@@ -134,11 +134,11 @@ export async function seedCurriculum() {
 export async function getCurriculum(gradeNumber) {
   const q = query(
     collection(db, 'curriculum'), 
-    where('gradeNumber', '==', Number(gradeNumber)), 
-    orderBy('week', 'asc')
+    where('gradeNumber', '==', Number(gradeNumber))
   )
   const snap = await getDocs(q)
-  return snap.docs.map(d => ({ id: d.id, ...d.data() }))
+  const list = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+  return list.sort((a, b) => (Number(a.week) || 0) - (Number(b.week) || 0))
 }
 
 export async function updateCurriculumWeek(gradeNumber, weekNumber, data) {
