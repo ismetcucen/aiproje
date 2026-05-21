@@ -162,5 +162,11 @@ service cloud.firestore {
       allow update, delete: if isAdmin();
     }
 
+    // ─── CURRICULUM ────────────────────────────────────────────────
+    match /curriculum/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
   }
 }

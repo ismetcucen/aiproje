@@ -44,7 +44,12 @@ export async function createAssignment({ title, description, classLevel, gradeNu
 }
 
 export async function getAssignmentsForStudent({ classLevel, schoolCode, gradeNumber }) {
-  const q = query(collection(db, 'assignments'), where('schoolCode', '==', schoolCode), orderBy('createdAt', 'desc'))
+  const q = query(
+    collection(db, 'assignments'), 
+    where('schoolCode', '==', schoolCode), 
+    where('isActive', '==', true),
+    orderBy('createdAt', 'desc')
+  )
   const snap = await getDocs(q)
   return snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(a => {
     const levelMatch = a.classLevel === 'all' || a.classLevel === classLevel
