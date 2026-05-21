@@ -48,7 +48,7 @@ export default function CurriculumManager() {
       setCurriculum(data)
     } catch (err) {
       console.error(err)
-      setError('Müfredat yüklenirken hata oluştu.')
+      setError('Müfredat yüklenirken hata oluştu: ' + (err.message || err.toString()))
     } finally {
       setLoading(false)
     }
@@ -73,7 +73,7 @@ export default function CurriculumManager() {
       setTimeout(() => setSuccess(''), 3000)
     } catch (err) {
       console.error(err)
-      setError('Güncelleme sırasında hata oluştu.')
+      setError('Güncelleme sırasında hata oluştu: ' + (err.message || err.toString()))
     } finally {
       setActionLoading(false)
     }
@@ -97,7 +97,7 @@ export default function CurriculumManager() {
       setTimeout(() => setSuccess(''), 4000)
     } catch (err) {
       console.error(err)
-      setError('Ödev atama sırasında hata oluştu.')
+      setError('Ödev atama sırasında hata oluştu: ' + (err.message || err.toString()))
     } finally {
       setActionLoading(false)
     }
