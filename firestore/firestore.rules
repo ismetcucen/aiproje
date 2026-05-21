@@ -1,0 +1,166 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── YARDIMCI FONKSİYONLAR ─────────────────────────────────────
+
+    // Giriş yapmış mı?
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    // Kendi dökümanı mı?
+    function isOwner(uid) {
+      return request.auth.uid == uid;
+    }
+
+    // Rol kontrolü (users koleksiyonundan okur)
+    function getRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+
+    function isStudent()  { return isAuth() && getRole() == 'student';  }
+    function isTeacher()  { return isAuth() && getRole() == 'teacher';  }
+    function isAdmin()    { return isAuth() && getRole() == 'admin';    }
+    function isTeacherOrAdmin() { return isAuth() && getRole() in ['teacher', 'admin']; }
+
+    // Aynı okul kontrolü
+    function sameSchool(schoolCode) {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.schoolCode == schoolCode;
+    }
+
+    // ─── USERS ─────────────────────────────────────────────────────
+
+    match /users/{uid} {
+      // Herkes kendi profilini okuyabilir
+      allow read: if isAuth() && isOwner(uid);
+
+      // Öğretmen/Admin aynı okuldaki kullanıcıları okuyabilir
+      allow read: if isTeacherOrAdmin()
+                  && sameSchool(resource.data.schoolCode);
+
+      // Admin herkesi okuyabilir
+      allow read: if isAdmin();
+
+      // Profil oluşturma: sadece kendi UID'si ile, kayıt sırasında
+      allow create: if isAuth() && isOwner(uid)
+                    && request.resource.data.role in ['student', 'teacher']
+                    && request.resource.data.keys().hasAll([
+                         'fullName', 'email', 'role', 'schoolCode', 'createdAt', 'isActive'
+                       ]);
+
+      // Güncelleme: kendi profili (sınırlı alanlar)
+      allow update: if isAuth() && isOwner(uid)
+                    && request.resource.data.diff(resource.data).affectedKeys()
+                         .hasOnly(['fullName', 'gradeNumber']);
+
+      // Admin her şeyi güncelleyebilir (isActive, rol değişikliği)
+      allow update, delete: if isAdmin();
+    }
+
+    // ─── ASSIGNMENTS ───────────────────────────────────────────────
+
+    match /assignments/{assignmentId} {
+      // Öğrenci: kendi okuluna ait, aktif görevleri okur
+      allow read: if isAuth()
+                  && sameSchool(resource.data.schoolCode);
+
+      // Öğretmen: kendi okuluna görev oluşturabilir
+      allow create: if isTeacher()
+                    && sameSchool(request.resource.data.schoolCode)
+                    && request.resource.data.createdBy == request.auth.uid
+                    && request.resource.data.keys().hasAll([
+                         'title', 'description', 'classLevel',
+                         'createdBy', 'schoolCode', 'isActive', 'createdAt'
+                       ]);
+
+      // Öğretmen: kendi görevini güncelleyebilir
+      allow update: if isTeacher()
+                    && resource.data.createdBy == request.auth.uid;
+
+      // Admin: her şeyi yapabilir
+      allow write: if isAdmin();
+    }
+
+    // ─── SUBMISSIONS ───────────────────────────────────────────────
+
+    match /submissions/{submissionId} {
+      // Öğrenci kendi üretimlerini okur
+      allow read: if isAuth() && isOwner(resource.data.userId);
+
+      // Öğretmen/Admin: kendi okulundaki üretimleri okur
+      allow read: if isTeacherOrAdmin()
+                  && sameSchool(resource.data.schoolCode);
+
+      // Öğrenci: yeni üretim oluşturabilir (kendi adına)
+      allow create: if isStudent()
+                    && request.resource.data.userId == request.auth.uid
+                    && request.resource.data.keys().hasAll([
+                         'userId', 'assignmentId', 'content',
+                         'contentType', 'aiUsed', 'schoolCode', 'createdAt'
+                       ])
+                    // Öğrenci puan/feedback alanlarını kendi kendine set edemez
+                    && !('score'      in request.resource.data)
+                    && !('feedback'   in request.resource.data)
+                    && !('feedbackBy' in request.resource.data);
+
+      // Öğrenci: sadece content ve AI alanlarını güncelleyebilir
+      allow update: if isStudent()
+                    && isOwner(resource.data.userId)
+                    && request.resource.data.diff(resource.data).affectedKeys()
+                         .hasOnly(['content', 'aiUsed', 'aiNotes', 'updatedAt']);
+
+      // Öğretmen: puan ve feedback alanlarını güncelleyebilir
+      allow update: if isTeacher()
+                    && sameSchool(resource.data.schoolCode)
+                    && request.resource.data.diff(resource.data).affectedKeys()
+                         .hasOnly(['score', 'feedback', 'feedbackBy', 'feedbackAt']);
+
+      // Admin: her şeyi yapabilir
+      allow write: if isAdmin();
+    }
+
+    // ─── FEEDBACKS ─────────────────────────────────────────────────
+
+    match /feedbacks/{feedbackId} {
+      // Öğrenci, öğretmen ve admin okuyabilir
+      allow read: if isAuth();
+
+      // Sadece öğretmen oluşturabilir
+      allow create: if isTeacher()
+                    && request.resource.data.teacherId == request.auth.uid
+                    && request.resource.data.keys().hasAll([
+                         'submissionId', 'teacherId', 'comment', 'score', 'createdAt'
+                       ])
+                    && request.resource.data.score >= 0
+                    && request.resource.data.score <= 100;
+
+      // Öğretmen kendi geri bildirimini güncelleyebilir
+      allow update: if isTeacher()
+                    && resource.data.teacherId == request.auth.uid;
+
+      allow delete: if isAdmin();
+    }
+
+    // ─── AI LOGS ───────────────────────────────────────────────────
+
+    match /ai_logs/{logId} {
+      // Öğrenci kendi loglarını okur
+      allow read: if isAuth() && isOwner(resource.data.userId);
+
+      // Admin ve öğretmen tüm logları okur (analitik için)
+      allow read: if isTeacherOrAdmin();
+
+      // Herhangi bir giriş yapmış kullanıcı log oluşturabilir (kendi adına)
+      allow create: if isAuth()
+                    && request.resource.data.userId == request.auth.uid
+                    && request.resource.data.purpose in [
+                         'idea', 'help', 'rewrite', 'example'
+                       ];
+
+      // Log silinemez, güncellenemez (immutable)
+      allow update, delete: if isAdmin();
+    }
+
+  }
+}
