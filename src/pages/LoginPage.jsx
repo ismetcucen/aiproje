@@ -83,7 +83,7 @@ export default function LoginPage() {
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 mb-4 shadow-lg border border-blue-400/20">
               <span className="text-white text-3xl font-bold tracking-tighter">AI</span>
             </div>
-            <h1 className="text-slate-800 text-2xl font-bold">ÖHEP AI Studio</h1>
+            <h1 className="text-slate-800 text-2xl font-bold">ÖHEP OKULLARI AI STUDIO</h1>
             <p className="text-slate-500 text-sm mt-1">Yapay Zeka Eğitim Platformu</p>
           </div>
 
@@ -148,7 +148,7 @@ export default function LoginPage() {
             )}
           </div>
         </div>
-        <p className="text-center text-slate-400 text-xs mt-6">ÖHEP AI Studio © 2025</p>
+        <p className="text-center text-slate-400 text-xs mt-6">ÖHEP OKULLARI AI STUDIO © 2025</p>
       </div>
       </div>
     </div>
