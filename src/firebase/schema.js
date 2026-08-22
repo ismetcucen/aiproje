@@ -180,3 +180,96 @@ export async function assignCurriculumWeek({ gradeNumber, week, schoolCode, crea
   
   return assignmentId
 }
+
+// ─── SINIFLAR ────────────────────────────────
+
+export async function createClass({ grade, section, schoolCode, teacherId }) {
+  const ref = await addDoc(collection(db, 'classes'), {
+    grade,       // "3", "4" ... "10"
+    section,     // "A", "B", "C"
+    name:        `${grade}/${section}`,
+    schoolCode,
+    teacherId:   teacherId || null,
+    createdAt:   serverTimestamp(),
+    isActive:    true,
+  })
+  return ref.id
+}
+
+export async function getClassesBySchool(schoolCode) {
+  const q = query(
+    collection(db, 'classes'),
+    where('schoolCode', '==', schoolCode),
+    where('isActive', '==', true)
+  )
+  const snap = await getDocs(q)
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }))
+    .sort((a, b) => a.name.localeCompare(b.name))
+}
+
+export async function addStudentToClass(classId, userId) {
+  await setDoc(doc(db, 'class_students', `${classId}_${userId}`), {
+    classId,
+    userId,
+    joinedAt: serverTimestamp(),
+  })
+}
+
+export async function getStudentsByClass(classId) {
+  const q = query(
+    collection(db, 'class_students'),
+    where('classId', '==', classId)
+  )
+  const snap = await getDocs(q)
+  const studentIds = snap.docs.map(d => d.data().userId)
+  if (studentIds.length === 0) return []
+  const students = await Promise.all(
+    studentIds.map(async (uid) => {
+      const s = await getDoc(doc(db, 'users', uid))
+      return s.exists() ? { id: s.id, ...s.data() } : null
+    })
+  )
+  return students.filter(Boolean)
+}
+
+export async function removeStudentFromClass(classId, userId) {
+  await updateDoc(doc(db, 'class_students', `${classId}_${userId}`), {
+    removedAt: serverTimestamp(),
+  })
+}
+
+// ─── HAFTALIK MÜFREDAT ATAMA ─────────────────
+
+export async function assignWeekToClass({ classId, schoolCode, grade, week, title, description, activity, assignedBy }) {
+  const ref = await addDoc(collection(db, 'assignments'), {
+    title,
+    description,
+    activity,
+    classLevel:   'all',
+    gradeNumbers: [Number(grade)],
+    contentTypes: ['text', 'project'],
+    dueDate:      null,
+    createdBy:    assignedBy,
+    schoolCode,
+    classId,
+    week:         Number(week),
+    grade,
+    aiAssisted:   false,
+    isActive:     true,
+    isCurriculum: true,
+    createdAt:    serverTimestamp(),
+  })
+  return ref.id
+}
+
+export async function getAssignmentsByClass(classId) {
+  const q = query(
+    collection(db, 'assignments'),
+    where('classId', '==', classId),
+    where('isActive', '==', true)
+  )
+  const snap = await getDocs(q)
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }))
+    .sort((a, b) => (a.week || 0) - (b.week || 0))
+}
+

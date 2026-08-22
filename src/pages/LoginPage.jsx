@@ -150,6 +150,7 @@ export default function LoginPage() {
         </div>
         <p className="text-center text-slate-400 text-xs mt-6">ÖHEP AI Studio © 2025</p>
       </div>
+      </div>
     </div>
   )
 }
