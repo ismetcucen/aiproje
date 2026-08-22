@@ -43,8 +43,8 @@ export default function LoginPage() {
         </div>
 
         <div className="relative z-10 max-w-lg">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-white/10 backdrop-blur-md mb-8 border border-white/20 shadow-2xl">
-            <span className="text-white text-4xl font-bold tracking-tighter">AI</span>
+          <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-white mb-8 border-4 border-white/20 shadow-2xl overflow-hidden">
+            <img src="/ohep.jpeg" alt="ÖHEP Logosu" className="w-full h-full object-contain p-1" />
           </div>
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-6 leading-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-200">
             Geleceği Yapay Zeka ile Şekillendir
@@ -80,8 +80,8 @@ export default function LoginPage() {
 
           {/* Logo (Sadece mobilde görünür) */}
           <div className="text-center mb-8 md:hidden">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 mb-4 shadow-lg border border-blue-400/20">
-              <span className="text-white text-3xl font-bold tracking-tighter">AI</span>
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-white mb-4 shadow-lg border border-slate-200 overflow-hidden">
+              <img src="/ohep.jpeg" alt="ÖHEP Logosu" className="w-full h-full object-contain p-1" />
             </div>
             <h1 className="text-slate-800 text-2xl font-bold">ÖHEP OKULLARI AI STUDIO</h1>
             <p className="text-slate-500 text-sm mt-1">Yapay Zeka Eğitim Platformu</p>
