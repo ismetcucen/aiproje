@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import { getAssignmentsForStudent, getSubmissionsByStudent } from '../../firebase/schema'
+import { CURRICULUM } from '../../data/curriculum'
 
 const CONTENT_TYPE_LABELS = {
   text: 'Metin', code: 'Kod', project: 'Proje', presentation: 'Sunum',
@@ -12,7 +13,6 @@ export default function AssignmentList({ onStart }) {
   const [submissions, setSubmissions] = useState([])
   const [loading,     setLoading]     = useState(true)
   const [error,       setError]       = useState('')
-  const [filter,      setFilter]      = useState('all')
 
   useEffect(() => { if (profile) loadData() }, [profile])
 
@@ -20,7 +20,7 @@ export default function AssignmentList({ onStart }) {
     setLoading(true)
     try {
       const [asgns, subs] = await Promise.all([
-        getAssignmentsForStudent({ classLevel: profile.classLevel, schoolCode: profile.schoolCode }),
+        getAssignmentsForStudent({ classLevel: profile.classLevel, schoolCode: profile.schoolCode, gradeNumber: profile.gradeNumber }),
         getSubmissionsByStudent(user.uid),
       ])
       setAssignments(asgns)
@@ -44,118 +44,122 @@ export default function AssignmentList({ onStart }) {
     return 'submitted'
   }
 
-  const filtered = assignments.filter(a => {
-    if (filter === 'all')       return true
-    if (filter === 'pending')   return getStatus(a.id) === 'pending'
-    if (filter === 'submitted') return getStatus(a.id) === 'submitted'
-    if (filter === 'graded')    return getStatus(a.id) === 'graded'
-    return true
-  })
-
-  const counts = {
-    all:       assignments.length,
-    pending:   assignments.filter(a => getStatus(a.id) === 'pending').length,
-    submitted: assignments.filter(a => getStatus(a.id) === 'submitted').length,
-    graded:    assignments.filter(a => getStatus(a.id) === 'graded').length,
-  }
-
-  if (loading) return <div className="text-center py-20 text-slate-400">Yukleniyor...</div>
+  if (loading) return <div className="text-center py-20 text-slate-400">Yükleniyor...</div>
   if (error)   return <div className="text-center py-20 text-red-500">{error}</div>
 
+  // profile.gradeNumber might be "3", "4" etc.
+  const gradeStr = profile?.gradeNumber ? String(profile.gradeNumber) : "3"
+  const curriculum = CURRICULUM[gradeStr] || []
+
   return (
-    <div className="max-w-3xl">
-      <div className="mb-6">
-        <h2 className="text-slate-800 text-xl font-semibold">Görevlerim</h2>
-        <p className="text-slate-500 text-sm mt-0.5">{assignments.length} görev</p>
+    <div className="max-w-4xl mx-auto">
+      <div className="mb-8">
+        <h2 className="text-slate-800 text-2xl font-bold">Yıllık Müfredatım</h2>
+        <p className="text-slate-500 mt-1">Bu yıl öğreneceğimiz tüm konular ve sana atanan aktif görevler.</p>
       </div>
 
-      {/* İstatistik Kartları */}
-      <div className="grid grid-cols-4 gap-3 mb-6">
-        {[
-          { id: 'all',       label: 'Tümü',      count: counts.all,       border: 'border-slate-200',  text: 'text-slate-800', bg: 'bg-white' },
-          { id: 'pending',   label: 'Bekliyor',  count: counts.pending,   border: 'border-red-200',    text: 'text-red-600',   bg: 'bg-red-50' },
-          { id: 'submitted', label: 'Teslim',    count: counts.submitted, border: 'border-yellow-200', text: 'text-yellow-600',bg: 'bg-yellow-50' },
-          { id: 'graded',    label: 'Puanlandı', count: counts.graded,    border: 'border-green-200',  text: 'text-green-600', bg: 'bg-green-50' },
-        ].map(f => (
-          <button key={f.id} onClick={() => setFilter(f.id)}
-            className={`rounded-xl p-3 text-center border-2 transition-all shadow-sm ${
-              filter === f.id ? `${f.bg} ${f.border}` : 'bg-white border-slate-200 hover:border-slate-300'
-            }`}>
-            <p className={`text-2xl font-bold ${filter === f.id ? f.text : 'text-slate-700'}`}>{f.count}</p>
-            <p className={`text-xs mt-0.5 ${filter === f.id ? f.text : 'text-slate-500'}`}>{f.label}</p>
-          </button>
-        ))}
-      </div>
+      <div className="space-y-4">
+        {curriculum.map(week => {
+          // Find if there is an assignment for this week
+          // It could match by week number or title
+          const assignment = assignments.find(a => a.week === week.week || a.title === week.title)
+          
+          const isAssigned = !!assignment
+          const status = assignment ? getStatus(assignment.id) : null
+          const sub = assignment ? getSubmission(assignment.id) : null
 
-      {filtered.length === 0 ? (
-        <div className="text-center py-20 bg-white rounded-xl border border-slate-200">
-          <p className="text-slate-700 font-medium mb-2">Görev bulunamadı</p>
-          <p className="text-slate-400 text-sm">Öğretmenin görev oluşturduğunda burada görünecek.</p>
-        </div>
-      ) : (
-        <div className="space-y-3">
-          {filtered.map(a => {
-            const status = getStatus(a.id)
-            const sub    = getSubmission(a.id)
+          if (isAssigned) {
+            // PROMINENT ACTIVE WEEK
             return (
-              <div key={a.id} className={`bg-white border-2 rounded-xl p-5 transition-colors shadow-sm ${
-                status === 'pending'   ? 'border-slate-200 hover:border-slate-300' :
-                status === 'submitted' ? 'border-yellow-200' :
-                'border-green-200'
+              <div key={week.week} className={`bg-white border-2 rounded-2xl p-6 transition-all shadow-md transform hover:-translate-y-1 ${
+                status === 'pending'   ? 'border-blue-400 ring-4 ring-blue-50' :
+                status === 'submitted' ? 'border-yellow-400' :
+                'border-green-400'
               }`}>
-                <div className="flex items-start justify-between gap-4">
+                <div className="flex flex-col md:flex-row items-start justify-between gap-6">
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${
-                        status === 'pending'   ? 'bg-red-500' :
-                        status === 'submitted' ? 'bg-yellow-400' :
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl font-bold text-white shadow-sm ${
+                        status === 'pending'   ? 'bg-blue-500' :
+                        status === 'submitted' ? 'bg-yellow-500' :
                         'bg-green-500'
-                      }`} />
-                      <h3 className="text-slate-800 font-medium">{a.title}</h3>
+                      }`}>
+                        {week.week}
+                      </div>
+                      <div>
+                        <h3 className="text-slate-900 text-xl font-bold">{week.title}</h3>
+                        <p className="text-slate-500 text-sm font-medium">{week.dateRange}</p>
+                      </div>
+                      
                       {status === 'graded' && sub?.score !== null && (
-                        <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
-                          sub.score >= 70 ? 'bg-green-100 text-green-700 border border-green-200' :
-                          sub.score >= 50 ? 'bg-yellow-100 text-yellow-700 border border-yellow-200' :
-                          'bg-red-100 text-red-700 border border-red-200'
+                        <span className={`ml-auto text-sm font-bold px-3 py-1 rounded-full ${
+                          sub.score >= 70 ? 'bg-green-100 text-green-700' :
+                          sub.score >= 50 ? 'bg-yellow-100 text-yellow-700' :
+                          'bg-red-100 text-red-700'
                         }`}>{sub.score} puan</span>
                       )}
                     </div>
-                    <p className="text-slate-500 text-sm mb-3">{a.description}</p>
+                    
+                    <p className="text-slate-700 text-base mb-4 leading-relaxed">{week.description}</p>
+                    
+                    <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 mb-4">
+                      <p className="text-slate-800 font-medium text-sm mb-1">🎯 Bu Haftanın Aktivitesi:</p>
+                      <p className="text-slate-600 text-sm">{week.activity}</p>
+                    </div>
+
                     <div className="flex items-center gap-2 flex-wrap">
-                      {(a.contentTypes || []).map(ct => (
-                        <span key={ct} className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md border border-slate-200">
-                          {CONTENT_TYPE_LABELS[ct] || ct}
-                        </span>
-                      ))}
-                      <span className={`text-xs px-2 py-0.5 rounded-full border ${
-                        status === 'pending'   ? 'bg-red-50 text-red-600 border-red-200' :
+                      <span className={`text-sm px-3 py-1 font-semibold rounded-full border ${
+                        status === 'pending'   ? 'bg-blue-50 text-blue-600 border-blue-200' :
                         status === 'submitted' ? 'bg-yellow-50 text-yellow-600 border-yellow-200' :
                         'bg-green-50 text-green-600 border-green-200'
                       }`}>
-                        {status === 'pending' ? 'Teslim Edilmedi' : status === 'submitted' ? 'Teslim Edildi' : 'Puanlandı'}
+                        {status === 'pending' ? '🚀 Görev Bekliyor' : status === 'submitted' ? '✅ Teslim Edildi' : '🏆 Puanlandı'}
                       </span>
                     </div>
+
                     {status === 'graded' && sub?.feedback && (
-                      <div className="mt-3 p-2 bg-blue-50 border border-blue-200 rounded-lg">
-                        <p className="text-blue-600 text-xs font-medium mb-0.5">Öğretmen Yorumu</p>
-                        <p className="text-slate-700 text-xs">{sub.feedback}</p>
+                      <div className="mt-4 p-3 bg-indigo-50 border border-indigo-200 rounded-xl">
+                        <p className="text-indigo-700 text-sm font-bold mb-1">Öğretmen Yorumu</p>
+                        <p className="text-indigo-900 text-sm">{sub.feedback}</p>
                       </div>
                     )}
                   </div>
-                  <button onClick={() => onStart(a)}
-                    className={`flex-shrink-0 px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm ${
-                      status === 'pending'
-                        ? 'bg-blue-600 hover:bg-blue-500 text-white'
-                        : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-                    }`}>
-                    {status === 'pending' ? 'Göreve Başla' : 'Güncelle'}
-                  </button>
+                  
+                  <div className="w-full md:w-auto flex-shrink-0">
+                    <button onClick={() => onStart(assignment)}
+                      className={`w-full md:w-auto px-8 py-4 rounded-xl text-lg font-bold transition-all shadow-sm ${
+                        status === 'pending'
+                          ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-blue-500/25'
+                          : 'bg-white border-2 border-slate-200 hover:bg-slate-50 text-slate-700'
+                      }`}>
+                      {status === 'pending' ? 'Göreve Başla' : 'Görevi İncele'}
+                    </button>
+                  </div>
                 </div>
               </div>
             )
-          })}
-        </div>
-      )}
+          }
+
+          // INACTIVE WEEK (Just informative)
+          return (
+            <div key={week.week} className="bg-white border border-slate-200 rounded-xl p-4 flex flex-col md:flex-row items-center gap-4 opacity-75 hover:opacity-100 transition-opacity">
+              <div className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 font-bold flex-shrink-0">
+                {week.week}
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <h3 className="text-slate-700 font-semibold">{week.title}</h3>
+                  <span className="text-slate-400 text-xs font-medium">({week.dateRange})</span>
+                </div>
+                <p className="text-slate-500 text-sm line-clamp-1">{week.description}</p>
+              </div>
+              <div className="text-slate-400 text-xs font-medium px-3 py-1 bg-slate-50 rounded-full border border-slate-100">
+                Kilitli
+              </div>
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }
