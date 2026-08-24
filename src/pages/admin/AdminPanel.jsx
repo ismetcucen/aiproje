@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import UserManager from '../../components/admin/UserManager'
-import SchoolCodes from '../../components/admin/SchoolCodes'
 import Stats from '../../components/admin/Stats'
 import ClassManager from '../../components/admin/ClassManager'
 import CurriculumEditor from '../../components/admin/CurriculumEditor'
@@ -11,7 +10,6 @@ const MENU = [
   { id: 'classes',    label: 'Sınıflar',      icon: '🏫' },
   { id: 'curriculum', label: 'Müfredat',      icon: '📚' },
   { id: 'users',      label: 'Kullanıcılar',  icon: '👥' },
-  { id: 'schools',    label: 'Okul Kodları',  icon: '🔑' },
 ]
 
 export default function AdminPanel() {
@@ -68,7 +66,6 @@ export default function AdminPanel() {
           {active === 'classes'    && <ClassManager schoolCode={profile?.schoolCode} />}
           {active === 'curriculum' && <CurriculumEditor />}
           {active === 'users'      && <UserManager />}
-          {active === 'schools'    && <SchoolCodes />}
         </div>
       </main>
     </div>
