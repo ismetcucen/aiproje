@@ -197,9 +197,10 @@ export async function createClass({ grade, section, schoolCode, teacherId }) {
 }
 
 export async function getClassesBySchool(schoolCode) {
+  const code = schoolCode || 'OHEP'
   const q = query(
     collection(db, 'classes'),
-    where('schoolCode', '==', schoolCode),
+    where('schoolCode', '==', code),
     where('isActive', '==', true)
   )
   const snap = await getDocs(q)
