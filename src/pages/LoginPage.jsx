@@ -50,7 +50,7 @@ export default function LoginPage() {
             Geleceği Yapay Zeka ile Şekillendir
           </h1>
           <p className="text-lg md:text-xl text-blue-100 mb-8 leading-relaxed font-light">
-            ÖHEP AI Studio ile ilkokuldan liseye kadar uzanan interaktif programımızla yapay zeka dünyasını keşfet, kendi modellerini eğit ve geleceğin teknolojilerine yön ver.
+            ÖHEP AI Studio ile ilkokuldan liseye kadar uzanan interaktif programımızla yapay zeka dünyasını keşfet, kendi modellerini eğit ve geleceğin teknolojisinin önemli bir parçası ol.
           </p>
           <div className="flex flex-wrap items-center gap-4 text-sm font-medium text-blue-100">
             <div className="flex items-center gap-2 bg-white/10 px-4 py-2.5 rounded-full backdrop-blur-sm border border-white/10 shadow-lg">
@@ -162,7 +162,7 @@ export default function LoginPage() {
             )}
           </div>
         </div>
-        <p className="text-center text-slate-400 text-xs mt-6">ÖHEP OKULLARI AI STUDIO © 2025</p>
+        <p className="text-center text-slate-400 text-xs mt-6">ÖHEP OKULLARI AI STÜDYO © 2026 - İsmet ÇÜÇEN</p>
       </div>
       </div>
     </div>
