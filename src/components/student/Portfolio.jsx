@@ -93,6 +93,23 @@ export default function Portfolio() {
     URL.revokeObjectURL(url)
   }
 
+  
+  const totalSubmissions = items.length;
+  const gradedItems = items.filter(i => i.score !== null && i.score !== undefined);
+  const totalScore = gradedItems.reduce((acc, curr) => acc + curr.score, 0);
+  const avgScore = gradedItems.length > 0 ? totalScore / gradedItems.length : 0;
+  const aiUsedCount = items.filter(i => i.aiUsed).length;
+
+  const badges = [];
+  if (totalSubmissions >= 1) badges.push({ icon: '🌱', label: 'İlk Adım' });
+  if (totalSubmissions >= 5) badges.push({ icon: '🛠️', label: 'Yapay Zeka Çırağı' });
+  if (totalSubmissions >= 10) badges.push({ icon: '🎓', label: 'Yapay Zeka Uzmanı' });
+  if (aiUsedCount >= 3) badges.push({ icon: '🤖', label: 'AI Dostu' });
+  if (avgScore >= 85 && gradedItems.length >= 3) badges.push({ icon: '⭐', label: 'Yıldız Öğrenci' });
+  if (items.some(i => i.isShowcase)) badges.push({ icon: '🏆', label: 'Vitrin Yıldızı' });
+
+  // Let's render badges below the title
+
   const filtered = filter === 'all' ? items :
     filter === 'graded' ? items.filter(i => i.score !== null && i.score !== undefined) :
     filter === 'ai'     ? items.filter(i => i.aiUsed) : items
@@ -111,8 +128,34 @@ export default function Portfolio() {
             className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
             Tumunu Indir
           </button>
+          
+          <button onClick={() => {
+            const url = `${window.location.origin}/p/${user.uid}`;
+            navigator.clipboard.writeText(url);
+            alert('Portfolyo linki kopyalandı! Bu linki ailenle paylaşabilirsin.\n' + url);
+          }}
+            className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+            🔗 Ailemle Paylaş
+          </button>
+
         )}
       </div>
+
+      
+      {/* Rozetler */}
+      {badges.length > 0 && (
+        <div className="bg-slate-800 rounded-xl p-4 mb-6 border border-slate-700">
+          <p className="text-slate-400 text-xs font-semibold mb-3 uppercase tracking-wider">Kazanılan Rozetler</p>
+          <div className="flex flex-wrap gap-3">
+            {badges.map((b, i) => (
+              <div key={i} className="flex flex-col items-center justify-center bg-slate-900 border border-slate-700 w-20 h-20 rounded-xl shadow-lg">
+                <span className="text-3xl mb-1">{b.icon}</span>
+                <span className="text-[10px] text-center font-medium text-slate-300 leading-tight">{b.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Filtreler */}
       {items.length > 0 && (
@@ -183,6 +226,16 @@ export default function Portfolio() {
               {selected?.id === item.id && (
                 <div className="mt-4 pt-4 border-t border-slate-800">
                   <p className="text-slate-300 text-sm whitespace-pre-wrap leading-relaxed">{item.content}</p>
+
+                  {item.files && item.files.length > 0 && (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {item.files.map((f, i) => (
+                        <a key={i} href={f.url} target="_blank" rel="noopener noreferrer" className="bg-slate-800 hover:bg-slate-700 text-xs px-3 py-1.5 rounded-lg text-blue-300 border border-slate-700 flex items-center gap-1 transition-colors">
+                          📎 {f.name}
+                        </a>
+                      ))}
+                    </div>
+                  )}
                   {item.feedback && (
                     <div className="mt-4 p-3 bg-indigo-900/20 border border-indigo-800/50 rounded-lg">
                       <p className="text-indigo-300 text-xs font-medium mb-1">Ogretmen Yorumu</p>

@@ -3,8 +3,16 @@ import LoginPage from './pages/LoginPage'
 import TeacherPanel from './pages/teacher/TeacherPanel'
 import StudentPanel from './pages/student/StudentPanel'
 import AdminPanel from './pages/admin/AdminPanel'
+import ParentPortfolio from './pages/ParentPortfolio'
 
 function AppContent() {
+  
+  const path = window.location.pathname;
+  if (path.startsWith('/p/')) {
+    const studentId = path.split('/')[2];
+    return <ParentPortfolio studentId={studentId} />
+  }
+
   const { user, profile } = useAuth()
 
   if (!user || !profile) return <LoginPage />

@@ -114,7 +114,7 @@ service cloud.firestore {
       allow update: if isTeacher()
                     && sameSchool(resource.data.schoolCode)
                     && request.resource.data.diff(resource.data).affectedKeys()
-                         .hasOnly(['score', 'feedback', 'feedbackBy', 'feedbackAt']);
+                         .hasOnly(['score', 'feedback', 'feedbackBy', 'feedbackAt', 'isShowcase']);
 
       // Admin: her şeyi yapabilir
       allow write: if isAdmin();
@@ -168,5 +168,31 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+
+    // ─── CLASSES ───────────────────────────────────────────────────
+    match /classes/{classId} {
+      allow read: if isAuth();
+      allow write: if isAdmin() || isTeacher();
+    }
+
+    match /class_students/{docId} {
+      allow read: if isAuth();
+      allow write: if isAdmin() || isTeacher();
+    }
+
+    match /class_assignments/{docId} {
+      allow read: if isAuth();
+      allow write: if isAdmin() || isTeacher();
+    }
+
+    match /curriculum_edits/{docId} {
+      allow read: if isAuth();
+      allow write: if isAdmin() || isTeacher();
+    }
+    
+    match /schools/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
   }
 }

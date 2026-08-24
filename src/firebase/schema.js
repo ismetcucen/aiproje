@@ -1,5 +1,6 @@
 import { doc, collection, addDoc, setDoc, getDoc, getDocs, updateDoc, query, where, orderBy, serverTimestamp, Timestamp, writeBatch, limit } from 'firebase/firestore'
-import { db } from './config'
+import { db, storage } from './config'
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import { generateCurriculumList } from '../data/defaultCurriculum'
 
 export const ROLES = { STUDENT: 'student', TEACHER: 'teacher', ADMIN: 'admin' }
@@ -13,6 +14,7 @@ export async function createUserProfile(uid, { fullName, email, role, classLevel
     classLevel:  classLevel  || null,
     gradeNumber: gradeNumber || null,
     schoolCode,
+    files: files || [],
     createdAt: serverTimestamp(),
     isActive:  true,
   })
@@ -64,12 +66,13 @@ export async function getAssignmentsByTeacher(teacherUid) {
   return snap.docs.map(d => ({ id: d.id, ...d.data() }))
 }
 
-export async function createSubmission({ userId, assignmentId, content, contentType, aiUsed, aiNotes, schoolCode }) {
+export async function createSubmission({ userId, assignmentId, content, contentType, aiUsed, aiNotes, schoolCode, files }) {
   const ref = await addDoc(collection(db, 'submissions'), {
     userId, assignmentId, content, contentType,
     aiUsed:    aiUsed   || false,
     aiNotes:   aiNotes  || null,
     schoolCode,
+    files:     files    || [],
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
     score: null, feedback: null,
@@ -99,8 +102,8 @@ export async function getSubmissionsBySchool(schoolCode) {
   return snap.docs.map(d => ({ id: d.id, ...d.data() }))
 }
 
-export async function upsertFeedback({ submissionId, teacherId, comment, score }) {
-  await updateDoc(doc(db, 'submissions', submissionId), { score, feedback: comment, feedbackBy: teacherId, feedbackAt: serverTimestamp() })
+export async function upsertFeedback({ submissionId, teacherId, comment, score, isShowcase }) {
+  await updateDoc(doc(db, 'submissions', submissionId), { score, feedback: comment, feedbackBy: teacherId, feedbackAt: serverTimestamp(), isShowcase: isShowcase || false })
   await addDoc(collection(db, 'feedbacks'), { submissionId, teacherId, comment, score, createdAt: serverTimestamp() })
 }
 
@@ -274,3 +277,43 @@ export async function getAssignmentsByClass(classId) {
     .sort((a, b) => (a.week || 0) - (b.week || 0))
 }
 
+
+
+// ─── STORAGE ───────────────────────────────────────────────────
+
+export async function uploadFile(userId, file, onProgress) {
+  if (!file) return null;
+  const fileName = `${Date.now()}_${file.name}`;
+  const storageRef = ref(storage, `submissions/${userId}/${fileName}`);
+  const uploadTask = uploadBytesResumable(storageRef, file);
+
+  return new Promise((resolve, reject) => {
+    uploadTask.on('state_changed',
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        if (onProgress) onProgress(progress);
+      },
+      (error) => {
+        reject(error);
+      },
+      async () => {
+        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+        resolve({ url: downloadURL, name: file.name, type: file.type });
+      }
+    );
+  });
+}
+
+
+export async function getPublicPortfolio(userId) {
+  const userDoc = await getDoc(doc(db, 'users', userId));
+  if (!userDoc.exists()) return null;
+  const userData = userDoc.data();
+  if (!userData.publicPortfolio) return null;
+
+  const submissions = await getSubmissionsByStudent(userId);
+  return {
+    student: { fullName: userData.fullName, gradeNumber: userData.gradeNumber },
+    submissions: submissions.filter(s => s.score !== null) // only graded
+  };
+}

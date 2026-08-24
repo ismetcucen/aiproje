@@ -1,16 +1,20 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '../../hooks/useAuth'
-import { createSubmission, updateSubmission, getSubmissionsByStudent } from '../../firebase/schema'
+import { createSubmission, getSubmissionsByStudent, uploadFile } from '../../firebase/schema'
 import { CURRICULUM } from '../../data/curriculum'
 import { getToolUrl } from '../../data/aiToolUrls'
 
 export default function Studio({ assignment, onBack }) {
   const { user, profile } = useAuth()
   const [content,  setContent]  = useState('')
+  const [files,    setFiles]    = useState([])
   const [saving,   setSaving]   = useState(false)
   const [saved,    setSaved]    = useState(false)
   const [error,    setError]    = useState('')
   const [aiUsed,   setAiUsed]   = useState(false)
+  
+  const [uploading, setUploading] = useState(false)
+  const [progress, setProgress] = useState(0)
 
   if (!assignment) {
     return (
@@ -23,14 +27,30 @@ export default function Studio({ assignment, onBack }) {
     )
   }
 
-  // Görevin müfredattaki hafta verisini bul
   const grade      = profile?.gradeNumber?.toString()
   const weekData   = CURRICULUM[grade]?.find(w => w.week === assignment.week) || null
   const aiTools    = weekData?.aiTools || assignment.aiTools || []
   const objectives = weekData?.objectives || []
 
+  async function handleFileSelect(e) {
+    const file = e.target.files[0]
+    if (!file) return
+    setUploading(true)
+    setError('')
+    try {
+      const uploaded = await uploadFile(user.uid, file, (p) => setProgress(p))
+      setFiles(prev => [...prev, uploaded])
+    } catch (err) {
+      console.error(err)
+      setError('Dosya yüklenirken hata oluştu.')
+    } finally {
+      setUploading(false)
+      setProgress(0)
+    }
+  }
+
   async function handleSave() {
-    if (!content.trim()) return setError('Lütfen önce bir şeyler yaz.')
+    if (!content.trim() && files.length === 0) return setError('Lütfen bir içerik yaz veya dosya yükle.')
     setError(''); setSaving(true)
     try {
       await createSubmission({
@@ -41,6 +61,7 @@ export default function Studio({ assignment, onBack }) {
         aiUsed,
         aiNotes:      aiUsed ? 'Onerilen arac kullanildi' : null,
         schoolCode:   profile.schoolCode,
+        files:        files,
       })
       setSaved(true)
       setTimeout(() => setSaved(false), 3000)
@@ -54,8 +75,6 @@ export default function Studio({ assignment, onBack }) {
 
   return (
     <div className="max-w-4xl">
-
-      {/* Geri + Başlık */}
       <div className="flex items-center gap-3 mb-6">
         <button onClick={onBack} className="text-slate-400 hover:text-slate-600 transition-colors text-sm flex items-center gap-1">
           ← Geri
@@ -69,10 +88,7 @@ export default function Studio({ assignment, onBack }) {
         )}
       </div>
 
-      {/* Görev Bilgileri */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
-
-        {/* Görev Açıklaması */}
         <div className="lg:col-span-2 bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
           <p className="text-slate-500 text-xs font-medium uppercase tracking-wide mb-1">Görev</p>
           <p className="text-slate-700 text-sm">{assignment.description}</p>
@@ -84,9 +100,7 @@ export default function Studio({ assignment, onBack }) {
           )}
         </div>
 
-        {/* Sağ Bilgi Paneli */}
         <div className="space-y-3">
-          {/* Kazanımlar */}
           {objectives.length > 0 && (
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-3">
               <p className="text-blue-700 text-xs font-medium uppercase tracking-wide mb-2">Kazanımlar</p>
@@ -101,7 +115,6 @@ export default function Studio({ assignment, onBack }) {
             </div>
           )}
 
-          {/* Önerilen Araçlar */}
           {aiTools.length > 0 && (
             <div className="bg-white border border-slate-200 rounded-xl p-3 shadow-sm">
               <p className="text-slate-500 text-xs font-medium uppercase tracking-wide mb-2">Önerilen Araçlar</p>
@@ -124,38 +137,40 @@ export default function Studio({ assignment, onBack }) {
                     )
                   })}
               </div>
-              <p className="text-slate-400 text-xs mt-2">Bir araca tıklarsan AI kullandın olarak işaretlenir.</p>
-            </div>
-          )}
-
-          {/* Süre ve Çıktı */}
-          {weekData && (
-            <div className="bg-white border border-slate-200 rounded-xl p-3 shadow-sm">
-              {weekData.duration && (
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-slate-500 text-xs">Süre</span>
-                  <span className="text-slate-700 text-xs font-medium">{weekData.duration} dk</span>
-                </div>
-              )}
-              {weekData.output && (
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-500 text-xs">Çıktı</span>
-                  <span className="text-slate-700 text-xs font-medium">{weekData.output}</span>
-                </div>
-              )}
             </div>
           )}
         </div>
       </div>
 
-      {/* Yazı Alanı */}
+      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm mb-4">
+        <label className="block text-slate-700 text-sm font-medium mb-2">Medya / Dosya Yükle</label>
+        
+        <div className="flex flex-wrap gap-3 mb-3">
+          {files.map((f, i) => (
+            <div key={i} className="flex items-center gap-2 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg">
+              <span className="text-slate-600 text-xs truncate max-w-[150px]">{f.name}</span>
+              <a href={f.url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-600 text-xs">Aç</a>
+              <button onClick={() => setFiles(files.filter((_, idx) => idx !== i))} className="text-red-500 hover:text-red-600 font-bold ml-1 text-xs">✕</button>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-3">
+          <label className="cursor-pointer bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors border border-slate-200">
+            {uploading ? `Yükleniyor... %${Math.round(progress)}` : '📁 Dosya / Görsel Seç'}
+            <input type="file" className="hidden" onChange={handleFileSelect} disabled={uploading} />
+          </label>
+          <span className="text-slate-400 text-xs">Maks 10MB. (Resim, Ses, PDF)</span>
+        </div>
+      </div>
+
       <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
-        <label className="block text-slate-700 text-sm font-medium mb-2">Üretiminiz</label>
+        <label className="block text-slate-700 text-sm font-medium mb-2">Metin / Link</label>
         <textarea
           value={content}
           onChange={e => setContent(e.target.value)}
-          placeholder="Buraya yazın veya ürettiğiniz içeriği yapıştırın..."
-          className="w-full min-h-48 bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-3 text-sm placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors resize-none"
+          placeholder="Buraya yazın, açıklama ekleyin veya oluşturduğunuz içeriğin linkini yapıştırın..."
+          className="w-full min-h-32 bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-3 text-sm placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors resize-none"
         />
 
         <div className="flex items-center justify-between mt-3">
@@ -170,9 +185,9 @@ export default function Studio({ assignment, onBack }) {
           <div className="flex items-center gap-3">
             {error  && <span className="text-red-500 text-xs">{error}</span>}
             {saved  && <span className="text-green-600 text-xs font-medium">✓ Kaydedildi!</span>}
-            <button onClick={handleSave} disabled={saving}
+            <button onClick={handleSave} disabled={saving || uploading}
               className="bg-blue-600 hover:bg-blue-500 disabled:bg-blue-300 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
-              {saving ? 'Kaydediliyor...' : 'Kaydet'}
+              {saving ? 'Kaydediliyor...' : 'Gönder & Kaydet'}
             </button>
           </div>
         </div>

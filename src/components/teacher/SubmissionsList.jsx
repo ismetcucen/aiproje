@@ -16,6 +16,7 @@ export default function SubmissionsList() {
   const [filterAssignment, setFilterAssignment] = useState('all')
   const [score,   setScore]   = useState('')
   const [comment, setComment] = useState('')
+  const [isShowcase, setIsShowcase] = useState(false)
   const [saving,  setSaving]  = useState(false)
   const [saved,   setSaved]   = useState(false)
 
@@ -47,6 +48,7 @@ export default function SubmissionsList() {
     setSelected(sub)
     setScore(sub.score !== null && sub.score !== undefined ? String(sub.score) : '')
     setComment(sub.feedback || '')
+    setIsShowcase(sub.isShowcase || false)
     setSaved(false)
   }
 
@@ -58,7 +60,7 @@ export default function SubmissionsList() {
     }
     setSaving(true)
     try {
-      await upsertFeedback({ submissionId: selected.id, teacherId: user.uid, comment: comment.trim(), score: Number(score) })
+      await upsertFeedback({ submissionId: selected.id, teacherId: user.uid, comment: comment.trim(), score: Number(score), isShowcase })
       setSaved(true)
       await loadData()
       setTimeout(() => setSaved(false), 2000)
@@ -169,6 +171,16 @@ export default function SubmissionsList() {
               </div>
               <div className="bg-slate-800 rounded-lg p-3 max-h-48 overflow-auto">
                 <p className="text-slate-200 text-sm whitespace-pre-wrap leading-relaxed">{selected.content}</p>
+              {selected.files && selected.files.length > 0 && (
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {selected.files.map((f, i) => (
+                    <a key={i} href={f.url} target="_blank" rel="noopener noreferrer" className="bg-slate-700 hover:bg-slate-600 text-xs px-2 py-1 rounded text-blue-300">
+                      📎 {f.name}
+                    </a>
+                  ))}
+                </div>
+              )}
+
               </div>
             </div>
             <div className="border-t border-slate-800 pt-4 space-y-3">
@@ -184,6 +196,11 @@ export default function SubmissionsList() {
                 <textarea value={comment} onChange={e => setComment(e.target.value)}
                   placeholder="Harika bir uretim!..." rows={3}
                   className="w-full bg-slate-800 border border-slate-700 text-white rounded-lg px-3 py-2 text-sm placeholder-slate-600 focus:outline-none focus:border-indigo-500 resize-none" />
+
+              <div className="flex items-center gap-2 mt-2">
+                <input type="checkbox" id="showcase" checked={isShowcase} onChange={e => setIsShowcase(e.target.checked)} className="w-4 h-4 accent-indigo-600" />
+                <label htmlFor="showcase" className="text-slate-300 text-sm">Vitrinde Sergile (Tüm sınıf görsün)</label>
+              </div>
               </div>
               <div className="flex items-center gap-3">
                 <button onClick={handleFeedback} disabled={saving}
