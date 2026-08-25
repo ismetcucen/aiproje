@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import { buildPortfolio } from '../../firebase/schema'
 
-const CONTENT_TYPE_LABELS = {
+export const CONTENT_TYPE_LABELS = {
   text: 'Metin', code: 'Kod', project: 'Proje', presentation: 'Sunum',
 }
 
@@ -124,20 +124,20 @@ export default function Portfolio() {
           <p className="text-slate-400 text-sm mt-0.5">{items.length} uretim</p>
         </div>
         {items.length > 0 && (
-          <button onClick={downloadAllTxt}
-            className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
-            Tumunu Indir
-          </button>
-          
-          <button onClick={() => {
-            const url = `${window.location.origin}/p/${user.uid}`;
-            navigator.clipboard.writeText(url);
-            alert('Portfolyo linki kopyalandı! Bu linki ailenle paylaşabilirsin.\n' + url);
-          }}
-            className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
-            🔗 Ailemle Paylaş
-          </button>
-
+          <div className="flex gap-2">
+            <button onClick={downloadAllTxt}
+              className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+              Tumunu Indir
+            </button>
+            <button onClick={() => {
+              const url = `${window.location.origin}/p/${user.uid}`;
+              navigator.clipboard.writeText(url);
+              alert('Portfolyo linki kopyalandı! Bu linki ailenle paylaşabilirsin.\n' + url);
+            }}
+              className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+              🔗 Ailemle Paylaş
+            </button>
+          </div>
         )}
       </div>
 
