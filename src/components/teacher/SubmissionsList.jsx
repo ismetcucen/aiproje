@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../hooks/useAuth'
-import { getSubmissionsBySchool, getAssignmentsByTeacher, getStudentsBySchool, upsertFeedback } from '../../firebase/schema'
+import * as XLSX from 'xlsx'
+import { getSubmissionsBySchool, getAssignmentsByTeacher, getStudentsBySchool, upsertFeedback, createNotification } from '../../firebase/schema'
 
 const CONTENT_TYPE_LABELS = {
   text: 'Metin', code: 'Kod', project: 'Proje', presentation: 'Sunum',
@@ -21,6 +22,29 @@ export default function SubmissionsList() {
   const [saved,   setSaved]   = useState(false)
 
   useEffect(() => { if (user) loadData() }, [user])
+
+  
+  function exportToExcel() {
+    const dataToExport = filtered.map(s => {
+      const student = students[s.studentId] || {}
+      const assignment = assignments[s.assignmentId] || {}
+      return {
+        'Öğrenci Adı': student.fullName || 'Bilinmiyor',
+        'Sınıf': student.gradeNumber || student.classLevel || 'Bilinmiyor',
+        'Görev Başlığı': assignment.title || 'Bilinmiyor',
+        'İçerik Türü': CONTENT_TYPE_LABELS[s.contentType] || s.contentType,
+        'Gönderim Tarihi': s.createdAt?.toDate?.()?.toLocaleDateString('tr-TR') || '',
+        'Durum': s.feedback ? 'Değerlendirildi' : 'Bekliyor',
+        'Puan': s.score !== undefined ? s.score : '',
+        'Öğretmen Yorumu': s.feedback?.comment || s.teacherFeedback || ''
+      }
+    })
+
+    const ws = XLSX.utils.json_to_sheet(dataToExport)
+    const wb = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(wb, ws, "Notlar")
+    XLSX.writeFile(wb, "Ogrenci_Not_Listesi.xlsx")
+  }
 
   async function loadData() {
     setLoading(true)
@@ -82,7 +106,14 @@ export default function SubmissionsList() {
           <h2 className="text-white text-xl font-semibold">Uretimler</h2>
           <p className="text-slate-400 text-sm mt-0.5">{filtered.length} teslim</p>
         </div>
-        <button onClick={loadData} className="text-slate-400 hover:text-white text-sm">Yenile</button>
+        <div className="flex items-center gap-4">
+          <button onClick={exportToExcel} className="flex items-center gap-2 bg-emerald-600/20 hover:bg-emerald-600/40 text-emerald-400 border border-emerald-600/30 px-4 py-2 rounded-xl text-sm font-bold transition-all shadow-lg shadow-emerald-900/20">
+            <span>📊</span> Excel İndir
+          </button>
+          <button onClick={loadData} className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-bold transition-all border border-slate-700">
+            Yenile
+          </button>
+        </div>
       </div>
 
       <div className="flex gap-2 mb-8 flex-wrap">
