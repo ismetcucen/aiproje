@@ -39,6 +39,14 @@ const GAMES = [
     icon: '🚚',
     external: true
   }
+  ,
+  {
+    id: 'rodocodo',
+    title: 'Rodocodo (Kodlama)',
+    desc: 'Kod bloklarını kullanarak sevimli robota yol göster ve bulmacaları çöz!',
+    url: 'https://game.rodocodo.com/hour-of-code/',
+    icon: '🤖'
+  }
 ]
 
 export default function CodingGames() {
