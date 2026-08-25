@@ -21,12 +21,21 @@ export const VISUAL_PASSWORDS = [
   { id: 'sunflower', icon: '🌻', label: 'Çiçek' },
 ]
 
+
+function normalizeStr(str) {
+  if (!str) return '';
+  return str.trim().toLowerCase()
+    .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
+    .replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c')
+    .replace(/[^a-z0-9]/g, '');
+}
+
 export default function AddStudentModal({ classInfo, schoolCode, onClose, onSuccess }) {
   const [mode, setMode] = useState('visual') // 'visual' or 'email'
 
   const [form, setForm] = useState({
     fullName:    '',
-    studentNo:   '',
+    
     visualId:    'fox', // default
     email:       '',
     password:    '',
@@ -51,9 +60,9 @@ export default function AddStudentModal({ classInfo, schoolCode, onClose, onSucc
     let targetPassword = ''
     
     if (mode === 'visual') {
-      if (!form.studentNo.trim()) return setError('Öğrenci/Okul Numarası gerekli.')
+      if (!form.gradeNumber) return setError('Sınıf seviyesi gerekli.')
       // Generate deterministic credentials
-      targetEmail = `std_${form.studentNo.trim()}_${schoolCode}@ohep.edu.tr`
+      targetEmail = `std_${form.gradeNumber}_${normalizeStr(form.fullName)}@aistudio.com`
       targetPassword = `vp_${form.visualId}_2026!`
     } else {
       if (!form.email.trim()) return setError('Email gerekli.')
@@ -73,7 +82,7 @@ export default function AddStudentModal({ classInfo, schoolCode, onClose, onSucc
         classLevel:  classLevelFromGrade(form.gradeNumber),
         gradeNumber: Number(form.gradeNumber),
         schoolCode,
-        studentNo:   mode === 'visual' ? form.studentNo.trim() : null,
+        
         visualId:    mode === 'visual' ? form.visualId : null,
       })
       if (classInfo) {
@@ -81,7 +90,7 @@ export default function AddStudentModal({ classInfo, schoolCode, onClose, onSucc
       }
       onSuccess()
     } catch(err) {
-      if (err.code === 'auth/email-already-in-use') setError(mode === 'visual' ? 'Bu okul numarası zaten kullanımda.' : 'Bu email zaten kayıtlı.')
+      if (err.code === 'auth/email-already-in-use') setError(mode === 'visual' ? 'Bu isimde ve sınıfta bir öğrenci zaten var.' : 'Bu email zaten kayıtlı.')
       else setError('Öğrenci eklenemedi: ' + err.message)
     } finally {
       setSaving(false)
@@ -138,12 +147,7 @@ export default function AddStudentModal({ classInfo, schoolCode, onClose, onSucc
 
           {mode === 'visual' ? (
             <>
-              <div>
-                <label className="block text-slate-300 text-xs font-bold uppercase tracking-wider mb-2">Okul Numarası <span className="text-slate-500 lowercase">(Kullanıcı Adı yerine geçecek)</span></label>
-                <input type="text" value={form.studentNo} onChange={e => setForm(p => ({...p, studentNo: e.target.value}))}
-                  placeholder="1045" required
-                  className="w-full bg-slate-950 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all" />
-              </div>
+              
               <div>
                 <label className="block text-slate-300 text-xs font-bold uppercase tracking-wider mb-3">Gizli Görsel Ataması</label>
                 <div className="grid grid-cols-5 gap-2 max-h-48 overflow-y-auto custom-scrollbar p-1">

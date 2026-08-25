@@ -12,6 +12,15 @@ const SLOGANS = [
   "Kendi Hikayeni Yaz"
 ]
 
+
+function normalizeStr(str) {
+  if (!str) return '';
+  return str.trim().toLowerCase()
+    .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
+    .replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c')
+    .replace(/[^a-z0-9]/g, '');
+}
+
 export default function LoginPage() {
   const { login, register } = useAuth()
   const [tab, setTab]         = useState(TABS.VISUAL) // Default to visual for students
@@ -20,7 +29,7 @@ export default function LoginPage() {
   const [sloganIdx, setSloganIdx] = useState(0)
   
   const [loginData, setLoginData] = useState({ email: '', password: '' })
-  const [visualData, setVisualData] = useState({ studentNo: '', schoolCode: '', visualId: '' })
+  const [visualData, setVisualData] = useState({ fullName: '', gradeNumber: '', visualId: '' })
   const [regData, setRegData] = useState({
     fullName: '', email: '', password: '',
     role: ROLES.STUDENT, classLevel: CLASS_LEVELS.ORTAOKUL,
@@ -49,18 +58,18 @@ export default function LoginPage() {
 
   async function handleVisualLogin(e) {
     e.preventDefault()
-    if (!visualData.studentNo || !visualData.schoolCode || !visualData.visualId) {
-      return setError('Lütfen Okul Kodu, Öğrenci No ve Gizli Görselinizi seçin.')
+    if (!visualData.fullName || !visualData.gradeNumber || !visualData.visualId) {
+      return setError('Lütfen Adınızı, Sınıfınızı ve Gizli Görselinizi eksiksiz girin.')
     }
     setError(''); setLoading(true)
     
-    const computedEmail = `std_${visualData.studentNo.trim()}_${visualData.schoolCode.trim()}@ohep.edu.tr`
+    const computedEmail = `std_${visualData.gradeNumber}_${normalizeStr(visualData.fullName)}@aistudio.com`
     const computedPassword = `vp_${visualData.visualId}_2026!`
     
     try {
       await login(computedEmail, computedPassword)
     } catch(err) {
-      setError('Giriş başarısız. Numara, okul kodu veya görsel yanlış olabilir.')
+      setError('Giriş başarısız. İsminizi yanlış yazmış veya yanlış görsel seçmiş olabilirsiniz.')
     } finally {
       setLoading(false)
     }
@@ -160,20 +169,20 @@ export default function LoginPage() {
                 <form onSubmit={handleVisualLogin} className="space-y-5">
                   <div className="text-center mb-6">
                     <h3 className="text-white text-xl font-bold">Öğrenci Görsel Girişi</h3>
-                    <p className="text-slate-400 text-sm mt-1">Okul numarası ve gizli görselinle giriş yap.</p>
+                    <p className="text-slate-400 text-sm mt-1">Adın, sınıfın ve gizli görselinle giriş yap.</p>
                   </div>
                   
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-slate-300 text-xs font-bold uppercase tracking-wider mb-2">Okul Kodu</label>
-                      <input type="text" value={visualData.schoolCode} onChange={e => setVisualData(p => ({...p, schoolCode: e.target.value}))}
-                        placeholder="OHEP" required
-                        className="w-full bg-slate-950/50 border border-slate-700 text-white font-bold rounded-xl px-4 py-3.5 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-center" />
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="col-span-2">
+                      <label className="block text-slate-300 text-xs font-bold uppercase tracking-wider mb-2">Ad Soyad</label>
+                      <input type="text" value={visualData.fullName} onChange={e => setVisualData(p => ({...p, fullName: e.target.value}))}
+                        placeholder="Ali Yılmaz" required
+                        className="w-full bg-slate-950/50 border border-slate-700 text-white font-bold rounded-xl px-4 py-3.5 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all" />
                     </div>
-                    <div>
-                      <label className="block text-slate-300 text-xs font-bold uppercase tracking-wider mb-2">Okul Numarası</label>
-                      <input type="number" value={visualData.studentNo} onChange={e => setVisualData(p => ({...p, studentNo: e.target.value}))}
-                        placeholder="1045" required
+                    <div className="col-span-1">
+                      <label className="block text-slate-300 text-xs font-bold uppercase tracking-wider mb-2">Sınıf</label>
+                      <input type="number" min="1" max="12" value={visualData.gradeNumber} onChange={e => setVisualData(p => ({...p, gradeNumber: e.target.value}))}
+                        placeholder="5" required
                         className="w-full bg-slate-950/50 border border-slate-700 text-white font-bold rounded-xl px-4 py-3.5 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-center" />
                     </div>
                   </div>
