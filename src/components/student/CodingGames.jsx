@@ -47,6 +47,23 @@ const GAMES = [
     url: 'https://game.rodocodo.com/hour-of-code/',
     icon: '🤖'
   }
+  ,
+  {
+    id: 'codeorg',
+    title: 'Code.org',
+    desc: 'Eğlenceli görevlerle kodlama öğren ve kendi projeni yarat. (Yeni sekmede açılır)',
+    url: 'https://code.org/learn',
+    icon: '🌐',
+    external: true
+  },
+  {
+    id: 'quickdraw',
+    title: 'Quick, Draw! (AI)',
+    desc: '20 saniye içinde çizim yap, Google yapay zekası ne çizdiğini tahmin etsin! (Yeni sekmede açılır)',
+    url: 'https://quickdraw.withgoogle.com/',
+    icon: '✏️',
+    external: true
+  }
 ]
 
 export default function CodingGames() {

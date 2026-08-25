@@ -78,6 +78,15 @@ const TOOLS = [
     icon: '🎹',
     external: false
   }
+  ,
+  {
+    id: 'tinkercad',
+    title: 'Tinkercad',
+    desc: '3D tasarımlar yap ve sanal Arduino elektronik devreleri kur. (Yeni sekmede açılır)',
+    url: 'https://www.tinkercad.com/',
+    icon: '🧊',
+    external: true
+  }
 ]
 
 export default function LessonTools() {
