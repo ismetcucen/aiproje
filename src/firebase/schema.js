@@ -1,4 +1,4 @@
-import { doc, collection, addDoc, setDoc, getDoc, getDocs, updateDoc, query, where, orderBy, serverTimestamp, Timestamp, writeBatch, limit } from 'firebase/firestore'
+import { doc, collection, addDoc, setDoc, getDoc, getDocs, updateDoc, query, where, orderBy, serverTimestamp, Timestamp, writeBatch, limit, deleteDoc } from 'firebase/firestore'
 import { db, storage } from './config'
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import { generateCurriculumList } from '../data/defaultCurriculum'
@@ -333,4 +333,32 @@ export async function logAttendance(userId) {
   }).catch(() => {
     // maybe field doesn't exist yet, arrayUnion still works if doc exists.
   });
+}
+
+export async function deleteClass(classId) {
+  await deleteDoc(doc(db, 'classes', classId))
+}
+
+export async function updateClass(classId, data) {
+  await updateDoc(doc(db, 'classes', classId), {
+    ...data,
+    updatedAt: serverTimestamp()
+  })
+}
+
+export async function deleteUser(userId) {
+  // Hard delete a user
+  await deleteDoc(doc(db, 'users', userId))
+}
+
+export async function updateUser(userId, data) {
+  await updateDoc(doc(db, 'users', userId), {
+    ...data,
+    updatedAt: serverTimestamp()
+  })
+}
+
+export async function forceRemoveStudentFromClass(classId, userId) {
+  // Hard delete the association instead of soft delete
+  await deleteDoc(doc(db, 'class_students', `${classId}_${userId}`))
 }

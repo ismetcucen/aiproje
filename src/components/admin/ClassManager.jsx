@@ -35,6 +35,34 @@ export default function ClassManager({ schoolCode }) {
     finally { setLoading(false) }
   }
 
+  
+  async function handleDeleteClass(classId) {
+    if (!window.confirm("Bu sınıfı silmek istediğinize emin misiniz? (Öğrenciler silinmez, sadece sınıftan çıkarılır)")) return;
+    try {
+      await deleteClass(classId);
+      setSuccess("Sınıf başarıyla silindi!");
+      if (selected?.id === classId) setSelected(null);
+      await loadData();
+    } catch(err) {
+      setError(err.message || "Sınıf silinirken hata oluştu.");
+    }
+  }
+
+  async function handleRemoveStudent(studentId) {
+    if (!selected) return;
+    if (!window.confirm("Bu öğrenciyi sınıftan çıkarmak istediğinize emin misiniz?")) return;
+    try {
+      await forceRemoveStudentFromClass(selected.id, studentId);
+      setSuccess("Öğrenci sınıftan çıkarıldı.");
+      const m = await import('../../firebase/schema');
+      const studs = await m.getStudentsByClass(selected.id);
+      setStudents(studs);
+      await loadData();
+    } catch(err) {
+      setError(err.message || "Öğrenci çıkarılırken hata oluştu.");
+    }
+  }
+
   async function handleCreateClass() {
     const exists = classes.find(c => c.grade === newGrade && c.section === newSection)
     if (exists) return setError(`${newGrade}/${newSection} sinifi zaten var.`)
@@ -153,18 +181,24 @@ export default function ClassManager({ schoolCode }) {
                 <p className="text-slate-500 text-base">Henüz sınıf yok.</p>
               </div>
             ) : classes.map(cls => (
-              <button key={cls.id} onClick={() => selectClass(cls)}
-                className={`w-full text-left px-5 py-4 rounded-2xl border transition-all duration-200 ${
+              <div key={cls.id} className={`group relative w-full flex items-center px-5 py-4 rounded-2xl border transition-all duration-200 ${
                   selected?.id === cls.id
                     ? 'bg-red-900/20 border-red-500/50 shadow-lg shadow-red-900/20'
                     : 'bg-slate-900/50 border-slate-800 hover:bg-slate-800 hover:border-slate-700'
                 }`}>
-                <div className="flex items-center justify-between">
-                  <p className={`text-lg font-bold ${selected?.id === cls.id ? 'text-red-400' : 'text-slate-200'}`}>{cls.name}</p>
-                  <span className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${selected?.id === cls.id ? 'bg-red-500/20 text-red-400' : 'bg-slate-800 text-slate-400'}`}>{cls.section}</span>
-                </div>
-                <p className={`text-sm mt-1 ${selected?.id === cls.id ? 'text-red-300/70' : 'text-slate-500'}`}>{cls.grade}. Sınıf Seviyesi</p>
-              </button>
+                <button onClick={() => selectClass(cls)} className="flex-1 text-left">
+                  <div className="flex items-center justify-between">
+                    <p className={`text-lg font-bold ${selected?.id === cls.id ? 'text-red-400' : 'text-slate-200'}`}>{cls.name}</p>
+                    <span className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${selected?.id === cls.id ? 'bg-red-500/20 text-red-400' : 'bg-slate-800 text-slate-400'}`}>{cls.section}</span>
+                  </div>
+                  <p className={`text-sm mt-1 ${selected?.id === cls.id ? 'text-red-300/70' : 'text-slate-500'}`}>{cls.grade}. Sınıf Seviyesi</p>
+                </button>
+                <button onClick={(e) => { e.stopPropagation(); handleDeleteClass(cls.id); }}
+                  title="Sınıfı Sil"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 bg-red-600 hover:bg-red-500 text-white w-8 h-8 rounded-full flex items-center justify-center transition-all">
+                  🗑️
+                </button>
+              </div>
             ))}
           </div>
         </div>
@@ -229,9 +263,14 @@ export default function ClassManager({ schoolCode }) {
                             <p className="text-slate-400 text-sm">{s.email}</p>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2 bg-green-500/10 px-3 py-1.5 rounded-full border border-green-500/20">
-                          <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                          <span className="text-green-400 text-xs font-bold uppercase tracking-wider">Aktif</span>
+                        <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-2 bg-green-500/10 px-3 py-1.5 rounded-full border border-green-500/20">
+                            <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                            <span className="text-green-400 text-xs font-bold uppercase tracking-wider">Aktif</span>
+                          </div>
+                          <button onClick={() => handleRemoveStudent(s.id)} title="Öğrenciyi Sınıftan Çıkar" className="bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 p-2 rounded-xl transition-colors">
+                            ❌
+                          </button>
                         </div>
                       </div>
                     ))}
