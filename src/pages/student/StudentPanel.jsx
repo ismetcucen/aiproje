@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '../../hooks/useAuth'
+import { logAttendance } from '../../firebase/schema'
 import AssignmentList from '../../components/student/AssignmentList'
 import Studio from '../../components/student/Studio'
 import Portfolio from '../../components/student/Portfolio'
@@ -11,9 +12,15 @@ const MENU = [
 ]
 
 export default function StudentPanel() {
-  const { profile, logout } = useAuth()
+  const { user, profile, logout } = useAuth()
   const [active, setActive]                     = useState('assignments')
   const [selectedAssignment, setSelectedAssignment] = useState(null)
+
+  useEffect(() => {
+    if (user?.uid) {
+      logAttendance(user.uid).catch(console.error)
+    }
+  }, [user])
 
   function goToStudio(assignment) {
     setSelectedAssignment(assignment)

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import AssignmentForm from '../../components/teacher/AssignmentForm'
+import Attendance from '../../components/teacher/Attendance'
 import StudentList from '../../components/teacher/StudentList'
 import SubmissionsList from '../../components/teacher/SubmissionsList'
 import CurriculumAssigner from '../../components/teacher/CurriculumAssigner'
@@ -9,6 +10,7 @@ const MENU = [
   { id: 'curriculum',  label: 'Müfredat',   icon: '📚' },
   { id: 'assignments', label: 'Görevler',   icon: '📋' },
   { id: 'students',    label: 'Öğrenciler', icon: '👥' },
+  { id: 'attendance',  label: 'Yoklama',    icon: '✅' },
   { id: 'submissions', label: 'Üretimler',  icon: '📝' },
 ]
 
@@ -82,6 +84,7 @@ export default function TeacherPanel() {
           {active === 'curriculum'  && <CurriculumAssigner />}
           {active === 'assignments' && <AssignmentForm />}
           {active === 'students'    && <StudentList />}
+          {active === 'attendance'  && <Attendance />}
           {active === 'submissions' && <SubmissionsList />}
         </div>
       </main>

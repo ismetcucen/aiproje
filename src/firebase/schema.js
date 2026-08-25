@@ -317,3 +317,20 @@ export async function getPublicPortfolio(userId) {
     submissions: submissions.filter(s => s.score !== null) // only graded
   };
 }
+
+
+// ─── YOKLAMA (ATTENDANCE) ──────────────────────────────────────
+
+export async function logAttendance(userId) {
+  if (!userId) return;
+  const today = new Date();
+  // YYYY-MM-DD
+  const dateStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+  
+  const userRef = doc(db, 'users', userId);
+  await updateDoc(userRef, {
+    loginDates: arrayUnion(dateStr)
+  }).catch(() => {
+    // maybe field doesn't exist yet, arrayUnion still works if doc exists.
+  });
+}
