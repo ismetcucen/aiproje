@@ -74,7 +74,6 @@ export default function AddStudentModal({ classInfo, schoolCode, onClose, onSucc
     
     if (mode === 'visual') {
       if (!form.gradeNumber) return setError('Sınıf seviyesi gerekli.')
-      // Generate deterministic credentials
       targetEmail = `std_${form.gradeNumber}_${normalizeStr(form.fullName)}@aistudio.com`
       targetPassword = `vp_${form.visualId}_2026!`
     } else {
@@ -85,33 +84,59 @@ export default function AddStudentModal({ classInfo, schoolCode, onClose, onSucc
     }
 
     setError(''); setSaving(true)
+    
     try {
-      const secAuth = getSecondaryAuth()
-      const cred = await createUserWithEmailAndPassword(secAuth, targetEmail, targetPassword)
-      await updateProfile(cred.user, { displayName: form.fullName.trim() })
-      const secDb = getFirestore(secAuth.app);
-      await setDoc(doc(secDb, 'users', cred.user.uid), {
-        fullName:    form.fullName.trim(),
-        email:       targetEmail,
-        role:        ROLES.STUDENT,
-        classLevel:  classLevelFromGrade(form.gradeNumber),
-        gradeNumber: Number(form.gradeNumber),
-        schoolCode,
-        visualId:    mode === 'visual' ? form.visualId : null,
-        files:       [],
-        createdAt:   serverTimestamp(),
-        isActive:    true,
-      })
-      if (classInfo) {
-        await addStudentToClass(classInfo.id, cred.user.uid)
+      const secAuth = getSecondaryAuth();
+      let cred;
+      
+      try {
+        cred = await createUserWithEmailAndPassword(secAuth, targetEmail, targetPassword);
+      } catch (authErr) {
+        if (authErr.code === 'auth/email-already-in-use') {
+          try {
+            // Hesap yarım kalmış, giriş yapıp kurtarmayı deneyelim
+            cred = await signInWithEmailAndPassword(secAuth, targetEmail, targetPassword);
+          } catch (loginErr) {
+            throw new Error('HESAP_VAR_AMA_SIFRE_YANLIS: Bu isimde bir öğrenci var ancak ona atanan görsel bu değildi! Öğrenciyi önceki seçilen görseliyle eklemeyi deneyin. (' + loginErr.message + ')');
+          }
+        } else {
+          throw new Error('KAYIT_HATASI: ' + authErr.message);
+        }
       }
-      await signOut(secAuth)
-      onSuccess()
+      
+      try {
+        const secDb = getFirestore(secAuth.app);
+        await updateProfile(cred.user, { displayName: form.fullName.trim() });
+        await setDoc(doc(secDb, 'users', cred.user.uid), {
+          fullName:    form.fullName.trim(),
+          email:       targetEmail,
+          role:        ROLES.STUDENT,
+          classLevel:  classLevelFromGrade(form.gradeNumber),
+          gradeNumber: Number(form.gradeNumber),
+          schoolCode,
+          visualId:    mode === 'visual' ? form.visualId : null,
+          files:       [],
+          createdAt:   serverTimestamp(),
+          isActive:    true,
+        });
+      } catch (firestoreErr) {
+        throw new Error('VERITABANI_KAYIT_HATASI: ' + firestoreErr.message);
+      }
+      
+      try {
+        if (classInfo) {
+          await addStudentToClass(classInfo.id, cred.user.uid);
+        }
+      } catch (classErr) {
+        throw new Error('SINIFA_EKLEME_HATASI: ' + classErr.message);
+      }
+      
+      await signOut(secAuth);
+      onSuccess();
     } catch(err) {
-      if (err.code === 'auth/email-already-in-use') setError(mode === 'visual' ? 'Bu isimde ve sınıfta bir öğrenci zaten var.' : 'Bu email zaten kayıtlı.')
-      else setError('Öğrenci eklenemedi: ' + err.message)
+      setError(err.message);
     } finally {
-      setSaving(false)
+      setSaving(false);
     }
   }
 
