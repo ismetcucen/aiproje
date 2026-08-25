@@ -52,7 +52,7 @@ export default function StudentPanel() {
         </div>
 
         <nav className="flex-1 p-4 space-y-1.5 overflow-y-auto custom-scrollbar">
-          {MENU.map(item => (
+          {[...MENU, ...(settings.codingModuleEnabled ? [{ id: "games", label: "Eğlence & Kodlama", icon: "🎮" }] : [])].map(item => (
             <button key={item.id} onClick={() => setActive(item.id)}
               className={`w-full flex items-center justify-start px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 group ${
                 active === item.id
