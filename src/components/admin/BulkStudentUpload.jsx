@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { createUserWithEmailAndPassword, updateProfile, getAuth, signOut } from 'firebase/auth'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, getAuth, signOut } from 'firebase/auth'
 import { initializeApp, getApp } from 'firebase/app'
 import { getFirestore, doc, setDoc, serverTimestamp } from 'firebase/firestore'
 import app, { auth } from '../../firebase/config'
