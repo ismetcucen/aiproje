@@ -1,4 +1,4 @@
-import { doc, collection, addDoc, setDoc, getDoc, getDocs, updateDoc, query, where, orderBy, serverTimestamp, Timestamp, writeBatch, limit, deleteDoc } from 'firebase/firestore'
+import { doc, collection, addDoc, setDoc, getDoc, getDocs, updateDoc, query, where, orderBy, serverTimestamp, Timestamp, writeBatch, limit, deleteDoc, onSnapshot } from 'firebase/firestore'
 import { db, storage } from './config'
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import { generateCurriculumList } from '../data/defaultCurriculum'
@@ -361,4 +361,45 @@ export async function updateUser(userId, data) {
 export async function forceRemoveStudentFromClass(classId, userId) {
   // Hard delete the association instead of soft delete
   await deleteDoc(doc(db, 'class_students', `${classId}_${userId}`))
+}
+
+// --- NOTIFICATIONS ---
+export async function createNotification(userId, { title, message, type, link }) {
+  await addDoc(collection(db, 'notifications'), {
+    userId,
+    title,
+    message,
+    type: type || 'general',
+    link: link || null,
+    isRead: false,
+    createdAt: serverTimestamp()
+  })
+}
+
+export async function markNotificationAsRead(notifId) {
+  await updateDoc(doc(db, 'notifications', notifId), { isRead: true })
+}
+
+export async function getUserNotifications(userId) {
+  const q = query(
+    collection(db, 'notifications'), 
+    where('userId', '==', userId), 
+    orderBy('createdAt', 'desc'), 
+    limit(20)
+  )
+  const snap = await getDocs(q)
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }))
+}
+
+export function listenUserNotifications(userId, callback) {
+  
+  const q = query(
+    collection(db, 'notifications'), 
+    where('userId', '==', userId), 
+    orderBy('createdAt', 'desc'), 
+    limit(20)
+  )
+  return onSnapshot(q, (snap) => {
+    callback(snap.docs.map(d => ({ id: d.id, ...d.data() })))
+  })
 }

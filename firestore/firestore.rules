@@ -9,6 +9,13 @@ service cloud.firestore {
       return request.auth != null;
     }
 
+    match /notifications/{notifId} {
+      allow read, update: if isAuth() && resource.data.userId == request.auth.uid;
+      allow create: if isAuth(); // Teachers and students can create notifications for each other
+      allow delete: if isAuth() && resource.data.userId == request.auth.uid;
+    }
+
+
     // Kendi dökümanı mı?
     function isOwner(uid) {
       return request.auth.uid == uid;
@@ -55,7 +62,7 @@ service cloud.firestore {
                          .hasOnly(['fullName', 'gradeNumber']);
 
       // Admin her şeyi güncelleyebilir (isActive, rol değişikliği)
-      allow update, delete: if isAdmin();
+      allow create, update, delete: if isAdmin() || isTeacher();
     }
 
     // ─── ASSIGNMENTS ───────────────────────────────────────────────

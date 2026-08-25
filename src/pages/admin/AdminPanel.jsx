@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useAuth } from '../../hooks/useAuth'
+import NotificationBell from '../../components/NotificationBell'
 import UserManager from '../../components/admin/UserManager'
 import Stats from '../../components/admin/Stats'
 import ClassManager from '../../components/admin/ClassManager'

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useAuth } from '../../hooks/useAuth'
+import NotificationBell from '../../components/NotificationBell'
 import AssignmentForm from '../../components/teacher/AssignmentForm'
 import Attendance from '../../components/teacher/Attendance'
 import StudentList from '../../components/teacher/StudentList'
@@ -85,6 +86,7 @@ export default function TeacherPanel() {
               <p className="text-slate-400 text-xs font-medium">Yönetim ve Takip</p>
             </div>
           </div>
+          <NotificationBell />
           <div className="hidden md:flex items-center gap-3 bg-slate-50 px-4 py-2 rounded-full border border-slate-200">
             <span className="text-xl">🎓</span>
             <div>

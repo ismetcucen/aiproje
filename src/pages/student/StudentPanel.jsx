@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../hooks/useAuth'
+import NotificationBell from '../../components/NotificationBell'
 import { logAttendance } from '../../firebase/schema'
 import AssignmentList from '../../components/student/AssignmentList'
 import Studio from '../../components/student/Studio'
@@ -87,6 +88,7 @@ export default function StudentPanel() {
               <p className="text-slate-400 text-xs font-medium">Çalışma Alanı</p>
             </div>
           </div>
+          <NotificationBell />
           <div className="hidden md:flex items-center gap-3 bg-indigo-50 px-4 py-2 rounded-full border border-indigo-100">
             <span className="text-xl">🏫</span>
             <div>
