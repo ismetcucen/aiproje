@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import NotificationBell from '../../components/NotificationBell'
+import CodingGames from '../../components/student/CodingGames'
+import LessonTools from '../../components/student/LessonTools'
+import HighSchoolAILab from '../../components/student/HighSchoolAILab'
 import UserManager from '../../components/admin/UserManager'
 import Stats from '../../components/admin/Stats'
 import ClassManager from '../../components/admin/ClassManager'
@@ -14,6 +17,9 @@ const MENU = [
   { id: 'curriculum', label: 'Müfredat',      icon: '📚' },
   { id: 'users',      label: 'Kullanıcılar',  icon: '👥' },
   { id: 'attendance', label: 'Yoklama',      icon: '✅' },
+  { id: 'games', label: 'Oyunlar', icon: '🎮' },
+  { id: 'tools', label: 'Araçlar', icon: '🛠️' },
+  { id: 'ailab', label: 'Lise AI Lab', icon: '🧠' },
   { id: 'settings',   label: 'Ayarlar',      icon: '⚙️' },
 ]
 
@@ -75,6 +81,9 @@ export default function AdminPanel() {
           {active === 'curriculum' && <CurriculumEditor />}
           {active === 'users'      && <UserManager />}
           {active === 'attendance' && <Attendance />}
+          {active === 'games'       && <CodingGames />}
+          {active === 'tools'       && <LessonTools />}
+          {active === 'ailab'       && <HighSchoolAILab />}
           {active === 'settings'   && <ClassSettings />}
         </div>
       </main>

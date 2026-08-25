@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import NotificationBell from '../../components/NotificationBell'
+import CodingGames from '../../components/student/CodingGames'
+import LessonTools from '../../components/student/LessonTools'
+import HighSchoolAILab from '../../components/student/HighSchoolAILab'
 import AssignmentForm from '../../components/teacher/AssignmentForm'
 import Attendance from '../../components/teacher/Attendance'
 import StudentList from '../../components/teacher/StudentList'
@@ -14,6 +17,9 @@ const MENU = [
   { id: 'students',    label: 'Öğrenciler', icon: '👥' },
   { id: 'attendance',  label: 'Yoklama',    icon: '✅' },
   { id: 'submissions', label: 'Üretimler',  icon: '📝' },
+  { id: 'games', label: 'Oyunlar', icon: '🎮' },
+  { id: 'tools', label: 'Araçlar', icon: '🛠️' },
+  { id: 'ailab', label: 'Lise AI Lab', icon: '🧠' },
   { id: 'settings', label: 'Ayarlar', icon: '⚙️' },
 ]
 
@@ -104,6 +110,9 @@ export default function TeacherPanel() {
           {active === 'students'    && <StudentList />}
           {active === 'attendance'  && <Attendance />}
           {active === 'submissions' && <SubmissionsList />}
+          {active === 'games'       && <CodingGames />}
+          {active === 'tools'       && <LessonTools />}
+          {active === 'ailab'       && <HighSchoolAILab />}
           {active === 'settings' && <ClassSettings />}
         </div>
       </main>
