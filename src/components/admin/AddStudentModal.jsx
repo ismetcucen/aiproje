@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
-import { auth } from '../../firebase/config'
+import { createUserWithEmailAndPassword, updateProfile, getAuth, signOut } from 'firebase/auth'
+import { initializeApp, getApp } from 'firebase/app'
+import app, { auth } from '../../firebase/config'
 import { createUserProfile, addStudentToClass, ROLES, CLASS_LEVELS } from '../../firebase/schema'
 
 export const VISUAL_PASSWORDS = [
@@ -28,6 +29,17 @@ function normalizeStr(str) {
     .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
     .replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c')
     .replace(/[^a-z0-9]/g, '');
+}
+
+
+function getSecondaryAuth() {
+  let secondaryApp;
+  try {
+    secondaryApp = getApp('SecondaryApp');
+  } catch (e) {
+    secondaryApp = initializeApp(app.options, 'SecondaryApp');
+  }
+  return getAuth(secondaryApp);
 }
 
 export default function AddStudentModal({ classInfo, schoolCode, onClose, onSuccess }) {
@@ -73,7 +85,8 @@ export default function AddStudentModal({ classInfo, schoolCode, onClose, onSucc
 
     setError(''); setSaving(true)
     try {
-      const cred = await createUserWithEmailAndPassword(auth, targetEmail, targetPassword)
+      const secAuth = getSecondaryAuth()
+      const cred = await createUserWithEmailAndPassword(secAuth, targetEmail, targetPassword)
       await updateProfile(cred.user, { displayName: form.fullName.trim() })
       await createUserProfile(cred.user.uid, {
         fullName:    form.fullName.trim(),
@@ -88,6 +101,7 @@ export default function AddStudentModal({ classInfo, schoolCode, onClose, onSucc
       if (classInfo) {
         await addStudentToClass(classInfo.id, cred.user.uid)
       }
+      await signOut(secAuth)
       onSuccess()
     } catch(err) {
       if (err.code === 'auth/email-already-in-use') setError(mode === 'visual' ? 'Bu isimde ve sınıfta bir öğrenci zaten var.' : 'Bu email zaten kayıtlı.')

@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
-import { auth } from '../../firebase/config'
+import { createUserWithEmailAndPassword, updateProfile, getAuth, signOut } from 'firebase/auth'
+import { initializeApp, getApp } from 'firebase/app'
+import app, { auth } from '../../firebase/config'
 import { createUserProfile, addStudentToClass, ROLES, CLASS_LEVELS } from '../../firebase/schema'
 
 function classLevelFromGrade(grade) {
@@ -8,6 +9,17 @@ function classLevelFromGrade(grade) {
   if (g <= 4) return CLASS_LEVELS.ILKOKUL
   if (g <= 8) return CLASS_LEVELS.ORTAOKUL
   return CLASS_LEVELS.LISE
+}
+
+
+function getSecondaryAuth() {
+  let secondaryApp;
+  try {
+    secondaryApp = getApp('SecondaryApp');
+  } catch (e) {
+    secondaryApp = initializeApp(app.options, 'SecondaryApp');
+  }
+  return getAuth(secondaryApp);
 }
 
 export default function BulkStudentUpload({ classInfo, schoolCode, onSuccess }) {
@@ -59,8 +71,10 @@ export default function BulkStudentUpload({ classInfo, schoolCode, onSuccess }) 
     for (let i = 0; i < students.length; i++) {
       const s = students[i]
       try {
-        const cred = await createUserWithEmailAndPassword(auth, s.email, s.password)
+        const secAuth = getSecondaryAuth()
+        const cred = await createUserWithEmailAndPassword(secAuth, s.email, s.password)
         await updateProfile(cred.user, { displayName: s.fullName })
+        await signOut(secAuth)
         await createUserProfile(cred.user.uid, {
           fullName:    s.fullName,
           email:       s.email,
