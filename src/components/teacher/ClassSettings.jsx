@@ -50,10 +50,10 @@ export default function ClassSettings() {
               🎮
             </div>
             <div>
-              <h3 className="text-xl font-bold text-slate-800 mb-2">Eğlence ve Kodlama Modülü</h3>
+              <h3 className="text-xl font-bold text-slate-800 mb-2">Oyunlar ve Ders Araçları Modülü</h3>
               <p className="text-slate-500 text-sm leading-relaxed max-w-xl mb-4">
                 Bu modülü açtığınızda, 3. ve 4. sınıf (veya daha küçük yaş) öğrencilerinizin panelinde 
-                <strong> "Kodlama ve Oyunlar"</strong> sekmesi belirir. Bu alanda Blockly Games ve Scratch gibi 
+                <strong> "Oyunlar"</strong> ve <strong> "Araçlar"</strong> sekmeleri belirir. Bu alanda Blockly Games, Scratch (TurboWarp), MakeCode (Micro:bit) ve Çizim Araçları gibi 
                 eğitici mini oyunlar bulunur. Görevlere odaklanmalarını istediğinizde bu modülü kapatabilirsiniz.
               </p>
               <div className="flex gap-2 items-center">

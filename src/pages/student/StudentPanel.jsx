@@ -7,6 +7,7 @@ import Studio from '../../components/student/Studio'
 import Portfolio from '../../components/student/Portfolio'
 import StudentHome from '../../components/student/StudentHome'
 import CodingGames from '../../components/student/CodingGames'
+import LessonTools from '../../components/student/LessonTools'
 import { getSchoolSettings } from '../../firebase/schema'
 
 const MENU = [
@@ -52,7 +53,7 @@ export default function StudentPanel() {
         </div>
 
         <nav className="flex-1 p-4 space-y-1.5 overflow-y-auto custom-scrollbar">
-          {[...MENU, ...(settings.codingModuleEnabled ? [{ id: "games", label: "Eğlence & Kodlama", icon: "🎮" }] : [])].map(item => (
+          {[...MENU, ...(settings.codingModuleEnabled ? [{ id: "games", label: "Oyunlar", icon: "🎮" }, { id: "tools", label: "Araçlar", icon: "🛠️" }] : [])].map(item => (
             <button key={item.id} onClick={() => setActive(item.id)}
               className={`w-full flex items-center justify-start px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 group ${
                 active === item.id
@@ -110,6 +111,7 @@ export default function StudentPanel() {
           {active === 'studio'      && <Studio assignment={selectedAssignment} onBack={() => setActive('assignments')} />}
           {active === 'portfolio'   && <Portfolio />}
           {active === 'games'       && <CodingGames />}
+          {active === 'tools'       && <LessonTools />}
         </div>
       </main>
     </div>
