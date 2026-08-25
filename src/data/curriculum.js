@@ -3,81 +3,369 @@ export const SECTIONS = ["A", "B", "C"]
 
 export const CURRICULUM = {
   "3": [
-    { week: 1, dateRange: "14 - 18 Eylül", title: "Yapay Zeka Nedir?", description: "Yapay zekanin ne oldugunu ve gunluk hayatta nasil kullanildigini kesfediyoruz.", objectives: ["Yapay zeka kavramini tanimlar", "Akilli cihazlara ornekler verir", "AI nin insanlara nasil yardim ettigini aciklar"], aiTools: ["Google Assistant", "Siri"], duration: 40, output: "Akilli cihazlar listesi", activity: "Evindeki ve okuldaki akilli cihazlari listele. Her birinin ne yapabildigini yaz." },
-    { week: 2, dateRange: "21 - 25 Eylül", title: "Bilgisayarlar Nasil Dusunur?", description: "Bilgisayarlarin talimatlarla calistigini ve algoritma kavrami.", objectives: ["Algoritma kavramini aciklar", "Adim adim talimat yazabilir", "Bilgisayar ile insan dusuncesini karsilastirir"], aiTools: ["Code.org", "Scratch Jr"], duration: 40, output: "Adim adim talimat listesi", activity: "Bir robota sandvic yap talimati ver. Her adimi numarala. Kac adim oldu?" },
-    { week: 3, dateRange: "28 Eyl - 2 Eki", title: "Siralama ve Kurallar", description: "Gunluk hayattaki siralama ve kurallari algoritma olarak ifade etme.", objectives: ["Gunluk rutinleri algoritma olarak yazar", "Dogru siralama onemini aciklar", "Hatalı algoritmayı fark eder"], aiTools: ["Scratch Jr", "Blockly"], duration: 40, output: "Sabah rutini algoritmasi", activity: "Sabah rutinini siraya koy: uyan, disleri firlcala, kahvalti yap. Kac adim?" },
-    { week: 4, dateRange: "5 - 9 Ekim", title: "Oruntuler ve Tekrarlar", description: "Bilgisayarlarin oruntuleri nasil tanıdigini renk ve sekil ornekleriyle anlama.", objectives: ["Oruntu kavramini tanimlar", "Oruntuleri devam ettirebilir", "Bilgisayarlarin oruntu bulma yetenegini aciklar"], aiTools: ["Google Teachable Machine"], duration: 40, output: "Oruntu kartlari", activity: "Kirmizi-mavi-kirmizi-mavi oruntusunu devam ettir. Kendi oruntunu olustur." },
-    { week: 5, dateRange: "12 - 16 Ekim", title: "Verilerle Tanisiyoruz", description: "Veri toplama, saklama ve basit grafik olusturma.", objectives: ["Veri kavramini aciklar", "Basit veri toplar ve kaydeder", "Cubuk grafik olusturur"], aiTools: ["Google Forms", "Canva"], duration: 40, output: "Sinif dogum ayi grafigi", activity: "Arkadaslarinin dogum aylarini listele. Hangi ayda en cok dogum var? Grafik ciz." },
-    { week: 6, dateRange: "19 - 23 Ekim", title: "Resim Yapan Yapay Zeka", description: "AI gorsel uretim araclarini kesfetme ve AI uretimini insan uretimi ile karsilastirma.", objectives: ["AI nin gorsel uretilebilecegini gosterir", "AI ve insan sanatini karsilastirir", "Yaratici AI kavramini aciklar"], aiTools: ["Canva AI", "AutoDraw"], duration: 40, output: "AI ve insan resmi karsilastirmasi", activity: "AutoDraw ile bir nesne ciz. Ardindan kendın ciz. Hangi daha iyi? Neden?" },
-    { week: 7, dateRange: "26 - 30 Ekim", title: "Soru Soran Makine", description: "Chatbot kavrami, AI ile nasil etkilesim kurulacagi.", objectives: ["Chatbot kavramini tanimlar", "AI ya dogru soru sorar", "AI cevaplarini degerlendirir"], aiTools: ["ChatGPT", "Google Gemini"], duration: 40, output: "3 soru ve degerlendirme", activity: "Bir chatbota 3 farkli soru sor. Cevaplari yaz. Hangi cevap daha yardimci oldu?" },
-    { week: 8, dateRange: "2 - 6 Kasım", title: "Dogru ve Yanlis Bilgi", description: "AI her zaman dogru soylemez. Bilgi dogrulama ve elestirel dusunme.", objectives: ["AI nin hata yapabilecegini aciklar", "Bilgi dogrulama yontemlerini kullanir", "Elestirel okuma becerisi kazanir"], aiTools: ["ChatGPT", "Google Search"], duration: 40, output: "Dogru-yanlis kontrol raporu", activity: "AI ya bir soru sor. Verdigi cevabi internette kontrol et. Dogru muydu?" },
-    { week: 9, dateRange: "9 - 13 Kasım", title: "Sesli Asistanlar", description: "Siri, Google Assistant, Alexa gibi sesli AI sistemleri.", objectives: ["Sesli asistan kavramini aciklar", "Sesli komut kullanabilir", "Ses tanima teknolojisini anlar"], aiTools: ["Google Assistant", "Siri", "Alexa"], duration: 40, output: "Sesli asistan test raporu", activity: "Sesli asistana 5 farkli komut ver. Hangilerini anladi, hangilerini anlamadi? Yaz." },
-    { week: 10, dateRange: "23 - 27 Kasım", title: "AI ile Hikaye Yaziyoruz", description: "AI destekli yaratici yazarlik, insan-AI isbirligi.", objectives: ["AI ile yaratici isbirligi yapar", "Hikaye unsurlarini tanimlar", "AI ciktisini kendi sozleriyle gelisitrir"], aiTools: ["ChatGPT", "Google Gemini"], duration: 40, output: "Ortak yazilmis hikaye", activity: "AI ya bir hikaye baslangici ver. AI devam etsin. Sen bitir. Hikayeni sinifa sun." },
-    { week: 11, dateRange: "30 Kas - 4 Ara", title: "Makineler Ogrenebilir mi?", description: "Makine ogrenmesi kavrami, orneklerle ogrenme.", objectives: ["Makine ogrenmesi kavramini aciklar", "Ornek vererek ogretme fikrini anlar", "ML ile normal programlamayi karsilastirir"], aiTools: ["Google Teachable Machine"], duration: 40, output: "Ornek veri seti", activity: "Teachable Machine a 10 farkli nesne fotografini goster. Yeni nesneleri taniyabildi mi?" },
-    { week: 12, dateRange: "7 - 11 Aralık", title: "Guvenli Internet Kullanimi", description: "AI araclarini guvenli kullanma, kisisel veri koruma.", objectives: ["Kisisel veri kavramini aciklar", "AI araclarinda guvenli davranis gosterir", "Paylasilmamasi gereken bilgileri listeler"], aiTools: ["Google SafeSearch"], duration: 40, output: "Guvenli internet kurallari posteri", activity: "Internette paylasılmamasi gereken 10 bilgiyi listele. Neden tehlikeli?" },
-    { week: 13, dateRange: "14 - 18 Aralık", title: "AI ile Muzik", description: "Yapay zeka muzik uretimi, AI nin yaratici alanlardaki rolu.", objectives: ["AI muzik uretebilecegini gosterir", "Muzigi duyguyla iliskilendirir", "AI yaraticiligini degerlendirir"], aiTools: ["Suno", "Chrome Music Lab"], duration: 40, output: "AI uretimi muzik ve degerlendirme", activity: "Chrome Music Lab ile kisa bir melodi olustur. Hangi duyguyu anlatiyor?" },
-    { week: 14, dateRange: "21 - 25 Aralık", title: "Robotlar Neler Yapabilir?", description: "Robot cesitleri, kullanim alanlari, insan-robot farki.", objectives: ["Farkli robot turlerini tanimlar", "Robotlarin kullanim alanlarini listeler", "Robot ve insan guclerini karsilastirir"], aiTools: ["YouTube (robot videolari)"], duration: 40, output: "Robot arastirma posteri", activity: "3 farkli robot videosunu izle. Her robotun ne is yaptigini ve neden ozel oldugunu yaz." },
-    { week: 15, dateRange: "28 Ara - 1 Oca", title: "AI Oyunlarinda", description: "Video oyunlarinda AI kullanimi, NPC davranislari.", objectives: ["Oyun AI sini aciklar", "NPC kavramini tanimlar", "AI davranislarini gozlemler"], aiTools: ["Chess.com"], duration: 40, output: "Oyun AI analizi", activity: "Chess.com da AI ya karsi oyna. AI nasil karar verdi? Stratejisini yaz." },
-    { week: 16, dateRange: "4 - 8 Ocak", title: "Yariyil Projesi", description: "Yari yil degerlenirme, ogrendiklerini gosterme.", objectives: ["Yari yil boyunca ogrenilenleri ozetler", "AI nin 3 kullanim alanini aciklar", "Proje sunar"], aiTools: ["Canva", "Google Slides"], duration: 80, output: "Yariyil sunumu", activity: "Bu yariyil yapay zeka hakkinda ogrendigin 5 seyi Canva ile gorselleştir. Sinifa sun." },
-    { week: 17, dateRange: "11 - 15 Ocak", title: "Yapay Zeka ve Doga", description: "AI nin cevre ve dogal yasami korumadaki rolu.", objectives: ["AI nin cevre arastirmalarinda kullanımını aciklar", "Teknoloji ile dogayi iliskilendirir", "Surdurulebilirlik kavramini tanimlar"], aiTools: ["Google Earth", "iNaturalist"], duration: 40, output: "AI + doga arastirma raporu", activity: "iNaturalist uygulamas ile bir bitki veya hayvan tani. AI nasil calistirir?" },
-    { week: 18, dateRange: "18 - 22 Ocak", title: "AI ile Ceviri", description: "Makine cevirisi, dil AI lari, ceviri kalitesi.", objectives: ["Makine cevirisini aciklar", "Ceviri kalitesini degerlendirir", "Dil bariyerini asmada AI nin rolunu anlat"], aiTools: ["Google Translate", "DeepL"], duration: 40, output: "Ceviri kalite raporu", activity: "Bir cumleyi 3 farkli dile cevir. Geri Turkce ye cevir. Anlam korundu mu?" },
-    { week: 19, dateRange: "8 - 12 Şubat", title: "Fotograflari Taniyan AI", description: "Goruntu tanima teknolojisi, Google Lens kullanimi.", objectives: ["Goruntu tanima kavramini aciklar", "Google Lens i kullanabilir", "AI nin gorsel analiz yetenegini degerlendirir"], aiTools: ["Google Lens", "Google Photos"], duration: 40, output: "Goruntu tanima deney raporu", activity: "Google Lens ile 5 farkli nesneyi tara. Her birinin sonucunu kaydet. Dogruluk orani?" },
-    { week: 20, dateRange: "15 - 19 Şubat", title: "AI ile Matematik", description: "Matematik problemlerinde AI yardimi, dogru cevap kontrolu.", objectives: ["AI matematik araclarini kullanabilir", "AI cevaplarini dogrular", "Eleştirel dusunme uygular"], aiTools: ["Photomath", "Wolfram Alpha", "ChatGPT"], duration: 40, output: "Matematik AI test raporu", activity: "Photomath a 5 farkli problem coz. Hepsini kendın de coz. Sonuclari karsilastir." },
-    { week: 21, dateRange: "22 - 26 Şubat", title: "Harita ve Konum AI", description: "GPS, Google Maps, konum bazli AI servisleri.", objectives: ["Harita AI lerini aciklar", "Rota planlama yapabilir", "Konum verisini anlar"], aiTools: ["Google Maps", "Google Earth"], duration: 40, output: "Okul cevresinin haritasi", activity: "Google Maps ta okulundan evine rota bul. Farkli ulasim seceneklerini karsilastir." },
-    { week: 22, dateRange: "1 - 5 Mart", title: "AI Hekimler Yardimcisi mi?", description: "Saglik alaninda AI uygulamalari, AI nin simirlari.", objectives: ["Saglikta AI kullanimini aciklar", "AI nin doktor yerini tutamaiacagini anlar", "Guvenilir saglik bilgisi kaynaklarini tanimlar"], aiTools: ["Ada Health", "WebMD"], duration: 40, output: "Saglik AI arastirma raporu", activity: "Ada Health uygulamasinda basit bir belirti gir. Ne tavsiye etti? Guvenilir mi?" },
-    { week: 23, dateRange: "15 - 19 Mart", title: "Oneri Sistemleri", description: "Netflix, YouTube, Spotify oneri algoritmalari.", objectives: ["Oneri algoritmasi kavramini aciklar", "Kisisellestirilmis icerik kavramini anlar", "Veri ve oneri iliskisini kurar"], aiTools: ["YouTube", "Spotify"], duration: 40, output: "Oneri analizi raporu", activity: "YouTube sana bugün ne onerdi? Neden bu videolari onerdi? 5 tahminde bulun." },
-    { week: 24, dateRange: "22 - 26 Mart", title: "AI ve Sanat", description: "AI sanat uretimi, sanatsal yaraticilik ve AI.", objectives: ["AI sanat uretebilecegini gosterir", "AI ve insan sanatini karsilastirir", "Sanatsal yaraticiligi tanimlar"], aiTools: ["Canva AI", "AutoDraw", "Bing Image Creator"], duration: 40, output: "AI sanat portfoyü", activity: "Bing Image Creator ile 3 farkli konuda resim uret. En cok hangi konuyu begendign? Neden?" },
-    { week: 25, dateRange: "29 Mar - 2 Nis", title: "Kisisel Veri Nedir?", description: "Kisisel veri kavrami, veri gizliligi, dijital ayak izi.", objectives: ["Kisisel veri turlerini listeler", "Dijital ayak izi kavramini aciklar", "Veri koruma stratejilerini ogrenir"], aiTools: ["Google hesap ayarlari"], duration: 40, output: "Kisisel veri haritasi", activity: "Hangi uygulamalar hangi verilerini kullaniyor? 5 uygulama icin liste yap." },
-    { week: 26, dateRange: "5 - 9 Nisan", title: "AI ile Haber Okuma", description: "Sahte haber, dezenformasyon, medya okuryazarligi.", objectives: ["Sahte haber kavramini tanimlar", "Haber dogrulama teknikleri kullanir", "Kaynagi sorgulama aliskanligı kazanir"], aiTools: ["Google Fact Check", "Teyit.org"], duration: 40, output: "Haber dogrulama raporu", activity: "3 haber basligi bul. Teyit.org da kontrol et. Kaci dogru, kaci yanlis?" },
-    { week: 27, dateRange: "12 - 16 Nisan", title: "Gelecegin Meslekleri", description: "AI nin is dunyasina etkisi, yeni meslekler, degisen roller.", objectives: ["AI nin yeni meslekler olusturabilecegini aciklar", "Kendi ilgi alanlarini AI ile iliskilendirir", "Gelecege yonelik dusunur"], aiTools: ["ChatGPT", "LinkedIn"], duration: 40, output: "Gelecek meslek plani", activity: "Buyuyunce ne olmak istiyorsun? AI bu mesleği nasil etkileyecek? ChatGPT ye sor." },
-    { week: 28, dateRange: "19 - 23 Nisan", title: "AI ile Siir Yaziyoruz", description: "Yaratici yazarlikta AI, siir unsurları, insan-AI isbirligi.", objectives: ["AI ile siir yazabilir", "Siir unsurlarini tanimlar", "AI ciktisini duzenleyebilir"], aiTools: ["ChatGPT", "Google Gemini"], duration: 40, output: "Ortak yazilmis siir kitapcigi", activity: "AI yardimiyla Bahar konulu bir siir yaz. Ardindan kendi siirini yaz. Ikisini karsilastir." },
-    { week: 29, dateRange: "26 - 30 Nisan", title: "Oyun Tasarliyoruz", description: "Oyun kurallari, algoritma tasarimi, yaratici dusunme.", objectives: ["Basit oyun kurallari tasarlar", "Algoritma dusuncesini oyuna uygular", "Kurallari yazili ifade eder"], aiTools: ["ChatGPT (kural kontrolu)"], duration: 40, output: "Kendi oyun kurallari", activity: "Kendi kart oyununu tasarla: amac, oyuncular, kurallar, kazanma kosulu. AI ye kural kontrolu yaptır." },
-    { week: 30, dateRange: "3 - 7 Mayıs", title: "AI Araclarini Karsilastirma", description: "Farkli AI araclarini ayni gorevde deneme ve karsilastirma.", objectives: ["Farkli AI araclarini degerlendirir", "Karsilastirmali analiz yapar", "En uygun araci secme becerisi kazanir"], aiTools: ["ChatGPT", "Google Gemini", "Copilot"], duration: 40, output: "AI arac karsilastirma tablosu", activity: "Uc farkli AI ya ayni soruyu sor. Cevaplarini tablo halinde karsilastir. Hangisi daha iyi?" },
-    { week: 31, dateRange: "10 - 14 Mayıs", title: "Empati ve AI", description: "AI nin duygusal zeka eksikligi, insan iliskilerinde empatinin onemi.", objectives: ["AI nin empati kuramayacagini aciklar", "Duygusal zeka kavramini tanimlar", "Insan iliskilerinde empatinin onemini anlar"], aiTools: ["ChatGPT", "Replika"], duration: 40, output: "AI vs insan empati analizi", activity: "AI ya uzgun oldugunu soy. Cevabini oku. Bir arkadasin nasil cevap verirdi? Farklari yaz." },
-    { week: 32, dateRange: "17 - 21 Mayıs", title: "AI ile Tarih", description: "Tarihi olaylari AI ile arastirma, kaynak dogrulama.", objectives: ["AI yi arastirma araci olarak kullanir", "Tarihi bilgiyi sorgular ve dogrular", "Birden fazla kaynak kullanir"], aiTools: ["ChatGPT", "Wikipedia", "Khan Academy"], duration: 40, output: "Tarihi arastirma raporu", activity: "AI ya Kurtuluş Savasi hakkında 5 soru sor. Verdigi cevaplari tarihi kaynaklarla dogrula." },
-    { week: 33, dateRange: "24 - 28 Mayıs", title: "Cevre Dostu AI", description: "AI nin enerji tuketimi, yesil teknoloji, surdurulebilirlik.", objectives: ["AI nin enerji tukettigini aciklar", "Surdurulebilir teknoloji kavramini tanimlar", "Cevre dostu teknoloji kullanimi uzerine dusunur"], aiTools: ["Google Earth Engine"], duration: 40, output: "AI enerji analizi raporu", activity: "ChatGPT nin bir cevap uretmek icin ne kadar enerji harcadigini arastir. Kac lamba yakabilir?" },
-    { week: 34, dateRange: "31 May - 4 Haz", title: "Mini Proje: AI Asistanim", description: "Ideal AI asistan tasarimi, yaratici dusunme, sunum becerileri.", objectives: ["Yaratici AI asistan konsepti gelistirir", "Ozellikleri ve sinirlamalari tanimlar", "Fikirlerini sunabilir"], aiTools: ["Canva", "Google Slides"], duration: 40, output: "AI asistan tasarim posteri", activity: "Hayalindeki AI asistanini tasarla: ismi, yetenekleri, gorunumu. Canva ile poster yap." },
-    { week: 35, dateRange: "7 - 11 Haziran", title: "Yil Sonu Hazırligi", description: "Yil boyunca ogrenilenlerin derlenmesi, en onemli kavramlar.", objectives: ["Yil boyunca ogrenilenleri ozetler", "En onemli 5 kavrami secip aciklar", "Sunum hazirlar"], aiTools: ["Canva", "Google Slides"], duration: 40, output: "Yil sonu ozet sunumu", activity: "Bu yil yapay zeka hakkinda ogrendigin en onemli 5 seyi Canva ile gorsellestir." },
-    { week: 36, dateRange: "14 - 18 Haziran", title: "Yil Sonu Sunumu", description: "Tum yilin ozeti, gelecek planlari, AI ile yasam.", objectives: ["Yil boyunca ogrenilenleri sunar", "Gelecek hedeflerini AI ile iliskilendirir", "Akranlarina ilham verir"], aiTools: ["Canva", "Google Slides"], duration: 80, output: "Yil sonu sunumu", activity: "Yapay zeka ile ilgili geleceğe dair bir hayalin var mi? Bunu sinifa anlat." },
-  ],
+    {
+        "week": 1,
+        "title": "Dosya-klasör-klavye",
+        "desc": "Bilgisayarın temel bileşenlerini tanır, dosya ve klasör yönetimini kavrar."
+    },
+    {
+        "week": 2,
+        "title": "Canva tasarım",
+        "desc": "Dijital içerik oluşturma araçlarını kullanarak temel tasarımlar ve metinler oluşturur."
+    },
+    {
+        "week": 3,
+        "title": "Dikkat geliştirme",
+        "desc": "Mantıksal akıl yürütme ve dikkat geliştirici oyunlaştırma etkinlikleriyle odaklanma becerisini artırır."
+    },
+    {
+        "week": 4,
+        "title": "Dikkat geliştirme",
+        "desc": "Mantıksal akıl yürütme ve dikkat geliştirici oyunlaştırma etkinlikleriyle odaklanma becerisini artırır."
+    },
+    {
+        "week": 5,
+        "title": "Örüntü kodlama",
+        "desc": "Blok tabanlı kodlama platformları ile algoritmik düşünme becerilerini geliştirir."
+    },
+    {
+        "week": 6,
+        "title": "Sezar şifreleme",
+        "desc": "Bilgi güvenliği ve temel şifreleme yöntemlerini (Sezar şifreleme, güçlü şifre oluşturma) kavrar."
+    },
+    {
+        "week": 7,
+        "title": "Fırça robot",
+        "desc": "Temel elektronik devre elemanlarını tanır ve basit robotik projelerin mantığını anlar."
+    },
+    {
+        "week": 8,
+        "title": "Amiral battı",
+        "desc": "Mantıksal akıl yürütme ve dikkat geliştirici oyunlaştırma etkinlikleriyle odaklanma becerisini artırır."
+    },
+    {
+        "week": 9,
+        "title": "Okyanusları temizliyorum",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 10,
+        "title": "Code org - müzik",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 11,
+        "title": "Uzay yolculuk",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 12,
+        "title": "Trafik lambası",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 13,
+        "title": "Türk bayrağı uzaya çıkıyor",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 14,
+        "title": "Gezegenlere ulaşıyoruz",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 15,
+        "title": "Kar küresi yapımı",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 16,
+        "title": "Scratch giriş",
+        "desc": "Oyun geliştirme platformlarında sahneler oluşturur ve karakterlere hareket komutları verir."
+    },
+    {
+        "week": 17,
+        "title": "Muz toplama",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 18,
+        "title": "Harflerin dansı",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 19,
+        "title": "Makey makey",
+        "desc": "Fiziksel programlama araçlarını (Makey Makey, Micro:bit) kullanarak dış dünya ile bilgisayar arasında köprü kurar."
+    },
+    {
+        "week": 20,
+        "title": "Makey makey",
+        "desc": "Fiziksel programlama araçlarını (Makey Makey, Micro:bit) kullanarak dış dünya ile bilgisayar arasında köprü kurar."
+    },
+    {
+        "week": 21,
+        "title": "Microbit",
+        "desc": "Fiziksel programlama araçlarını (Makey Makey, Micro:bit) kullanarak dış dünya ile bilgisayar arasında köprü kurar."
+    },
+    {
+        "week": 22,
+        "title": "Microbit",
+        "desc": "Fiziksel programlama araçlarını (Makey Makey, Micro:bit) kullanarak dış dünya ile bilgisayar arasında köprü kurar."
+    },
+    {
+        "week": 23,
+        "title": "Kodu game lab",
+        "desc": "Oyun geliştirme platformlarında sahneler oluşturur ve karakterlere hareket komutları verir."
+    },
+    {
+        "week": 24,
+        "title": "Kodu game lab",
+        "desc": "Oyun geliştirme platformlarında sahneler oluşturur ve karakterlere hareket komutları verir."
+    },
+    {
+        "week": 25,
+        "title": "Pivot animator",
+        "desc": "Oyun geliştirme platformlarında sahneler oluşturur ve karakterlere hareket komutları verir."
+    },
+    {
+        "week": 26,
+        "title": "Pivot animator",
+        "desc": "Oyun geliştirme platformlarında sahneler oluşturur ve karakterlere hareket komutları verir."
+    },
+    {
+        "week": 27,
+        "title": "3d tasarım",
+        "desc": "3 Boyutlu tasarım araçlarını kullanarak temel geometrik şekillerden modeller oluşturur."
+    },
+    {
+        "week": 28,
+        "title": "3d tasarım",
+        "desc": "3 Boyutlu tasarım araçlarını kullanarak temel geometrik şekillerden modeller oluşturur."
+    },
+    {
+        "week": 29,
+        "title": "3d baskı",
+        "desc": "3 Boyutlu tasarım araçlarını kullanarak temel geometrik şekillerden modeller oluşturur."
+    },
+    {
+        "week": 30,
+        "title": "Proje",
+        "desc": "Öğrendiği araçları kullanarak kendi özgün dijital veya fiziksel ürününü projelendirir."
+    },
+    {
+        "week": 31,
+        "title": "Proje",
+        "desc": "Öğrendiği araçları kullanarak kendi özgün dijital veya fiziksel ürününü projelendirir."
+    },
+    {
+        "week": 32,
+        "title": "Proje",
+        "desc": "Öğrendiği araçları kullanarak kendi özgün dijital veya fiziksel ürününü projelendirir."
+    },
+    {
+        "week": 33,
+        "title": "Yapay zeka",
+        "desc": "Yapay zeka araçlarının çalışma mantığını anlar ve kendi üretim süreçlerinde etik kurallara uyarak kullanır."
+    },
+    {
+        "week": 34,
+        "title": "Yapay zeka",
+        "desc": "Yapay zeka araçlarının çalışma mantığını anlar ve kendi üretim süreçlerinde etik kurallara uyarak kullanır."
+    },
+    {
+        "week": 35,
+        "title": "Yapay zeka",
+        "desc": "Yapay zeka araçlarının çalışma mantığını anlar ve kendi üretim süreçlerinde etik kurallara uyarak kullanır."
+    },
+    {
+        "week": 36,
+        "title": "Yapay zeka",
+        "desc": "Yapay zeka araçlarının çalışma mantığını anlar ve kendi üretim süreçlerinde etik kurallara uyarak kullanır."
+    }
+],
   "4": [
-    { week: 1, dateRange: "14 - 18 Eylül", title: "Yapay Zeka Dunyasi", description: "AI nin gunluk hayattaki yeri, akilli teknolojiler.", objectives: ["10 farkli AI uygulamasini listeler", "AI nin hayatimizi nasil kolaylastirdigini aciklar", "AI nin sinirlamalarini tanimlar"], aiTools: ["Google Assistant", "Siri", "Alexa"], duration: 40, output: "AI urun katalogu", activity: "Evinde ve okulunda kullandigin 10 AI urunu listele. Her birinin ne yaptigini ve limitlerini yaz." },
-    { week: 2, dateRange: "21 - 25 Eylül", title: "Algoritma Dusuncesi", description: "Gercek hayat problemlerini algoritmayla cozmek.", objectives: ["Gunluk problemi algoritmaya donusturur", "Adim adim yazma becerisini gelisitrir", "Yanlis algoritmay duzeltebilir"], aiTools: ["Scratch", "Code.org"], duration: 40, output: "Yemek tarifi algoritmasi", activity: "Favori yemeginizin tarifini algoritma olarak yaz. Her adimi numarala. AI ye kontrol ettir." },
-    { week: 3, dateRange: "28 Eyl - 2 Eki", title: "Veriler ve Grafikler", description: "Veri toplama, analiz ve gorsellesitirme.", objectives: ["Veri toplar ve kaydeder", "Cubuk ve pasta grafik olusturur", "Veriden cıkarim yapar"], aiTools: ["Google Forms", "Google Sheets", "Canva"], duration: 40, output: "Sinif anketi grafigi", activity: "Sinifça 10 kisiden favori renk verisi topla. Google Sheets te grafik olustur." },
-    { week: 4, dateRange: "5 - 9 Ekim", title: "Makine Nasil Ogrenir?", description: "Orneklerden ogrenme, veri etiketleme kavrami.", objectives: ["Makine ogrenmesini aciklar", "Veri etiketleme yapar", "Daha fazla verinin daha iyi sonuc verdigini anlar"], aiTools: ["Google Teachable Machine"], duration: 40, output: "Kendi ML modeli", activity: "Teachable Machine da kendi siniflandirma modelini olustur: 3 kategori, 20 ornek." },
-    { week: 5, dateRange: "12 - 16 Ekim", title: "Dogal Dil Isleme", description: "Bilgisayarlarin metni nasil anladigı, NLP kavrami.", objectives: ["NLP kavramini aciklar", "AI nin metni nasil anladigini anlar", "Dogal dil ornekleri verir"], aiTools: ["ChatGPT", "Google Translate"], duration: 40, output: "NLP deney raporu", activity: "ChatGPT ye hem resmi hem samimi bir mesaj yaz. Cevaplari nasil farklilasiyor? Gozlemle." },
-    { week: 6, dateRange: "19 - 23 Ekim", title: "Goruntu Tanima", description: "Bilgisayarlarin fotograflardan nesne tanimasini aciklar.", objectives: ["Goruntu tanima teknolojisini aciklar", "Pixel ve renk kavramini anlar", "AI nin goruyu nasil isledigini tanimlar"], aiTools: ["Google Lens", "Microsoft Seeing AI"], duration: 40, output: "Goruntu tanima analiz raporu", activity: "Google Lens ile 10 farkli nesne tara. Basari oranini tabloya kaydet. En zor nesne hangisi?" },
-    { week: 7, dateRange: "26 - 30 Ekim", title: "AI ile Hikaye Uretme", description: "Yaratici yazarlikta AI kullanimi, karakter ve olay orgusu.", objectives: ["AI ile ortak hikaye yazar", "Karakter, mekan, olay orgusunu tanimlar", "AI ciktisini kendi yazisiyla birlesitirir"], aiTools: ["ChatGPT", "Google Gemini", "Canva"], duration: 40, output: "Resimli hikaye kitabi", activity: "AI ile bir macera hikayesi yaz. Canva da resimle. Sinif kutuphanesine bagisla." },
-    { week: 8, dateRange: "2 - 6 Kasım", title: "Oneri Algoritmalari", description: "Kisisellestirilmis icerik, kullanici verisi ve oneri.", objectives: ["Oneri algoritmasini aciklar", "Kullanici verisinin oneri uzerindeki etkisini anlar", "Filtre balonu kavramini tanimlar"], aiTools: ["Spotify", "YouTube", "Netflix"], duration: 40, output: "Kisisel oneri analizi", activity: "Spotify da sana onerilen 10 sarki listele. Neden onerdi? Veri izini analiz et." },
-    { week: 9, dateRange: "9 - 13 Kasım", title: "Chatbot Tasarimi", description: "Chatbot mantıgı, soru-cevap sistemleri.", objectives: ["Chatbot mimarisini aciklar", "Soru-cevap agaci tasarlar", "Kullanici deneyimini dusunur"], aiTools: ["ChatGPT", "Dialogflow"], duration: 40, output: "Okul chatbot tasarimi", activity: "Okulunuza gelen yeni ogrenciler icin chatbot tasarla. 15 soru-cevap yaz." },
-    { week: 10, dateRange: "23 - 27 Kasım", title: "Sahte Bilgi Tespiti", description: "Deepfake, sahte haber, medya okuryazarligi.", objectives: ["Deepfake kavramini aciklar", "Sahte icerik belirtilerini tanimlar", "Dogrulama teknikleri kullanir"], aiTools: ["Teyit.org", "Google Reverse Image Search"], duration: 40, output: "Sahte icerik tespit rehberi", activity: "3 farkli haber gorseli bul. Google Gorselle ara. Gercek mi sahte mi? Nasil anladiniz?" },
-    { week: 11, dateRange: "30 Kas - 4 Ara", title: "AI ve Muzik Uretimi", description: "AI muzik besteleme, insan ve AI muzigini karsilastirma.", objectives: ["AI muzik araclarini kullanir", "Muzik unsurlarini tanimlar", "AI yaraticiligi hakkinda fikir gelistirir"], aiTools: ["Suno", "Chrome Music Lab", "Boomy"], duration: 40, output: "AI muzik albumu (3 parca)", activity: "Suno da 3 farkli turde muzik uret: huzun, neşe, heyecan. Sinifa dinlet." },
-    { week: 12, dateRange: "7 - 11 Aralık", title: "Veri Gizliligi", description: "Kisisel veri koruma, KVKK, dijital haklar.", objectives: ["Kisisel veri haklarini aciklar", "Uygulama izinlerini sorgular", "Veri gizliligini koruma yontemleri kullanir"], aiTools: ["Google Hesap Guvenligi"], duration: 40, output: "Dijital haklar brosuru", activity: "Telefonundaki 5 uygulamanin hangi verilere eristigini kontrol et. Bunlar gerekli mi?" },
-    { week: 13, dateRange: "14 - 18 Aralık", title: "Robot Programlama Temelleri", description: "Gorsel programlama, Scratch ile animasyon.", objectives: ["Scratch de temel animasyon yapar", "Dongu ve kosul komutlarini kullanir", "Kendi mini projesini olusturur"], aiTools: ["Scratch"], duration: 40, output: "Scratch animasyonu", activity: "Scratch de hareket eden, konusan bir karakter programla. En az 3 komut kullan." },
-    { week: 14, dateRange: "21 - 25 Aralık", title: "AI Saglik Sektorunde", description: "Tibbi goruntu analizi, hastane AI lari, telemedicine.", objectives: ["Saglikta AI kullanimini aciklar", "AI nin teshis surecine katkisini anlar", "Tibbi etik sorunlari tanimlar"], aiTools: ["YouTube (AI saglik videolari)"], duration: 40, output: "Saglikta AI arastirma sunumu", activity: "AI nin kanser tespitinde nasil kullanildigini arastir. 5 onemli bilgiyi sun." },
-    { week: 15, dateRange: "28 Ara - 1 Oca", title: "Otonom Araclar", description: "Sürücüsüz arabalar, sensor sistemleri, guvenlik.", objectives: ["Otonom arac teknolojisini aciklar", "Sensor cesitlerini listeler", "Guvenlik ve etik sorunlari tanimlar"], aiTools: ["YouTube (Tesla FSD, Waymo)"], duration: 40, output: "Otonom arac tasarimi", activity: "Kendi suruculer aracini tasarla. Hangi sensörlere ihtiyaci var? Diyagram ciz." },
-    { week: 16, dateRange: "4 - 8 Ocak", title: "Yariyil Projesi: AI Gazetesi", description: "Bu yariyil AI haberlerini derleme, sunum.", objectives: ["Medya okuryazarligini uygular", "AI konularini ozetler", "Sunum becerileri gelisitir"], aiTools: ["Canva", "Google Slides", "ChatGPT"], duration: 80, output: "AI haberleri gazetesi", activity: "3 onemli AI haberini bul. Her biri icin: ne oldu, neden onemli, etkileri ne? Gazete yap." },
-    { week: 17, dateRange: "11 - 15 Ocak", title: "AI ve Spor", description: "Sporda performans analizi, hakem kararlari, antrenman AI.", objectives: ["Sporda AI kullanimini aciklar", "Performans analizi kavramini anlar", "AI nin fair play e etkisini tartisir"], aiTools: ["YouTube (VAR, Hawk-Eye)"], duration: 40, output: "Spor AI analizi raporu", activity: "VAR veya Hawk-Eye sistemini arastir. Nasil calisir? Sporu adil mi yapiyor?" },
-    { week: 18, dateRange: "18 - 22 Ocak", title: "Ceviri Teknolojileri", description: "Makine cevirisi, sinir aglari ve dil modelleri.", objectives: ["Farkli ceviri araclarini karsilastirir", "Ceviri kalitesini degerlendirir", "Dil AI larinin sinirlarini anlar"], aiTools: ["Google Translate", "DeepL", "ChatGPT"], duration: 40, output: "Ceviri kalite karsilastirma tablosu", activity: "Bir Turkce metni 3 farkli aracla Ingilizce ye cevir. Hangisi daha dogal? Uzman degerlendir." },
-    { week: 19, dateRange: "8 - 12 Şubat", title: "AI ve Egitim", description: "Kisisellestirilmis ogrenme, AI ogretmenler, egitimin gelecegi.", objectives: ["Egitimde AI kullanimini aciklar", "Kisisellestirilmis ogrenme kavramini anlar", "AI ogretmen vs insan ogretmen karsilastirir"], aiTools: ["Khan Academy", "Duolingo", "Photomath"], duration: 40, output: "Egitim AI degerlendirme raporu", activity: "Khan Academy de bir konuyu AI yardimiyla ogre. Insan ogretmenle ogrenmeye gore farki nedir?" },
-    { week: 20, dateRange: "15 - 19 Şubat", title: "Ses Tanima Teknolojisi", description: "Konusmadan metne, ses sentezi, podcast AI.", objectives: ["Ses tanima sistemlerini aciklar", "Ses-metin donusumunu kullanir", "Ses sentezi kavramini anlar"], aiTools: ["Otter.ai", "Google Speech-to-Text", "ElevenLabs"], duration: 40, output: "Ses tanima deney raporu", activity: "Kendi sesini kaydet ve metne donustur. Dogruluk oranini hesapla." },
-    { week: 21, dateRange: "22 - 26 Şubat", title: "AI ile Cografya", description: "Uydu goruntuleri, Google Earth, harita AI lari.", objectives: ["Uydu goruntu teknolojisini aciklar", "Google Earth i etkili kullanir", "Cografik analiz yapar"], aiTools: ["Google Earth", "Google Maps"], duration: 40, output: "Okul cevresinin 3D haritasi", activity: "Google Earth te okulunun bulundugu bölgeyi incele. 5 yil onceki goruntüyle karsilastir." },
-    { week: 22, dateRange: "1 - 5 Mart", title: "Etik ve Adalet", description: "Algoritmik onyargi, adalet, kapsayicilik.", objectives: ["Algoritmik onyargi kavramini aciklar", "Adil AI tasarıminin onemini anlar", "Ornekler uzerinden onyargi tespit eder"], aiTools: ["ChatGPT (onyargi testi)"], duration: 40, output: "AI etik analizi", activity: "ChatGPT ye farkli isimler icin is basvurusu degerlendirmesi yaptir. Farklı sonuclar var mi?" },
-    { week: 23, dateRange: "15 - 19 Mart", title: "AI ile Sanat Galerisi", description: "Farkli AI sanat araclarini kesfetme ve karsilastirma.", objectives: ["3 farkli AI sanat aracini kullanir", "Sanatsal kaliteyi degerlendirir", "AI sanatinin etik boyutunu tartisir"], aiTools: ["Midjourney", "DALL-E", "Bing Image Creator", "Stable Diffusion"], duration: 40, output: "AI sanat galerisi", activity: "3 farkli AI sanat araciyla ayni konuda resim uret. Galeri olustur. Oylamada en iyiyi sec." },
-    { week: 24, dateRange: "22 - 26 Mart", title: "Doga ve Cevre AI", description: "Iklim modelleme, hayvan takibi, ormansizlasma tespiti.", objectives: ["Cevre korumada AI kullanimini aciklar", "Iklim verisi analiz etmeyi anlar", "Surdurulebilirlik projelerine ornekler verir"], aiTools: ["Google Earth Engine", "iNaturalist"], duration: 40, output: "Cevre AI projesi raporu", activity: "Google Earth Engine de bir bolgenin 10 yillik degisimini incele. Ne degisti? Neden?" },
-    { week: 25, dateRange: "29 Mar - 2 Nis", title: "AI Kariyer Rehberi", description: "AI alanindaki meslekler, gerekli beceriler, egitim yollari.", objectives: ["5 AI meslegi tanimlar", "Her meslek icin gerekli becerileri listeler", "Kendi ilgi alaniyla AI yi iliskilendirir"], aiTools: ["LinkedIn", "ChatGPT"], duration: 40, output: "Kisisel AI kariyer haritasi", activity: "5 AI meslegi arastir. Hangisi sana uygun? Neden? ChatGPT den kariyer tavsiyesi al." },
-    { week: 26, dateRange: "5 - 9 Nisan", title: "Mini Proje: AI Dedektifi", description: "Okul problemini AI ile cozme, proje tabanli ogrenme.", objectives: ["Gercek bir problemi tanimlar", "AI cozumu onerisi gelistirir", "Proje sunar"], aiTools: ["ChatGPT", "Canva"], duration: 40, output: "AI cozum projesi", activity: "Okulundaki bir problemi sec. AI ile nasil cozulur? Plan yaz ve sun." },
-    { week: 27, dateRange: "12 - 16 Nisan", title: "Oyun AI si", description: "Satranc motorlari, oyun dengeleme, NPC davranislari.", objectives: ["Oyun AI sistemlerini aciklar", "Minimax algoritmasi kavrami anlar", "AI nin oyun tasarimindaki rolunu anlat"], aiTools: ["Chess.com", "Lichess"], duration: 40, output: "Oyun AI analizi raporu", activity: "Lichess te 3 farkli AI zorluk seviyesiyle oyna. Her birinin stratejisi nasil farklilasiyor?" },
-    { week: 28, dateRange: "19 - 23 Nisan", title: "AI ve Habercilik", description: "Otomatik haber yazimi, bot gazeteciler, medya etigi.", objectives: ["AI haberciligini aciklar", "Otomatik haber ile insan haberini karsilastirir", "Medya etigi sorunlarini tanimlar"], aiTools: ["ChatGPT", "Google News"], duration: 40, output: "AI vs insan haber karsilastirmasi", activity: "ChatGPT ye bir olayı haberlesir. Gercek bir gazeteci haberini bul. Karsilastir." },
-    { week: 29, dateRange: "26 - 30 Nisan", title: "Gelecekte AI", description: "2035 yili tahmini, AGI, insan-AI iliskisi.", objectives: ["Geleceğe yonelik tahminler yapar", "AGI kavramini aciklar", "Olumlu ve olumsuz senaryolar gelistirir"], aiTools: ["ChatGPT", "Canva"], duration: 40, output: "2035 gelecek senaryosu", activity: "2035 yilinda AI nasil olacak? Canva ile gelecek senaryosu hazirla. En iyi ve en kotu durumu goster." },
-    { week: 30, dateRange: "3 - 7 Mayıs", title: "AI ile Siir ve Edebiyat", description: "Edebi yaraticilik, metin analizi, AI edebiyati.", objectives: ["AI ile edebi uretim yapar", "AI edebiyatını insan edebiyatiyla karsilastirir", "Dil ve anlam iliskisini anlar"], aiTools: ["ChatGPT", "Gemini"], duration: 40, output: "AI edebiyat antolojisi", activity: "Favori kitabinin farkli bir sonunu AI ile yaz. Hangisi daha iyi? Neden?" },
-    { week: 31, dateRange: "10 - 14 Mayıs", title: "Veri Analizi Temelleri", description: "Temel veri okuma, yorum, istatistik.", objectives: ["Grafik okuma ve yorumlama yapar", "Ortalama, medyan kavramlarini uygular", "Veriden anlam cikarir"], aiTools: ["Google Sheets", "Canva"], duration: 40, output: "Veri analizi raporu", activity: "Sinif notlarinizin istatistiklerini hesapla: ortalama, en yuksek, en dusuk. Grafik ciz." },
-    { week: 32, dateRange: "17 - 21 Mayıs", title: "AI Guvenligi", description: "Sifre guvenligi, phishing, siber guvenlik temelleri.", objectives: ["Guvenli sifre ozellikleri listeler", "Phishing saldirilarini tanimlar", "Temel siber guvenlik kurallari uygular"], aiTools: ["Google Sifre Yoneticisi", "HaveIBeenPwned"], duration: 40, output: "Siber guvenlik rehberi", activity: "HaveIBeenPwned da bir email adresini kontrol et. Guvenli sifre politikasi yaz." },
-    { week: 33, dateRange: "24 - 28 Mayıs", title: "Yaratici AI Projem", description: "Ozgun AI uygulamasi tasarimi, kullanici deneyimi.", objectives: ["Ozgun AI uygulamasi tasarlar", "Kullanici ihtiyaclarini belirler", "Tasarimi sunabilir"], aiTools: ["Canva", "ChatGPT", "Figma"], duration: 40, output: "AI uygulama prototip tasarimi", activity: "Hayalindeki AI uygulamasini tasarla: problem, kullanici, ozellikler. Canva ile mockup yap." },
-    { week: 34, dateRange: "31 May - 4 Haz", title: "Akran Degerlendirmesi", description: "Yapici geri bildirim, akran ogrenimi, degerlendir.", objectives: ["Yapici geri bildirim verir", "Baskasinin calısmasini degerlendirir", "Geri bildirimi alip uygular"], aiTools: ["Google Forms", "Canva"], duration: 40, output: "Akran degerlendirme raporu", activity: "3 arkadasinin projesine yazi ve gorsel acidan geri bildirim ver. AI ye de kontrol ettir." },
-    { week: 35, dateRange: "7 - 11 Haziran", title: "Yil Sonu Hazirligi", description: "Portfolyo derleme, en iyi calismalar.", objectives: ["Yil boyunca urettiklerini secer", "Secim gerekcesini aciklar", "Portfolyo olusturur"], aiTools: ["Canva", "Google Sites"], duration: 40, output: "Dijital portfolyo", activity: "Bu yilin en iyi 3 calismasini sec. Google Sites de portfolyo olustur." },
-    { week: 36, dateRange: "14 - 18 Haziran", title: "Yil Sonu Sunumu", description: "Yil ozeti, gelecek planlar, motivasyon.", objectives: ["Yil boyunca ogrenilenleri sunar", "Gelecek hedeflerini paylasir", "Sinifi motive eder"], aiTools: ["Canva", "Google Slides"], duration: 80, output: "Yil sonu sunumu", activity: "Bu yil AI hakkinda ogrendigin en onemli seyi anlat. Gelecekte ne yapmak istiyorsun?" },
-  ],
+    {
+        "week": 1,
+        "title": "Internet güvenliği",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 2,
+        "title": "Siber zorbalık",
+        "desc": "Dijital ortamlarda güvende kalmanın yollarını, siber zorbalığı ve dijital ayak izi kavramlarını açıklar."
+    },
+    {
+        "week": 3,
+        "title": "Iyi dijital vatandaş",
+        "desc": "Dijital ortamlarda güvende kalmanın yollarını, siber zorbalığı ve dijital ayak izi kavramlarını açıklar."
+    },
+    {
+        "week": 4,
+        "title": "Dijital ayak izi - güçlü şifre",
+        "desc": "Bilgi güvenliği ve temel şifreleme yöntemlerini (Sezar şifreleme, güçlü şifre oluşturma) kavrar."
+    },
+    {
+        "week": 5,
+        "title": "Bilgisayarlar - donanımlar",
+        "desc": "Bilgisayarın temel bileşenlerini tanır, dosya ve klasör yönetimini kavrar."
+    },
+    {
+        "week": 6,
+        "title": "Klavye-dosya",
+        "desc": "Bilgisayarın temel bileşenlerini tanır, dosya ve klasör yönetimini kavrar."
+    },
+    {
+        "week": 7,
+        "title": "Wordpad",
+        "desc": "Dijital içerik oluşturma araçlarını kullanarak temel tasarımlar ve metinler oluşturur."
+    },
+    {
+        "week": 8,
+        "title": "Bilgisayarsız kodlama",
+        "desc": "Blok tabanlı kodlama platformları ile algoritmik düşünme becerilerini geliştirir."
+    },
+    {
+        "week": 9,
+        "title": "Code.org basit kod",
+        "desc": "Blok tabanlı kodlama platformları ile algoritmik düşünme becerilerini geliştirir."
+    },
+    {
+        "week": 10,
+        "title": "Code.org çizim",
+        "desc": "Blok tabanlı kodlama platformları ile algoritmik düşünme becerilerini geliştirir."
+    },
+    {
+        "week": 11,
+        "title": "Little dot",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 12,
+        "title": "Compute it",
+        "desc": "Blok tabanlı kodlama platformları ile algoritmik düşünme becerilerini geliştirir."
+    },
+    {
+        "week": 13,
+        "title": "Blockly",
+        "desc": "Blok tabanlı kodlama platformları ile algoritmik düşünme becerilerini geliştirir."
+    },
+    {
+        "week": 14,
+        "title": "Kodu game lab",
+        "desc": "Oyun geliştirme platformlarında sahneler oluşturur ve karakterlere hareket komutları verir."
+    },
+    {
+        "week": 15,
+        "title": "Kodu game lab",
+        "desc": "Oyun geliştirme platformlarında sahneler oluşturur ve karakterlere hareket komutları verir."
+    },
+    {
+        "week": 16,
+        "title": "Scratch harf",
+        "desc": "Oyun geliştirme platformlarında sahneler oluşturur ve karakterlere hareket komutları verir."
+    },
+    {
+        "week": 17,
+        "title": "Scratch gezgin fare",
+        "desc": "Oyun geliştirme platformlarında sahneler oluşturur ve karakterlere hareket komutları verir."
+    },
+    {
+        "week": 18,
+        "title": "Scratch top sektirme",
+        "desc": "Oyun geliştirme platformlarında sahneler oluşturur ve karakterlere hareket komutları verir."
+    },
+    {
+        "week": 19,
+        "title": "Parola - adın ne",
+        "desc": "Bilgi güvenliği ve temel şifreleme yöntemlerini (Sezar şifreleme, güçlü şifre oluşturma) kavrar."
+    },
+    {
+        "week": 20,
+        "title": "Devre tasarımı",
+        "desc": "Temel elektronik devre elemanlarını tanır ve basit robotik projelerin mantığını anlar."
+    },
+    {
+        "week": 21,
+        "title": "Seri- paralel bağlama",
+        "desc": "Temel elektronik devre elemanlarını tanır ve basit robotik projelerin mantığını anlar."
+    },
+    {
+        "week": 22,
+        "title": "Yer silme robotu",
+        "desc": "Temel elektronik devre elemanlarını tanır ve basit robotik projelerin mantığını anlar."
+    },
+    {
+        "week": 23,
+        "title": "Micro bit",
+        "desc": "Fiziksel programlama araçlarını (Makey Makey, Micro:bit) kullanarak dış dünya ile bilgisayar arasında köprü kurar."
+    },
+    {
+        "week": 24,
+        "title": "Isimlik duygu rozeti",
+        "desc": "Fiziksel programlama araçlarını (Makey Makey, Micro:bit) kullanarak dış dünya ile bilgisayar arasında köprü kurar."
+    },
+    {
+        "week": 25,
+        "title": "Gece lambası - termometre",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 26,
+        "title": "Müzik yapımı",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 27,
+        "title": "Sulama",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 28,
+        "title": "Pusula yapımı",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 29,
+        "title": "Yz müzik yapımı",
+        "desc": "Yapay zeka araçlarının çalışma mantığını anlar ve kendi üretim süreçlerinde etik kurallara uyarak kullanır."
+    },
+    {
+        "week": 30,
+        "title": "Chat gpt",
+        "desc": "Yapay zeka araçlarının çalışma mantığını anlar ve kendi üretim süreçlerinde etik kurallara uyarak kullanır."
+    },
+    {
+        "week": 31,
+        "title": "Quick draw",
+        "desc": "Yapay zeka araçlarının çalışma mantığını anlar ve kendi üretim süreçlerinde etik kurallara uyarak kullanır."
+    },
+    {
+        "week": 32,
+        "title": "Tinkercad",
+        "desc": "3 Boyutlu tasarım araçlarını kullanarak temel geometrik şekillerden modeller oluşturur."
+    },
+    {
+        "week": 33,
+        "title": "3d tasarım",
+        "desc": "3 Boyutlu tasarım araçlarını kullanarak temel geometrik şekillerden modeller oluşturur."
+    },
+    {
+        "week": 34,
+        "title": "Yapay zeka",
+        "desc": "Yapay zeka araçlarının çalışma mantığını anlar ve kendi üretim süreçlerinde etik kurallara uyarak kullanır."
+    },
+    {
+        "week": 35,
+        "title": "Yapay zeka",
+        "desc": "Yapay zeka araçlarının çalışma mantığını anlar ve kendi üretim süreçlerinde etik kurallara uyarak kullanır."
+    },
+    {
+        "week": 36,
+        "title": "Yapay zeka",
+        "desc": "Yapay zeka araçlarının çalışma mantığını anlar ve kendi üretim süreçlerinde etik kurallara uyarak kullanır."
+    }
+],
   "5": [
     { week: 1, dateRange: "14 - 18 Eylül", title: "Yapay Zeka Tarihcesi", description: "AI nin ortaya cikisi, Alan Turing den gunumuze.", objectives: ["AI tarihinin ana donumnoktalarini sıralar", "Alan Turing ve Turing Testi ni aciklar", "AI nin nasil gelisitgini anlar"], aiTools: ["ChatGPT", "Wikipedia"], duration: 40, output: "AI zaman siyasi", activity: "AI tarihindeki 8 onemli olayı arastir. Zaman şeridi olustur." },
     { week: 2, dateRange: "21 - 25 Eylül", title: "Makine Ogrenmesi Temelleri", description: "ML turleri: denetimli, denetimsiz, pekistirmeli.", objectives: ["3 ML turunu tanimlar ve aciklar", "Spam filtresi ornegi ile ML yi anlar", "Training ve test verisi kavrami anlar"], aiTools: ["Google Teachable Machine", "Weka"], duration: 40, output: "ML tur karsilastirma tablosu", activity: "Teachable Machine da 3 sinifli model kur. Training ve test verisini ayri tut. Sonuc ne?" },

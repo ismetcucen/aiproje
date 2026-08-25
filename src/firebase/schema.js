@@ -126,7 +126,12 @@ export async function buildPortfolio(userId) {
 export async function seedCurriculum() {
   const q = query(collection(db, 'curriculum'), limit(1))
   const snap = await getDocs(q)
-  if (!snap.empty) return // Zaten yüklenmiş
+  
+  // Sadece sürüm kontrolü yap
+  const versionRef = doc(db, 'curriculum_metadata', 'version_v2');
+  const versionSnap = await getDoc(versionRef);
+  
+  if (versionSnap.exists()) return; // Zaten v2 yüklenmiş
   
   const list = generateCurriculumList()
   const batch = writeBatch(db)
@@ -137,6 +142,7 @@ export async function seedCurriculum() {
   })
   
   await batch.commit()
+  await setDoc(versionRef, { installed: true });
 }
 
 export async function getCurriculum(gradeNumber) {
