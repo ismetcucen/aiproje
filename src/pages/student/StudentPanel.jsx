@@ -4,8 +4,10 @@ import { logAttendance } from '../../firebase/schema'
 import AssignmentList from '../../components/student/AssignmentList'
 import Studio from '../../components/student/Studio'
 import Portfolio from '../../components/student/Portfolio'
+import StudentHome from '../../components/student/StudentHome'
 
 const MENU = [
+  { id: 'home',        label: 'Ana Sayfa', icon: '🏠' },
   { id: 'assignments', label: 'Görevler',  icon: '📋' },
   { id: 'studio',      label: 'Üret',      icon: '✏️' },
   { id: 'portfolio',   label: 'Portfolyo', icon: '🗂️' },
@@ -13,7 +15,7 @@ const MENU = [
 
 export default function StudentPanel() {
   const { user, profile, logout } = useAuth()
-  const [active, setActive]                     = useState('assignments')
+  const [active, setActive]                     = useState('home')
   const [selectedAssignment, setSelectedAssignment] = useState(null)
 
   useEffect(() => {
@@ -81,6 +83,7 @@ export default function StudentPanel() {
         </header>
 
         <div className="flex-1 overflow-auto p-6">
+          {active === 'home'        && <StudentHome onNavigate={setActive} />}
           {active === 'assignments' && <AssignmentList onStart={goToStudio} />}
           {active === 'studio'      && <Studio assignment={selectedAssignment} onBack={() => setActive('assignments')} />}
           {active === 'portfolio'   && <Portfolio />}
