@@ -9,17 +9,10 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    match /school_settings/{schoolCode} {
-      allow read: if isAuth();
-      allow write: if isAdmin() || isTeacher();
-    }
 
 
-    match /notifications/{notifId} {
-      allow read, update: if isAuth() && resource.data.userId == request.auth.uid;
-      allow create: if isAuth(); // Teachers and students can create notifications for each other
-      allow delete: if isAuth() && resource.data.userId == request.auth.uid;
-    }
+
+
 
 
     // Kendi dökümanı mı?
@@ -206,6 +199,17 @@ service cloud.firestore {
     match /schools/{docId} {
       allow read: if true;
       allow write: if isAdmin();
+    }
+
+    match /school_settings/{schoolCode} {
+      allow read: if isAuth();
+      allow write: if isAdmin() || isTeacher();
+    }
+
+    match /notifications/{notifId} {
+      allow read, update: if isAuth() && resource.data.userId == request.auth.uid;
+      allow create: if isAuth();
+      allow delete: if isAuth() && resource.data.userId == request.auth.uid;
     }
   }
 }
