@@ -26,7 +26,7 @@ export default function StudentPanel() {
     if (user?.uid) {
       logAttendance(user.uid).catch(console.error)
       if (profile?.schoolCode) {
-        getSchoolSettings(profile.schoolCode).then(s => setSettings(s)).catch(console.error)
+        getSchoolSettings(profile.schoolCode || "DEFAULT_SCHOOL").then(s => setSettings(s)).catch(console.error)
       }
     }
   }, [user, profile])

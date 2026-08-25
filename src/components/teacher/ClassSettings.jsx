@@ -14,7 +14,7 @@ export default function ClassSettings() {
 
   async function loadSettings() {
     try {
-      const data = await getSchoolSettings(profile.schoolCode)
+      const data = await getSchoolSettings(profile.schoolCode || "DEFAULT_SCHOOL")
       setSettings(data)
     } catch (err) {
       console.error(err)
@@ -27,11 +27,11 @@ export default function ClassSettings() {
     setSaving(true)
     try {
       const newVal = !settings.codingModuleEnabled
-      await updateSchoolSettings(profile.schoolCode, { codingModuleEnabled: newVal })
+      await updateSchoolSettings(profile.schoolCode || "DEFAULT_SCHOOL", { codingModuleEnabled: newVal })
       setSettings(prev => ({ ...prev, codingModuleEnabled: newVal }))
     } catch (err) {
       console.error(err)
-      alert("Hata oluştu. Tekrar deneyin.")
+      alert("Hata oluştu: " + err.message)
     } finally {
       setSaving(false)
     }
@@ -57,7 +57,7 @@ export default function ClassSettings() {
                 eğitici mini oyunlar bulunur. Görevlere odaklanmalarını istediğinizde bu modülü kapatabilirsiniz.
               </p>
               <div className="flex gap-2 items-center">
-                <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider \${settings.codingModuleEnabled ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-500 border border-slate-200'}`}>
+                <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${settings.codingModuleEnabled ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-500 border border-slate-200'}`}>
                   {settings.codingModuleEnabled ? 'Aktif - Açık' : 'Pasif - Kapalı'}
                 </span>
               </div>
@@ -67,10 +67,10 @@ export default function ClassSettings() {
           <button 
             onClick={toggleCodingModule}
             disabled={saving}
-            className={`relative inline-flex h-10 w-20 items-center rounded-full transition-colors focus:outline-none \${settings.codingModuleEnabled ? 'bg-emerald-500' : 'bg-slate-300'}`}
+            className={`relative inline-flex h-10 w-20 items-center rounded-full transition-colors focus:outline-none ${settings.codingModuleEnabled ? 'bg-emerald-500' : 'bg-slate-300'}`}
           >
             <span
-              className={`inline-block h-8 w-8 transform rounded-full bg-white transition-transform \${settings.codingModuleEnabled ? 'translate-x-11' : 'translate-x-1'}`}
+              className={`inline-block h-8 w-8 transform rounded-full bg-white transition-transform ${settings.codingModuleEnabled ? 'translate-x-11' : 'translate-x-1'}`}
             />
           </button>
         </div>
