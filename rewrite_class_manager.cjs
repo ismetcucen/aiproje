@@ -1,105 +1,9 @@
-import { useState, useEffect } from 'react'
-import { db } from '../../firebase/config'
-import { collection, getDocs, query, where } from 'firebase/firestore'
-import { createClass, getClassesBySchool, addStudentToClass, getStudentsByClass } from '../../firebase/schema'
-import { GRADES, SECTIONS } from '../../data/curriculum'
-import BulkStudentUpload from "./BulkStudentUpload"
-import AddStudentModal from './AddStudentModal'
+const fs = require('fs');
+let content = fs.readFileSync('src/components/admin/ClassManager.jsx', 'utf8');
 
-export default function ClassManager({ schoolCode }) {
-  const [classes,    setClasses]    = useState([])
-  const [selected,   setSelected]   = useState(null)
-  const [students,   setStudents]   = useState([])
-  const [allUsers,   setAllUsers]   = useState([])
-  const [loading,    setLoading]    = useState(true)
-  const [tab,        setTab]        = useState('students')
-  const [newGrade,   setNewGrade]   = useState('3')
-  const [newSection, setNewSection] = useState('A')
-  const [saving,     setSaving]     = useState(false)
-  const [success,    setSuccess]    = useState('')
-  const [error,      setError]      = useState('')
-  const [showModal,  setShowModal]  = useState(false)
-
-  useEffect(() => { loadData() }, [])
-
-  async function loadData() {
-    setLoading(true)
-    try {
-      const [cls, users] = await Promise.all([
-        getClassesBySchool(schoolCode),
-        getDocs(query(collection(db, 'users'), where('schoolCode', '==', schoolCode || 'OHEP'), where('role', '==', 'student'))),
-      ])
-      setClasses(cls)
-      setAllUsers(users.docs.map(d => ({ id: d.id, ...d.data() })))
-    } catch(e) { console.error(e) }
-    finally { setLoading(false) }
-  }
-
-  async function handleCreateClass() {
-    const exists = classes.find(c => c.grade === newGrade && c.section === newSection)
-    if (exists) return setError(`${newGrade}/${newSection} sinifi zaten var.`)
-    setSaving(true); setError('')
-    try {
-      await createClass({ grade: newGrade, section: newSection, schoolCode: schoolCode || 'OHEP' })
-      await loadData()
-      setSuccess(`${newGrade}/${newSection} sinifi olusturuldu.`)
-      setTimeout(() => setSuccess(''), 3000)
-    } catch(e) { setError('Sinif olusturulamadi.') }
-    finally { setSaving(false) }
-  }
-
-  async function selectClass(cls) {
-    setSelected(cls)
-    setTab('students')
-    const studs = await getStudentsByClass(cls.id)
-    setStudents(studs)
-  }
-
-  async function handleAddExisting(userId) {
-    if (!selected) return
-    try {
-      await addStudentToClass(selected.id, userId)
-      const studs = await getStudentsByClass(selected.id)
-      setStudents(studs)
-      setSuccess('Ogrenci sinifa eklendi.')
-      setTimeout(() => setSuccess(''), 2000)
-    } catch(e) { setError('Ogrenci eklenemedi.') }
-  }
-
-  async function handleModalSuccess() {
-    setShowModal(false)
-    setSuccess('Ogrenci basariyla eklendi!')
-    setTimeout(() => setSuccess(''), 3000)
-    await loadData()
-    if (selected) {
-      const studs = await getStudentsByClass(selected.id)
-      setStudents(studs)
-    }
-  }
-
-  async function handleExcelUpload(e) {
-    const file = e.target.files[0]
-    if (!file || !selected) return
-    try {
-      const { default: XLSX } = await import('xlsx')
-      const reader = new FileReader()
-      reader.onload = (evt) => {
-        const wb = XLSX.read(evt.target.result, { type: 'binary' })
-        const ws = wb.Sheets[wb.SheetNames[0]]
-        const data = XLSX.utils.sheet_to_json(ws)
-        const names = data.map(r => r['Ad Soyad'] || r.fullName || r.name || '?').join(', ')
-        setSuccess(`${data.length} ogrenci okundu: ${names}. Tam entegrasyon yakinda.`)
-      }
-      reader.readAsBinaryString(file)
-    } catch(e) { setError('Excel okunamadi.') }
-  }
-
-  const studentsInClass = students.map(s => s.id)
-  const available = allUsers.filter(u => !studentsInClass.includes(u.id))
-
-  if (loading) return <div className="text-center py-20 text-slate-400">Yukleniyor...</div>
-
-  return (
+// We will do a full rewrite of the return statement
+const oldReturnStart = "return (\n    <div className=\"max-w-5xl\">";
+const newReturn = `return (
     <div className="max-w-6xl mx-auto pb-10">
       {showModal && (
         <AddStudentModal
@@ -154,16 +58,16 @@ export default function ClassManager({ schoolCode }) {
               </div>
             ) : classes.map(cls => (
               <button key={cls.id} onClick={() => selectClass(cls)}
-                className={`w-full text-left px-5 py-4 rounded-2xl border transition-all duration-200 ${
+                className={\`w-full text-left px-5 py-4 rounded-2xl border transition-all duration-200 \${
                   selected?.id === cls.id
                     ? 'bg-red-900/20 border-red-500/50 shadow-lg shadow-red-900/20'
                     : 'bg-slate-900/50 border-slate-800 hover:bg-slate-800 hover:border-slate-700'
-                }`}>
+                }\`}>
                 <div className="flex items-center justify-between">
-                  <p className={`text-lg font-bold ${selected?.id === cls.id ? 'text-red-400' : 'text-slate-200'}`}>{cls.name}</p>
-                  <span className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${selected?.id === cls.id ? 'bg-red-500/20 text-red-400' : 'bg-slate-800 text-slate-400'}`}>{cls.section}</span>
+                  <p className={\`text-lg font-bold \${selected?.id === cls.id ? 'text-red-400' : 'text-slate-200'}\`}>{cls.name}</p>
+                  <span className={\`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold \${selected?.id === cls.id ? 'bg-red-500/20 text-red-400' : 'bg-slate-800 text-slate-400'}\`}>{cls.section}</span>
                 </div>
-                <p className={`text-sm mt-1 ${selected?.id === cls.id ? 'text-red-300/70' : 'text-slate-500'}`}>{cls.grade}. Sınıf Seviyesi</p>
+                <p className={\`text-sm mt-1 \${selected?.id === cls.id ? 'text-red-300/70' : 'text-slate-500'}\`}>{cls.grade}. Sınıf Seviyesi</p>
               </button>
             ))}
           </div>
@@ -193,14 +97,14 @@ export default function ClassManager({ schoolCode }) {
 
               <div className="flex flex-wrap gap-3 mb-8 relative z-10 bg-slate-950 p-1.5 rounded-2xl border border-slate-800 w-fit">
                 {[
-                  { id: 'students', label: `Kayıtlı Öğrenciler (${students.length})`, icon: '🎓' },
+                  { id: 'students', label: \`Kayıtlı Öğrenciler (\${students.length})\`, icon: '🎓' },
                   { id: 'add',      label: 'Mevcut Öğrenci Seç', icon: '🔍' },
                   { id: 'excel',    label: 'Excel ile Yükle', icon: '📄' },
                 ].map(t => (
                   <button key={t.id} onClick={() => setTab(t.id)}
-                    className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all ${
+                    className={\`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all \${
                       tab === t.id ? 'bg-slate-800 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
-                    }`}>
+                    }\`}>
                     <span>{t.icon}</span> {t.label}
                   </button>
                 ))}
@@ -270,7 +174,7 @@ export default function ClassManager({ schoolCode }) {
                       classInfo={selected}
                       schoolCode={schoolCode}
                       onSuccess={async (count) => {
-                        setSuccess(`${count} öğrenci başarıyla eklendi!`)
+                        setSuccess(\`\${count} öğrenci başarıyla eklendi!\`)
                         setTimeout(() => setSuccess(''), 4000)
                         await loadData()
                         if (selected) {
@@ -288,4 +192,13 @@ export default function ClassManager({ schoolCode }) {
       </div>
     </div>
   )
+}`;
+
+const startIndex = content.indexOf('return (');
+if (startIndex !== -1) {
+  content = content.substring(0, startIndex) + newReturn + "\n}\n";
+  fs.writeFileSync('src/components/admin/ClassManager.jsx', content, 'utf8');
+  console.log('ClassManager updated');
+} else {
+  console.log('Could not find return statement in ClassManager');
 }

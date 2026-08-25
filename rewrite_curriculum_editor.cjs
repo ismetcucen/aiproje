@@ -1,67 +1,8 @@
-import { useState } from 'react'
-import { CURRICULUM, GRADES } from '../../data/curriculum'
-import { db } from '../../firebase/config'
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
+const fs = require('fs');
+let content = fs.readFileSync('src/components/admin/CurriculumEditor.jsx', 'utf8');
 
-export default function CurriculumEditor() {
-  const [selectedGrade, setSelectedGrade] = useState('3')
-  const [selectedWeek,  setSelectedWeek]  = useState(null)
-  const [editForm,      setEditForm]      = useState(null)
-  const [saving,        setSaving]        = useState(false)
-  const [success,       setSuccess]       = useState('')
-  const [localEdits,    setLocalEdits]    = useState({})
-
-  function openEdit(week) {
-    const grade = selectedGrade
-    const key   = `${grade}_${week.week}`
-    const data  = localEdits[key] || week
-    setSelectedWeek(week.week)
-    setEditForm({
-      title:       data.title       || '',
-      description: data.description || '',
-      objectives:  (data.objectives || []).join('\n'),
-      aiTools:     (data.aiTools    || []).join('\n'),
-      duration:    data.duration    || 40,
-      output:      data.output      || '',
-      activity:    data.activity    || '',
-    })
-  }
-
-  async function handleSave() {
-    if (!editForm || !selectedWeek) return
-    setSaving(true)
-    try {
-      const key = `${selectedGrade}_${selectedWeek}`
-      const updated = {
-        title:       editForm.title.trim(),
-        description: editForm.description.trim(),
-        objectives:  editForm.objectives.split('\n').map(s => s.trim()).filter(Boolean),
-        aiTools:     editForm.aiTools.split('\n').map(s => s.trim()).filter(Boolean),
-        duration:    Number(editForm.duration),
-        output:      editForm.output.trim(),
-        activity:    editForm.activity.trim(),
-      }
-      setLocalEdits(p => ({ ...p, [key]: { ...updated, week: selectedWeek } }))
-      await addDoc(collection(db, 'curriculum_edits'), {
-        grade:       selectedGrade,
-        week:        selectedWeek,
-        ...updated,
-        editedAt:    serverTimestamp(),
-      })
-      setSuccess(`Hafta ${selectedWeek} guncellendi!`)
-      setTimeout(() => setSuccess(''), 3000)
-      setSelectedWeek(null)
-      setEditForm(null)
-    } catch(e) {
-      console.error(e)
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  const curriculum = CURRICULUM[selectedGrade] || []
-
-  return (
+const oldReturnStart = "return (\n    <div className=\"max-w-6xl\">";
+const newReturn = `return (
     <div className="max-w-7xl mx-auto pb-10">
       <div className="mb-8">
         <h2 className="text-white text-3xl font-bold tracking-tight mb-1">Müfredat Düzenleyici</h2>
@@ -80,9 +21,9 @@ export default function CurriculumEditor() {
             <div className="grid grid-cols-4 gap-2 relative z-10">
               {GRADES.map(g => (
                 <button key={g} onClick={() => { setSelectedGrade(g); setSelectedWeek(null); setEditForm(null) }}
-                  className={`py-3 rounded-xl text-sm font-bold transition-all ${
+                  className={\`py-3 rounded-xl text-sm font-bold transition-all \${
                     selectedGrade === g ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 border border-indigo-500' : 'bg-slate-800 text-slate-400 border border-slate-700 hover:border-slate-500 hover:text-slate-200'
-                  }`}>
+                  }\`}>
                   {g}.
                 </button>
               ))}
@@ -93,27 +34,27 @@ export default function CurriculumEditor() {
             <label className="block text-slate-400 text-xs font-bold uppercase tracking-wider px-2">Haftalık Plan ({selectedGrade}. Sınıf)</label>
             <div className="space-y-2 max-h-[600px] overflow-y-auto custom-scrollbar pr-2">
               {curriculum.map(week => {
-                const key     = `${selectedGrade}_${week.week}`
+                const key     = \`\${selectedGrade}_\${week.week}\`
                 const edited  = !!localEdits[key]
                 return (
                   <button key={week.week} onClick={() => openEdit(week)}
-                    className={`w-full text-left px-5 py-4 rounded-2xl border transition-all duration-200 ${
+                    className={\`w-full text-left px-5 py-4 rounded-2xl border transition-all duration-200 \${
                       selectedWeek === week.week
                         ? 'bg-indigo-900/30 border-indigo-500/50 shadow-lg shadow-indigo-900/20'
                         : 'bg-slate-900/50 border-slate-800 hover:bg-slate-800 hover:border-slate-700'
-                    }`}>
+                    }\`}>
                     <div className="flex items-start justify-between">
                       <div className="flex-1 pr-4">
                         <div className="flex items-center gap-2 mb-1">
-                          <span className={`text-xs font-bold px-2 py-0.5 rounded-md ${selectedWeek === week.week ? 'bg-indigo-500/20 text-indigo-400' : 'bg-slate-800 text-slate-400'}`}>Hafta {week.week}</span>
+                          <span className={\`text-xs font-bold px-2 py-0.5 rounded-md \${selectedWeek === week.week ? 'bg-indigo-500/20 text-indigo-400' : 'bg-slate-800 text-slate-400'}\`}>Hafta {week.week}</span>
                           {edited && <span className="text-yellow-400 text-xs font-bold px-2 py-0.5 bg-yellow-400/10 rounded-md border border-yellow-400/20">Düzenlendi</span>}
                         </div>
-                        <p className={`text-base font-bold leading-tight ${selectedWeek === week.week ? 'text-indigo-200' : 'text-slate-200'}`}>
+                        <p className={\`text-base font-bold leading-tight \${selectedWeek === week.week ? 'text-indigo-200' : 'text-slate-200'}\`}>
                           {localEdits[key]?.title || week.title}
                         </p>
                       </div>
                     </div>
-                    <p className={`text-xs mt-2 ${selectedWeek === week.week ? 'text-indigo-400' : 'text-slate-500'}`}>{week.dateRange}</p>
+                    <p className={\`text-xs mt-2 \${selectedWeek === week.week ? 'text-indigo-400' : 'text-slate-500'}\`}>{week.dateRange}</p>
                   </button>
                 )
               })}
@@ -205,4 +146,13 @@ export default function CurriculumEditor() {
       </div>
     </div>
   )
+}`;
+
+const startIndex = content.indexOf('return (');
+if (startIndex !== -1) {
+  content = content.substring(0, startIndex) + newReturn + "\n}\n";
+  fs.writeFileSync('src/components/admin/CurriculumEditor.jsx', content, 'utf8');
+  console.log('CurriculumEditor updated');
+} else {
+  console.log('Could not find return statement in CurriculumEditor');
 }
