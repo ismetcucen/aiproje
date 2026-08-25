@@ -47,10 +47,11 @@ const TOOLS = [
   ,
   {
     id: 'avatar',
-    title: 'Avatar Stüdyosu (3D)',
-    desc: 'Kendi 3 boyutlu karakterini tasarla, giydir ve tarzını yarat!',
-    url: 'https://demo.readyplayer.me/avatar?frameApi',
-    icon: '👤'
+    title: 'Avatar Stüdyosu',
+    desc: 'Kendi profil avatarını tasarla, indir ve paylaş! (Yeni sekmede açılır)',
+    url: 'https://avatarmaker.com/',
+    icon: '👤',
+    external: true
   }
   ,
   {

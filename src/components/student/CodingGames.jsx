@@ -68,10 +68,10 @@ const GAMES = [
   {
     id: 'makecodearcade',
     title: 'MakeCode Arcade',
-    desc: 'Kendi retro atari oyunlarını bloklarla tasarla ve oyna!',
+    desc: 'Kendi retro atari oyunlarını bloklarla tasarla ve oyna! (Yeni sekmede açılır)',
     url: 'https://arcade.makecode.com/',
     icon: '👾',
-    external: false
+    external: true
   }
 ]
 
