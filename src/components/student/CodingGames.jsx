@@ -52,7 +52,7 @@ const GAMES = [
     id: 'codeorg',
     title: 'Code.org',
     desc: 'Eğlenceli görevlerle kodlama öğren ve kendi projeni yarat. (Yeni sekmede açılır)',
-    url: 'https://code.org/learn',
+    url: 'https://code.org/tr',
     icon: '🌐',
     external: true
   },
