@@ -23,11 +23,11 @@ const TOOLS = [
     icon: '🎨'
   },
   {
-    id: 'quickdraw',
-    title: 'Yapay Zeka Çizim',
-    desc: 'Sen çiz, yapay zeka ne çizdiğini tahmin etsin!',
-    url: 'https://quickdraw.withgoogle.com/',
-    icon: '🤖'
+    id: 'autodraw',
+    title: 'Akıllı Çizim (AutoDraw)',
+    desc: 'Sen basitçe çiz, yapay zeka onu harika bir görsele dönüştürsün!',
+    url: 'https://www.autodraw.com/',
+    icon: '🪄'
   }
   ,
   {
