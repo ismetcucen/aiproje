@@ -64,6 +64,15 @@ const GAMES = [
     icon: '✏️',
     external: true
   }
+  ,
+  {
+    id: 'makecodearcade',
+    title: 'MakeCode Arcade',
+    desc: 'Kendi retro atari oyunlarını bloklarla tasarla ve oyna!',
+    url: 'https://arcade.makecode.com/',
+    icon: '👾',
+    external: false
+  }
 ]
 
 export default function CodingGames() {

@@ -87,6 +87,23 @@ const TOOLS = [
     icon: '🧊',
     external: true
   }
+  ,
+  {
+    id: 'pictoblox',
+    title: 'PictoBlox (AI & ML)',
+    desc: 'Scratch tabanlı arayüzle Yapay Zeka ve Makine Öğrenmesi projeleri geliştir!',
+    url: 'https://pictoblox.ai/ide/',
+    icon: '🐼',
+    external: false
+  },
+  {
+    id: 'arduino',
+    title: 'Arduino Web Editor',
+    desc: 'Arduino kartlarını doğrudan tarayıcı üzerinden kodla! (Yeni sekmede açılır)',
+    url: 'https://app.arduino.cc/',
+    icon: '♾️',
+    external: true
+  }
 ]
 
 export default function LessonTools() {
