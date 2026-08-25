@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { createUserWithEmailAndPassword, updateProfile, getAuth, signOut } from 'firebase/auth'
 import { initializeApp, getApp } from 'firebase/app'
+import { getFirestore, doc, setDoc, serverTimestamp } from 'firebase/firestore'
 import app, { auth } from '../../firebase/config'
 import { createUserProfile, addStudentToClass, ROLES, CLASS_LEVELS } from '../../firebase/schema'
 
@@ -88,15 +89,18 @@ export default function AddStudentModal({ classInfo, schoolCode, onClose, onSucc
       const secAuth = getSecondaryAuth()
       const cred = await createUserWithEmailAndPassword(secAuth, targetEmail, targetPassword)
       await updateProfile(cred.user, { displayName: form.fullName.trim() })
-      await createUserProfile(cred.user.uid, {
+      const secDb = getFirestore(secAuth.app);
+      await setDoc(doc(secDb, 'users', cred.user.uid), {
         fullName:    form.fullName.trim(),
         email:       targetEmail,
         role:        ROLES.STUDENT,
         classLevel:  classLevelFromGrade(form.gradeNumber),
         gradeNumber: Number(form.gradeNumber),
         schoolCode,
-        
         visualId:    mode === 'visual' ? form.visualId : null,
+        files:       [],
+        createdAt:   serverTimestamp(),
+        isActive:    true,
       })
       if (classInfo) {
         await addStudentToClass(classInfo.id, cred.user.uid)

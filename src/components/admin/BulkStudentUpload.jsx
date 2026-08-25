@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { createUserWithEmailAndPassword, updateProfile, getAuth, signOut } from 'firebase/auth'
 import { initializeApp, getApp } from 'firebase/app'
+import { getFirestore, doc, setDoc, serverTimestamp } from 'firebase/firestore'
 import app, { auth } from '../../firebase/config'
 import { createUserProfile, addStudentToClass, ROLES, CLASS_LEVELS } from '../../firebase/schema'
 
@@ -75,13 +76,17 @@ export default function BulkStudentUpload({ classInfo, schoolCode, onSuccess }) 
         const cred = await createUserWithEmailAndPassword(secAuth, s.email, s.password)
         await updateProfile(cred.user, { displayName: s.fullName })
         await signOut(secAuth)
-        await createUserProfile(cred.user.uid, {
+        const secDb = getFirestore(secAuth.app);
+        await setDoc(doc(secDb, 'users', cred.user.uid), {
           fullName:    s.fullName,
           email:       s.email,
           role:        ROLES.STUDENT,
-          classLevel:  classLevelFromGrade(s.gradeNumber),
-          gradeNumber: Number(s.gradeNumber) || null,
+          classLevel:  classInfo ? classInfo.level : 'ortaokul',
+          gradeNumber: classInfo ? classInfo.grade : null,
           schoolCode,
+          files:       [],
+          createdAt:   serverTimestamp(),
+          isActive:    true,
         })
         if (classInfo) {
           await addStudentToClass(classInfo.id, cred.user.uid)
