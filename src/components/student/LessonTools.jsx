@@ -10,9 +10,9 @@ const TOOLS = [
   },
   {
     id: 'scratch',
-    title: 'Scratch (TurboWarp)',
+    title: 'mBlock (Scratch AI)',
     desc: 'Kuklalar ve arka planlarla kendi oyununu, animasyonunu tasarla.',
-    url: 'https://turbowarp.org/editor',
+    url: 'https://ide.mblock.cc/',
     icon: '🐱'
   },
   {
