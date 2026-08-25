@@ -14,7 +14,7 @@ export default function ClassSettings() {
 
   async function loadSettings() {
     try {
-      const data = await getSchoolSettings(profile.schoolCode || "DEFAULT_SCHOOL")
+      const data = await getSchoolSettings("global_school")
       setSettings(data)
     } catch (err) {
       console.error(err)
@@ -27,7 +27,7 @@ export default function ClassSettings() {
     setSaving(true)
     try {
       const newVal = !settings.codingModuleEnabled
-      await updateSchoolSettings(profile.schoolCode || "DEFAULT_SCHOOL", { codingModuleEnabled: newVal })
+      await updateSchoolSettings("global_school", { codingModuleEnabled: newVal })
       setSettings(prev => ({ ...prev, codingModuleEnabled: newVal }))
     } catch (err) {
       console.error(err)
