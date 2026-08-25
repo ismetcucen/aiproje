@@ -9,48 +9,370 @@ const MODULES = [
 
 // Grade Groups: 3-4 (İlkokul), 5-6 (Ortaokul Giriş), 7-8 (Ortaokul İleri), 9-10 (Lise)
 const CURRICULUM_TEMPLATES = {
-  "3-4": [
-    // Modül 1: Haftalar 1-9
-    { week: 1, title: "Yapay Zeka Nedir?", desc: "Yapay zekanın ne olduğunu ve günlük hayattaki akıllı cihazları (akıllı süpürgeler, sesli asistanlar) öğreniyoruz." },
-    { week: 2, title: "Robotlar ve İnsanlar", desc: "Robotların yapay zeka ile nasıl çalıştığını ve insanlardan farklarını tartışıyoruz." },
-    { week: 3, title: "Çevremizdeki Akıllı Teknolojiler", desc: "Evimizde ve okulumuzda hangi cihazların yapay zeka kullandığını keşfediyoruz." },
-    { week: 4, title: "Algılayıcılar (Sensörler) Dünyası", desc: "Robotların çevresini görmek, duymak ve hissetmek için kullandığı sensörleri öğreniyoruz." },
-    { week: 5, title: "Komut Vermeyi Öğreniyorum", desc: "Bir bilgisayara adım adım nasıl talimat (komut) verileceğini oyunlarla deneyimliyoruz." },
-    { week: 6, title: "Yapay Zeka Nasıl Görür?", desc: "Bilgisayarların kameralar yardımıyla nesneleri nasıl tanıdığını basit örneklerle inceliyoruz." },
-    { week: 7, title: "Yapay Zeka Nasıl Duyar?", desc: "Konuşmalarimizi dinleyen ve kelimeleri anlayan ses tanıma teknolojilerini keşfediyoruz." },
-    { week: 8, title: "Karar Verme Oyunu", desc: "Eğer-İse mantığıyla çalışan basit karar verme akışlarını oyunlaştırarak öğreniyoruz." },
-    { week: 9, title: "İlk Modül Değerlendirmesi", desc: "Yapay zeka kavramlarını özetleyen eğlenceli bir bulmaca ve kısa bir taslak çalışması yapıyoruz." },
-    // Modül 2: Haftalar 10-18
-    { week: 10, title: "Makine Öğrenmesi Nedir?", desc: "Bilgisayarların kod yazılmadan, deneyimlerle nasıl öğrendiğini (makine öğrenmesi) keşfediyoruz." },
-    { week: 11, title: "Örüntü ve Desenleri Bulma", desc: "Çevremizdeki şekil, renk ve ses kalıplarını (örüntüleri) bulma oyunları oynuyoruz." },
-    { week: 12, title: "Yapay Zekaya Öğretme (Veri Ekleme)", desc: "Yapay zekanın öğrenebilmesi için görselleri ve sesleri nasıl etiketleyeceğimizi öğreniyoruz." },
-    { week: 13, title: "Teachable Machine ile Tanışma", desc: "Google Teachable Machine kullanarak kendi el hareketlerimizi tanıyan bir yapay zeka eğitiyoruz." },
-    { week: 14, title: "Görsel Sınıflandırma Yapalım", desc: "Kedi ve köpek resimlerini birbirinden ayıran basit bir sınıflandırma modeli hazırlıyoruz." },
-    { week: 15, title: "Ses Sınıflandırma Yapalım", desc: "Farklı alkış veya ıslık seslerini tanıyan ses tabanlı bir model eğitiyoruz." },
-    { week: 16, title: "Yapay Zeka Hataları", desc: "Eğittiğimiz modelin yanlış verilerle nasıl hatalı kararlar verebileceğini deneyimliyoruz." },
-    { week: 17, title: "Doğru Veri Toplama Yöntemi", desc: "Daha iyi kararlar alan bir yapay zeka için temiz ve dengeli verinin önemini öğreniyoruz." },
-    { week: 18, title: "Makine Öğrenmesi Sergisi", desc: "Şu ana kadar eğittiğimiz basit modelleri arkadaşlarımızla paylaşıp sunuyoruz." },
-    // Modül 3: Haftalar 19-27
-    { week: 19, title: "Yaratıcı Yapay Zeka Nedir?", desc: "Resim çizen, hikaye yazan üretken yapay zeka araçları hakkında ilk bilgileri alıyoruz." },
-    { week: 20, title: "Yapay Zeka ile Resim Çizme", desc: "Basit kelimeler (prompt) kullanarak yapay zekaya hayalimizdeki resmi çizdiriyoruz." },
-    { week: 21, title: "Kelime Sihirbazlığı (Prompt Giriş)", desc: "İstediğimiz resmi tam olarak alabilmek için yapay zekaya nasıl doğru kelimeler yazacağımızı öğreniyoruz." },
-    { week: 22, title: "Ortaklaşa Hikaye Yazma", desc: "Yapay zeka ile cümle cümle paslaşarak eğlenceli bir masal veya macera hikayesi yazıyoruz." },
-    { week: 23, title: "Yapay Zeka ve Müzik", desc: "Yapay zeka araçlarını kullanarak kendi kısa şarkımızı veya melodimizi üretiyoruz." },
-    { week: 24, title: "Scratch AI Eklentileri Giriş", desc: "Scratch üzerinde kuklaları sesimizle veya hareketlerimizle yöneteceğimiz projeler tasarlıyoruz." },
-    { week: 25, title: "Sesli Komutlu Scratch Oyunu", desc: "Scratch'te 'Yukarı' veya 'Zıpla' deyince hareket eden basit bir platform oyunu yapıyoruz." },
-    { week: 26, title: "Görüntü Efektleri Projesi", desc: "Yapay zekanın yüzümüzü takip ederek ekranda maskeler veya şapkalar yerleştirdiği bir eğlence projesi yapıyoruz." },
-    { week: 27, title: "Yaratıcı Proje Sunumu", desc: "Yapay zeka ile ürettiğimiz hikaye, resim veya oyunu sınıfta sergiliyoruz." },
-    // Modül 4: Haftalar 28-36
-    { week: 28, title: "Yapay Zeka Her Şeyi Bilir mi?", desc: "Yapay zekanın da yanılabileceğini, internetteki her bilginin doğru olmayabileceğini tartışıyoruz." },
-    { week: 29, title: "Yapay Zeka Etiği Nedir?", desc: "Akıllı cihazları ve yapay zekayı kullanırken nasıl adil ve iyi davranacağımızı öğreniyoruz." },
-    { week: 30, title: "Güvenli Chatbot Kullanımı", desc: "Yapay zeka sohbet robotlarıyla konuşurken kişisel bilgilerimizi (şifre, adres) neden vermememiz gerektiğini öğreniyoruz." },
-    { week: 31, title: "Telif Hakkı Nedir? (Basitçe)", desc: "Yapay zekanın çizdiği resimlerin ve yazdığı yazıların kime ait olduğunu çocuk gözüyle tartışıyoruz." },
-    { week: 32, title: "Yapay Zeka ve Çevre", desc: "Yapay zeka sunucularının çok enerji harcadığını ve doğayı korumak için neler yapabileceğimizi öğreniyoruz." },
-    { week: 33, title: "Gelecekteki Akıllı Meslekler", desc: "Yapay zekanın gelecekte doktorlara, öğretmenlere veya itfaiyecilere nasıl yardım edeceğini hayal ediyoruz." },
-    { week: 34, title: "Benim Gelecekteki Robotum", desc: "İnsanlığa yardım edecek, çevre dostu ve akıllı bir robot tasarlayıp resmini çiziyoruz." },
-    { week: 35, title: "Yıl Sonu Portfolyo Hazırlığı", desc: "Yıl boyunca yaptığımız yapay zeka çalışmalarını bir araya getirip portfolyomuzu düzenliyoruz." },
-    { week: 36, title: "Yıl Sonu AI Şenliği", desc: "Tüm projelerimizi, hikayelerimizi ve tasarımlarımızı okul genelinde paylaşıp kutluyoruz." }
-  ],
+  "3": [
+    {
+        "week": 1,
+        "title": "Dosya-klasör-klavye",
+        "desc": "Bilgisayarın temel bileşenlerini tanır, dosya ve klasör yönetimini kavrar."
+    },
+    {
+        "week": 2,
+        "title": "Canva tasarım",
+        "desc": "Dijital içerik oluşturma araçlarını kullanarak temel tasarımlar ve metinler oluşturur."
+    },
+    {
+        "week": 3,
+        "title": "Dikkat geliştirme",
+        "desc": "Mantıksal akıl yürütme ve dikkat geliştirici oyunlaştırma etkinlikleriyle odaklanma becerisini artırır."
+    },
+    {
+        "week": 4,
+        "title": "Dikkat geliştirme",
+        "desc": "Mantıksal akıl yürütme ve dikkat geliştirici oyunlaştırma etkinlikleriyle odaklanma becerisini artırır."
+    },
+    {
+        "week": 5,
+        "title": "Örüntü kodlama",
+        "desc": "Blok tabanlı kodlama platformları ile algoritmik düşünme becerilerini geliştirir."
+    },
+    {
+        "week": 6,
+        "title": "Sezar şifreleme",
+        "desc": "Bilgi güvenliği ve temel şifreleme yöntemlerini (Sezar şifreleme, güçlü şifre oluşturma) kavrar."
+    },
+    {
+        "week": 7,
+        "title": "Fırça robot",
+        "desc": "Temel elektronik devre elemanlarını tanır ve basit robotik projelerin mantığını anlar."
+    },
+    {
+        "week": 8,
+        "title": "Amiral battı",
+        "desc": "Mantıksal akıl yürütme ve dikkat geliştirici oyunlaştırma etkinlikleriyle odaklanma becerisini artırır."
+    },
+    {
+        "week": 9,
+        "title": "Okyanusları temizliyorum",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 10,
+        "title": "Code org - müzik",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 11,
+        "title": "Uzay yolculuk",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 12,
+        "title": "Trafik lambası",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 13,
+        "title": "Türk bayrağı uzaya çıkıyor",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 14,
+        "title": "Gezegenlere ulaşıyoruz",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 15,
+        "title": "Kar küresi yapımı",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 16,
+        "title": "Scratch giriş",
+        "desc": "Oyun geliştirme platformlarında sahneler oluşturur ve karakterlere hareket komutları verir."
+    },
+    {
+        "week": 17,
+        "title": "Muz toplama",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 18,
+        "title": "Harflerin dansı",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 19,
+        "title": "Makey makey",
+        "desc": "Fiziksel programlama araçlarını (Makey Makey, Micro:bit) kullanarak dış dünya ile bilgisayar arasında köprü kurar."
+    },
+    {
+        "week": 20,
+        "title": "Makey makey",
+        "desc": "Fiziksel programlama araçlarını (Makey Makey, Micro:bit) kullanarak dış dünya ile bilgisayar arasında köprü kurar."
+    },
+    {
+        "week": 21,
+        "title": "Microbit",
+        "desc": "Fiziksel programlama araçlarını (Makey Makey, Micro:bit) kullanarak dış dünya ile bilgisayar arasında köprü kurar."
+    },
+    {
+        "week": 22,
+        "title": "Microbit",
+        "desc": "Fiziksel programlama araçlarını (Makey Makey, Micro:bit) kullanarak dış dünya ile bilgisayar arasında köprü kurar."
+    },
+    {
+        "week": 23,
+        "title": "Kodu game lab",
+        "desc": "Oyun geliştirme platformlarında sahneler oluşturur ve karakterlere hareket komutları verir."
+    },
+    {
+        "week": 24,
+        "title": "Kodu game lab",
+        "desc": "Oyun geliştirme platformlarında sahneler oluşturur ve karakterlere hareket komutları verir."
+    },
+    {
+        "week": 25,
+        "title": "Pivot animator",
+        "desc": "Oyun geliştirme platformlarında sahneler oluşturur ve karakterlere hareket komutları verir."
+    },
+    {
+        "week": 26,
+        "title": "Pivot animator",
+        "desc": "Oyun geliştirme platformlarında sahneler oluşturur ve karakterlere hareket komutları verir."
+    },
+    {
+        "week": 27,
+        "title": "3d tasarım",
+        "desc": "3 Boyutlu tasarım araçlarını kullanarak temel geometrik şekillerden modeller oluşturur."
+    },
+    {
+        "week": 28,
+        "title": "3d tasarım",
+        "desc": "3 Boyutlu tasarım araçlarını kullanarak temel geometrik şekillerden modeller oluşturur."
+    },
+    {
+        "week": 29,
+        "title": "3d baskı",
+        "desc": "3 Boyutlu tasarım araçlarını kullanarak temel geometrik şekillerden modeller oluşturur."
+    },
+    {
+        "week": 30,
+        "title": "Proje",
+        "desc": "Öğrendiği araçları kullanarak kendi özgün dijital veya fiziksel ürününü projelendirir."
+    },
+    {
+        "week": 31,
+        "title": "Proje",
+        "desc": "Öğrendiği araçları kullanarak kendi özgün dijital veya fiziksel ürününü projelendirir."
+    },
+    {
+        "week": 32,
+        "title": "Proje",
+        "desc": "Öğrendiği araçları kullanarak kendi özgün dijital veya fiziksel ürününü projelendirir."
+    },
+    {
+        "week": 33,
+        "title": "Yapay zeka",
+        "desc": "Yapay zeka araçlarının çalışma mantığını anlar ve kendi üretim süreçlerinde etik kurallara uyarak kullanır."
+    },
+    {
+        "week": 34,
+        "title": "Yapay zeka",
+        "desc": "Yapay zeka araçlarının çalışma mantığını anlar ve kendi üretim süreçlerinde etik kurallara uyarak kullanır."
+    },
+    {
+        "week": 35,
+        "title": "Yapay zeka",
+        "desc": "Yapay zeka araçlarının çalışma mantığını anlar ve kendi üretim süreçlerinde etik kurallara uyarak kullanır."
+    },
+    {
+        "week": 36,
+        "title": "Yapay zeka",
+        "desc": "Yapay zeka araçlarının çalışma mantığını anlar ve kendi üretim süreçlerinde etik kurallara uyarak kullanır."
+    }
+],
+  "4": [
+    {
+        "week": 1,
+        "title": "Internet güvenliği",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 2,
+        "title": "Siber zorbalık",
+        "desc": "Dijital ortamlarda güvende kalmanın yollarını, siber zorbalığı ve dijital ayak izi kavramlarını açıklar."
+    },
+    {
+        "week": 3,
+        "title": "Iyi dijital vatandaş",
+        "desc": "Dijital ortamlarda güvende kalmanın yollarını, siber zorbalığı ve dijital ayak izi kavramlarını açıklar."
+    },
+    {
+        "week": 4,
+        "title": "Dijital ayak izi - güçlü şifre",
+        "desc": "Bilgi güvenliği ve temel şifreleme yöntemlerini (Sezar şifreleme, güçlü şifre oluşturma) kavrar."
+    },
+    {
+        "week": 5,
+        "title": "Bilgisayarlar - donanımlar",
+        "desc": "Bilgisayarın temel bileşenlerini tanır, dosya ve klasör yönetimini kavrar."
+    },
+    {
+        "week": 6,
+        "title": "Klavye-dosya",
+        "desc": "Bilgisayarın temel bileşenlerini tanır, dosya ve klasör yönetimini kavrar."
+    },
+    {
+        "week": 7,
+        "title": "Wordpad",
+        "desc": "Dijital içerik oluşturma araçlarını kullanarak temel tasarımlar ve metinler oluşturur."
+    },
+    {
+        "week": 8,
+        "title": "Bilgisayarsız kodlama",
+        "desc": "Blok tabanlı kodlama platformları ile algoritmik düşünme becerilerini geliştirir."
+    },
+    {
+        "week": 9,
+        "title": "Code.org basit kod",
+        "desc": "Blok tabanlı kodlama platformları ile algoritmik düşünme becerilerini geliştirir."
+    },
+    {
+        "week": 10,
+        "title": "Code.org çizim",
+        "desc": "Blok tabanlı kodlama platformları ile algoritmik düşünme becerilerini geliştirir."
+    },
+    {
+        "week": 11,
+        "title": "Little dot",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 12,
+        "title": "Compute it",
+        "desc": "Blok tabanlı kodlama platformları ile algoritmik düşünme becerilerini geliştirir."
+    },
+    {
+        "week": 13,
+        "title": "Blockly",
+        "desc": "Blok tabanlı kodlama platformları ile algoritmik düşünme becerilerini geliştirir."
+    },
+    {
+        "week": 14,
+        "title": "Kodu game lab",
+        "desc": "Oyun geliştirme platformlarında sahneler oluşturur ve karakterlere hareket komutları verir."
+    },
+    {
+        "week": 15,
+        "title": "Kodu game lab",
+        "desc": "Oyun geliştirme platformlarında sahneler oluşturur ve karakterlere hareket komutları verir."
+    },
+    {
+        "week": 16,
+        "title": "Scratch harf",
+        "desc": "Oyun geliştirme platformlarında sahneler oluşturur ve karakterlere hareket komutları verir."
+    },
+    {
+        "week": 17,
+        "title": "Scratch gezgin fare",
+        "desc": "Oyun geliştirme platformlarında sahneler oluşturur ve karakterlere hareket komutları verir."
+    },
+    {
+        "week": 18,
+        "title": "Scratch top sektirme",
+        "desc": "Oyun geliştirme platformlarında sahneler oluşturur ve karakterlere hareket komutları verir."
+    },
+    {
+        "week": 19,
+        "title": "Parola - adın ne",
+        "desc": "Bilgi güvenliği ve temel şifreleme yöntemlerini (Sezar şifreleme, güçlü şifre oluşturma) kavrar."
+    },
+    {
+        "week": 20,
+        "title": "Devre tasarımı",
+        "desc": "Temel elektronik devre elemanlarını tanır ve basit robotik projelerin mantığını anlar."
+    },
+    {
+        "week": 21,
+        "title": "Seri- paralel bağlama",
+        "desc": "Temel elektronik devre elemanlarını tanır ve basit robotik projelerin mantığını anlar."
+    },
+    {
+        "week": 22,
+        "title": "Yer silme robotu",
+        "desc": "Temel elektronik devre elemanlarını tanır ve basit robotik projelerin mantığını anlar."
+    },
+    {
+        "week": 23,
+        "title": "Micro bit",
+        "desc": "Fiziksel programlama araçlarını (Makey Makey, Micro:bit) kullanarak dış dünya ile bilgisayar arasında köprü kurar."
+    },
+    {
+        "week": 24,
+        "title": "Isimlik duygu rozeti",
+        "desc": "Fiziksel programlama araçlarını (Makey Makey, Micro:bit) kullanarak dış dünya ile bilgisayar arasında köprü kurar."
+    },
+    {
+        "week": 25,
+        "title": "Gece lambası - termometre",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 26,
+        "title": "Müzik yapımı",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 27,
+        "title": "Sulama",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 28,
+        "title": "Pusula yapımı",
+        "desc": "Konuya ilişkin temel kavramları anlar ve pratik uygulamalarla pekiştirir."
+    },
+    {
+        "week": 29,
+        "title": "Yz müzik yapımı",
+        "desc": "Yapay zeka araçlarının çalışma mantığını anlar ve kendi üretim süreçlerinde etik kurallara uyarak kullanır."
+    },
+    {
+        "week": 30,
+        "title": "Chat gpt",
+        "desc": "Yapay zeka araçlarının çalışma mantığını anlar ve kendi üretim süreçlerinde etik kurallara uyarak kullanır."
+    },
+    {
+        "week": 31,
+        "title": "Quick draw",
+        "desc": "Yapay zeka araçlarının çalışma mantığını anlar ve kendi üretim süreçlerinde etik kurallara uyarak kullanır."
+    },
+    {
+        "week": 32,
+        "title": "Tinkercad",
+        "desc": "3 Boyutlu tasarım araçlarını kullanarak temel geometrik şekillerden modeller oluşturur."
+    },
+    {
+        "week": 33,
+        "title": "3d tasarım",
+        "desc": "3 Boyutlu tasarım araçlarını kullanarak temel geometrik şekillerden modeller oluşturur."
+    },
+    {
+        "week": 34,
+        "title": "Yapay zeka",
+        "desc": "Yapay zeka araçlarının çalışma mantığını anlar ve kendi üretim süreçlerinde etik kurallara uyarak kullanır."
+    },
+    {
+        "week": 35,
+        "title": "Yapay zeka",
+        "desc": "Yapay zeka araçlarının çalışma mantığını anlar ve kendi üretim süreçlerinde etik kurallara uyarak kullanır."
+    },
+    {
+        "week": 36,
+        "title": "Yapay zeka",
+        "desc": "Yapay zeka araçlarının çalışma mantığını anlar ve kendi üretim süreçlerinde etik kurallara uyarak kullanır."
+    }
+],
   "5-6": [
     // Modül 1: Haftalar 1-9
     { week: 1, title: "Yapay Zekanın Tarihçesi ve Gelişimi", desc: "Yapay zekanın ilk fikirlerinden günümüzdeki modern asistanlara kadar uzanan yolculuğunu öğreniyoruz." },
@@ -189,8 +511,12 @@ export function generateCurriculumList() {
   
   // Generate for each grade from 3 to 10
   for (let grade = 3; grade <= 10; grade++) {
-    let templateKey = "3-4";
-    if (grade === 5 || grade === 6) templateKey = "5-6";
+    let templateKey = grade.toString();
+    if (grade === 3) templateKey = "3";
+    else if (grade === 4) templateKey = "4";
+    else if (grade === 3) templateKey = "3";
+    else if (grade === 4) templateKey = "4";
+    else if (grade === 5 || grade === 6) templateKey = "5-6";
     else if (grade === 7 || grade === 8) templateKey = "7-8";
     else if (grade === 9 || grade === 10) templateKey = "9-10";
     
