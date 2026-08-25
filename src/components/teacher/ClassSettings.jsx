@@ -9,7 +9,7 @@ export default function ClassSettings() {
   const [settings, setSettings] = useState({ codingModuleEnabled: false })
 
   useEffect(() => {
-    if (profile?.schoolCode) loadSettings()
+    loadSettings()
   }, [profile])
 
   async function loadSettings() {

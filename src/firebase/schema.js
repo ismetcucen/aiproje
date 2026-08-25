@@ -408,7 +408,7 @@ export function listenUserNotifications(userId, callback) {
 export async function getSchoolSettings(schoolCode) {
   const snap = await getDoc(doc(db, 'school_settings', schoolCode));
   if (snap.exists()) return snap.data();
-  return { codingModuleEnabled: false };
+  return { codingModuleEnabled: true };
 }
 
 export async function updateSchoolSettings(schoolCode, data) {

@@ -26,7 +26,7 @@ export default function StudentPanel() {
   useEffect(() => {
     if (user?.uid) {
       logAttendance(user.uid).catch(console.error)
-      if (profile?.schoolCode) {
+      if (true) {
         getSchoolSettings("global_school").then(s => setSettings(s)).catch(console.error)
       }
     }
