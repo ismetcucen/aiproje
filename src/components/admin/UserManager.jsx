@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { db } from '../../firebase/config'
 import { collection, getDocs, updateDoc, doc, orderBy, query } from 'firebase/firestore'
+import { deleteUser } from '../../firebase/schema'
 
 const ROLE_LABELS = { student: 'Ogrenci', teacher: 'Ogretmen', admin: 'Admin' }
 const ROLE_COLORS = {
@@ -48,6 +49,22 @@ export default function UserManager() {
     }
   }
 
+  
+  async function handleDeleteUser(userId) {
+    if (!window.confirm("Bu kullanıcıyı sistemden TAMAMEN silmek istediğinize emin misiniz? (Bu işlem geri alınamaz!)")) return;
+    setUpdating(userId);
+    try {
+      await deleteUser(userId);
+      setUsers(prev => prev.filter(u => u.id !== userId));
+      alert('Kullanıcı başarıyla silindi.');
+    } catch(err) {
+      console.error(err);
+      alert('Silme işlemi başarısız: ' + err.message);
+    } finally {
+      setUpdating(null);
+    }
+  }
+
   async function toggleActive(userId, current) {
     setUpdating(userId)
     try {
@@ -68,10 +85,10 @@ export default function UserManager() {
   if (loading) return <div className="text-center py-20 text-slate-400">Yukleniyor...</div>
 
   return (
-    <div className="max-w-5xl">
+    <div className="max-w-7xl mx-auto pb-10">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-white text-xl font-semibold">Kullanicilar</h2>
+          <h2 className="text-white text-3xl font-bold tracking-tight mb-1">Kullanıcı Yönetimi</h2>
           <p className="text-slate-400 text-sm mt-0.5">{users.length} kayitli kullanici</p>
         </div>
         <button onClick={loadUsers} className="text-slate-400 hover:text-white text-sm transition-colors">
@@ -153,11 +170,19 @@ export default function UserManager() {
                   disabled={updating === user.id}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
                     user.isActive
-                      ? 'bg-slate-800 border-slate-700 text-slate-400 hover:border-red-700 hover:text-red-400'
+                      ? 'bg-slate-800 border-slate-700 text-slate-400 hover:border-yellow-700 hover:text-yellow-400'
                       : 'bg-green-900/30 border-green-800 text-green-400 hover:bg-green-900/50'
                   }`}
                 >
                   {updating === user.id ? '...' : user.isActive ? 'Deaktif Et' : 'Aktif Et'}
+                </button>
+                <button
+                  onClick={() => handleDeleteUser(user.id)}
+                  disabled={updating === user.id}
+                  title="Sistemden Tamamen Sil"
+                  className="px-3 py-1.5 rounded-lg text-xs font-medium bg-red-900/30 border border-red-800/50 text-red-400 hover:bg-red-600 hover:text-white transition-colors"
+                >
+                  Sil 🗑️
                 </button>
               </div>
             </div>
