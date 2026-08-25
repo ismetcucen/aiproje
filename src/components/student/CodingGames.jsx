@@ -22,6 +22,14 @@ const GAMES = [
     url: 'https://blockly.games/bird?lang=tr',
     icon: '🦅'
   }
+  ,
+  {
+    id: 'computeit',
+    title: 'Compute it',
+    desc: 'Kodları okuyarak bilgisayarın kendisi sen ol! Yön tuşlarıyla algoritmaları çöz.',
+    url: 'https://compute-it.toxicode.fr/',
+    icon: '💻'
+  }
 ]
 
 export default function CodingGames() {
