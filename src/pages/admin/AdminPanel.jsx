@@ -4,12 +4,14 @@ import UserManager from '../../components/admin/UserManager'
 import Stats from '../../components/admin/Stats'
 import ClassManager from '../../components/admin/ClassManager'
 import CurriculumEditor from '../../components/admin/CurriculumEditor'
+import Attendance from '../../components/teacher/Attendance'
 
 const MENU = [
   { id: 'stats',      label: 'İstatistikler', icon: '📊' },
   { id: 'classes',    label: 'Sınıflar',      icon: '🏫' },
   { id: 'curriculum', label: 'Müfredat',      icon: '📚' },
   { id: 'users',      label: 'Kullanıcılar',  icon: '👥' },
+  { id: 'attendance', label: 'Yoklama',      icon: '✅' },
 ]
 
 export default function AdminPanel() {
@@ -66,6 +68,7 @@ export default function AdminPanel() {
           {active === 'classes'    && <ClassManager schoolCode={profile?.schoolCode} />}
           {active === 'curriculum' && <CurriculumEditor />}
           {active === 'users'      && <UserManager />}
+          {active === 'attendance' && <Attendance />}
         </div>
       </main>
     </div>
