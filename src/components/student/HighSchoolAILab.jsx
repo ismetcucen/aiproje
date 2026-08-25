@@ -21,6 +21,10 @@ const AI_TOOLS = [
   { cat: 'text', title: 'Overleaf', url: 'https://www.overleaf.com/', icon: '📄', desc: 'Akademik makale ve teknik rapor (LaTeX) hazırlama.' },
   { cat: 'text', title: 'NotebookLM', url: 'https://notebooklm.google.com/', icon: '📓', desc: 'Kendi PDF/notların üzerinden çalışan yapay zeka asistanı.' },
 
+  
+  { cat: 'text', title: 'Character.ai', url: 'https://character.ai/', icon: '🎭', desc: 'Tarihi figürler ve özel karakterlerle sohbet et.' },
+  { cat: 'text', title: 'ChatPDF', url: 'https://www.chatpdf.com/', icon: '📖', desc: 'PDF kitaplarını yükle ve içindeki bilgilerle sohbet et.' },
+
   // --- Görsel, Video, Ses ve Sunum ---
   { cat: 'visual', title: 'Canva (Magic Studio)', url: 'https://www.canva.com/', icon: '🎨', desc: 'Yapay zeka destekli sunum, afiş ve materyal tasarımı.' },
   { cat: 'visual', title: 'Adobe Firefly', url: 'https://firefly.adobe.com/', icon: '🖌️', desc: 'Metinden görsel, metin efektleri ve tasarım üretimi.' },
@@ -30,6 +34,10 @@ const AI_TOOLS = [
   { cat: 'visual', title: 'Suno', url: 'https://suno.com/', icon: '🎵', desc: 'Metin promptu vererek kendi yapay zeka şarkını üret.' },
   { cat: 'visual', title: 'Gamma', url: 'https://gamma.app/', icon: '📊', desc: 'Verilen içerikten anında profesyonel sunum taslağı.' },
   { cat: 'visual', title: 'Flowise', url: 'https://flowiseai.com/', icon: '🔄', desc: 'Yapay zeka iş akışları ve zincir (LangChain) tasarlama.' },
+
+  
+  { cat: 'visual', title: 'Leonardo.ai', url: 'https://leonardo.ai/', icon: '🖼️', desc: 'İleri düzey, inanılmaz kalitede yapay zeka görsel üretimi.' },
+  { cat: 'visual', title: 'HeyGen', url: 'https://www.heygen.com/', icon: '👩‍💼', desc: 'Fotoğrafları ve metinleri kullanarak sanal insan/sunucu videoları yap.' },
 
   // --- Teknik Geliştirme ve Veri Analizi ---
   { cat: 'dev', title: 'V0 by Vercel', url: 'https://v0.dev/', icon: '⚡', desc: 'Metinle (Prompt) arayüz ve oyun kodlama (React/HTML).' },
@@ -44,6 +52,9 @@ const AI_TOOLS = [
   { cat: 'dev', title: 'Hugging Face', url: 'https://huggingface.co/', icon: '🤗', desc: 'Dünyanın en büyük yapay zeka model ve veri kütüphanesi.' },
   { cat: 'dev', title: 'Kaggle', url: 'https://www.kaggle.com/', icon: '📉', desc: 'Veri bilimi ve makine öğrenmesi açık veri setleri.' },
   { cat: 'dev', title: 'Julius AI', url: 'https://julius.ai/', icon: '📊', desc: 'Tablo analiz etme, verileri yorumlama ve grafik çıkarma.' },
+
+  
+  { cat: 'dev', title: 'Blockade Labs (Skybox)', url: 'https://skybox.blockadelabs.com/', icon: '🌌', desc: 'Metin yazarak içine girebileceğin 360 derece (VR) dünyalar tasarla.' },
 
   // --- Yardımcı Araçlar ---
   { cat: 'edu', title: 'Diffit', url: 'https://web.diffit.me/', icon: '📑', desc: 'İçeriği farklı öğrenci/okuma seviyelerine göre uyarla.' },
