@@ -44,6 +44,14 @@ const TOOLS = [
     url: 'https://agilefingers.com/tr',
     icon: '⌨️'
   }
+  ,
+  {
+    id: 'avatar',
+    title: 'Avatar Stüdyosu (3D)',
+    desc: 'Kendi 3 boyutlu karakterini tasarla, giydir ve tarzını yarat!',
+    url: 'https://demo.readyplayer.me/avatar?frameApi',
+    icon: '👤'
+  }
 ]
 
 export default function LessonTools() {
