@@ -52,6 +52,15 @@ const TOOLS = [
     url: 'https://demo.readyplayer.me/avatar?frameApi',
     icon: '👤'
   }
+  ,
+  {
+    id: 'edublocks',
+    title: 'EduBlocks',
+    desc: 'Python ve HTML/CSS kodlamaya bloklarla başla! (Yeni sekmede açılır)',
+    url: 'https://app.edublocks.org/',
+    icon: '🐍',
+    external: true
+  }
 ]
 
 export default function LessonTools() {
@@ -103,7 +112,7 @@ export default function LessonTools() {
         {TOOLS.map(t => (
           <div 
             key={t.id} 
-            onClick={() => setActiveTool(t)}
+            onClick={() => t.external ? window.open(t.url, "_blank") : setActiveTool(t)}
             className="bg-white border-2 border-slate-100 rounded-3xl p-6 hover:border-emerald-500 hover:shadow-2xl hover:-translate-y-1 transition-all cursor-pointer group flex gap-6 items-center"
           >
             <div className="text-7xl group-hover:scale-110 transition-transform origin-left">

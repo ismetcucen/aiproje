@@ -30,6 +30,15 @@ const GAMES = [
     url: 'https://compute-it.toxicode.fr/',
     icon: '💻'
   }
+  ,
+  {
+    id: 'codeforlife',
+    title: 'Code For Life',
+    desc: 'Rapid Router oyunu ile teslimat minibüsünü kodlayarak yönlendir! (Yeni sekmede açılır)',
+    url: 'https://www.codeforlife.education/rapidrouter/',
+    icon: '🚚',
+    external: true
+  }
 ]
 
 export default function CodingGames() {
@@ -80,7 +89,7 @@ export default function CodingGames() {
         {GAMES.map(g => (
           <div 
             key={g.id} 
-            onClick={() => setActiveGame(g)}
+            onClick={() => g.external ? window.open(g.url, "_blank") : setActiveGame(g)}
             className="bg-white border-2 border-slate-100 rounded-3xl p-6 hover:border-indigo-500 hover:shadow-2xl hover:-translate-y-1 transition-all cursor-pointer group"
           >
             <div className="text-6xl mb-4 group-hover:scale-110 transition-transform origin-left">
