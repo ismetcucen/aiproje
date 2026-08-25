@@ -403,3 +403,14 @@ export function listenUserNotifications(userId, callback) {
     callback(snap.docs.map(d => ({ id: d.id, ...d.data() })))
   })
 }
+
+// --- SCHOOL SETTINGS ---
+export async function getSchoolSettings(schoolCode) {
+  const snap = await getDoc(doc(db, 'school_settings', schoolCode));
+  if (snap.exists()) return snap.data();
+  return { codingModuleEnabled: false };
+}
+
+export async function updateSchoolSettings(schoolCode, data) {
+  await setDoc(doc(db, 'school_settings', schoolCode), data, { merge: true });
+}

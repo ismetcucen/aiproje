@@ -6,6 +6,7 @@ import Attendance from '../../components/teacher/Attendance'
 import StudentList from '../../components/teacher/StudentList'
 import SubmissionsList from '../../components/teacher/SubmissionsList'
 import CurriculumAssigner from '../../components/teacher/CurriculumAssigner'
+import ClassSettings from '../../components/teacher/ClassSettings'
 
 const MENU = [
   { id: 'curriculum',  label: 'Müfredat',   icon: '📚' },
@@ -13,6 +14,7 @@ const MENU = [
   { id: 'students',    label: 'Öğrenciler', icon: '👥' },
   { id: 'attendance',  label: 'Yoklama',    icon: '✅' },
   { id: 'submissions', label: 'Üretimler',  icon: '📝' },
+  { id: 'settings', label: 'Ayarlar', icon: '⚙️' },
 ]
 
 export default function TeacherPanel() {
@@ -102,6 +104,7 @@ export default function TeacherPanel() {
           {active === 'students'    && <StudentList />}
           {active === 'attendance'  && <Attendance />}
           {active === 'submissions' && <SubmissionsList />}
+          {active === 'settings' && <ClassSettings />}
         </div>
       </main>
     </div>

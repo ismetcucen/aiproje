@@ -6,6 +6,8 @@ import AssignmentList from '../../components/student/AssignmentList'
 import Studio from '../../components/student/Studio'
 import Portfolio from '../../components/student/Portfolio'
 import StudentHome from '../../components/student/StudentHome'
+import CodingGames from '../../components/student/CodingGames'
+import { getSchoolSettings } from '../../firebase/schema'
 
 const MENU = [
   { id: 'home',        label: 'Ana Sayfa', icon: '🏠' },
@@ -18,12 +20,16 @@ export default function StudentPanel() {
   const { user, profile, logout } = useAuth()
   const [active, setActive]                     = useState('home')
   const [selectedAssignment, setSelectedAssignment] = useState(null)
+  const [settings, setSettings] = useState({ codingModuleEnabled: false })
 
   useEffect(() => {
     if (user?.uid) {
       logAttendance(user.uid).catch(console.error)
+      if (profile?.schoolCode) {
+        getSchoolSettings(profile.schoolCode).then(s => setSettings(s)).catch(console.error)
+      }
     }
-  }, [user])
+  }, [user, profile])
 
   function goToStudio(assignment) {
     setSelectedAssignment(assignment)
@@ -103,6 +109,7 @@ export default function StudentPanel() {
           {active === 'assignments' && <AssignmentList onStart={goToStudio} />}
           {active === 'studio'      && <Studio assignment={selectedAssignment} onBack={() => setActive('assignments')} />}
           {active === 'portfolio'   && <Portfolio />}
+          {active === 'games'       && <CodingGames />}
         </div>
       </main>
     </div>
