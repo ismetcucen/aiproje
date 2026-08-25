@@ -61,6 +61,23 @@ const TOOLS = [
     icon: '🐍',
     external: true
   }
+  ,
+  {
+    id: 'teachablemachine',
+    title: 'Teachable Machine',
+    desc: 'Kameranı kullanarak kendi yapay zeka modelini eğit! (Yeni sekmede açılır)',
+    url: 'https://teachablemachine.withgoogle.com/',
+    icon: '🧠',
+    external: true
+  },
+  {
+    id: 'makeymakey',
+    title: 'Makey Makey Uygulamaları',
+    desc: 'Bilgisayar klavyesini bir piyanoya veya bongo davuluna dönüştür!',
+    url: 'https://apps.makeymakey.com/',
+    icon: '🎹',
+    external: false
+  }
 ]
 
 export default function LessonTools() {
