@@ -4,6 +4,7 @@ import NotificationBell from '../../components/NotificationBell'
 import CodingGames from '../../components/student/CodingGames'
 import LessonTools from '../../components/student/LessonTools'
 import HighSchoolAILab from '../../components/student/HighSchoolAILab'
+import AIEducationTools from '../../components/admin/AIEducationTools'
 import UserManager from '../../components/admin/UserManager'
 import Stats from '../../components/admin/Stats'
 import ClassManager from '../../components/admin/ClassManager'
@@ -20,6 +21,7 @@ const MENU = [
   { id: 'games', label: 'Oyunlar', icon: '🎮' },
   { id: 'tools', label: 'Araçlar', icon: '🛠️' },
   { id: 'ailab', label: 'Lise AI Lab', icon: '🧠' },
+  { id: 'aiedu', label: 'Eğitimde YZ', icon: '🏫' },
   { id: 'settings',   label: 'Ayarlar',      icon: '⚙️' },
 ]
 
@@ -84,6 +86,7 @@ export default function AdminPanel() {
           {active === 'games'       && <CodingGames />}
           {active === 'tools'       && <LessonTools />}
           {active === 'ailab'       && <HighSchoolAILab />}
+          {active === 'aiedu'       && <AIEducationTools />}
           {active === 'settings'   && <ClassSettings />}
         </div>
       </main>
