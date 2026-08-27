@@ -2985,1332 +2985,1209 @@ export const CURRICULUM = {
   "9": [
     {
       "week": 1,
-      "dateRange": "14 - 18 Eylül",
-      "title": "AI Arastirma Dunyasi",
-      "description": "Arxiv, NeurIPS, ICML, ICLR, akademik AI.",
+      "title": "Üretken Yapay Zekaya (GenAI) Giriş",
+      "desc": "GenAI nedir, nasıl çalışır, günlük hayata etkileri.",
       "objectives": [
-        "Top AI konferanslarini listeler",
-        "Arxiv preprint surecini aciklar",
-        "Akademik makale yapısını tanimlar"
+        "GenAI konseptini kavrar.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Arxiv",
-        "Semantic Scholar",
-        "Connected Papers"
+        "ChatGPT",
+        "Gemini",
+        "Claude"
       ],
-      "duration": 40,
-      "output": "Arastirma dunyasi haritasi",
-      "activity": "Bu yilin NeurIPS best paper odülünü kazanan calismayı bul. 5 cümleyle katkısını yaz."
+      "duration": 80,
+      "output": "Karşılaştırma Raporu",
+      "activity": "Farklı dil modellerine aynı soruları sorarak cevap tarzlarını karşılaştırma."
     },
     {
       "week": 2,
-      "dateRange": "21 - 25 Eylül",
-      "title": "Lineer Cebir ve AI",
-      "description": "Matris islemleri, SVD, PCA, eigendecomposition.",
+      "title": "Etkili Komut (Prompt) Mühendisliği - 1",
+      "desc": "Rol atama, bağlam verme, kısıtlamalar ekleme.",
       "objectives": [
-        "SVD ve PCA iliskisini aciklar",
-        "PCA uygular",
-        "Boyut indirgemenin ML etkisini anlar"
+        "Prompt yazım tekniklerini öğrenir.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Google Colab",
-        "NumPy",
-        "Scikit-learn"
+        "ChatGPT",
+        "Claude"
       ],
-      "duration": 40,
-      "output": "PCA analiz notebook u",
-      "activity": "Yuksek boyutlu bir veri setine PCA uygula. 2D de gorsellesitir. Varyans ne kadar korundu?"
+      "duration": 80,
+      "output": "Rol Tabanlı Çıktılar",
+      "activity": "Bir yapay zekaya farklı mesleklerden (öğretmen, doktor, yazar) roller atayarak yanıtlar alma."
     },
     {
       "week": 3,
-      "dateRange": "28 Eyl - 2 Eki",
-      "title": "Olasilik Teorisi Ileri",
-      "description": "Bayesian inference, MCMC, variational inference.",
+      "title": "Etkili Komut (Prompt) Mühendisliği - 2",
+      "desc": "Few-shot (Az örnekle) ve Chain of Thought (Düşünce Zinciri) teknikleri.",
       "objectives": [
-        "Bayesian inference pipeline i aciklar",
-        "MCMC kavrami anlar",
-        "Variational inference ile MCMC karsilastirir"
+        "Gelişmiş prompt tekniklerini uygular.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "PyMC",
-        "Google Colab"
+        "ChatGPT"
       ],
-      "duration": 40,
-      "output": "Bayesian analiz raporu",
-      "activity": "PyMC ile basit bir Bayesian coin flip modeli kur. Posterior dagilimı gorsellesitir."
+      "duration": 80,
+      "output": "Problem Çözüm Akışı",
+      "activity": "Karmaşık bir matematik veya mantık problemini adım adım çözdürme egzersizi."
     },
     {
       "week": 4,
-      "dateRange": "5 - 9 Ekim",
-      "title": "Knowledge Graphs",
-      "description": "RDF, SPARQL, ontolojiler, knowledge base.",
+      "title": "AI ile Yaratıcı Yazarlık ve İçerik Üretimi",
+      "desc": "Hikaye, şiir, blog yazısı ve senaryo oluşturma.",
       "objectives": [
-        "Knowledge graph bilesenlerini tanimlar",
-        "SPARQL sorgusu yazar",
-        "Ontoloji tasarlar"
+        "İçerik üretiminde AI araçlarını kullanır.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Neo4j",
-        "Wikidata",
-        "SPARQL endpoint"
+        "ChatGPT",
+        "Gemini",
+        "Notion AI"
       ],
-      "duration": 40,
-      "output": "Alan ontolojisi ve KG",
-      "activity": "Wikidata SPARQL ile AI bilim insanlarinin iliskilerini sorgula. Graf gorsellesitir."
+      "duration": 80,
+      "output": "Kısa Hikaye / Blog Yazısı",
+      "activity": "AI yardımıyla kısa bir bilim kurgu hikayesi yazma ve düzenleme."
     },
     {
       "week": 5,
-      "dateRange": "12 - 16 Ekim",
-      "title": "Causal Inference",
-      "description": "Do calculus, causal graph, counterfactual.",
+      "title": "Görsel Üretken AI Araçlarına Giriş",
+      "desc": "Metinden görsele (Text-to-Image) teknolojilerinin mantığı.",
       "objectives": [
-        "Korelasyon-nedensellik farkını kesinlestirir",
-        "Causal DAG cizer",
-        "Do calculus uygular"
-      ],
-      "aiTools": [
-        "DoWhy",
-        "CausalML",
-        "Google Colab"
-      ],
-      "duration": 40,
-      "output": "Causal analiz raporu",
-      "activity": "DoWhy ile bir veri setinde causal etki tahminleme yap. Correlation vs causation goster."
-    },
-    {
-      "week": 6,
-      "dateRange": "19 - 23 Ekim",
-      "title": "Ileri NLP: NER ve Coreference",
-      "description": "Named entity recognition, coreference resolution.",
-      "objectives": [
-        "NER pipeline i kurar",
-        "Coreference resolution anlat",
-        "spaCy ve Hugging Face karsilastirir"
-      ],
-      "aiTools": [
-        "spaCy",
-        "Hugging Face",
-        "Google Colab"
-      ],
-      "duration": 40,
-      "output": "NLP pipeline projesi",
-      "activity": "Bir Turkce haber metni icin spaCy NER calistir. Hatalari analiz et. Nasil iyilestirilir?"
-    },
-    {
-      "week": 7,
-      "dateRange": "26 - 30 Ekim",
-      "title": "Konusma AI Sistemleri",
-      "description": "Task-oriented dialog, state tracking, NLU/NLG.",
-      "objectives": [
-        "Gorev odakli dialog sistemini aciklar",
-        "Dialog state tracking anlat",
-        "NLU ve NLG pipeline i tasarlar"
-      ],
-      "aiTools": [
-        "Rasa",
-        "Dialogflow",
-        "LangChain"
-      ],
-      "duration": 40,
-      "output": "Task-oriented chatbot",
-      "activity": "Rasa ile okul kayit asistani chatbotu tasarla. 10 konusma senaryosu test et."
-    },
-    {
-      "week": 8,
-      "dateRange": "2 - 6 Kasım",
-      "title": "Multimodal AI Ileri",
-      "description": "CLIP, Flamingo, LLaVA, GPT-4V uygulama.",
-      "objectives": [
-        "CLIP modelini anlat ve kullanir",
-        "Multimodal retrieval yapar",
-        "Image captioning uygular"
-      ],
-      "aiTools": [
-        "CLIP",
-        "LLaVA",
-        "Google Colab"
-      ],
-      "duration": 40,
-      "output": "Multimodal AI uygulama projesi",
-      "activity": "CLIP ile gorsel-metin eslestirme yap. Kendi veri setinde sifir-atimli goruntu arama kur."
-    },
-    {
-      "week": 9,
-      "dateRange": "9 - 13 Kasım",
-      "title": "AI ve Yaraticilik",
-      "description": "Computational creativity, divergent thinking, AI art.",
-      "objectives": [
-        "Hesaplamali yaraticilik teorilerini karsilastirir",
-        "AI yaraticilik degerlendirme metrikleri olusturur",
-        "Insan-AI ortak yaratim ornekleri verir"
+        "Görsel üretim AI'larını kullanır.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
         "Midjourney",
-        "Claude",
-        "Suno"
+        "DALL-E 3",
+        "Bing Image Creator"
       ],
-      "duration": 40,
-      "output": "AI yaraticilik analizi",
-      "activity": "AI yaratici midir? Her iki taraf icin de guclu argüman gelistir. Felsefi essay yaz."
+      "duration": 80,
+      "output": "Üretilmiş Tasarım Görselleri",
+      "activity": "Hayali bir ürün veya karakter için detaylı promptlar yazarak görsel üretme."
+    },
+    {
+      "week": 6,
+      "title": "İleri Düzey Görsel Tasarım ve Stilizasyon",
+      "desc": "Sanat akımları, kamera açıları, aydınlatma promptları.",
+      "objectives": [
+        "Görsel prompt parametrelerini kavrar.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
+      ],
+      "aiTools": [
+        "Midjourney",
+        "Adobe Firefly"
+      ],
+      "duration": 80,
+      "output": "Stilizasyon Portfolyosu",
+      "activity": "Aynı objeyi 5 farklı sanat akımında (Kübizm, Cyberpunk vb.) üretme."
+    },
+    {
+      "week": 7,
+      "title": "AI ile Logo ve Marka Kimliği Tasarımı",
+      "desc": "Görsel araçlarla kurumsal kimlik oluşturma.",
+      "objectives": [
+        "AI ile kurumsal tasarım yapar.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
+      ],
+      "aiTools": [
+        "Canva AI",
+        "DALL-E 3"
+      ],
+      "duration": 80,
+      "output": "Marka Kimliği Kitapçığı",
+      "activity": "Hayali bir startup için logo, renk paleti ve slogan tasarlama."
+    },
+    {
+      "week": 8,
+      "title": "Sunum ve Doküman Hazırlamada AI",
+      "desc": "Hızlı ve etkileyici sunumlar hazırlama.",
+      "objectives": [
+        "Üretken araçlarla sunum tasarlar.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
+      ],
+      "aiTools": [
+        "Gamma.app",
+        "Tome",
+        "Beautiful.ai"
+      ],
+      "duration": 80,
+      "output": "Etkileşimli Sunum",
+      "activity": "Bir ders konusu hakkında AI kullanarak sıfırdan 10 sayfalık sunum üretme."
+    },
+    {
+      "week": 9,
+      "title": "Ses ve Müzik Üretiminde AI",
+      "desc": "Metinden müziğe ve ses sentezleme teknolojileri.",
+      "objectives": [
+        "Ses ve müzik AI araçlarını keşfeder.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
+      ],
+      "aiTools": [
+        "Suno AI",
+        "Udio",
+        "ElevenLabs"
+      ],
+      "duration": 80,
+      "output": "Yapay Zeka Şarkısı/Ses Kaydı",
+      "activity": "Kendi yazdıkları bir şiiri veya şarkı sözünü AI ile besteletme."
     },
     {
       "week": 10,
-      "dateRange": "23 - 27 Kasım",
-      "title": "Norobilim ve AI",
-      "description": "Noral korrelasyon, hopfield ag, boltzmann machine.",
+      "title": "Ara Tatil",
+      "desc": "Ara Tatil",
       "objectives": [
-        "Biyolojik sinir agi ile ANN farklarini anlar",
-        "Hopfield ag energi fonksiyonunu aciklar",
-        "Noral korrelasyon orneklerini listeler"
+        "-",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
-      "aiTools": [
-        "Neuromatch Academy",
-        "Google Colab"
-      ],
-      "duration": 40,
-      "output": "Norobilim-AI iliskisi analizi",
-      "activity": "Hippocampus ve transformerlardaki attention arasindaki benzerlikleri arastir. 5 analoji kur."
+      "aiTools": [],
+      "duration": 80,
+      "output": "-",
+      "activity": "-"
     },
     {
       "week": 11,
-      "dateRange": "30 Kas - 4 Ara",
-      "title": "AI Felsefesi",
-      "description": "Chin odasi, bilinc, ozgür irade, AI hak.",
+      "title": "Video Üretiminde AI (Text-to-Video)",
+      "desc": "Görselleri hareketlendirme ve sıfırdan video üretimi.",
       "objectives": [
-        "Searle Cin odasi argümanını degerlendirir",
-        "Strong AI vs Weak AI tartisir",
-        "AI hakları tartismasini analiz eder"
+        "AI video üretim araçlarını kullanır.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Stanford Encyclopedia of Philosophy"
+        "RunwayML",
+        "Luma Dream Machine",
+        "HeyGen"
       ],
-      "duration": 40,
-      "output": "Felsefi analiz essay i",
-      "activity": "Güçlü yapay zeka mümkün mü? Searle ve Dennett'in görüslerini karsilastir. Kendi pozisyonunu savun."
+      "duration": 80,
+      "output": "Kısa AI Video Klibi",
+      "activity": "Ürettikleri görselleri kısa video kliplere dönüştürme."
     },
     {
       "week": 12,
-      "dateRange": "7 - 11 Aralık",
-      "title": "AI Alignment ve Guvenlik",
-      "description": "Alignment problemi, mesa-optimization, deceptive alignment.",
+      "title": "Avatar ve Sunucu Oluşturma",
+      "desc": "Sanal sunucularla içerik üretimi.",
       "objectives": [
-        "AI alignment problemini aciklar",
-        "Mesa-optimization kavrami anlat",
-        "RLHF ve Constitutional AI karsilastirir"
+        "Sanal avatar oluşturur.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Anthropic papers",
-        "DeepMind Safety papers"
+        "HeyGen",
+        "D-ID"
       ],
-      "duration": 40,
-      "output": "AI alignment analizi",
-      "activity": "Anthropic in Constitutional AI makalesini oku. RLHF e karsı avantajları ve dezavantajları."
+      "duration": 80,
+      "output": "Avatar Sunum Videosu",
+      "activity": "Yazdıkları bir metni sanal bir karaktere (avatar) okutma."
     },
     {
       "week": 13,
-      "dateRange": "14 - 18 Aralık",
-      "title": "Constitutional AI Derinlemesi",
-      "description": "Anthropic yaklaşimi, CAI prosedürü, değerlendirme.",
+      "title": "Üretken AI ile Ders Çalışma ve Özetleme",
+      "desc": "PDF okuma, Youtube videosu özetleme.",
       "objectives": [
-        "CAI prosedurünü adim adim aciklar",
-        "Harmlessness ve helpfulness dengesini anlat",
-        "CAI nin limitasyonlarini tanimlar"
+        "Akademik/Eğitim verimliliğini artırır.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Claude",
-        "Anthropic research papers"
+        "ChatPDF",
+        "YouTube AI Summarizer"
       ],
-      "duration": 40,
-      "output": "CAI analiz raporu",
-      "activity": "Claude a Constitutional AI prensiplerini sordur. Kendi AI için bir anayasa yaz."
+      "duration": 80,
+      "output": "Ders Çalışma Notları",
+      "activity": "Uzun bir makaleyi veya videoyu AI ile özetleyip anahtar notlar çıkarma."
     },
     {
       "week": 14,
-      "dateRange": "21 - 25 Aralık",
-      "title": "AI Politika ve Jeopolitik",
-      "description": "AI hegemonya, chip savasi, ulusal AI stratejileri.",
+      "title": "Kodlama Asistanı Olarak AI",
+      "desc": "Kod yazmadan kod anlamak ve yazdırmak.",
       "objectives": [
-        "Küresel AI güç dengelerini analiz eder",
-        "Chip savasinin AI ye etkisini anlat",
-        "Türkiye icin AI stratejisi onerir"
+        "AI yardımıyla temel kod üretir.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "CSIS reports",
-        "OECD AI Policy"
+        "ChatGPT",
+        "Blackbox AI"
       ],
-      "duration": 40,
-      "output": "Turkiye AI stratejisi taslagi",
-      "activity": "ABD-Cin AI yarısını analiz et. Turkiye bu dinamikte nerede durmali? Strateji belge taslagi yaz."
+      "duration": 80,
+      "output": "Basit Web Sayfası",
+      "activity": "AI yardımıyla basit bir web sayfasının HTML/CSS kodunu oluşturma."
     },
     {
       "week": 15,
-      "dateRange": "28 Ara - 1 Oca",
-      "title": "Küresel AI Yarisi",
-      "description": "Silikon Vadisi, Pekin, Londra AI ekosistemleri.",
+      "title": "AI ile Proje Planlama",
+      "desc": "Zaman yönetimi ve proje taslağı oluşturma.",
       "objectives": [
-        "3 küresel AI merkezini karsilastirir",
-        "NVIDIA nin kritik rolünü anlat",
-        "AI tedarik zinciri kırılganlıklarını listeler"
+        "Planlama ve organizasyonda AI kullanır.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Crunchbase",
-        "CB Insights"
+        "ChatGPT",
+        "Notion AI"
       ],
-      "duration": 40,
-      "output": "Kuresel AI rekabet analizi",
-      "activity": "NVIDIA in AI çiplerindeki hakimiyetini arastir. Alternatifleri kim gelistiriyor? Geopolitik etkisi?"
+      "duration": 80,
+      "output": "Etkinlik Planlama Şablonu",
+      "activity": "Bir okul etkinliği veya gezi için AI ile haftalık plan ve görev listesi yapma."
     },
     {
       "week": 16,
-      "dateRange": "4 - 8 Ocak",
-      "title": "Yariyil Projesi",
-      "description": "Ozgun AI araştırma projesi.",
+      "title": "Özelleştirilmiş AI Asistanları (Custom GPTs)",
+      "desc": "Kendi veri setinizle chatbot tasarlama.",
       "objectives": [
-        "Özgün araştırma sorusu formüle eder",
-        "Metodoloji uygular",
-        "Akademik sunum yapar"
+        "Kişiselleştirilmiş AI botu oluşturur.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Tum araçlar"
+        "OpenAI Custom GPTs",
+        "Poe.com"
       ],
       "duration": 80,
-      "output": "Akademik araştırma raporu",
-      "activity": "Yeni bir AI yöntemi veya uygulaması propose et. Teorik temeller + deneysel kanit sun."
+      "output": "Uzman Chatbot",
+      "activity": "Sadece belirli bir konuda (ör. okul kuralları) uzmanlaşmış bir sohbet botu kurma."
     },
     {
       "week": 17,
-      "dateRange": "11 - 15 Ocak",
-      "title": "AI Startup Ekosistemi",
-      "description": "YC AI batch, a16z AI, Series A metrikleri.",
+      "title": "Kişilikli Botlar ve Karakter Tasarımı",
+      "desc": "Kurgusal karakterlerle etkileşim.",
       "objectives": [
-        "AI startupların değerlemesini anlat",
-        "VC AI yatırım kriterlerini listeler",
-        "Başarılı AI startupları analiz eder"
+        "AI karakterlerine kişilik entegre eder.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Crunchbase",
-        "Y Combinator",
-        "TechCrunch"
+        "Character.ai"
       ],
-      "duration": 40,
-      "output": "AI startup ekosistemi haritasi",
-      "activity": "YC nin son AI batch inden 3 şirketi analiz et. Problem, çözüm, iş modeli, büyüme tezi."
+      "duration": 80,
+      "output": "Tarihsel Karakter Botu",
+      "activity": "Tarihsel bir figür (ör. Atatürk veya Tesla) kişiliğinde bir bot hazırlama."
     },
     {
       "week": 18,
-      "dateRange": "18 - 22 Ocak",
-      "title": "Büyük Ölçekli Sistem Tasarımı",
-      "description": "Distributed training, data parallelism, model serving.",
+      "title": "Dönem Projesi: Üretken AI Sergisi",
+      "desc": "Öğrenilen tüm araçların entegre edilmesi.",
       "objectives": [
-        "Dağıtık ML sistemi tasarlar",
-        "Data paralelizm ve model paralelizmi anlat",
-        "Yük dengeleme stratejisi gelistirir"
+        "Dönem kazanımlarını birleştirir.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "AWS/GCP/Azure",
-        "Ray",
-        "Kubernetes"
+        "Tüm Araçlar"
       ],
-      "duration": 40,
-      "output": "Büyük ölçekli sistem mimarisi",
-      "activity": "ChatGPT benzeri bir sistemin tam mimarisini tasarla. Her bileşeni ayrıntılı açıkla."
+      "duration": 80,
+      "output": "Dönem Proje Sergisi",
+      "activity": "Metin, görsel, ses ve videodan oluşan multi-medya bir proje geliştirme ve sunma."
     },
     {
       "week": 19,
-      "dateRange": "8 - 12 Şubat",
-      "title": "AI ve Sürdürülebilirlik",
-      "description": "AI'nin karbon ayak izi, yeşil hesaplama, enerji verimliliği.",
+      "title": "AI Veri Analizi ve Veri Görselleştirme",
+      "desc": "Veri setlerini inceleme ve tablo/grafik üretme.",
       "objectives": [
-        "AI enerji tüketimini hesaplar",
-        "Yeşil AI stratejilerini listeler",
-        "Verimli model tasarım öneriler"
+        "Veri analizi için AI kullanır.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "ML CO2 Impact calculator",
-        "CodeCarbon"
+        "ChatGPT Advanced Data",
+        "Julius AI"
       ],
-      "duration": 40,
-      "output": "AI karbon ayak izi raporu",
-      "activity": "CodeCarbon ile bir model eğitiminin karbon ayak izini ölç. Nasıl azaltırsın?"
+      "duration": 80,
+      "output": "Veri Analiz Raporu",
+      "activity": "Bir Excel tablosunu AI'a yükleyip anlamlı grafikler ve analizler çıkartma."
     },
     {
       "week": 20,
-      "dateRange": "15 - 19 Şubat",
-      "title": "AI ve İnsan Hakları",
-      "description": "Gözetim teknolojisi, sosyal kredi, dijital otoriterlik.",
+      "title": "Üretkenlik Otomasyonları (AI + No-Code)",
+      "desc": "Farklı araçları birbirine bağlama.",
       "objectives": [
-        "AI destekli gözetim sistemlerini analiz eder",
-        "Dijital otoriter rejim kavramını anlat",
-        "Mahremiyet koruma stratejileri gelistirir"
+        "No-code otomasyon araçlarını kavrar.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Electronic Frontier Foundation",
-        "Privacy Tools"
+        "Zapier",
+        "Make.com"
       ],
-      "duration": 40,
-      "output": "AI insan hakları analizi",
-      "activity": "Çin sosyal kredi sistemini araştır. AB GDPR ile karşılaştır. İnsan hakları değerlendirmesi yap."
+      "duration": 80,
+      "output": "Mini Otomasyon Akışı",
+      "activity": "Bir e-posta geldiğinde AI ile özetleyip otomatik taslak yanıt oluşturan akış."
     },
     {
       "week": 21,
-      "dateRange": "22 - 26 Şubat",
-      "title": "Klinik AI Uygulamaları",
-      "description": "EHR analizi, klinik tahmin modelleri, FDA onay süreci.",
+      "title": "Yapay Zeka Halüsinasyonları ve Doğrulama",
+      "desc": "AI'ın uydurduğu bilgileri tespit etme (Fact-checking).",
       "objectives": [
-        "FDA AI/ML tıbbi cihaz yolunu açıklar",
-        "EHR veri analizi yapar",
-        "Klinik validasyon önemini anlar"
+        "AI çıktılarının güvenilirliğini ölçer.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "MIMIC-III",
-        "PhysioNet",
-        "Google Colab"
+        "Perplexity",
+        "Google Fact Check"
       ],
-      "duration": 40,
-      "output": "Klinik AI proje raporu",
-      "activity": "MIMIC-III verisinde basit bir ICU mortalite tahmin modeli kur. Klinik yorumu yaz."
+      "duration": 80,
+      "output": "Gerçeklik Doğrulama Analizi",
+      "activity": "Yapay zekanın kasıtlı olarak hatalı bilgi verdiği senaryoları doğrulama çalışmaları."
     },
     {
       "week": 22,
-      "dateRange": "1 - 5 Mart",
-      "title": "AI ve Hukuk İleri",
-      "description": "Yapay zeka sorumluluk teorisi, AI ajanlığı, patent.",
+      "title": "Deepfake Teknolojisi ve Etik",
+      "desc": "Deepfake nasıl yapılır, nasıl tespit edilir?",
       "objectives": [
-        "AI kararları için sorumluluk rejimini anlat",
-        "AB AI Liability Directive'i açıklar",
-        "AI icat edebilir mi tartışır"
+        "Deepfake konseptini ve etiğini anlar.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "EUR-Lex",
-        "USPTO AI guidelines"
+        "Deepware Scanner"
       ],
-      "duration": 40,
-      "output": "AI hukuk kapsamlı analizi",
-      "activity": "DABUS patent davasını araştır. AI mucit sayılmalı mı? 3 ülkenin tutumunu karşılaştır."
+      "duration": 80,
+      "output": "Etik Bildirgesi",
+      "activity": "Sentetik medyayı ayırt etme ve etik kullanım kuralları üzerine münazara."
     },
     {
       "week": 23,
-      "dateRange": "15 - 19 Mart",
-      "title": "AI ve Hesaplamalı Sosyal Bilim",
-      "description": "Twitter/X analizi, ağ teorisi, polarizasyon.",
+      "title": "Oyun Geliştirmede AI Varlıkları (Assets)",
+      "desc": "Oyunlar için karakter ve arkaplan üretimi.",
       "objectives": [
-        "Twitter API ile veri toplar",
-        "Sosyal ağ analizi yapar",
-        "Filtre balonu tespiti uygular"
+        "Oyun geliştirme süreçlerinde AI kullanır.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Twitter API",
-        "NetworkX",
-        "Google Colab"
+        "Leonardo.ai",
+        "Scenario"
       ],
-      "duration": 40,
-      "output": "Sosyal ağ analizi projesi",
-      "activity": "Twitter'da bir hashtag çevresindeki ağı analiz et. Topluluk yapısı ve köprüler nerede?"
+      "duration": 80,
+      "output": "Oyun Konsept Görselleri",
+      "activity": "2B bir platform oyunu için sprite ve arka plan konseptleri üretme."
     },
     {
       "week": 24,
-      "dateRange": "22 - 26 Mart",
-      "title": "AI Tabanlı Siber Güvenlik",
-      "description": "Anomali tespiti, malware sınıflandırma, LLM kötüye kullanımı.",
+      "title": "Kullanıcı Arayüzü (UI) Tasarımında AI",
+      "desc": "Web ve mobil uygulama arayüzü fikirleri.",
       "objectives": [
-        "AI tabanlı saldırı türlerini listeler",
-        "Anomali tespiti modeli kurar",
-        "LLM kötüye kullanım vektörlerini anlat"
+        "UI/UX süreçlerinde AI araçlarını tanır.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Kaggle (NSL-KDD)",
-        "Scikit-learn",
-        "Google Colab"
+        "Galileo AI",
+        "Uizard"
       ],
-      "duration": 40,
-      "output": "Siber güvenlik AI modeli",
-      "activity": "NSL-KDD verisinde ağ saldırı tespiti modeli kur. En zor tanınan saldırı türü hangisi?"
+      "duration": 80,
+      "output": "Mobil Uygulama Arayüzü (Prototip)",
+      "activity": "Bir mobil uygulama fikri için AI ile prototip arayüz oluşturma."
     },
     {
       "week": 25,
-      "dateRange": "29 Mar - 2 Nis",
-      "title": "Beyin-Bilgisayar Arabirimi",
-      "description": "EEG, fMRI, Neuralink, nöryal arayüz etiği.",
+      "title": "Yabancı Dil Öğreniminde AI",
+      "desc": "Pratik yapma ve dil koçu olarak AI.",
       "objectives": [
-        "BCI türlerini ve uygulamalarını listeler",
-        "Neuralink'in hedeflerini açıklar",
-        "BCI etik sorunlarını tartışır"
+        "Dil öğreniminde yapay zekadan faydalanır.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "OpenBCI (simülasyon)",
-        "BCI akademik kaynaklar"
+        "Talkpal",
+        "ChatGPT Voice"
       ],
-      "duration": 40,
-      "output": "BCI teknoloji analizi",
-      "activity": "Neuralink'in en son klinik denemesini araştır. Etik onay süreci nasıl geçti?"
+      "duration": 80,
+      "output": "Dil Pratik Kaydı",
+      "activity": "Sesli diyalog özelliği ile yabancı dilde mülakat veya günlük konuşma pratiği."
     },
     {
       "week": 26,
-      "dateRange": "5 - 9 Nisan",
-      "title": "Post-AGI Senaryosu",
-      "description": "AGI zaman çizelgesi, post-AGI ekonomi, insan rolü.",
+      "title": "Yapay Zeka ve Çevre / Sürdürülebilirlik",
+      "desc": "Çevre sorunlarına yenilikçi çözümler üretme.",
       "objectives": [
-        "Önde gelen AGI zaman çizelgesi tahminlerini karşılaştırır",
-        "Post-AGI ekonomik modelleri analiz eder",
-        "İnsan değerinin AGI sonrasında ne olduğunu tartışır"
+        "Sürdürülebilirlik için AI fikirleri üretir.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "ChatGPT",
-        "Futurist kaynaklar"
+        "Gemini",
+        "Bing Copilot"
       ],
-      "duration": 40,
-      "output": "Post-AGI senaryo belgesi",
-      "activity": "AGI 2030'da gerçekleşse ne olur? Ekonomi, eğitim, sağlık için 3 senaryo yaz."
+      "duration": 80,
+      "output": "Yeşil Proje Fikri",
+      "activity": "Karbon ayak izini azaltmak için AI tabanlı bir girişim fikri bulma ve detaylandırma."
     },
     {
       "week": 27,
-      "dateRange": "12 - 16 Nisan",
-      "title": "Araştırma Portföyü",
-      "description": "Akademik kimlik, Google Scholar, GitHub, LinkedIn.",
+      "title": "AI ile CV ve Kariyer Hazırlığı",
+      "desc": "Gelecekteki meslekler için hazırlık.",
       "objectives": [
-        "Akademik profil oluşturur",
-        "Araştırma çıktılarını belgeler",
-        "Akademik topluluğa katılım planlar"
+        "Kariyer araçlarında AI kullanır.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Google Scholar",
-        "GitHub",
-        "LinkedIn",
-        "ORCID"
+        "Kickresume",
+        "ChatGPT"
       ],
-      "duration": 40,
-      "output": "Akademik portföy",
-      "activity": "Google Scholar, ORCID, GitHub ve LinkedIn profillerini oluştur. Birbiriyle bağla."
+      "duration": 80,
+      "output": "Kişisel Özgeçmiş (CV)",
+      "activity": "Hayalindeki meslek için AI ile profesyonel bir özgeçmiş ve niyet mektubu yazma."
     },
     {
       "week": 28,
-      "dateRange": "19 - 23 Nisan",
-      "title": "Kapsamlı Araştırma Projesi",
-      "description": "Özgün araştırma tasarımı.",
+      "title": "AI Destekli Girişimcilik",
+      "desc": "İş fikri bulma, pazar analizi ve isim üretme.",
       "objectives": [
-        "Özgün araştırma sorusu belirler",
-        "Metodoloji ve araçlar seçer",
-        "Proje teklifi yazar"
+        "Girişimcilikte yapay zeka entegrasyonu yapar.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Arxiv",
-        "Semantic Scholar",
-        "Notion"
+        "Namelix",
+        "ChatGPT"
       ],
-      "duration": 40,
-      "output": "Araştırma teklif belgesi",
-      "activity": "8 haftalık final araştırma projeni tasarla. Araştırma sorusu, metodoloji, beklenen katkı."
+      "duration": 80,
+      "output": "Mini İş Planı (Business Canvas)",
+      "activity": "Küçük bir girişim fikri için pazar analizi yaptırma ve marka ismi bulma."
     },
     {
       "week": 29,
-      "dateRange": "26 - 30 Nisan",
-      "title": "Proje: Literatür ve Metodoloji",
-      "description": "Kapsamlı literatür taraması.",
+      "title": "Metin Madenciliği ve Duygu Analizi (Pratik)",
+      "desc": "Büyük metinlerden duygu çıkarma.",
       "objectives": [
-        "10 makale okur ve özetler",
-        "Research gap belgeler",
-        "Metodoloji detaylandırır"
+        "Metin ve duygu analizi konseptini uygular.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Semantic Scholar",
-        "Arxiv",
-        "Zotero"
+        "ChatGPT",
+        "MonkeyLearn"
       ],
-      "duration": 40,
-      "output": "Literatür tarama raporu",
-      "activity": "Zotero ile 10 makale yönet. Tematik literatür özeti yaz. Research gap'i göster."
+      "duration": 80,
+      "output": "Duygu Analizi Tablosu",
+      "activity": "Öğrencilerin yazdığı yorumları toplayıp pozitif/negatif analizini yaptırma."
     },
     {
       "week": 30,
-      "dateRange": "3 - 7 Mayıs",
-      "title": "Proje: Uygulama I",
-      "description": "Deney tasarımı ve ilk bulgular.",
+      "title": "Etkileşimli Yapay Zeka Deneyimleri",
+      "desc": "Kendi macera oyununu yaratma (Text-adventure).",
       "objectives": [
-        "Deney tasarlar ve uygular",
-        "İlk veriyi toplar",
-        "Baseline oluşturur"
+        "Kompleks ve oyunlaştırılmış promptlar yazar.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Google Colab",
-        "MLflow",
-        "W&B"
+        "ChatGPT"
       ],
-      "duration": 40,
-      "output": "İlk bulgu raporu",
-      "activity": "Araştırma deneyinin ilk fazını tamamla. Baseline sonuçları raporla."
+      "duration": 80,
+      "output": "Metin Tabanlı Oyun Deneyimi",
+      "activity": "ChatGPT'yi bir zindan ustası (Dungeon Master) olarak yapılandırıp interaktif oyun oynama."
     },
     {
       "week": 31,
-      "dateRange": "10 - 14 Mayıs",
-      "title": "Proje: Analiz",
-      "description": "İstatistiksel analiz ve yorum.",
+      "title": "Yapay Zeka Telif Hakları ve Hukuk",
+      "desc": "Üretilen içeriklerin telifi kime ait?",
       "objectives": [
-        "İstatistiksel testler uygular",
-        "Bulguları yorumlar",
-        "Beklenmedik sonuçları açıklar"
+        "AI hukuk ve telif süreçlerini tartışır.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "SciPy",
-        "StatsModels",
-        "Google Colab"
+        "Arastirma"
       ],
-      "duration": 40,
-      "output": "Analiz raporu",
-      "activity": "Tüm deneysel sonuçları istatistiksel olarak analiz et. Hipotezler doğrulandı mı?"
+      "duration": 80,
+      "output": "Hukuki Vaka Analizi",
+      "activity": "AI ile üretilen bir sanat eserinin ödül alması vakasının (ör. Jason Allen) incelenmesi."
     },
     {
       "week": 32,
-      "dateRange": "17 - 21 Mayıs",
-      "title": "Makale Yazımı",
-      "description": "Conference paper formatı, LaTeX.",
+      "title": "Geleceğin Meslekleri ve AI Uyumu",
+      "desc": "Yapay zekanın meslekleri nasıl dönüştüreceği.",
       "objectives": [
-        "IMRaD formatında makale yazar",
-        "LaTeX'te biçimlendirir",
-        "Related work bölümü yazar"
+        "AI'ın iş dünyasına etkisini projeksiyonlar.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Overleaf (LaTeX)",
-        "Grammarly"
+        "Gemini"
       ],
-      "duration": 40,
-      "output": "Makale taslağı",
-      "activity": "Araştırmanı NeurIPS/ICML formatında yaz. Abstract, introduction, related work tamamla."
+      "duration": 80,
+      "output": "Meslek Dönüşüm Raporu",
+      "activity": "Gelecekte yok olacak veya dönüşecek meslekler üzerine sunum ve tartışma."
     },
     {
       "week": 33,
-      "dateRange": "24 - 28 Mayıs",
-      "title": "Peer Review Süreci",
-      "description": "Akademik değerlendirme, constructive feedback.",
+      "title": "Yıl Sonu Projesi - Tasarım Aşaması",
+      "desc": "Serbest AI projesi için fikir belirleme.",
       "objectives": [
-        "Peer review yapar",
-        "Yapıcı geri bildirim yazar",
-        "Revizyon süreci anlat"
+        "Kendi projesini bağımsız tasarlar.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "OpenReview",
-        "Google Docs"
+        "Tüm Araçlar"
       ],
-      "duration": 40,
-      "output": "Peer review raporu",
-      "activity": "2 arkadaşının makalesine NeurIPS reviewer formatında peer review yaz."
+      "duration": 80,
+      "output": "Proje Önerisi",
+      "activity": "Dönem sonu sergisi için gruplara ayrılıp proje konusunu (örn: AI ile çizgi roman, AI ile kısa film) seçme."
     },
     {
       "week": 34,
-      "dateRange": "31 May - 4 Haz",
-      "title": "Revizyon ve Finalizasyon",
-      "description": "Geri bildirimleri uygulama, final polishing.",
+      "title": "Yıl Sonu Projesi - Üretim Aşaması 1",
+      "desc": "İçeriklerin araçlar kullanılarak üretilmesi.",
       "objectives": [
-        "Geri bildirimlere yanıt yazar",
-        "Makaleyi güçlendirir",
-        "Yayınlamaya hazır hale getirir"
+        "Tasarım fikirlerini fiili üretime dönüştürür.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Overleaf",
-        "Grammarly"
+        "Tüm Araçlar"
       ],
-      "duration": 40,
-      "output": "Final makale taslağı",
-      "activity": "Peer review geri bildirimlerini uygula. Her yoruma nasıl yanıt verdin belgele."
+      "duration": 80,
+      "output": "Proje Ara Çıktıları",
+      "activity": "Projenin görsel, işitsel ve metinsel materyallerinin üretilmesi."
     },
     {
       "week": 35,
-      "dateRange": "7 - 11 Haziran",
-      "title": "Konferans Sunumu",
-      "description": "Akademik sunum, poster hazırlama.",
+      "title": "Yıl Sonu Projesi - Üretim Aşaması 2",
+      "desc": "Parçaların birleştirilmesi ve hataların düzeltilmesi.",
       "objectives": [
-        "20 dakikalık sunum yapar",
-        "Akademik poster hazırlar",
-        "Q&A'yı yönetir"
+        "Medya düzenleme ve entegrasyon yapar.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "LaTeX Beamer",
-        "Canva"
+        "Tüm Araçlar"
       ],
       "duration": 80,
-      "output": "Konferans sunumu + poster",
-      "activity": "20 dakikalık akademik sunum + poster hazırla. Sunumu yap, soruları yanıtla."
+      "output": "Tamamlanmış Ürün Prototipi",
+      "activity": "Üretilen çıktıların Canva, CapCut vb. araçlarda son haline getirilmesi."
     },
     {
       "week": 36,
-      "dateRange": "14 - 18 Haziran",
-      "title": "Yıl Sonu ve Kariyer Planı",
-      "description": "Üniversite başvurusu, araştırma grupları.",
+      "title": "Yıl Sonu AI Proje Şenliği",
+      "desc": "Projelerin sunulması.",
       "objectives": [
-        "Hedef üniversite ve grupları araştırır",
-        "Niyet mektubu taslağı yazar",
-        "3 yıllık araştırma yol haritası çizer"
+        "Topluluk önünde sunum ve savunu yapar.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "University websites",
-        "ChatGPT",
-        "LinkedIn"
+        "Tüm Araçlar"
       ],
-      "duration": 40,
-      "output": "Üniversite başvuru paketi taslağı",
-      "activity": "3 hedef üniversite araştırma grubu belirle. Her biri için SOP taslağı başlat."
+      "duration": 80,
+      "output": "Büyük Sergi / Portfolyo",
+      "activity": "Tüm sınıfın ürettiği çizgi romanlar, kısa filmler, müzikler veya oyunların sergilenmesi."
     }
   ],
   "10": [
     {
       "week": 1,
-      "dateRange": "14 - 18 Eylül",
-      "title": "Öğrenme Teorisi ve PAC Learning",
-      "description": "PAC learning, VC dimension, sample complexity.",
+      "title": "LLM (Büyük Dil Modeli) Anatomisi",
+      "desc": "GPT-4, Claude, Gemini arkasındaki mantık.",
       "objectives": [
-        "PAC öğrenme çerçevesini açıklar",
-        "VC dimension hesaplar",
-        "Örneklem karmaşıklığı formülünü kullanır"
+        "LLM mantığını parametrik olarak anlar.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Google Colab",
-        "NumPy",
-        "SciPy"
+        "Hugging Face",
+        "ChatGPT"
       ],
-      "duration": 40,
-      "output": "PAC learning analizi",
-      "activity": "Farklı hipotez sınıfları için VC dimension hesapla. Sample complexity grafiği çiz."
+      "duration": 80,
+      "output": "LLM Karşılaştırma Analizi",
+      "activity": "Farklı modellerin (açık kaynak vs kapalı) aynı parametrelerde verdiği tepkileri ölçme."
     },
     {
       "week": 2,
-      "dateRange": "21 - 25 Eylül",
-      "title": "Bilgi Teorisi ve Sıkıştırma",
-      "description": "Shannon entropy, KL divergence, mutual information.",
+      "title": "İleri Düzey Prompt Mühendisliği (Advanced)",
+      "desc": "Few-shot, Zero-shot ve Meta-prompting teknikleri.",
       "objectives": [
-        "Shannon entropy hesaplar",
-        "KL divergence yorumlar",
-        "Mutual information özellik seçiminde kullanır"
+        "İleri seviye prompt mühendisliğini uygular.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Google Colab",
-        "SciPy"
+        "ChatGPT",
+        "Claude"
       ],
-      "duration": 40,
-      "output": "Bilgi teorisi uygulamaları",
-      "activity": "Farklı veri dağılımları için entropy ve KL divergence hesapla. Yorumla."
+      "duration": 80,
+      "output": "Optimize Edilmiş Sistem Promptu",
+      "activity": "Modele kendi promptunu nasıl iyileştireceğini (meta-prompting) komutlama."
     },
     {
       "week": 3,
-      "dateRange": "28 Eyl - 2 Eki",
-      "title": "Oyun Teorisi ve Çok Ajanlı AI",
-      "description": "Nash dengesi, mechanism design, cooperative game theory.",
+      "title": "API (Uygulama Programlama Arayüzü) Nedir?",
+      "desc": "Modelleri kendi yazılımlarımıza bağlama mantığı.",
       "objectives": [
-        "Nash dengesini hesaplar",
-        "Mechanism design kavramını açıklar",
-        "AI müzayede sistemlerini analiz eder"
+        "API konseptini ve LLM entegrasyonunu kavrar.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Nashpy",
-        "Google Colab"
+        "Postman",
+        "OpenAI API Playground"
       ],
-      "duration": 40,
-      "output": "Oyun teorisi modelleme raporu",
-      "activity": "İki oyunculu bir oyunda Nash dengesini hesapla. Günlük hayattan 3 uygulama bul."
+      "duration": 80,
+      "output": "API Başarılı Çağrı Yanıtı",
+      "activity": "Playground üzerinden API anahtarı ile basit bir HTTP çağrısı denemesi."
     },
     {
       "week": 4,
-      "dateRange": "5 - 9 Ekim",
-      "title": "İleri Optimizasyon Teorisi",
-      "description": "Convex optimization, duality, KKT conditions.",
+      "title": "Python ve OpenAI API Giriş",
+      "desc": "Kod üzerinden ChatGPT ile konuşma.",
       "objectives": [
-        "Konveks optimizasyon problemini tanımlar",
-        "KKT koşullarını uygular",
-        "SVM'i optimizasyon perspektifinden açıklar"
+        "Kod üzerinden LLM kullanır.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "CVXPY",
-        "Google Colab"
+        "Google Colab",
+        "Python",
+        "OpenAI API"
       ],
-      "duration": 40,
-      "output": "Optimizasyon problemi çözümleri",
-      "activity": "CVXPY ile bir portföy optimizasyon problemi çöz. Kısıtlamaları değiştirince ne değişiyor?"
+      "duration": 80,
+      "output": "Çalışan Python LLM Kodu",
+      "activity": "Python kullanarak OpenAI API'a soru sorup yanıtı konsola yazdırma."
     },
     {
       "week": 5,
-      "dateRange": "12 - 16 Ekim",
-      "title": "Bayesian Derin Öğrenme",
-      "description": "Uncertainty quantification, Monte Carlo dropout, BNN.",
+      "title": "Basit AI Web Uygulamaları (Streamlit)",
+      "desc": "Yazdığımız koda görsel arayüz (UI) ekleme.",
       "objectives": [
-        "Bayesian sinir ağını açıklar",
-        "Belirsizlik tahminlemesi yapar",
-        "Kalibrasyon değerlendirir"
+        "Koda web arayüzü entegre eder.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "PyTorch",
-        "Pyro",
+        "Streamlit",
+        "Python",
         "Google Colab"
       ],
-      "duration": 40,
-      "output": "Belirsizlik tahminleme modeli",
-      "activity": "MC Dropout ile bir modelde belirsizlik tahmini yap. Güven kalibrasyonunu değerlendir."
+      "duration": 80,
+      "output": "AI Web Uygulaması (Prototip)",
+      "activity": "Streamlit kütüphanesi ile basit bir 'Hikaye Üretici' web arayüzü kodlama."
     },
     {
       "week": 6,
-      "dateRange": "19 - 23 Ekim",
-      "title": "Meta-Learning",
-      "description": "MAML, Prototypical Networks, few-shot learning.",
+      "title": "RAG (Retrieval-Augmented Generation) Nedir?",
+      "desc": "AI modeline kendi dokümanlarımızı öğretme.",
       "objectives": [
-        "Meta-learning paradigmasını açıklar",
-        "MAML algoritmasını implement eder",
-        "Few-shot learning değerlendirir"
+        "RAG mimarisinin teorisini ve pratiğini anlar.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "PyTorch",
-        "learn2learn",
-        "Google Colab"
+        "ChatPDF",
+        "Mendable"
       ],
-      "duration": 40,
-      "output": "Meta-learning uygulama raporu",
-      "activity": "learn2learn ile MAML implement et. 5-way 1-shot classification doğruluğunu ölç."
+      "duration": 80,
+      "output": "Doküman Sorgulama Testi",
+      "activity": "Kendi ders notlarını içeren bir PDF'e soru sorma ve RAG mantığını anlama."
     },
     {
       "week": 7,
-      "dateRange": "26 - 30 Ekim",
-      "title": "Nöral Mimari Arama",
-      "description": "NAS yöntemleri, DARTS, one-shot NAS.",
+      "title": "Açık Kaynak AI Modelleri (Open Source)",
+      "desc": "Llama, Mistral ve yerel çalışma mantığı.",
       "objectives": [
-        "NAS problem formülasyonunu açıklar",
-        "DARTS'ı anlat",
-        "AutoML ile NAS farkını karşılaştırır"
+        "Açık kaynak modellerle tanışır.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "AutoKeras",
-        "Google Colab",
-        "NNI"
+        "Ollama",
+        "Hugging Face"
       ],
-      "duration": 40,
-      "output": "NAS deney raporu",
-      "activity": "AutoKeras ile bir problem için otomatik mimari bul. Manuel tasarlananla karşılaştır."
+      "duration": 80,
+      "output": "Yerel Model Kurulumu",
+      "activity": "Ollama üzerinden bilgisayara yerel ve internetsiz çalışan bir LLM kurup test etme."
     },
     {
       "week": 8,
-      "dateRange": "2 - 6 Kasım",
-      "title": "İleri Pekiştirmeli Öğrenme",
-      "description": "PPO, SAC, model-based RL, world models.",
+      "title": "AI ile Kod Hata Ayıklama (Debugging)",
+      "desc": "Yazılım geliştirmede AI'ı mentor olarak kullanma.",
       "objectives": [
-        "PPO ve SAC karşılaştırır",
-        "Model-based RL avantajlarını listeler",
-        "Continuous action space yönetir"
+        "AI destekli hata ayıklama süreçlerini öğrenir.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Stable Baselines3",
-        "OpenAI Gym",
-        "Google Colab"
+        "Cursor",
+        "GitHub Copilot",
+        "ChatGPT"
       ],
-      "duration": 40,
-      "output": "İleri RL ajan raporu",
-      "activity": "PPO ile Bipedal Walker veya Ant ortamını çöz. SAC ile karşılaştır. Öğrenme eğrisi çiz."
+      "duration": 80,
+      "output": "Debug Edilmiş Temiz Kod",
+      "activity": "Hatalı bilerek bozulmuş Python kodunu AI yardımıyla analiz edip düzeltme."
     },
     {
       "week": 9,
-      "dateRange": "9 - 13 Kasım",
-      "title": "Resmi Doğrulama ve AI Güvenliği",
-      "description": "Formal verification, certified robustness, Lyapunov.",
+      "title": "İleri Görsel Yapay Zeka: Kontrollü Üretim",
+      "desc": "ControlNet, ComfyUI, Image-to-Image.",
       "objectives": [
-        "Certified robustness kavramını açıklar",
-        "Smoothed classifier anlat",
-        "Güvenlik garantisi kavramını tartışır"
+        "Görsel üretiminde kontrol parametrelerini yönetir.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "auto_LiRPA",
-        "DeepMind Verification tools"
+        "Krea.ai",
+        "Stable Diffusion Demo"
       ],
-      "duration": 40,
-      "output": "AI güvenlik doğrulama raporu",
-      "activity": "Bir modelde certified robustness analizi yap. Belirli epsilon için güvence verebiliyor mu?"
+      "duration": 80,
+      "output": "Kontrollü Render Çıktısı",
+      "activity": "Bir karakalem eskizi sisteme yükleyip fotogerçekçi bir render alma."
     },
     {
       "week": 10,
-      "dateRange": "23 - 27 Kasım",
-      "title": "Büyük Ölçekli Sistem Tasarımı",
-      "description": "Dağıtık eğitim, serving, MLOps at scale.",
+      "title": "Ara Tatil",
+      "desc": "Ara Tatil",
       "objectives": [
-        "Model serving mimarisini tasarlar",
-        "Dağıtık eğitim stratejilerini karşılaştırır",
-        "Ölçekleme zorluklarını listeler"
+        "-",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
-      "aiTools": [
-        "Ray",
-        "Kubernetes",
-        "Triton Inference Server"
-      ],
-      "duration": 40,
-      "output": "Büyük ölçek sistem mimarisi",
-      "activity": "1 milyar parametre model için serving mimarisi tasarla. Latency ve throughput optimize et."
+      "aiTools": [],
+      "duration": 80,
+      "output": "-",
+      "activity": "-"
     },
     {
       "week": 11,
-      "dateRange": "30 Kas - 4 Ara",
-      "title": "Ablation Studies ve Deneysel Tasarım",
-      "description": "Ablation analizi, baseline seçimi, statistical significance.",
+      "title": "Yapay Zeka Ajanları (AI Agents) Nedir?",
+      "desc": "Otonom olarak görev bitiren yapay zekalar.",
       "objectives": [
-        "Ablation çalışması tasarlar",
-        "İstatistiksel anlamlılık test eder",
-        "Adil karşılaştırma ilkelerini uygular"
+        "Otonom ajanların çalışma mantığını keşfeder.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Google Colab",
-        "SciPy",
-        "Weights & Biases"
+        "AutoGPT",
+        "AgentGPT"
       ],
-      "duration": 40,
-      "output": "Ablation analizi raporu",
-      "activity": "Bir makalenin ablation study'sini yeniden üret. Sonuçlar uyuşuyor mu? Farklılar neden?"
+      "duration": 80,
+      "output": "Otonom Görev Kaydı",
+      "activity": "AgentGPT üzerinden 'Sağlıklı yaşam planı araştır ve raporla' görevini otonom izleme."
     },
     {
       "week": 12,
-      "dateRange": "7 - 11 Aralık",
-      "title": "State Space Models ve Yeni Paradigmalar",
-      "description": "Mamba, Hyena, linear attention, SSM.",
+      "title": "Multi-Agent Sistemler",
+      "desc": "Birden fazla AI'ın kendi aralarında konuşması.",
       "objectives": [
-        "SSM ve Transformer arasındaki farkları açıklar",
-        "Mamba'nın verimliliğini anlat",
-        "Yeni mimari paradigmaları karşılaştırır"
+        "Çoklu ajan işbirliği konseptini kavrar.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Mamba library",
-        "Google Colab"
+        "ChatDev (Demo)"
       ],
-      "duration": 40,
-      "output": "SSM karşılaştırma raporu",
-      "activity": "Mamba ve GPT-2'yi aynı görevde karşılaştır. Bellek verimliliği ve hız farklarını ölç."
+      "duration": 80,
+      "output": "Ajan İletişim Logları",
+      "activity": "Bir AI'ı 'Yazılımcı', diğerini 'Testçi' yaparak birbirleriyle iletişimlerini simüle etme."
     },
     {
       "week": 13,
-      "dateRange": "14 - 18 Aralık",
-      "title": "Foundation Models Ekolojisi",
-      "description": "GPT-4, Gemini Ultra, Claude 3, LLaMA 3 karşılaştırma.",
+      "title": "Gelişmiş AI Otomasyonları (Make.com İleri)",
+      "desc": "API'leri birbirine zincirleme bağlama.",
       "objectives": [
-        "Foundation model ekosistemini haritalandırır",
-        "Benchmark metodolojisini eleştirir",
-        "Model seçim kriterlerini geliştirir"
+        "İleri düzey otomasyon zincirleri tasarlar.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "LMSYS Chatbot Arena",
-        "HELM",
-        "Hugging Face"
+        "Make.com",
+        "OpenAI API"
       ],
-      "duration": 40,
-      "output": "Foundation model analiz matrisi",
-      "activity": "HELM ve Chatbot Arena kullanarak 4 foundation modeli kapsamlı değerlendir. Sonuçları tartış."
+      "duration": 80,
+      "output": "Entegre Otomasyon Sistemi",
+      "activity": "Google Sheets'e eklenen bir başlığı AI ile makaleye dönüştürüp mail atan akış kurma."
     },
     {
       "week": 14,
-      "dateRange": "21 - 25 Aralık",
-      "title": "Ulusal AI Politikası",
-      "description": "Türkiye AI stratejisi, TBMM AI komisyonu, uygulama.",
+      "title": "Sektörel AI: Tıp ve Sağlık",
+      "desc": "Tıpta teşhis, ilaç geliştirme ve AI.",
       "objectives": [
-        "Türkiye'nin mevcut AI politikasını analiz eder",
-        "Güçlü ve zayıf yanları değerlendirir",
-        "Spesifik politika önerisi geliştir"
+        "Sektörel yapay zeka dönüşümünü inceler.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "TÜSEB",
-        "TÜBİTAK",
-        "Sanayi Bakanlığı raporları"
+        "PubMed",
+        "ChatGPT"
       ],
-      "duration": 40,
-      "output": "Türkiye AI politika önerisi",
-      "activity": "Türkiye'nin AI alanında en önemli 3 zaafiyetini belirle. Her biri için politika önerisi yaz."
+      "duration": 80,
+      "output": "Sektörel Vaka Analizi (Tıp)",
+      "activity": "Tıbbi makaleleri AI ile tarama ve yapay zekanın tıptaki rolü üzerine vaka analizi."
     },
     {
       "week": 15,
-      "dateRange": "28 Ara - 1 Oca",
-      "title": "AI ve İnsanlığın Geleceği",
-      "description": "Long-termism, existential risk, değer hizalama.",
+      "title": "Sektörel AI: Hukuk ve Finans",
+      "desc": "Algoritmik ticaret, sözleşme analizi.",
       "objectives": [
-        "Varoluşsal AI riskini açıklar",
-        "Long-termism tartışmasını değerlendirir",
-        "İnsanlık değerlerini AI'ya kodlama zorluğunu tartışır"
+        "Finans ve hukukta AI'ın analitik gücünü kullanır.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "80,000 Hours",
-        "Future of Life Institute"
+        "ChatPDF"
       ],
-      "duration": 40,
-      "output": "Uzun vadeli AI analizi",
-      "activity": "AI'nın insanlık tarihindeki 3 olası en büyük etkisini savun. Her biri için kanıt ve argüman."
+      "duration": 80,
+      "output": "Sözleşme/Risk Analiz Raporu",
+      "activity": "Örnek bir hizmet sözleşmesini AI'a verip boşlukları ve riskleri buldurma."
     },
     {
       "week": 16,
-      "dateRange": "4 - 8 Ocak",
-      "title": "Yarıyıl Projesi",
-      "description": "Özgün araştırma katkısı.",
+      "title": "Kendi Özel Verimizle Model Eğitme (Fine-Tuning)",
+      "desc": "Fine-Tuning vs Prompt Engineering.",
       "objectives": [
-        "Özgün araştırma sorusu formüle eder",
-        "Deneysel/teorik katkı sunar",
-        "Akademik sunum yapar"
+        "Fine-tuning süreçlerinin temellerini anlar.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Tüm araçlar"
+        "Hugging Face AutoTrain (Demo)"
       ],
       "duration": 80,
-      "output": "Akademik araştırma makalesi taslağı",
-      "activity": "Özgün bir AI problemine katkı sun. Deneysel kanıt + teorik analiz. NeurIPS formatı."
+      "output": "Kavram Haritası (Eğitim Süreci)",
+      "activity": "Spesifik bir dilde veya tonda yanıt vermesi için model eğitim mantığını inceleme."
     },
     {
       "week": 17,
-      "dateRange": "11 - 15 Ocak",
-      "title": "Disiplinlerarası AI Araştırması",
-      "description": "AI+X: tıp, hukuk, ekonomi, sanat, biyoloji.",
+      "title": "Yapay Zeka Güvenliği (Red Teaming)",
+      "desc": "Modellerin açıklarını bulma (Jailbreak).",
       "objectives": [
-        "Kendi ilgi alanıyla AI'yı birleştirir",
-        "Disiplinlerarası metodoloji geliştirir",
-        "Yeni araştırma soruları üretir"
+        "AI güvenlik testleri (Red Teaming) yapar.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "İlgi alanına özel araçlar"
+        "ChatGPT"
       ],
-      "duration": 40,
-      "output": "Disiplinlerarası araştırma önerisi",
-      "activity": "Farklı bir alanla AI'yı birleştiren özgün bir araştırma sorusu formüle et. Metodoloji yaz."
+      "duration": 80,
+      "output": "Güvenlik Testi Raporu",
+      "activity": "Etik sınırları zorlamadan modele güvenlik politikasını ihlal ettirmeye çalışma (Red Team)."
     },
     {
       "week": 18,
-      "dateRange": "18 - 22 Ocak",
-      "title": "0'dan 1'e AI Ürünü",
-      "description": "Product-market fit, MVP, go-to-market, scaling.",
+      "title": "Dönem Projesi: AI Ürün Tasarımı",
+      "desc": "Çözüm üreten bir AI ürünü tasarlama.",
       "objectives": [
-        "Product-market fit kavramını açıklar",
-        "AI MVP tasarlar",
-        "Go-to-market stratejisi geliştirir"
+        "AI ürün geliştirme vizyonunu ortaya koyar.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Figma",
-        "Notion",
+        "Figma AI",
         "Canva"
       ],
-      "duration": 40,
-      "output": "AI ürün yol haritası",
-      "activity": "Bir AI ürünü için tam yol haritası: problem-çözüm uyumu, MVP, GTM, metrikler, 18 aylık plan."
+      "duration": 80,
+      "output": "Ürün Prototip Arayüzü",
+      "activity": "Gerçek bir problemi çözen AI tabanlı bir mobil uygulamanın arayüzünü tasarlama."
     },
     {
       "week": 19,
-      "dateRange": "8 - 12 Şubat",
-      "title": "AI ve Sosyal Etki",
-      "description": "AI for good, kalkınma hedefleri, eşitsizlik.",
+      "title": "Video AI ve Kurgu Otomasyonu",
+      "desc": "Videolarda AI destekli düzenleme.",
       "objectives": [
-        "AI for Good uygulamalarını listeler",
-        "BM Sürdürülebilir Kalkınma Hedefleri ile AI ilişkisini kurar",
-        "Türkiye sosyal sorununa AI çözümü geliştir"
+        "Post-prodüksiyon süreçlerinde AI araçlarını kullanır.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "UN AI for Good",
-        "Google.org"
+        "CapCut AI",
+        "Descript"
       ],
-      "duration": 40,
-      "output": "AI sosyal etki projesi",
-      "activity": "Türkiye'deki bir sosyal sorunu AI ile çöz. Problem, çözüm, veri, model, etki ölçümü."
+      "duration": 80,
+      "output": "AI Destekli Kurgulanmış Video",
+      "activity": "Metin düzenler gibi video düzenleyip AI ile otomatik altyazı, b-roll ve efekt ekleme."
     },
     {
       "week": 20,
-      "dateRange": "15 - 19 Şubat",
-      "title": "İleri Etik: Değer Hizalama",
-      "description": "Moral realism, preference learning, inverse RL.",
+      "title": "Ses Klonlama ve Etik İhlaller",
+      "desc": "Voice cloning ile sahte ses üretimi.",
       "objectives": [
-        "Değer hizalama problemini açıklar",
-        "Preference learning kavramını anlat",
-        "Inverse RL ile RLHF karşılaştırır"
+        "Ses klonlama teknolojisinin potansiyelini ve risklerini kavrar.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Anthropic research",
-        "DeepMind Ethics"
+        "ElevenLabs"
       ],
-      "duration": 40,
-      "output": "Değer hizalama analizi",
-      "activity": "AI'ya hangi değerleri vermeli? Kültürler arası değer farklılıklarını AI eğitimine nasıl yansıtırsın?"
+      "duration": 80,
+      "output": "Ses Klonu & Etik Tartışma",
+      "activity": "Kendi sesini (veya rızası olan birinin) klonlama ve bunun riskleri üzerine tartışma."
     },
     {
       "week": 21,
-      "dateRange": "22 - 26 Şubat",
-      "title": "Transhumanizm ve Post-Human AI",
-      "description": "Kurzweil tekil nokta, Bostrom süper zeka, Harari.",
+      "title": "Sosyal Medya Asistanı Olarak AI",
+      "desc": "Büyük ölçekli içerik planlaması.",
       "objectives": [
-        "Tekil nokta hipotezini değerlendirir",
-        "Süper zeka senaryolarını analiz eder",
-        "Transhumanizmin etik boyutunu tartışır"
+        "Dijital pazarlamada AI'ı efektif kullanır.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Felsefi ve bilimsel kaynaklar"
+        "Buffer",
+        "ChatGPT"
       ],
-      "duration": 40,
-      "output": "Post-human AI felsefi essay",
-      "activity": "Kurzweil 2045 tekil nokta tahminini eleştirel olarak değerlendir. Sana göre ne olacak?"
+      "duration": 80,
+      "output": "1 Aylık İçerik Takvimi",
+      "activity": "Bir markanın 1 aylık sosyal medya takvimini görsel fikirleriyle birlikte AI ile üretme."
     },
     {
       "week": 22,
-      "dateRange": "1 - 5 Mart",
-      "title": "AI ve Sanat: Estetik Teorisi",
-      "description": "Hesaplamalı estetik, AI sanat hukuku, özgünlük.",
+      "title": "Oyun Geliştirmede Generative AI (İleri)",
+      "desc": "Oyun içi diyaloglar ve dinamik NPCs.",
       "objectives": [
-        "Hesaplamalı estetik teorilerini karşılaştırır",
-        "AI sanat telif hakkı durumunu açıklar",
-        "AI sanat özgünlük tartışmasını analiz eder"
+        "Oyun mekaniklerine dinamik yapay zeka entegre eder.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Midjourney",
-        "Adobe Firefly",
-        "Stable Diffusion"
+        "Inworld AI",
+        "ChatGPT"
       ],
-      "duration": 40,
-      "output": "AI sanat teorik analizi + sanat eseri",
-      "activity": "Bir AI sanat eseri üret. Estetik teorisi bağlamında değerlendir. Özgün müdür? Neden?"
+      "duration": 80,
+      "output": "Dinamik NPC Diyalog Testi",
+      "activity": "Oyun içinde senaryosu sabit olmayan, AI ile oyuncuya cevap veren bir karakter (NPC) tasarlama."
     },
     {
       "week": 23,
-      "dateRange": "15 - 19 Mart",
-      "title": "Hesaplamalı Yaratıcılık Ölçümü",
-      "description": "Creativity metrics, Torrance, computational creativity.",
+      "title": "Kuantum Hesaplama ve AI Geleceği",
+      "desc": "Kuantum yapay zeka ufku.",
       "objectives": [
-        "Yaratıcılık ölçüm yöntemlerini karşılaştırır",
-        "AI yaratıcılığı için metrik önerir",
-        "Deneysel yaratıcılık değerlendirmesi tasarlar"
+        "Gelecek donanım teknolojileri ve AI bağını kurar.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "GPT-4",
-        "Claude",
-        "Midjourney"
+        "IBM Quantum Educational (Teorik)"
       ],
-      "duration": 40,
-      "output": "AI yaratıcılık ölçüm çerçevesi",
-      "activity": "AI yaratıcılığını ölçmek için bir çerçeve geliştir. 5 boyut, metrikler, değerlendirme protokolü."
+      "duration": 80,
+      "output": "Gelecek Projeksiyon Raporu",
+      "activity": "Kuantum bilgisayarların AI eğitim sürelerini nasıl milyarlarca kat hızlandıracağını tartışma."
     },
     {
       "week": 24,
-      "dateRange": "22 - 26 Mart",
-      "title": "Global AI Yönetişim Çerçevesi",
-      "description": "BM AI, OECD ilkeleri, uluslararası AI antlaşması.",
+      "title": "Üretken AI İle Müzik Prodüksiyonu",
+      "desc": "Stem (Vokal, Davul) ayırma ve mastering.",
       "objectives": [
-        "Mevcut global AI yönetişim boşluklarını listeler",
-        "Uluslararası AI antlaşması tasarlar",
-        "Uygulanabilirlik sorunlarını tartışır"
+        "Müzik üretiminin ileri aşamalarında AI kullanır.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "UN AI Advisory Body",
-        "OECD AI Policy"
+        "Moises.ai",
+        "Suno"
       ],
-      "duration": 40,
-      "output": "Global AI yönetişim önerisi",
-      "activity": "AI silahları için bir uluslararası antlaşma tasarla. Denetim mekanizması, imzacılar, cezalar."
+      "duration": 80,
+      "output": "Mastering Edilmiş Ses Parçası",
+      "activity": "Bir parçanın vokallerini izole etme ve AI araçlarıyla mastering/mix süreçlerini görme."
     },
     {
       "week": 25,
-      "dateRange": "29 Mar - 2 Nis",
-      "title": "Entegre Bilgi Teorisi ve AI Bilinci",
-      "description": "IIT, Global Workspace Theory, consciousness upload.",
+      "title": "Büyük Dil Modeli Mimarisinde Bias (Önyargı)",
+      "desc": "Veri seti önyargıları ve stereotipler.",
       "objectives": [
-        "IIT'nin AI bilinci için ne anlama geldiğini açıklar",
-        "Bilinç yükleme teknik zorluklarını listeler",
-        "Yapay bilinç kriterlerini tartışır"
+        "AI veri setlerindeki sosyolojik önyargıları (bias) eleştirir.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Nörobilim ve felsefe kaynakları"
+        "Google Image Search (Geçmiş Vakalar)"
       ],
-      "duration": 40,
-      "output": "AI bilinç teorisi analizi",
-      "activity": "IIT'ye göre mevcut AI'lar bilinçli midir? Argümanını matematiksel çerçeveyle destekle."
+      "duration": 80,
+      "output": "Önyargı (Bias) Tespit Raporu",
+      "activity": "Farklı modellere 'CEO resmi çiz' diyerek çıkan sonuçlardaki cinsiyet/ırk önyargılarını analiz etme."
     },
     {
       "week": 26,
-      "dateRange": "5 - 9 Nisan",
-      "title": "Uzun Vadeli AI Güvenliği: İleri",
-      "description": "Corrigibility, myopic training, decision theory.",
+      "title": "Otonom Robotlar ve AI İşbirliği",
+      "desc": "Robotik, görüntü işleme ve LLM entegrasyonu.",
       "objectives": [
-        "Corrigibility problemini açıklar",
-        "Myopic training stratejisini anlat",
-        "Causal decision theory vs evidential anlat"
+        "Fiziksel dünya ile AI bilişini (vision) bağdaştırır.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "MIRI papers",
-        "Alignment Forum"
+        "ChatGPT Vision"
       ],
-      "duration": 40,
-      "output": "AI güvenlik analizi",
-      "activity": "Alignment Forum'da en çok tartışılan 2025 konusunu bul. Teknik argümanları özetle."
+      "duration": 80,
+      "output": "Görsel İşleme ve Karar Akışı",
+      "activity": "Görüntü işleme ile 'Bu odada ne var?' sorusunu AI'a görsel yükleyerek yorumlatma."
     },
     {
       "week": 27,
-      "dateRange": "12 - 16 Nisan",
-      "title": "Araştırma Portföyü ve Yayın",
-      "description": "Arxiv preprint, GitHub, academic networking.",
+      "title": "Girişimcilik ve AI: Yatırım Süreçleri",
+      "desc": "AI tabanlı startupların yapısı.",
       "objectives": [
-        "Arxiv'e preprint gönderir",
-        "GitHub araştırma reposu oluşturur",
-        "Akademik toplulukla iletişim kurar"
+        "İş fikirlerini profesyonel yatırım sunumuna dönüştürür.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Arxiv",
-        "GitHub",
-        "Twitter/X akademi"
+        "Pitch deck şablonları"
       ],
-      "duration": 40,
-      "output": "Yayınlanmış araştırma çıktısı",
-      "activity": "Araştırmandan arxiv preprint'e hazırla ve gönder. GitHub reposunu hazırla."
+      "duration": 80,
+      "output": "AI Startup Pitch Deck",
+      "activity": "Kendi tasarladıkları AI projesi için yatırımcı sunumu (Pitch Deck) hazırlama."
     },
     {
       "week": 28,
-      "dateRange": "19 - 23 Nisan",
-      "title": "Final Projesi: Araştırma Tasarımı",
-      "description": "Özgün araştırma: soru, metodoloji, beklenti.",
+      "title": "Web Scraping ve AI Analizi",
+      "desc": "İnternetten veri çekip AI ile yorumlama.",
       "objectives": [
-        "Özgün araştırma sorusu formüle eder",
-        "Ayrıntılı metodoloji yazar",
-        "Beklenen katkıyı tanımlar"
+        "Gerçek zamanlı web verisini AI ile işler.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Tüm araçlar"
+        "Browse AI",
+        "ChatGPT"
       ],
-      "duration": 40,
-      "output": "Araştırma teklif belgesi",
-      "activity": "8 haftalık final araştırma projesini tam olarak tasarla. Commit edilen katkı nedir?"
+      "duration": 80,
+      "output": "Müşteri Yorum Analizi",
+      "activity": "E-ticaret sitelerindeki müşteri yorumlarını çekip AI ile 'En çok şikayet edilen özellik' analizi yaptırma."
     },
     {
       "week": 29,
-      "dateRange": "26 - 30 Nisan",
-      "title": "Proje: Literatür ve Teori",
-      "description": "Kapsamlı literatür, teorik çerçeve.",
+      "title": "AI ile Mimari ve İç Mekan Tasarımı",
+      "desc": "Mekansal tasarım.",
       "objectives": [
-        "15 makale okur ve sentezler",
-        "Teorik çerçeve oluşturur",
-        "Orijinallik iddiasını belgeler"
+        "Mimari tasarım süreçlerinde GenAI konseptlerini uygular.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Zotero",
-        "Semantic Scholar",
-        "Arxiv"
+        "Spacemaker",
+        "Midjourney"
       ],
-      "duration": 40,
-      "output": "Teorik çerçeve belgesi",
-      "activity": "15 makaleyi Zotero'da yönet. Tematik sentez yaz. Orijinallik iddiasını güçlendir."
+      "duration": 80,
+      "output": "İç Mekan Tasarım Kataloğu",
+      "activity": "Sınıfın veya odalarının taslağını verip AI ile farklı mimari stillerde (Modern, Rustik) yeniden dekore etme."
     },
     {
       "week": 30,
-      "dateRange": "3 - 7 Mayıs",
-      "title": "Proje: Deneysel Uygulama",
-      "description": "Deney yürütme, veri toplama.",
+      "title": "Açık Kaynak Projelere Katkı (GitHub & AI)",
+      "desc": "Yazılım dünyasında açık kaynak ve AI.",
       "objectives": [
-        "Sistematik deney yürütür",
-        "Veri kalitesini kontrol eder",
-        "İlk bulguları raporlar"
+        "Açık kaynak kültürünü ve AI desteğini deneyimler.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "W&B",
-        "MLflow",
-        "Google Colab"
+        "GitHub"
       ],
-      "duration": 40,
-      "output": "Deneysel veri ve ilk bulgular",
-      "activity": "Tüm deneylerini W&B'de takip et. İlk bulguları ve sürprizleri raporla."
+      "duration": 80,
+      "output": "GitHub Reposu Katkısı (PR / Doküman)",
+      "activity": "GitHub Copilot veya ChatGPT ile basit bir açık kaynak projenin dokümantasyonunu düzeltme."
     },
     {
       "week": 31,
-      "dateRange": "10 - 14 Mayıs",
-      "title": "Proje: Analiz ve Makale",
-      "description": "Derin analiz ve makale yazımı.",
+      "title": "Kapsamlı Bitirme Projesi - Beyin Fırtınası",
+      "desc": "Takımların kurulması ve problemin seçilmesi.",
       "objectives": [
-        "Kapsamlı istatistiksel analiz yapar",
-        "IMRaD formatında makale yazar",
-        "Related work'ü tamamlar"
+        "Büyük ölçekli proje konusunu bağımsız tasarlar.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "SciPy",
-        "Overleaf",
-        "Grammarly"
+        "Tüm Araçlar"
       ],
-      "duration": 40,
-      "output": "Makale taslağı (tam)",
-      "activity": "Tüm analizleri tamamla. Makaleyi Overleaf'te yaz. Related work ve contribution açık olsun."
+      "duration": 80,
+      "output": "Proje İsterleri Belgesi",
+      "activity": "Öğrencilerin bir sorunu çözecek 'End-to-End (Uçtan uca)' AI ürünü/projesi için fikirlerini belirlemesi."
     },
     {
       "week": 32,
-      "dateRange": "17 - 21 Mayıs",
-      "title": "Proje: Revizyon ve Hazırlık",
-      "description": "Peer review geri bildirimleri, final polishing.",
+      "title": "Bitirme Projesi - Sistem Tasarımı",
+      "desc": "Prototip aşaması ve mimari yapı.",
       "objectives": [
-        "Peer review'e yanıt yazar",
-        "Makaleyi güçlendirir",
-        "Sunum materyali hazırlar"
+        "Sistem mimarisini şematize eder.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Overleaf",
-        "LaTeX Beamer",
-        "Canva"
+        "Figma",
+        "Trello",
+        "ChatGPT"
       ],
-      "duration": 40,
-      "output": "Final makale ve sunum",
-      "activity": "Peer review geri bildirimlerini uygula. 25 dakikalık sunum + poster hazırla."
+      "duration": 80,
+      "output": "Sistem ve Veri Akış Şeması",
+      "activity": "Kullanılacak API'lerin, arayüzün ve veri akışının tasarlanması."
     },
     {
       "week": 33,
-      "dateRange": "24 - 28 Mayıs",
-      "title": "İleri Akran Değerlendirmesi",
-      "description": "Çift kör peer review, editorial process.",
+      "title": "Bitirme Projesi - Geliştirme 1",
+      "desc": "Yazılım, tasarım veya içeriklerin üretilmesi.",
       "objectives": [
-        "Çift kör peer review yapar",
-        "Editorial mektubu yazar",
-        "Akademik dürüstlük ilkelerini uygular"
+        "Tasarımlarını geliştirme aşamasına taşır.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "OpenReview",
-        "Google Docs"
+        "Tüm Araçlar"
       ],
-      "duration": 40,
-      "output": "Peer review raporu",
-      "activity": "İki makaleye çift kör NeurIPS reviewer formatında detaylı değerlendirme yaz."
+      "duration": 80,
+      "output": "Alfa Versiyon / İçerik Havuzu",
+      "activity": "Tasarlanan uygulamanın veya ürünün kod/içerik üretim süreçlerinin icrası."
     },
     {
       "week": 34,
-      "dateRange": "31 May - 4 Haz",
-      "title": "Arxiv Yayını ve Duyuru",
-      "description": "Preprint yayınlama, akademik duyuru.",
+      "title": "Bitirme Projesi - Geliştirme 2",
+      "desc": "Test etme ve entegrasyon.",
       "objectives": [
-        "Arxiv'e preprint gönderir",
-        "GitHub reposunu hazırlar",
-        "Akademik topluluğa duyurur"
+        "Sistemi test edip optimize eder.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Arxiv",
-        "GitHub",
-        "Twitter/X"
+        "Tüm Araçlar"
       ],
-      "duration": 40,
-      "output": "Yayınlanmış arxiv preprint",
-      "activity": "Araştırmayı arxiv'e gönder. GitHub reposunu hazırla. Akademik toplulukta paylaş."
+      "duration": 80,
+      "output": "Beta Versiyon (Prototip)",
+      "activity": "Projenin test edilmesi, hataların (bug) ve halüsinasyonların giderilmesi."
     },
     {
       "week": 35,
-      "dateRange": "7 - 11 Haziran",
-      "title": "Final Konferansı",
-      "description": "Akademik konferans sunumu.",
+      "title": "Bitirme Projesi - Lansman ve Pazarlama",
+      "desc": "Projenin kitlelere duyurulması.",
       "objectives": [
-        "25 dakikalık akademik sunum yapar",
-        "Posteri sunar",
-        "Teknik soruları yanıtlar"
+        "Ürün pazarlamasını AI materyalleriyle gerçekleştirir.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "Tüm sunum araçları"
+        "Canva",
+        "ChatGPT",
+        "Suno"
       ],
       "duration": 80,
-      "output": "Konferans sunumu + poster",
-      "activity": "25 dakikalık sunum + poster. En zorlayıcı 5 soruya hazırlan. Savun."
+      "output": "Lansman Materyalleri",
+      "activity": "Proje için tanıtım videosu, reklam afişi ve jingle müzik gibi pazarlama materyallerinin AI ile üretilmesi."
     },
     {
       "week": 36,
-      "dateRange": "14 - 18 Haziran",
-      "title": "Mezuniyet ve Geleceğin Yolları",
-      "description": "Araştırma planı, üniversite, kariyer.",
+      "title": "10. Sınıf AI Mezuniyet Sergisi",
+      "desc": "Yatırımcı/Jüri sunumları.",
       "objectives": [
-        "Hedef üniversite araştırma gruplarını listeler",
-        "SOP taslağı yazar",
-        "3 yıllık araştırma planı çizer"
+        "Geliştirdiği yapay zeka ürününü topluluğa sunar.",
+        "Kazanımları pratik araçlarla uygular.",
+        "Haftalık hedefe uygun ürün geliştirir."
       ],
       "aiTools": [
-        "University websites",
-        "ChatGPT",
-        "LinkedIn"
+        "Sunum Araçları"
       ],
-      "duration": 40,
-      "output": "Üniversite başvuru paketi + araştırma planı",
-      "activity": "3 hedef üniversite araştırma grubu için SOP yaz. 3 yıllık araştırma yol haritanı belgele."
+      "duration": 80,
+      "output": "Büyük Proje Sunumu ve Sergi",
+      "activity": "Öğrencilerin projelerini yatırımcıya (jüriye) sunar gibi sahnede tanıtması ve sergilemesi."
     }
   ]
 };
