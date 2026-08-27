@@ -37,13 +37,13 @@ export default function LiveMarquee() {
           ))}
         </div>
       </div>
-      <style dangerouslySetInnerHTML={{__html: \`
+      <style dangerouslySetInnerHTML={{__html: `
         @keyframes marquee {
           0% { transform: translateX(100vw); }
           100% { transform: translateX(-100%); }
         }
-        .hover\\\\:pause:hover { animation-play-state: paused; }
-      \`}} />
+        .hover\:pause:hover { animation-play-state: paused; }
+      `}} />
     </div>
   )
 }
