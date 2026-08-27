@@ -441,3 +441,28 @@ export async function deleteTubitakProject(id) {
 export async function updateTubitakProject(id, data) {
   await updateDoc(doc(db, 'tubitak_projects', id), data);
 }
+
+export async function createEvent({ userId, title, description, eventDate }) {
+  return await addDoc(collection(db, 'events'), {
+    userId,
+    title,
+    description,
+    eventDate: new Date(eventDate),
+    notified: false,
+    createdAt: serverTimestamp()
+  });
+}
+
+export async function getUserEvents(userId) {
+  const q = query(collection(db, 'events'), where('userId', '==', userId), orderBy('eventDate', 'asc'));
+  const snap = await getDocs(q);
+  return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+}
+
+export async function deleteEvent(eventId) {
+  await deleteDoc(doc(db, 'events', eventId));
+}
+
+export async function markEventAsNotified(eventId) {
+  await updateDoc(doc(db, 'events', eventId), { notified: true });
+}
