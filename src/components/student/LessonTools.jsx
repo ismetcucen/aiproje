@@ -121,15 +121,30 @@ export default function LessonTools() {
               <p className="text-slate-500 text-xs">{activeTool.desc}</p>
             </div>
           </div>
-          <button 
+          <div className="flex gap-2">
+            <button 
+              onClick={() => {
+                const iframe = document.getElementById('embedded-iframe');
+                if (iframe) {
+                  if (iframe.requestFullscreen) iframe.requestFullscreen();
+                  else if (iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
+                  else if (iframe.msRequestFullscreen) iframe.msRequestFullscreen();
+                }
+              }}
+              className="bg-blue-50 hover:bg-blue-100 text-blue-600 px-4 py-2 rounded-xl font-bold transition-colors flex items-center gap-2"
+            >
+              <span>⛶</span> Tam Ekran
+            </button>
+            <button 
             onClick={() => setActiveTool(null)}
             className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-6 py-2 rounded-xl font-bold transition-colors"
           >
             Araçlara Dön
           </button>
+          </div>
         </div>
         <div className="flex-1 bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-lg relative">
-          <iframe 
+          <iframe id="embedded-iframe" 
             src={activeTool.url} 
             className="w-full h-full border-0 absolute inset-0"
             title={activeTool.title}
