@@ -81,6 +81,12 @@ export default function CalendarPlanner() {
 
   async function handleSubmit(e) {
     e.preventDefault()
+    
+    if (!formData.date || !formData.time || !formData.title) {
+      alert("Lütfen Tarih, Saat ve Başlık alanlarını doldurunuz.");
+      return;
+    }
+
     try {
       // Tarih ve saati birleştir
       const datetimeStr = `${formData.date}T${formData.time}:00`
@@ -95,6 +101,7 @@ export default function CalendarPlanner() {
       setShowForm(false)
       setFormData({ title: '', description: '', date: '', time: '' })
       loadEvents()
+      alert("Etkinlik başarıyla kaydedildi!");
     } catch (err) {
       alert('Kaydedilirken hata oluştu: ' + err.message)
       console.error(err)
@@ -142,16 +149,16 @@ export default function CalendarPlanner() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-slate-400 text-sm mb-1">Tarih</label>
-                <input type="date" required value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white" />
+                <input type="date" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white" />
               </div>
               <div>
                 <label className="block text-slate-400 text-sm mb-1">Saat</label>
-                <input type="time" required value={formData.time} onChange={e => setFormData({...formData, time: e.target.value})} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white" />
+                <input type="time" value={formData.time} onChange={e => setFormData({...formData, time: e.target.value})} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white" />
               </div>
             </div>
             <div>
               <label className="block text-slate-400 text-sm mb-1">Başlık</label>
-              <input required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white" placeholder="Örn: Veli Toplantısı" />
+              <input value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white" placeholder="Örn: Veli Toplantısı" />
             </div>
             <div>
               <label className="block text-slate-400 text-sm mb-1">Açıklama (Opsiyonel)</label>
