@@ -454,9 +454,14 @@ export async function createEvent({ userId, title, description, eventDate }) {
 }
 
 export async function getUserEvents(userId) {
-  const q = query(collection(db, 'events'), where('userId', '==', userId), orderBy('eventDate', 'asc'));
+  const q = query(collection(db, 'events'), where('userId', '==', userId));
   const snap = await getDocs(q);
-  return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  const events = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  return events.sort((a, b) => {
+    const dA = a.eventDate?.toDate ? a.eventDate.toDate() : new Date(a.eventDate);
+    const dB = b.eventDate?.toDate ? b.eventDate.toDate() : new Date(b.eventDate);
+    return dA - dB;
+  });
 }
 
 export async function deleteEvent(eventId) {
@@ -505,7 +510,8 @@ export async function awardXP(userId, xpAmount, reason) {
 }
 
 export async function getLeaderboard(schoolCode) {
-  const q = query(collection(db, 'users'), where('schoolCode', '==', schoolCode), where('role', '==', 'student'), orderBy('xp', 'desc'), limit(10));
+  const q = query(collection(db, 'users'), where('schoolCode', '==', schoolCode), where('role', '==', 'student'));
   const snap = await getDocs(q);
-  return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  const students = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  return students.sort((a, b) => (b.xp || 0) - (a.xp || 0)).slice(0, 10);
 }
