@@ -109,11 +109,12 @@ export default function StudentList() {
         <div className="space-y-2">
           {/* Tablo başlığı */}
           <div className="grid grid-cols-12 gap-4 px-4 py-2 text-xs text-slate-500 font-medium uppercase tracking-wide">
-            <div className="col-span-4">Ad Soyad</div>
+            <div className="col-span-3">Ad Soyad</div>
             <div className="col-span-2">Seviye</div>
-            <div className="col-span-2">Sınıf</div>
+            <div className="col-span-1">Sınıf</div>
             <div className="col-span-2 text-center">Üretim</div>
             <div className="col-span-2">Son Teslim</div>
+            <div className="col-span-2 text-right">Veli Linki</div>
           </div>
 
           {filtered.map(student => {
@@ -125,7 +126,7 @@ export default function StudentList() {
                 className="grid grid-cols-12 gap-4 items-center bg-slate-900 border border-slate-800 rounded-xl px-4 py-3.5 hover:border-slate-700 transition-colors"
               >
                 {/* İsim */}
-                <div className="col-span-4 flex items-center gap-3">
+                <div className="col-span-3 flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-indigo-900/60 border border-indigo-800 flex items-center justify-center flex-shrink-0">
                     <span className="text-indigo-300 text-xs font-semibold">
                       {student.fullName?.charAt(0)?.toUpperCase()}
@@ -142,7 +143,7 @@ export default function StudentList() {
                 </div>
 
                 {/* Sınıf numarası */}
-                <div className="col-span-2 text-slate-400 text-sm">
+                <div className="col-span-1 text-slate-400 text-sm">
                   {student.gradeNumber ? `${student.gradeNumber}. sınıf` : '-'}
                 </div>
 
@@ -156,6 +157,20 @@ export default function StudentList() {
                 {/* Son teslim */}
                 <div className="col-span-2 text-slate-400 text-xs">
                   {last || '—'}
+                </div>
+                
+                {/* Veli Linki */}
+                <div className="col-span-2 flex justify-end">
+                  <button
+                    onClick={() => {
+                      const link = window.location.origin + '/p/' + student.id;
+                      navigator.clipboard.writeText(link);
+                      alert('Veli linki kopyalandı!\n' + link);
+                    }}
+                    className="bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600 hover:text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-colors"
+                  >
+                    🔗 Kopyala
+                  </button>
                 </div>
               </div>
             )

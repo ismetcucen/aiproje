@@ -42,14 +42,32 @@ export default function ParentPortfolio({ studentId }) {
   if (submissions.some(i => i.isShowcase)) badges.push({ icon: '🏆', label: 'Vitrin Yıldızı' });
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6">
+    <div className="min-h-screen bg-slate-50 p-6 print-container">
+      <style dangerouslySetInnerHTML={{__html: `
+        @media print {
+          body { background: white !important; }
+          .print-hidden { display: none !important; }
+          .print-block { display: block !important; }
+          .print-container { padding: 0 !important; background: white !important; }
+          .shadow-sm { box-shadow: none !important; }
+          .border { border-color: #ddd !important; }
+          @page { margin: 1cm; size: A4 portrait; }
+        }
+      `}} />
       <div className="max-w-4xl mx-auto">
-        <header className="bg-white rounded-2xl p-6 shadow-sm mb-6 text-center border border-slate-200">
+        <header className="bg-white rounded-2xl p-6 shadow-sm mb-6 text-center border border-slate-200 relative">
+          <button 
+            onClick={() => window.print()}
+            className="print-hidden absolute top-4 right-4 bg-red-50 hover:bg-red-100 text-red-600 font-bold py-2 px-4 rounded-xl text-sm transition-colors flex items-center gap-2"
+          >
+            <span>📥</span> Raporu İndir (PDF)
+          </button>
           <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-3">
             {student.fullName.charAt(0)}
           </div>
           <h1 className="text-2xl font-bold text-slate-800">{student.fullName}</h1>
-          <p className="text-slate-500">{student.gradeNumber ? student.gradeNumber + '. Sınıf ' : ''}Öğrenci Portfolyosu</p>
+          <p className="text-slate-500">{student.gradeNumber ? student.gradeNumber + '. Sınıf ' : ''}Öğrenci Gelişim Portfolyosu</p>
+          <div className="hidden print-block mt-4 text-sm text-slate-400">Bu rapor ÖHEP AI Studio sistemi üzerinden otomatik oluşturulmuştur.</div>
         </header>
 
         {badges.length > 0 && (
