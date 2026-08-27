@@ -19,6 +19,7 @@ const MENU = [
   { id: 'curriculum', label: 'Müfredat',      icon: '📚' },
   { id: 'users',      label: 'Kullanıcılar',  icon: '👥' },
   { id: 'attendance', label: 'Yoklama',      icon: '✅' },
+  { id: 'robotic',    label: 'Robotik Projeler', icon: '🦾' },
   { id: 'games', label: 'Oyunlar', icon: '🎮' },
   { id: 'tools', label: 'Araçlar', icon: '🛠️' },
   { id: 'ailab', label: 'Lise AI Lab', icon: '🧠' },
@@ -83,6 +84,7 @@ export default function AdminPanel() {
           {active === 'classes'    && <ClassManager schoolCode={profile?.schoolCode} />}
           {active === 'curriculum' && <CurriculumEditor />}
           {active === 'users'      && <UserManager />}
+          {active === 'robotic'    && <RoboticProjects />}
           {active === 'attendance' && <Attendance />}
           {active === 'games'       && <CodingGames />}
           {active === 'tools'       && <LessonTools />}
