@@ -1,23 +1,32 @@
 import { useState, useEffect } from 'react'
-import { createTubitakProject, getTubitakProjects, deleteTubitakProject, updateTubitakProject } from '../../firebase/schema'
+import { createTubitakProject, getTubitakProjects, deleteTubitakProject, updateTubitakProject, getStudentsBySchool } from '../../firebase/schema'
+import { useAuth } from '../../hooks/useAuth'
 
 export default function TubitakProjects() {
+  const { profile } = useAuth()
   const [projects, setProjects] = useState([])
+  const [students, setStudents] = useState([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState(null)
   const [formData, setFormData] = useState({
-    title: '', category: 'TÜBİTAK 2204-B', summary: '', description: '', materials: '', status: 'Fikir Aşamasında'
+    title: '', category: 'TÜBİTAK 2204-B', summary: '', description: '', materials: '', status: 'Fikir Aşamasında', teamMembers: []
   })
 
   useEffect(() => {
-    loadProjects()
-  }, [])
+    loadData()
+  }, [profile])
 
-  async function loadProjects() {
+  async function loadData() {
     setLoading(true)
-    const res = await getTubitakProjects()
-    setProjects(res)
+    if (profile?.schoolCode) {
+      const [projRes, stuRes] = await Promise.all([
+        getTubitakProjects(),
+        getStudentsBySchool(profile.schoolCode)
+      ])
+      setProjects(projRes)
+      setStudents(stuRes)
+    }
     setLoading(false)
   }
 
@@ -30,8 +39,8 @@ export default function TubitakProjects() {
     }
     setShowForm(false)
     setEditingId(null)
-    setFormData({ title: '', category: 'TÜBİTAK 2204-B', summary: '', description: '', materials: '', status: 'Fikir Aşamasında' })
-    loadProjects()
+    setFormData({ title: '', category: 'TÜBİTAK 2204-B', summary: '', description: '', materials: '', status: 'Fikir Aşamasında', teamMembers: [] })
+    loadData()
   }
 
   function handleEdit(proj) {
@@ -41,7 +50,8 @@ export default function TubitakProjects() {
       summary: proj.summary,
       description: proj.description,
       materials: proj.materials,
-      status: proj.status || 'Fikir Aşamasında'
+      status: proj.status || 'Fikir Aşamasında',
+      teamMembers: proj.teamMembers || []
     })
     setEditingId(proj.id)
     setShowForm(true)
@@ -50,20 +60,31 @@ export default function TubitakProjects() {
   async function handleDelete(id) {
     if (confirm('Bu projeyi kütüphaneden silmek istediğinize emin misiniz?')) {
       await deleteTubitakProject(id)
-      loadProjects()
+      loadData()
     }
+  }
+
+  function toggleStudent(studentId) {
+    setFormData(prev => {
+      const isSelected = prev.teamMembers.includes(studentId)
+      if (isSelected) {
+        return { ...prev, teamMembers: prev.teamMembers.filter(id => id !== studentId) }
+      } else {
+        return { ...prev, teamMembers: [...prev.teamMembers, studentId] }
+      }
+    })
   }
 
   if (showForm) {
     return (
-      <div className="max-w-3xl">
-        <button onClick={() => { setShowForm(false); setEditingId(null); setFormData({ title: '', category: 'TÜBİTAK 2204-B', summary: '', description: '', materials: '', status: 'Fikir Aşamasında' }) }} className="mb-6 flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+      <div className="max-w-4xl">
+        <button onClick={() => { setShowForm(false); setEditingId(null); setFormData({ title: '', category: 'TÜBİTAK 2204-B', summary: '', description: '', materials: '', status: 'Fikir Aşamasında', teamMembers: [] }) }} className="mb-6 flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
           <span>←</span> Kütüphaneye Dön
         </button>
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
           <h2 className="text-xl font-bold text-white mb-6">{editingId ? 'Projeyi Düzenle' : 'Yeni Proje Ekle'}</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-slate-400 text-sm mb-1">Proje Adı</label>
                 <input required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white" />
@@ -87,7 +108,7 @@ export default function TubitakProjects() {
 
             <div>
               <label className="block text-slate-400 text-sm mb-1">Detaylı Açıklama / Amacı</label>
-              <textarea required rows="4" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white"></textarea>
+              <textarea required rows="3" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white"></textarea>
             </div>
 
             <div>
@@ -95,15 +116,35 @@ export default function TubitakProjects() {
               <textarea rows="2" value={formData.materials} onChange={e => setFormData({...formData, materials: e.target.value})} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white"></textarea>
             </div>
 
-            <div>
-              <label className="block text-slate-400 text-sm mb-1">Proje Durumu</label>
-              <select value={formData.status} onChange={e => setFormData({...formData, status: e.target.value})} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white">
-                <option>Fikir Aşamasında</option>
-                <option>Ekip Kuruluyor</option>
-                <option>Geliştiriliyor</option>
-                <option>Tamamlandı</option>
-                <option>Başvuru Yapıldı</option>
-              </select>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-slate-400 text-sm mb-1">Proje Durumu</label>
+                <select value={formData.status} onChange={e => setFormData({...formData, status: e.target.value})} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white">
+                  <option>Fikir Aşamasında</option>
+                  <option>Ekip Kuruluyor</option>
+                  <option>Geliştiriliyor</option>
+                  <option>Tamamlandı</option>
+                  <option>Başvuru Yapıldı</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-slate-400 text-sm mb-2">Proje Ekibi (Öğrenciler)</label>
+                <div className="bg-slate-950 border border-slate-800 rounded-lg p-3 max-h-32 overflow-y-auto space-y-2">
+                  {students.map(stu => (
+                    <label key={stu.id} className="flex items-center gap-2 cursor-pointer group">
+                      <input 
+                        type="checkbox" 
+                        checked={formData.teamMembers.includes(stu.id)}
+                        onChange={() => toggleStudent(stu.id)}
+                        className="w-4 h-4 rounded border-slate-700 bg-slate-900 text-indigo-500 focus:ring-indigo-500 focus:ring-offset-slate-950"
+                      />
+                      <span className="text-slate-300 text-sm group-hover:text-white">{stu.fullName} <span className="text-slate-500 text-xs">({stu.classLevel})</span></span>
+                    </label>
+                  ))}
+                  {students.length === 0 && <p className="text-slate-500 text-xs">Okulda kayıtlı öğrenci bulunamadı.</p>}
+                </div>
+              </div>
             </div>
 
             <div className="pt-4 flex justify-end gap-3">
@@ -139,33 +180,59 @@ export default function TubitakProjects() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map(proj => (
-            <div key={proj.id} className="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative group flex flex-col">
-              <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button onClick={() => handleEdit(proj)} className="p-1.5 bg-blue-500/20 text-blue-400 hover:bg-blue-500 hover:text-white rounded-lg">✏️</button>
-                <button onClick={() => handleDelete(proj.id)} className="p-1.5 bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white rounded-lg">🗑️</button>
+          {projects.map(proj => {
+            const teamNames = (proj.teamMembers || []).map(id => {
+              const student = students.find(s => s.id === id)
+              return student ? student.fullName : 'Bilinmeyen Öğrenci'
+            })
+            
+            return (
+              <div key={proj.id} className="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative group flex flex-col hover:border-indigo-500/50 transition-colors">
+                <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button onClick={() => handleEdit(proj)} className="p-1.5 bg-blue-500/20 text-blue-400 hover:bg-blue-500 hover:text-white rounded-lg transition-colors">✏️</button>
+                  <button onClick={() => handleDelete(proj.id)} className="p-1.5 bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white rounded-lg transition-colors">🗑️</button>
+                </div>
+                
+                <div className="mb-4">
+                  <span className="text-xs bg-indigo-500/20 text-indigo-400 px-2 py-1 rounded-md font-medium border border-indigo-500/30">
+                    {proj.category}
+                  </span>
+                  <span className="text-xs bg-slate-800 text-slate-300 px-2 py-1 rounded-md font-medium ml-2 border border-slate-700">
+                    {proj.status}
+                  </span>
+                </div>
+                
+                <h3 className="text-xl font-bold text-white mb-2">{proj.title}</h3>
+                <p className="text-slate-400 text-sm flex-1">{proj.summary}</p>
+                
+                {(proj.materials || teamNames.length > 0) && (
+                  <div className="mt-4 pt-4 border-t border-slate-800 space-y-3">
+                    {proj.materials && (
+                      <div>
+                        <h4 className="text-xs font-bold text-slate-500 uppercase mb-1">Gerekli Malzemeler</h4>
+                        <p className="text-slate-300 text-xs truncate" title={proj.materials}>
+                          {proj.materials}
+                        </p>
+                      </div>
+                    )}
+                    
+                    {teamNames.length > 0 && (
+                      <div>
+                        <h4 className="text-xs font-bold text-slate-500 uppercase mb-1 flex items-center gap-1">👥 Proje Ekibi ({teamNames.length})</h4>
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {teamNames.map((name, idx) => (
+                            <span key={idx} className="text-[10px] bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded border border-slate-700">
+                              {name}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
-              
-              <div className="mb-4">
-                <span className="text-xs bg-indigo-500/20 text-indigo-400 px-2 py-1 rounded-md font-medium border border-indigo-500/30">
-                  {proj.category}
-                </span>
-                <span className="text-xs bg-slate-800 text-slate-300 px-2 py-1 rounded-md font-medium ml-2">
-                  {proj.status}
-                </span>
-              </div>
-              
-              <h3 className="text-xl font-bold text-white mb-2">{proj.title}</h3>
-              <p className="text-slate-400 text-sm flex-1">{proj.summary}</p>
-              
-              <div className="mt-4 pt-4 border-t border-slate-800">
-                <h4 className="text-xs font-bold text-slate-500 uppercase mb-2">Gerekli Malzemeler</h4>
-                <p className="text-slate-300 text-xs truncate" title={proj.materials}>
-                  {proj.materials || '-'}
-                </p>
-              </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       )}
     </div>
