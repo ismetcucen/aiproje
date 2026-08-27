@@ -219,4 +219,107 @@ export const ROBOTIC_PROJECTS = [
       "Gelişmiş Etkileşim: Kişi yüz tanıma ile sisteme kaydedilir, robot kişiyi görünce ismiyle hitap eder."
     ]
   }
+
+  ,
+  {
+    id: 11,
+    title: "♻️ Akıllı Geri Dönüşüm Kutusu (AI Çöp Kutusu)",
+    summary: "Atıkları kamerasından tanıyarak doğru bölmeye ayıran yapay zeka destekli sistem.",
+    description: "Öğrencilerin Teachable Machine veya OpenCV kullanarak plastik, kağıt, metal ve camı eğittiği, kameranın atığı tanıdıktan sonra servo motor ile doğru hazneyi açtığı yenilikçi bir çevre STEM projesi.",
+    materials: [
+      "Raspberry Pi veya ESP32-CAM",
+      "Kamera Modülü",
+      "Servo Motor (Kapak veya yönlendirici rampa için)",
+      "Ultrasonik Sensör (Çöp kutusunun doluluğunu ölçmek için)",
+      "Karton, Ahşap veya 3D Baskı Çöp Kutusu Şasisi"
+    ],
+    steps: [
+      "Model Eğitimi: Yapay zeka aracılığıyla farklı çöp türlerinin yüzlerce fotoğrafı çekilerek görüntü işleme modeli eğitilir.",
+      "Mekanik Sistem: Ana giriş hunisine konan çöpün, motorun dönmesiyle ilgili alt hazneye düşmesini sağlayacak rampa inşa edilir.",
+      "Otomasyon: Kamera çöpü gördüğünde yapay zeka modeline sorar, gelen 'Plastik' cevabına göre servo motor rampayı plastik haznesine çevirir.",
+      "Akıllı Uyarı: Herhangi bir hazne dolduğunda (Ultrasonik sensör ölçümü) LCD ekranda veya web panelinde 'Kutu Doldu' uyarısı verilir."
+    ]
+  },
+  {
+    id: 12,
+    title: "☀️ Güneş Takipli Enerji Sistemi (Solar Tracker)",
+    summary: "Verimliliği artırmak için güneşi (ışığı) otonom takip eden güneş paneli.",
+    description: "Sürdürülebilir enerji mantığını kavramak için tasarlanmış, üzerindeki ışık sensörleri sayesinde her zaman en parlak ışık kaynağına (Güneş'e) yönelen 2 eksenli mekanizma.",
+    materials: [
+      "Arduino Uno",
+      "4 adet LDR (Işık Bağımlı Direnç)",
+      "2 adet SG90 Mini Servo Motor (X ve Y ekseni için)",
+      "Mini Güneş Paneli (5V)",
+      "Pan-Tilt Servo Braketi (3D Baskı veya Pleksi)",
+      "Multimetre (Üretilen enerjiyi ölçmek için)"
+    ],
+    steps: [
+      "Pan-Tilt Montajı: İki servo motor birbirine dik olacak şekilde (sağ-sol ve yukarı-aşağı) monte edilir.",
+      "Sensör Yerleşimi: Güneş panelinin dört köşesine (veya aralarına artı şeklinde engel koyarak) 4 adet LDR yerleştirilir.",
+      "Algoritma: Arduino LDR'lerden gelen ışık değerlerini okur. Örneğin sol taraf daha aydınlıksa yatay motoru sola döndürür.",
+      "Analiz ve STEM Çıktısı: Öğrenciler, sabit duran bir panel ile güneşi takip eden panelin ürettiği enerjiyi multimetre ile ölçüp verimlilik farkını matematiksel olarak hesaplar."
+    ]
+  },
+  {
+    id: 13,
+    title: "🫀 Giyilebilir Sağlık Asistanı",
+    summary: "Nabız, sıcaklık ve düşme algılaması yapan akıllı saat/bileklik prototipi.",
+    description: "Biyomedikal mühendisliğine giriş niteliğinde olan bu projede, kullanıcının hayati verilerini okuyan ve tehlike anında (örn: düşme) uyarı veren bir cihaz tasarlanır.",
+    materials: [
+      "ESP8266 veya Arduino Nano",
+      "MAX30102 Kalp Atışı (Nabız) ve Oksijen Sensörü",
+      "MPU6050 İvmeölçer ve Jiroskop (Düşme tespiti için)",
+      "0.96 inch OLED Ekran",
+      "Buzzer ve Titreşim Motoru",
+      "Kumaş veya cırt cırtlı bant (Bileklik tasarımı için)"
+    ],
+    steps: [
+      "Donanım Testi: Sensörler tek tek test edilip parmaktan doğru nabız değeri ve bilekten eğim verisi okunur.",
+      "Arayüz Tasarımı: OLED ekranda anlık nabız ve durum ikonları (Kalp atışı animasyonu) kodlanır.",
+      "Düşme Algoritması (Fall Detection): İvmeölçer verisinde ani bir serbest düşüş ve durma tespit edilirse sistem acil durum moduna geçer.",
+      "IoT Bildirimi: Eğer cihaz WiFi ağına bağlıysa, düşme anında belirlenen bir e-posta adresine veya telefona otomatik acil durum mesajı yollanır."
+    ]
+  },
+  {
+    id: 14,
+    title: "🛸 Mars Rover (Uzay Keşif Aracı)",
+    summary: "Zorlu arazilerde devrilmeden ilerleyen rocker-bogie süspansiyonlu gezgin.",
+    description: "NASA'nın Curiosity ve Perseverance araçlarında kullandığı mekanik yapıyı (Rocker-Bogie) öğreten, topraktan nem/gaz analizi yapabilen uzaktan kumandalı veya otonom araştırma robotu.",
+    materials: [
+      "Rocker-Bogie Şasisi (6 tekerlekli, 3D baskı ile üretilmesi önerilir)",
+      "6 adet DC Redüktörlü Motor",
+      "Motor Sürücü (L298N veya PCA9685)",
+      "Arduino Mega + Bluetooth (HC-05) modülü",
+      "Toprak Nemi, DHT11 Sıcaklık ve MQ Gaz Sensörleri",
+      "Mini Robot Kol Eklem (Toprak numunesi almak için)"
+    ],
+    steps: [
+      "Mekanik ve Süspansiyon: 6 tekerlekli rocker-bogie mekanizması kurulur (Bu mekanizma aracın engelleri devrilmeden aşmasını sağlar).",
+      "Hareket Kontrolü: 6 motorun senkronize ileri-geri hareketleri Bluetooth üzerinden telefondan kontrol edilecek şekilde programlanır.",
+      "Veri Toplama: Robot zorlu bir engelin üzerine çıkarılır ve o noktadaki toprağa sensörlerini batırarak değer okur.",
+      "Telemetri İstasyonu: Okunan veriler tıpkı bir uzay üssündeymiş gibi bilgisayar ekranındaki gösterge paneline yansıtılır."
+    ]
+  },
+  {
+    id: 15,
+    title: "🪴 Topraksız Tarım (Hydroponics) İstasyonu",
+    summary: "Su, ışık ve PH seviyesini otomatik ayarlayan akıllı laboratuvar serası.",
+    description: "Geleceğin tarım teknolojilerini (AgriTech) öğreten bu projede, bitkiler toprak olmadan sadece besinli su ve yapay fotosentez ışıklarıyla büyütülür.",
+    materials: [
+      "ESP32 Geliştirme Kartı",
+      "Su Pompası ve Hortumlar",
+      "PH Sensörü ve Su Sıcaklığı Sensörü",
+      "Grow Light (Bitki Büyütme) LED Şeritleri (Kırmızı/Mavi tayf)",
+      "Ultrasonik Sensör (Su deposunun seviyesini ölçmek için)",
+      "Röle Modülü (LED ve Pompa kontrolü için)",
+      "PVC Borular veya Plastik Saklama Kapları"
+    ],
+    steps: [
+      "Sistem Kurulumu: Suyun PVC borular içinden devridaim yapacağı hidroponik altyapı maketi kurulur.",
+      "Aydınlatma (Fotosentez): Röle kullanılarak Grow LED'lerin günde sadece belirli saatlerde (Örn: sabah 8, akşam 8 arası) yanması kodlanır.",
+      "Sıvı Kontrolü: Su seviyesi azaldığında uyarı verilir, su sıcaklığı ve PH değerleri periyodik ölçülüp kaydedilir.",
+      "Biyolojik Gözlem: Öğrenciler sistemin içine marul veya fesleğen tohumu eker ve normal toprakla büyüyen bitki ile büyüme hızlarını kıyaslayarak bilimsel rapor hazırlar."
+    ]
+  }
+];
 ];
