@@ -9,6 +9,7 @@ import UserManager from '../../components/admin/UserManager'
 import RoboticProjects from '../../components/admin/RoboticProjects'
 import TubitakProjects from '../../components/admin/TubitakProjects'
 import CalendarPlanner from '../../components/CalendarPlanner'
+import Announcements from '../../components/admin/Announcements'
 import Stats from '../../components/admin/Stats'
 import ClassManager from '../../components/admin/ClassManager'
 import CurriculumEditor from '../../components/admin/CurriculumEditor'
@@ -24,6 +25,7 @@ const MENU = [
   { id: 'robotic',    label: 'Robotik Projeler', icon: '🦾' },
   { id: 'tubitak',    label: 'Tübitak & Teknofest', icon: '🏆' },
   { id: 'calendar',   label: 'Ajanda', icon: '📅' },
+  { id: 'announcements', label: 'Duyurular', icon: '📢' },
   { id: 'games', label: 'Oyunlar', icon: '🎮' },
   { id: 'tools', label: 'Araçlar', icon: '🛠️' },
   { id: 'ailab', label: 'Lise AI Lab', icon: '🧠' },
@@ -91,6 +93,7 @@ export default function AdminPanel() {
           {active === 'robotic'    && <RoboticProjects />}
           {active === 'tubitak'    && <TubitakProjects />}
           {active === 'calendar'   && <CalendarPlanner />}
+          {active === 'announcements' && <Announcements />}
           {active === 'attendance' && <Attendance />}
           {active === 'games'       && <CodingGames />}
           {active === 'tools'       && <LessonTools />}

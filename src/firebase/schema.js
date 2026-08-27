@@ -466,3 +466,46 @@ export async function deleteEvent(eventId) {
 export async function markEventAsNotified(eventId) {
   await updateDoc(doc(db, 'events', eventId), { notified: true });
 }
+
+export async function createAnnouncement({ message, targetRole, createdBy }) {
+  return await addDoc(collection(db, 'announcements'), {
+    message,
+    targetRole, // 'all', 'student', 'teacher'
+    createdBy,
+    createdAt: serverTimestamp()
+  });
+}
+
+export async function getLatestAnnouncements(targetRole = 'all') {
+  const q = query(collection(db, 'announcements'), orderBy('createdAt', 'desc'), limit(5));
+  const snap = await getDocs(q);
+  const allAnnouncements = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  return allAnnouncements.filter(a => a.targetRole === 'all' || a.targetRole === targetRole);
+}
+
+export async function deleteAnnouncement(id) {
+  await deleteDoc(doc(db, 'announcements', id));
+}
+
+export async function awardXP(userId, xpAmount, reason) {
+  const userRef = doc(db, 'users', userId);
+  const snap = await getDoc(userRef);
+  if (snap.exists()) {
+    const currentXP = snap.data().xp || 0;
+    await updateDoc(userRef, { xp: currentXP + xpAmount });
+    
+    // Create an XP log document for history
+    await addDoc(collection(db, 'xp_logs'), {
+      userId,
+      xpAmount,
+      reason,
+      createdAt: serverTimestamp()
+    });
+  }
+}
+
+export async function getLeaderboard(schoolCode) {
+  const q = query(collection(db, 'users'), where('schoolCode', '==', schoolCode), where('role', '==', 'student'), orderBy('xp', 'desc'), limit(10));
+  const snap = await getDocs(q);
+  return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+}
