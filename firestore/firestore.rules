@@ -211,5 +211,25 @@ service cloud.firestore {
       allow create: if isAuth();
       allow delete: if isAuth() && resource.data.userId == request.auth.uid;
     }
+
+    // ─── NEW MODULES ────────────────────────────────────────────────
+    match /events/{eventId} {
+      allow read: if isAuth();
+      allow create: if isAuth() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isAuth();
+    }
+    match /tubitak_projects/{docId} {
+      allow read: if isAuth();
+      allow write: if isAuth();
+    }
+    match /announcements/{docId} {
+      allow read: if isAuth();
+      allow write: if isAuth();
+    }
+    match /xp_logs/{docId} {
+      allow read: if isAuth();
+      allow create: if isAuth();
+      allow update, delete: if isAdmin();
+    }
   }
 }
