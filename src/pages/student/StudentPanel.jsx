@@ -24,13 +24,13 @@ export default function StudentPanel() {
   const [showRules, setShowRules] = useState(false)
 
   useEffect(() => {
-    if (!localStorage.getItem('aiLabRulesAccepted')) {
+    if (!localStorage.getItem('aiLabRulesAccepted_v2')) {
       setShowRules(true)
     }
   }, [])
 
   const acceptRules = () => {
-    localStorage.setItem('aiLabRulesAccepted', 'true')
+    localStorage.setItem('aiLabRulesAccepted_v2', 'true')
     setShowRules(false)
   }
   const [selectedAssignment, setSelectedAssignment] = useState(null)
