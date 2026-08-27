@@ -81,19 +81,24 @@ export default function CalendarPlanner() {
 
   async function handleSubmit(e) {
     e.preventDefault()
-    // Tarih ve saati birleştir
-    const datetimeStr = `${formData.date}T${formData.time}:00`
-    
-    await createEvent({
-      userId: user.uid,
-      title: formData.title,
-      description: formData.description,
-      eventDate: datetimeStr
-    })
-    
-    setShowForm(false)
-    setFormData({ title: '', description: '', date: '', time: '' })
-    loadEvents()
+    try {
+      // Tarih ve saati birleştir
+      const datetimeStr = `${formData.date}T${formData.time}:00`
+      
+      await createEvent({
+        userId: user.uid,
+        title: formData.title,
+        description: formData.description,
+        eventDate: datetimeStr
+      })
+      
+      setShowForm(false)
+      setFormData({ title: '', description: '', date: '', time: '' })
+      loadEvents()
+    } catch (err) {
+      alert('Kaydedilirken hata oluştu: ' + err.message)
+      console.error(err)
+    }
   }
 
   async function handleDelete(id) {
