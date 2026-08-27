@@ -159,6 +159,14 @@ export default function StudentPanel() {
                 <span className="text-xl">🖥️</span>
                 <p><strong className="text-slate-800">Ekipman Güvenliği:</strong> Bilgisayarlara ve ekipmanlara özen gösterin, izinsiz program kurmayın.</p>
               </div>
+              <div className="flex gap-3 items-start text-red-600">
+                <span className="text-xl">🚫</span>
+                <p><strong className="text-red-700">Sistem Kilitleme:</strong> Ders dışı oyun, internet sitesi veya uygulama açan öğrencilerin bilgisayarları anında kilitlenecektir.</p>
+              </div>
+              <div className="flex gap-3 items-start text-red-600">
+                <span className="text-xl">📡</span>
+                <p><strong className="text-red-700">İzleme ve Kayıt:</strong> Hangi bilgisayarda oturduğunuz ve IP adresiniz sistemde şahsi hesabınızla eşleştirilerek takip edilmekte ve kayıt altına alınmaktadır.</p>
+              </div>
             </div>
             <div className="p-5 border-t border-slate-100 bg-slate-50 flex justify-end">
               <button 
