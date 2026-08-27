@@ -21,6 +21,18 @@ const MENU = [
 export default function StudentPanel() {
   const { user, profile, logout } = useAuth()
   const [active, setActive]                     = useState('home')
+  const [showRules, setShowRules] = useState(false)
+
+  useEffect(() => {
+    if (!localStorage.getItem('aiLabRulesAccepted')) {
+      setShowRules(true)
+    }
+  }, [])
+
+  const acceptRules = () => {
+    localStorage.setItem('aiLabRulesAccepted', 'true')
+    setShowRules(false)
+  }
   const [selectedAssignment, setSelectedAssignment] = useState(null)
   const [settings, setSettings] = useState({ codingModuleEnabled: false })
 
@@ -123,6 +135,41 @@ export default function StudentPanel() {
           {active === 'ailab'       && <HighSchoolAILab />}
         </div>
       </main>
+      {showRules && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200 animate-in fade-in zoom-in duration-300">
+            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 text-white text-center">
+              <span className="text-4xl block mb-2">🤖</span>
+              <h2 className="text-2xl font-bold">Yapay Zeka Lab Kuralları</h2>
+            </div>
+            <div className="p-6 space-y-5 text-slate-600 text-sm">
+              <div className="flex gap-3 items-start">
+                <span className="text-xl">🎓</span>
+                <p><strong className="text-slate-800">Eğitim Amaçlı Kullanım:</strong> Yapay zeka araçlarını sadece ders ve öğrenme amaçlı kullanın. Oyun oynamak veya konu dışı arayışlara girmek yasaktır.</p>
+              </div>
+              <div className="flex gap-3 items-start">
+                <span className="text-xl">🤝</span>
+                <p><strong className="text-slate-800">Etik ve Saygı:</strong> Ürettiğiniz içeriklerde etik kurallara uyun. Kopya çekmek, zorbalık yapmak veya zararlı içerik üretmek kesinlikle yasaktır.</p>
+              </div>
+              <div className="flex gap-3 items-start">
+                <span className="text-xl">🔒</span>
+                <p><strong className="text-slate-800">Kişisel Veri Güvenliği:</strong> AI botlarına TC Kimlik numarası, adres, şifre vb. kişisel bilgilerinizi ASLA yazmayın.</p>
+              </div>
+              <div className="flex gap-3 items-start">
+                <span className="text-xl">🖥️</span>
+                <p><strong className="text-slate-800">Ekipman Güvenliği:</strong> Bilgisayarlara ve ekipmanlara özen gösterin, izinsiz program kurmayın.</p>
+              </div>
+            </div>
+            <div className="p-5 border-t border-slate-100 bg-slate-50 flex justify-end">
+              <button 
+                onClick={acceptRules}
+                className="px-6 py-2.5 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-600/20 active:scale-95">
+                Okudum ve Kabul Ediyorum
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
