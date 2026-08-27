@@ -7,6 +7,7 @@ import HighSchoolAILab from '../../components/student/HighSchoolAILab'
 import AIEducationTools from '../../components/admin/AIEducationTools'
 import UserManager from '../../components/admin/UserManager'
 import RoboticProjects from '../../components/admin/RoboticProjects'
+import TubitakProjects from '../../components/admin/TubitakProjects'
 import Stats from '../../components/admin/Stats'
 import ClassManager from '../../components/admin/ClassManager'
 import CurriculumEditor from '../../components/admin/CurriculumEditor'
@@ -20,6 +21,7 @@ const MENU = [
   { id: 'users',      label: 'Kullanıcılar',  icon: '👥' },
   { id: 'attendance', label: 'Yoklama',      icon: '✅' },
   { id: 'robotic',    label: 'Robotik Projeler', icon: '🦾' },
+  { id: 'tubitak',    label: 'Tübitak & Teknofest', icon: '🏆' },
   { id: 'games', label: 'Oyunlar', icon: '🎮' },
   { id: 'tools', label: 'Araçlar', icon: '🛠️' },
   { id: 'ailab', label: 'Lise AI Lab', icon: '🧠' },
@@ -85,6 +87,7 @@ export default function AdminPanel() {
           {active === 'curriculum' && <CurriculumEditor />}
           {active === 'users'      && <UserManager />}
           {active === 'robotic'    && <RoboticProjects />}
+          {active === 'tubitak'    && <TubitakProjects />}
           {active === 'attendance' && <Attendance />}
           {active === 'games'       && <CodingGames />}
           {active === 'tools'       && <LessonTools />}

@@ -420,3 +420,24 @@ export async function getSchoolSettings(schoolCode) {
 export async function updateSchoolSettings(schoolCode, data) {
   await setDoc(doc(db, 'school_settings', schoolCode), data, { merge: true });
 }
+
+export async function createTubitakProject(data) {
+  return await addDoc(collection(db, 'tubitak_projects'), {
+    ...data,
+    createdAt: serverTimestamp()
+  });
+}
+
+export async function getTubitakProjects() {
+  const q = query(collection(db, 'tubitak_projects'), orderBy('createdAt', 'desc'));
+  const snap = await getDocs(q);
+  return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+}
+
+export async function deleteTubitakProject(id) {
+  await deleteDoc(doc(db, 'tubitak_projects', id));
+}
+
+export async function updateTubitakProject(id, data) {
+  await updateDoc(doc(db, 'tubitak_projects', id), data);
+}
