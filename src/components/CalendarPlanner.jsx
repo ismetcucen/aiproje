@@ -14,11 +14,10 @@ export default function CalendarPlanner() {
   useEffect(() => {
     if (user?.uid) {
       loadEvents()
-      requestNotificationPermission()
     }
   }, [user])
 
-  // Gerçek zamanlı bildirim kontrolü (Her 30 saniyede bir kontrol et)
+  // Gerçek zamanlı bildirim kontrolü (Her 5 saniyede bir kontrol et)
   useEffect(() => {
     if (!events.length) return;
     
@@ -33,7 +32,7 @@ export default function CalendarPlanner() {
           }
         }
       })
-    }, 30000)
+    }, 5000)
     
     return () => clearInterval(interval)
   }, [events])
@@ -59,8 +58,8 @@ export default function CalendarPlanner() {
     // 1. Tarayıcı (Masaüstü) Bildirimi
     if ("Notification" in window && Notification.permission === "granted") {
       new Notification("⏰ Yaklaşan Etkinlik / Toplantı", {
-        body: event.title + "\n" + event.description,
-        icon: "/ohep.jpeg" // Varsa logo eklenebilir
+        body: event.title + "\n" + (event.description || ""),
+        icon: "/ohep.jpeg"
       })
     }
     
@@ -82,6 +81,8 @@ export default function CalendarPlanner() {
   async function handleSubmit(e) {
     e.preventDefault()
     
+    requestNotificationPermission()
+
     if (!formData.date || !formData.time || !formData.title) {
       alert("Lütfen Tarih, Saat ve Başlık alanlarını doldurunuz.");
       return;
