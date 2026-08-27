@@ -21,16 +21,16 @@ const MENU = [
 export default function StudentPanel() {
   const { user, profile, logout } = useAuth()
   const [active, setActive]                     = useState('home')
-  const [showRules, setShowRules] = useState(false)
+  const [showRules, setShowRules] = useState(!localStorage.getItem('aiLabRulesAccepted_v3'))
 
   useEffect(() => {
-    if (!localStorage.getItem('aiLabRulesAccepted_v2')) {
+    if (!localStorage.getItem('aiLabRulesAccepted_v3')) {
       setShowRules(true)
     }
   }, [])
 
   const acceptRules = () => {
-    localStorage.setItem('aiLabRulesAccepted_v2', 'true')
+    localStorage.setItem('aiLabRulesAccepted_v3', 'true')
     setShowRules(false)
   }
   const [selectedAssignment, setSelectedAssignment] = useState(null)
@@ -137,7 +137,7 @@ export default function StudentPanel() {
       </main>
       {showRules && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200 animate-in fade-in zoom-in duration-300">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200">
             <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 text-white text-center">
               <span className="text-4xl block mb-2">🤖</span>
               <h2 className="text-2xl font-bold">Yapay Zeka Lab Kuralları</h2>
