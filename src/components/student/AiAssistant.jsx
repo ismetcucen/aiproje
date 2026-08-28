@@ -6,6 +6,9 @@ export default function AiAssistant() {
     { role: 'model', parts: [{ text: "Merhaba! Ben OHEP Bilişim Asistanı. Kodlama veya robotik projelerinde sana yardımcı olmak için buradayım. Bugün ne öğrenmek istersin?" }] }
   ]);
   const [input, setInput] = useState('');
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const fileInputRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const chatRef = useRef(null);
@@ -19,13 +22,28 @@ export default function AiAssistant() {
     }
   }, [messages]);
 
+  function handleImageChange(e) {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => setImagePreview(reader.result);
+      reader.readAsDataURL(file);
+    }
+  }
+
   async function handleSend(e) {
     e.preventDefault();
-    if (!input.trim() || !apiKey) return;
+    if ((!input.trim() && !imageFile) || !apiKey) return;
     
     const userMsg = input.trim();
     setInput('');
-    setMessages(prev => [...prev, { role: 'user', parts: [{ text: userMsg }] }]);
+    const userParts = [{ text: userMsg || 'Bu görsele bak.' }];
+    if (imagePreview) {
+       // Just for local UI history we can store a text indicator or a custom img tag
+       userParts.push({ text: '[Görsel eklendi]' });
+    }
+    setMessages(prev => [...prev, { role: 'user', parts: userParts }]);
     setLoading(true);
     setError('');
 
@@ -45,7 +63,20 @@ Amacın öğrencinin kendi kendine öğrenmesini sağlamak. Anlaşılır, cesare
       }));
 
       // Kendi mesajını da ekle
-      history.push({ role: 'user', parts: [{ text: userMsg }] });
+      const apiUserParts = [{ text: userMsg || 'Lütfen bu görsele bakarak yardımcı ol.' }];
+      if (imageFile) {
+        const base64 = imagePreview.split(',')[1];
+        apiUserParts.push({
+          inlineData: {
+            data: base64,
+            mimeType: imageFile.type
+          }
+        });
+      }
+      history.push({ role: 'user', parts: apiUserParts });
+      setImageFile(null);
+      setImagePreview(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
 
       const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash',
@@ -127,8 +158,25 @@ Amacın öğrencinin kendi kendine öğrenmesini sağlamak. Anlaşılır, cesare
       </div>
 
       {/* Input Area */}
+      
+      {imagePreview && (
+        <div className="px-4 py-2 border-t border-slate-100 flex items-center gap-2">
+          <div className="relative">
+            <img src={imagePreview} alt="Preview" className="h-16 w-16 object-cover rounded-xl shadow-sm border border-slate-200" />
+            <button type="button" onClick={() => {setImageFile(null); setImagePreview(null); if(fileInputRef.current) fileInputRef.current.value='';}} className="absolute -top-2 -right-2 bg-slate-800 text-white w-6 h-6 rounded-full text-xs flex items-center justify-center hover:bg-red-500 shadow-md">✕</button>
+          </div>
+          <span className="text-xs text-slate-500 font-medium ml-2">Görsel eklendi, mesajınızı yazabilirsiniz...</span>
+        </div>
+      )}
       <div className="p-4 bg-white border-t border-slate-100">
-        <form onSubmit={handleSend} className="flex gap-2">
+        <form onSubmit={handleSend} className="flex gap-2 items-center">
+          <input
+            type="file"
+            accept="image/*"
+            className="hidden"
+            ref={fileInputRef}
+            onChange={handleImageChange}
+          />
           <input
             type="text"
             value={input}
@@ -137,10 +185,20 @@ Amacın öğrencinin kendi kendine öğrenmesini sağlamak. Anlaşılır, cesare
             className="flex-1 bg-slate-100 border-transparent focus:bg-white focus:border-blue-500 rounded-2xl px-6 py-4 text-sm transition-all outline-none"
             disabled={loading}
           />
+          
+          <button 
+            type="button" 
+            onClick={() => fileInputRef.current?.click()}
+            className="bg-slate-100 hover:bg-slate-200 text-slate-600 w-14 h-14 rounded-2xl flex items-center justify-center text-2xl transition-colors flex-shrink-0"
+            title="Görsel Ekle"
+          >
+            📸
+          </button>
+
           <button 
             type="submit" 
-            disabled={!input.trim() || loading}
-            className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white w-14 h-14 rounded-2xl flex items-center justify-center text-xl transition-colors"
+            disabled={(!input.trim() && !imageFile) || loading}
+            className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white w-14 h-14 rounded-2xl flex items-center justify-center text-xl transition-colors flex-shrink-0"
           >
             ➤
           </button>
