@@ -612,7 +612,7 @@ export async function sendChatMessage({ senderId, receiverId, schoolCode, text, 
 export function listenChatMessages(studentId, callback) {
   const q = query(
     collection(db, 'messages'),
-    where('senderId', 'in', [studentId, 'school_' + studentId]), 
+     
     // Wait, let's just query by a chatRoomId: studentId
     where('chatRoomId', '==', studentId),
     orderBy('createdAt', 'asc')

@@ -23,6 +23,7 @@ const MENU = [
   { id: 'portfolio',   label: 'Portfolyo', icon: '🗂️' },
   { id: 'leaderboard', label: 'Sıralama', icon: '🏆' },
   { id: 'showcase', label: 'Vitrin', icon: '🌟' },
+  { id: 'chat', label: 'Mesajlar', icon: '💬' },
   
 ]
 
@@ -119,7 +120,7 @@ export default function StudentPanel() {
           <div className="flex items-center gap-4">
             <div>
               <h1 className="text-slate-800 font-bold text-lg leading-tight">
-                {MENU.find(m => m.id === active)?.label}
+                {[...MENU, { id: 'games', label: 'Oyunlar' }, { id: 'tools', label: 'Araçlar' }, { id: 'ailab', label: 'Lise Yapay Zeka' }, { id: 'ai', label: 'OHEP AI' }].find(m => m.id === active)?.label}
               </h1>
               <p className="text-slate-400 text-xs font-medium">Çalışma Alanı</p>
             </div>
