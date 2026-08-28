@@ -11,6 +11,7 @@ import LessonTools from '../../components/student/LessonTools'
 import Leaderboard from '../../components/student/Leaderboard'
 import ShowcaseGallery from '../../components/ShowcaseGallery'
 import StudentQnaWidget from '../../components/student/StudentQnaWidget'
+import AiAssistant from '../../components/student/AiAssistant'
 import LiveMarquee from '../../components/LiveMarquee'
 import HighSchoolAILab from '../../components/student/HighSchoolAILab'
 import { getSchoolSettings } from '../../firebase/schema'
@@ -138,6 +139,7 @@ export default function StudentPanel() {
           {active === 'tools'       && <LessonTools />}
           {active === 'leaderboard' && <Leaderboard />}
           {active === 'showcase'    && <ShowcaseGallery />}
+          {active === 'ai'          && <AiAssistant />}
           {active === 'ailab'       && <HighSchoolAILab />}
         </div>
       </main>
