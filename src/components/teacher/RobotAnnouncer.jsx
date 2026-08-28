@@ -14,8 +14,10 @@ export default function RobotAnnouncer() {
       await sendRobotAnnouncement(msg);
       setMsg('');
       setOpen(false);
+      alert("Anons başarıyla gönderildi! 🤖 Bütün ekranlarda çıkacak.");
     } catch (err) {
       console.error(err);
+      alert("Gönderim hatası: " + err.message);
     } finally {
       setSending(false);
     }
