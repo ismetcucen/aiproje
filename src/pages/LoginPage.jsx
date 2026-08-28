@@ -139,21 +139,21 @@ export default function LoginPage() {
 
         {/* Right Side: Auth Box */}
         <div className="w-full max-w-[480px]">
-          <div className="bg-slate-900/60 backdrop-blur-2xl border border-slate-700/50 rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden">
+          <div className="bg-white/10 backdrop-blur-3xl border border-white/20 rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden shadow-indigo-500/20">
             
             <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-            <div className="flex bg-slate-950 p-1.5 rounded-2xl mb-8 relative z-10 border border-slate-800/50">
+            <div className="flex bg-black/30 p-1.5 rounded-2xl mb-8 relative z-10 border border-white/10 backdrop-blur-md">
               <button onClick={() => setTab(TABS.LOGIN)}
-                className={`flex-1 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${tab === TABS.LOGIN ? 'bg-slate-800 text-white shadow-sm border border-slate-700' : 'text-slate-500 hover:text-slate-300'}`}>
+                className={`flex-1 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${tab === TABS.LOGIN ? 'bg-white/20 text-white shadow-sm border border-white/20 backdrop-blur-md' : 'text-white/50 hover:text-white/80'}`}>
                 Giriş
               </button>
               <button onClick={() => setTab(TABS.REGISTER)}
-                className={`flex-1 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${tab === TABS.REGISTER ? 'bg-slate-800 text-white shadow-sm border border-slate-700' : 'text-slate-500 hover:text-slate-300'}`}>
+                className={`flex-1 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${tab === TABS.REGISTER ? 'bg-white/20 text-white shadow-sm border border-white/20 backdrop-blur-md' : 'text-white/50 hover:text-white/80'}`}>
                 Kayıt
               </button>
               <button onClick={() => setTab(TABS.VISUAL)}
-                className={`flex-1 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${tab === TABS.VISUAL ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-500 hover:text-slate-300'}`}>
+                className={`flex-1 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${tab === TABS.VISUAL ? 'bg-indigo-600 text-white shadow-sm' : 'text-white/50 hover:text-white/80'}`}>
                 🦄 Görsel
               </button>
             </div>
@@ -177,13 +177,13 @@ export default function LoginPage() {
                       <label className="block text-slate-300 text-xs font-bold uppercase tracking-wider mb-2">Ad Soyad</label>
                       <input type="text" value={visualData.fullName} onChange={e => setVisualData(p => ({...p, fullName: e.target.value}))}
                         placeholder="Ali Yılmaz" required
-                        className="w-full bg-slate-950/50 border border-slate-700 text-white font-bold rounded-xl px-4 py-3.5 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all" />
+                        className="w-full bg-black/20 border border-white/10 text-white placeholder-white/40 font-bold rounded-xl px-4 py-3.5 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all" />
                     </div>
                     <div className="col-span-1">
                       <label className="block text-slate-300 text-xs font-bold uppercase tracking-wider mb-2">Sınıf</label>
                       <input type="number" min="1" max="12" value={visualData.gradeNumber} onChange={e => setVisualData(p => ({...p, gradeNumber: e.target.value}))}
                         placeholder="5" required
-                        className="w-full bg-slate-950/50 border border-slate-700 text-white font-bold rounded-xl px-4 py-3.5 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-center" />
+                        className="w-full bg-black/20 border border-white/10 text-white placeholder-white/40 font-bold rounded-xl px-4 py-3.5 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-center" />
                     </div>
                   </div>
 
@@ -193,7 +193,7 @@ export default function LoginPage() {
                       {VISUAL_PASSWORDS.map(vp => (
                         <button type="button" key={vp.id} onClick={() => setVisualData(p => ({...p, visualId: vp.id}))} title={vp.label}
                           className={`text-3xl p-3 rounded-2xl transition-all border-2 ${
-                            visualData.visualId === vp.id ? 'bg-indigo-500/20 border-indigo-500 scale-105 shadow-lg shadow-indigo-500/20' : 'bg-slate-950/50 border-slate-800 hover:border-slate-600 opacity-60 hover:opacity-100'
+                            visualData.visualId === vp.id ? 'bg-indigo-500/20 border-indigo-500 scale-105 shadow-lg shadow-indigo-500/20' : 'bg-black/20 border-white/10 hover:border-white/30 opacity-60 hover:opacity-100'
                           }`}>
                           {vp.icon}
                         </button>
@@ -214,13 +214,13 @@ export default function LoginPage() {
                     <label className="block text-slate-300 text-xs font-bold uppercase tracking-wider mb-2">E-posta</label>
                     <input type="email" value={loginData.email} onChange={e => setLoginData(p => ({...p, email: e.target.value}))}
                       placeholder="ad@okul.edu.tr" required
-                      className="w-full bg-slate-950/50 border border-slate-700 text-white rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all" />
+                      className="w-full bg-black/20 border border-white/10 text-white placeholder-white/40 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all" />
                   </div>
                   <div>
                     <label className="block text-slate-300 text-xs font-bold uppercase tracking-wider mb-2">Şifre</label>
                     <input type="password" value={loginData.password} onChange={e => setLoginData(p => ({...p, password: e.target.value}))}
                       placeholder="••••••••" required
-                      className="w-full bg-slate-950/50 border border-slate-700 text-white rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all" />
+                      className="w-full bg-black/20 border border-white/10 text-white placeholder-white/40 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all" />
                   </div>
                   <button type="submit" disabled={loading}
                     className="w-full bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-600 hover:to-slate-700 disabled:opacity-50 text-white py-4 rounded-2xl text-sm font-bold transition-all shadow-lg mt-6">
@@ -236,7 +236,7 @@ export default function LoginPage() {
                       <label className="block text-slate-300 text-xs font-bold uppercase tracking-wider mb-2">Okul Kodu</label>
                       <input type="text" value={regData.schoolCode} onChange={e => setRegData(p => ({...p, schoolCode: e.target.value}))}
                         placeholder="OHEP" required
-                        className="w-full bg-slate-950/50 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 transition-all uppercase" />
+                        className="w-full bg-black/20 border border-white/10 text-white placeholder-white/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 transition-all uppercase" />
                     </div>
                   </div>
                   
@@ -244,13 +244,13 @@ export default function LoginPage() {
                     <label className="block text-slate-300 text-xs font-bold uppercase tracking-wider mb-2">Ad Soyad</label>
                     <input type="text" value={regData.fullName} onChange={e => setRegData(p => ({...p, fullName: e.target.value}))}
                       placeholder="Ali Yılmaz" required
-                      className="w-full bg-slate-950/50 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 transition-all" />
+                      className="w-full bg-black/20 border border-white/10 text-white placeholder-white/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 transition-all" />
                   </div>
 
                   <div>
                     <label className="block text-slate-300 text-xs font-bold uppercase tracking-wider mb-2">Rol</label>
                     <select value={regData.role} onChange={e => setRegData(p => ({...p, role: e.target.value}))}
-                      className="w-full bg-slate-950/50 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 transition-all">
+                      className="w-full bg-black/20 border border-white/10 text-white placeholder-white/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 transition-all">
                       <option value={ROLES.STUDENT}>Öğrenci</option>
                       <option value={ROLES.TEACHER}>Öğretmen</option>
                     </select>
@@ -261,7 +261,7 @@ export default function LoginPage() {
                       <label className="block text-slate-300 text-xs font-bold uppercase tracking-wider mb-2">Kaçıncı Sınıf</label>
                       <input type="number" min="1" max="12" value={regData.gradeNumber} onChange={e => setRegData(p => ({...p, gradeNumber: e.target.value}))}
                         placeholder="7" required
-                        className="w-full bg-slate-950/50 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 transition-all" />
+                        className="w-full bg-black/20 border border-white/10 text-white placeholder-white/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 transition-all" />
                     </div>
                   )}
 
@@ -270,13 +270,13 @@ export default function LoginPage() {
                       <label className="block text-slate-300 text-xs font-bold uppercase tracking-wider mb-2">E-posta</label>
                       <input type="email" value={regData.email} onChange={e => setRegData(p => ({...p, email: e.target.value}))}
                         placeholder="ad@okul.edu.tr" required
-                        className="w-full bg-slate-950/50 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 transition-all" />
+                        className="w-full bg-black/20 border border-white/10 text-white placeholder-white/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 transition-all" />
                     </div>
                     <div>
                       <label className="block text-slate-300 text-xs font-bold uppercase tracking-wider mb-2">Şifre</label>
                       <input type="password" value={regData.password} onChange={e => setRegData(p => ({...p, password: e.target.value}))}
                         placeholder="••••••••" required
-                        className="w-full bg-slate-950/50 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 transition-all" />
+                        className="w-full bg-black/20 border border-white/10 text-white placeholder-white/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 transition-all" />
                     </div>
                   </div>
 
