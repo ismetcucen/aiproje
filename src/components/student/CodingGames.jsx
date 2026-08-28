@@ -2,6 +2,15 @@ import { useState } from 'react'
 
 const GAMES = [
   {
+    id: 'minecraft',
+    title: 'OHEP Minecraft (Tam Sürüm)',
+    desc: 'Tarayıcıda tam envanter, yaratıcı mod ve devasa bir dünya. Hayalindeki yapıyı inşa et!',
+    url: 'https://eaglercraftgame.io/',
+    icon: '⛏️',
+    external: false
+  },
+
+  {
     id: 'maze',
     title: 'Labirent (Blockly)',
     desc: 'Kod bloklarını sürükleyip birleştirerek karakteri hedefe ulaştır!',
@@ -156,6 +165,7 @@ export default function CodingGames() {
             src={activeGame.url} 
             className="w-full h-full border-0 absolute inset-0"
             title={activeGame.title}
+            allow="fullscreen; pointer-lock" allowFullScreen={true}
           />
         </div>
       </div>
