@@ -8,7 +8,6 @@ export default function OhepBattleship() {
   const [gameWon, setGameWon] = useState(false)
   const [message, setMessage] = useState('')
 
-  // 10x10 grid. X: 1-10, Y: 1-10
   const GRID_SIZE = 10
   const NUM_SHIPS = 5
 
@@ -23,7 +22,6 @@ export default function OhepBattleship() {
     setInputCode('')
     setErrorMsg('')
     
-    // Generate 5 random single-cell ships
     const newShips = []
     while(newShips.length < NUM_SHIPS) {
       const x = Math.floor(Math.random() * GRID_SIZE) + 1
@@ -39,7 +37,6 @@ export default function OhepBattleship() {
     e.preventDefault()
     setErrorMsg('')
     
-    // Parse input: atesEt(X, Y)
     const regex = /atesEt\s*\(\s*(\d+)\s*,\s*(\d+)\s*\)/i
     const match = inputCode.match(regex)
 
@@ -56,13 +53,11 @@ export default function OhepBattleship() {
       return
     }
 
-    // Check if already shot
     if (shots.find(s => s.x === x && s.y === y)) {
       setErrorMsg("Burayı zaten vurdun Komutanım! Başka koordinat dene.")
       return
     }
 
-    // Check hit or miss
     let isHit = false
     const updatedShips = ships.map(ship => {
       if (ship.x === x && ship.y === y) {
@@ -78,7 +73,6 @@ export default function OhepBattleship() {
 
     if (isHit) {
       setMessage("💥 TAM İSABET! Bir düşman gemisi battı!")
-      // Check win
       if (updatedShips.every(s => s.hit)) {
         setGameWon(true)
         setMessage("🏆 GÖREV TAMAMLANDI! OHEP Karargahı seninle gurur duyuyor!")
@@ -91,7 +85,7 @@ export default function OhepBattleship() {
   return (
     <div className="w-full h-full flex flex-col md:flex-row bg-slate-900 text-slate-100 overflow-hidden font-mono">
       
-      {/* Sol Panel: Açıklama ve Kod Yazma */}
+      {/* Sol Panel */}
       <div className="w-full md:w-1/3 bg-slate-800 p-6 flex flex-col border-r border-slate-700">
         <div className="flex items-center gap-3 mb-6">
           <span className="text-4xl">🚢</span>
@@ -141,7 +135,7 @@ export default function OhepBattleship() {
         )}
       </div>
 
-      {/* Sağ Panel: Radar (Grid) */}
+      {/* Sağ Panel */}
       <div className="w-full md:w-2/3 p-4 md:p-10 flex flex-col items-center justify-center relative bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
         
         {gameWon && (
@@ -153,47 +147,42 @@ export default function OhepBattleship() {
           </div>
         )}
 
-        <div className="bg-slate-800/80 p-6 rounded-3xl border-4 border-slate-700 shadow-2xl backdrop-blur-md">
-          {/* X Eksen Etiketleri */}
-          <div className="flex ml-8 mb-2">
-            {[1,2,3,4,5,6,7,8,9,10].map(x => (
-              <div key={x} className="w-10 h-10 flex items-center justify-center font-black text-emerald-500/50">{x}</div>
-            ))}
-          </div>
+        <div className="bg-slate-800/80 p-6 rounded-3xl border-4 border-slate-700 shadow-2xl backdrop-blur-md relative">
+          {/* Eksen İsimleri */}
+          <div className="absolute -top-6 left-1/2 -translate-x-1/2 font-black text-emerald-500 tracking-widest uppercase text-xs">X Ekseni</div>
+          <div className="absolute top-1/2 -left-8 -translate-y-1/2 -rotate-90 font-black text-emerald-500 tracking-widest uppercase text-xs">Y Ekseni</div>
+          
+          <div className="grid grid-cols-[auto_repeat(10,minmax(0,1fr))] grid-rows-[auto_repeat(10,minmax(0,1fr))] gap-1 bg-cyan-950 p-2 border-2 border-cyan-800 rounded-lg">
+              {Array.from({ length: 121 }).map((_, i) => {
+                const col = i % 11
+                const row = Math.floor(i / 11)
 
-          <div className="flex relative">
-            {/* Y Eksen Etiketleri */}
-            <div className="flex flex-col mr-2">
-              {[1,2,3,4,5,6,7,8,9,10].map(y => (
-                <div key={y} className="w-8 h-10 flex items-center justify-center font-black text-emerald-500/50">{y}</div>
-              ))}
-            </div>
+                // Sol üst boşluk
+                if (row === 0 && col === 0) return <div key={i} />
+                
+                // X Eksen Etiketleri (Üst satır)
+                if (row === 0) return <div key={i} className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center font-black text-emerald-500">{col}</div>
+                
+                // Y Eksen Etiketleri (Sol sütun)
+                if (col === 0) return <div key={i} className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center font-black text-emerald-500">{row}</div>
 
-            {/* Grid */}
-            <div className="grid grid-cols-10 grid-rows-10 gap-1 bg-cyan-950 p-1 border-2 border-cyan-800 rounded-lg">
-              {Array.from({ length: 100 }).map((_, i) => {
-                const x = (i % 10) + 1
-                const y = Math.floor(i / 10) + 1
+                // Oyun Alanı (Hücreler)
+                const x = col
+                const y = row
                 
                 const shot = shots.find(s => s.x === x && s.y === y)
                 const isHit = shot?.result === 'hit'
                 const isMiss = shot?.result === 'miss'
-
-                // Uncomment below to cheat and see ships
-                // const isShip = ships.find(s => s.x === x && s.y === y)
+                const isShip = ships.find(s => s.x === x && s.y === y)
 
                 return (
-                  <div key={i} className={`w-10 h-10 rounded-sm flex items-center justify-center transition-all duration-300 ${isHit ? 'bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.8)]' : isMiss ? 'bg-slate-300/20' : 'bg-cyan-800/40 hover:bg-cyan-700/60'}`}>
-                    {isHit && <span className="text-xl animate-bounce-in">💥</span>}
-                    {isMiss && <span className="text-lg opacity-50">💦</span>}
+                  <div key={i} className={`w-8 h-8 sm:w-10 sm:h-10 rounded-sm flex items-center justify-center transition-all duration-300 ${isHit ? 'bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.8)]' : isMiss ? 'bg-slate-300/20' : 'bg-cyan-800/40'}`}>
+                    {isHit && <span className="text-sm sm:text-xl animate-bounce-in">💥</span>}
+                    {isMiss && <span className="text-xs sm:text-lg opacity-50">💦</span>}
+                    {(!shot && isShip) && <span className="text-sm sm:text-xl opacity-80 animate-pulse">👾</span>}
                   </div>
                 )
               })}
-            </div>
-
-            {/* Eksen İsimleri */}
-            <div className="absolute -top-8 left-1/2 -translate-x-1/2 font-black text-emerald-500 tracking-widest uppercase">X Ekseni</div>
-            <div className="absolute top-1/2 -left-12 -translate-y-1/2 -rotate-90 font-black text-emerald-500 tracking-widest uppercase">Y Ekseni</div>
           </div>
         </div>
 
