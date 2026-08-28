@@ -87,7 +87,7 @@ Amacın öğrencinin kendi kendine öğrenmesini sağlamak. Anlaşılır, cesare
           🤖
         </div>
         <div>
-          <h2 className="text-white font-bold text-lg">OHEP Zeka (AI Asistan)</h2>
+          <h2 className="text-white font-bold text-lg">OHEP AI</h2>
           <p className="text-blue-100 text-xs font-medium">Bilişim ve Robotik Öğretmeni</p>
         </div>
       </div>

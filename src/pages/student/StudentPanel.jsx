@@ -80,7 +80,7 @@ export default function StudentPanel() {
               { id: "games", label: "Oyunlar", icon: "🎮" }, 
               { id: "tools", label: "Araçlar", icon: "🛠️" },
               ...(profile?.gradeNumber >= 9 ? [{ id: "ailab", label: "Lise Yapay Zeka", icon: "🧠" }] : []),
-              ...(settings.aiAssistantEnabled ? [{ id: 'ai', label: 'OHEP Zeka', icon: '🤖' }] : [])
+              ...(settings.aiAssistantEnabled ? [{ id: 'ai', label: 'OHEP AI', icon: '🤖' }] : [])
             ] : [])
           ].map(item => (
             <button key={item.id} onClick={() => setActive(item.id)}

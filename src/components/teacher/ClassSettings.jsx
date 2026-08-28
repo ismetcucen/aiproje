@@ -95,9 +95,9 @@ export default function ClassSettings() {
               🤖
             </div>
             <div>
-              <h3 className="text-xl font-bold text-slate-800 mb-2">OHEP Zeka (AI Asistan) Modülü</h3>
+              <h3 className="text-xl font-bold text-slate-800 mb-2">OHEP AI Modülü</h3>
               <p className="text-slate-500 text-sm leading-relaxed max-w-xl mb-4">
-                Öğrenci panelindeki yapay zeka sohbet asistanını (OHEP Zeka) açıp kapatır. Kapalı olduğunda öğrenciler asistan sekmesini göremez. Dikkat dağınıklığını önlemek veya sınav anlarında kapatmak için kullanabilirsiniz.
+                Öğrenci panelindeki yapay zeka sohbet asistanını (OHEP AI) açıp kapatır. Kapalı olduğunda öğrenciler asistan sekmesini göremez. Dikkat dağınıklığını önlemek veya sınav anlarında kapatmak için kullanabilirsiniz.
               </p>
               <div className="flex gap-2 items-center">
                 <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${settings.aiAssistantEnabled ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-500 border border-slate-200'}`}>

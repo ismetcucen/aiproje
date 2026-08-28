@@ -158,7 +158,7 @@ export default function LiveChatInbox() {
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center text-slate-400 bg-slate-50">
             <div className="w-24 h-24 bg-slate-200 rounded-full flex items-center justify-center text-5xl mb-4">💬</div>
-            <h3 className="text-xl font-bold text-slate-600">OHEP Canlı Destek</h3>
+            <h3 className="text-xl font-bold text-slate-600">Öğretmenle Mesajlaş</h3>
             <p className="text-sm">Sohbete başlamak için sol taraftan bir öğrenci seçin.</p>
           </div>
         )}
