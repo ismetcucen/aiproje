@@ -68,7 +68,7 @@ export default function OhepAssistant() {
              console.log("New announcement:", data.message);
              try {
                 agentRef.current.stop();
-                agentRef.current.speak(`📢 DİKKAT: ${data.message}`);
+                agentRef.current.speak(data.message);
              } catch (e) {
                 console.error("Robot speak error:", e);
              }
