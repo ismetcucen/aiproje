@@ -80,9 +80,12 @@ export default function OhepBattleship() {
     }
 
     let isHit = false
+    let hitShipId = null
+
     const updatedShips = ships.map(ship => {
       if (ship.x === x && ship.y === y) {
         isHit = true
+        hitShipId = ship.id
         return { ...ship, hit: true }
       }
       return ship
@@ -93,7 +96,15 @@ export default function OhepBattleship() {
     setInputCode('')
 
     if (isHit) {
-      setMessage("💥 TAM İSABET! Hedefi vurdun!")
+      const hitShip = updatedShips.find(s => s.x === x && s.y === y)
+      const isSunk = updatedShips.filter(s => s.id === hitShip.id).every(s => s.hit)
+      
+      if (isSunk) {
+        setMessage(`💥 HARİKA! ${hitShip.size} birimlik gemiyi tamamen BATIRDIN!`)
+      } else {
+        setMessage(`💥 İSABET! ${hitShip.size} birimlik bir gemiyi vurdun. (Devamını bulmalısın!)`)
+      }
+
       if (updatedShips.every(s => s.hit)) {
         setGameWon(true)
         setMessage("🏆 GÖREV TAMAMLANDI! Tüm düşman filosu yok edildi!")
@@ -103,22 +114,33 @@ export default function OhepBattleship() {
     }
   }
 
+  // Filo durumu hesaplama
+  const uniqueShips = []
+  ships.forEach(s => {
+    if (!uniqueShips.find(us => us.id === s.id)) {
+      uniqueShips.push({
+        id: s.id,
+        size: s.size,
+        isSunk: ships.filter(part => part.id === s.id).every(part => part.hit),
+        hits: ships.filter(part => part.id === s.id && part.hit).length
+      })
+    }
+  })
+  uniqueShips.sort((a, b) => b.size - a.size) // Büyük gemiler üstte
+
   return (
     <div className="w-full h-full flex flex-col md:flex-row bg-slate-900 text-slate-100 overflow-hidden font-mono">
       
       {/* Sol Panel */}
-      <div className="w-full md:w-1/3 bg-slate-800 p-6 flex flex-col border-r border-slate-700">
+      <div className="w-full md:w-1/3 bg-slate-800 p-4 md:p-6 flex flex-col border-r border-slate-700 overflow-y-auto">
         <div className="flex items-center gap-3 mb-6">
           <span className="text-4xl">🚢</span>
           <h2 className="text-2xl font-black text-emerald-400">OHEP Amiral Battı</h2>
         </div>
 
-        <div className="bg-slate-900 rounded-xl p-4 mb-6 border border-slate-700 shadow-inner text-sm leading-relaxed text-slate-300">
-          <p className="mb-2"><strong className="text-white">Görev:</strong> Radarımıza giren 5 farklı boyutta düşman gemisi var (1, 2 ve 3 karelik). Görünmezler, onları kod yazarak avlamalısın!</p>
-          <p className="mb-2"><strong className="text-white">Nasıl Oynanır?</strong> Füzeleri ateşlemek için fareyle tıklayamazsın. Sisteme komut göndermek zorundasın.</p>
-          <p className="mb-2"><strong className="text-white">Kod Sözdizimi:</strong></p>
+        <div className="bg-slate-900 rounded-xl p-4 mb-4 border border-slate-700 shadow-inner text-xs md:text-sm leading-relaxed text-slate-300">
+          <p className="mb-2"><strong className="text-white">Görev:</strong> Radarımıza giren 5 farklı boyutta gizli düşman gemisi var. Onları kod yazarak avlamalısın!</p>
           <code className="block bg-slate-950 text-emerald-400 p-2 rounded-lg font-bold border border-slate-800 mb-2">atesEt(X, Y)</code>
-          <p>Örneğin; yatayda (X) 3, dikeyde (Y) 5 numaralı kareyi vurmak için <span className="text-emerald-400">atesEt(3, 5)</span> yaz ve gönder!</p>
         </div>
 
         <div className="flex-1">
@@ -141,19 +163,40 @@ export default function OhepBattleship() {
               Füzeyi Ateşle 🚀
             </button>
           </form>
+
+          {/* Filo Durumu Tablosu */}
+          {ships.length > 0 && (
+            <div className="mt-6 bg-slate-900 rounded-xl p-4 border border-slate-700">
+              <h3 className="text-emerald-500 font-bold text-xs uppercase mb-3 tracking-widest">Radar Filo Durumu</h3>
+              <div className="flex flex-col gap-2">
+                {uniqueShips.map(ship => (
+                  <div key={ship.id} className={`flex items-center justify-between p-2 rounded-lg transition-colors ${ship.isSunk ? 'bg-red-950/40 border border-red-900/50' : 'bg-slate-800 border border-slate-700'}`}>
+                    <div className="flex gap-1">
+                      {Array.from({length: ship.size}).map((_, i) => (
+                        <div key={i} className={`w-4 h-4 rounded-sm border ${i < ship.hits ? 'bg-red-500 border-red-400 shadow-[0_0_8px_rgba(239,68,68,0.6)]' : 'bg-slate-600 border-slate-500'}`}></div>
+                      ))}
+                    </div>
+                    <span className={`text-[10px] font-black uppercase tracking-wider ${ship.isSunk ? 'text-red-400' : 'text-slate-400'}`}>
+                      {ship.isSunk ? 'BATTI 💥' : 'BİLİNMİYOR'}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {message && (
+            <div className={`mt-6 p-4 rounded-xl border font-bold text-center animate-fade-in-up ${gameWon ? 'bg-emerald-900/50 border-emerald-500 text-emerald-300' : 'bg-slate-900 border-slate-700 text-slate-300'}`}>
+              {message}
+            </div>
+          )}
+
+          {gameWon && (
+            <button onClick={initGame} className="mt-4 w-full bg-slate-700 hover:bg-slate-600 text-white py-3 rounded-xl font-bold transition-colors">
+              🔄 Yeniden Oyna
+            </button>
+          )}
         </div>
-
-        {message && (
-          <div className={`mt-6 p-4 rounded-xl border font-bold text-center animate-fade-in-up ${gameWon ? 'bg-emerald-900/50 border-emerald-500 text-emerald-300' : 'bg-slate-900 border-slate-700 text-slate-300'}`}>
-            {message}
-          </div>
-        )}
-
-        {gameWon && (
-          <button onClick={initGame} className="mt-4 w-full bg-slate-700 hover:bg-slate-600 text-white py-3 rounded-xl font-bold transition-colors">
-            🔄 Yeniden Oyna
-          </button>
-        )}
       </div>
 
       {/* Sağ Panel */}
@@ -194,7 +237,6 @@ export default function OhepBattleship() {
                 const shot = shots.find(s => s.x === x && s.y === y)
                 const isHit = shot?.result === 'hit'
                 const isMiss = shot?.result === 'miss'
-                // isShip gizlendi, sadece hile için açık bırakılabilir: const isShip = ships.find(s => s.x === x && s.y === y)
 
                 return (
                   <div key={i} className={`w-8 h-8 sm:w-10 sm:h-10 rounded-sm flex items-center justify-center transition-all duration-300 ${isHit ? 'bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.8)]' : isMiss ? 'bg-slate-300/20' : 'bg-cyan-800/40'}`}>
