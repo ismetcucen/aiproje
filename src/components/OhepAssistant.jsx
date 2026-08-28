@@ -58,13 +58,21 @@ export default function OhepAssistant() {
 
         // Listen for live announcements
         unsub = listenToRobotAnnouncement((data) => {
-          if (agentRef.current && data && data.message && data.timestamp > lastAnnounceTimeRef.current) {
-            // Sadece son 30 saniye içinde atılan yeni mesajları söyle (sayfa yenilemede eskisini tekrar etmemesi için)
-            if (lastAnnounceTimeRef.current !== 0 || Date.now() - data.timestamp < 30000) {
-                agentRef.current.speak(`📢 DİKKAT: ${data.message}`);
-                agentRef.current.animate();
+          console.log("ROBOT ANNOUNCEMENT RECEIVED:", data);
+          if (agentRef.current && data && data.message) {
+            // Ensure we don't repeat the exact same timestamp
+            if (data.timestamp > lastAnnounceTimeRef.current) {
+               console.log("New announcement detected!");
+               // Play if it's not a stale message on first load
+               if (lastAnnounceTimeRef.current !== 0 || Date.now() - data.timestamp < 60000) {
+                  agentRef.current.stop(); // Stop current animation/speech
+                  agentRef.current.play("Alert"); // Play alert animation first
+                  agentRef.current.speak(data.message);
+               } else {
+                  console.log("Stale announcement, ignoring.");
+               }
+               lastAnnounceTimeRef.current = data.timestamp;
             }
-            lastAnnounceTimeRef.current = data.timestamp;
           }
         });
 
