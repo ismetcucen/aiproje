@@ -96,13 +96,13 @@ export default function QnaInbox() {
 
         {answered.length > 0 && (
           <div>
-            <h3 className="text-lg font-bold text-slate-400 mb-4 border-b border-slate-100 pb-2">Önceki Yanıtlarınız</h3>
+            <h3 className="text-lg font-bold text-slate-500 mb-4 border-b border-slate-100 pb-2">Önceki Yanıtlarınız</h3>
             <div className="space-y-4 opacity-80 hover:opacity-100 transition-opacity">
               {answered.map(q => (
                 <div key={q.id} className="bg-slate-50 border border-slate-200 rounded-2xl p-5">
                   <div className="flex justify-between items-start mb-2">
                     <span className="font-bold text-slate-700 text-sm">{q.studentName}</span>
-                    <span className="text-xs text-slate-400">{q.createdAt?.toDate ? q.createdAt.toDate().toLocaleDateString('tr-TR') : ''}</span>
+                    <span className="text-xs text-slate-500">{q.createdAt?.toDate ? q.createdAt.toDate().toLocaleDateString('tr-TR') : ''}</span>
                   </div>
                   <p className="text-slate-600 text-sm mb-3">Soru: {q.question}</p>
                   <div className="bg-indigo-50 p-3 rounded-xl border border-indigo-100 relative">

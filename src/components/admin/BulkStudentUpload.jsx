@@ -130,24 +130,24 @@ export default function BulkStudentUpload({ classInfo, schoolCode, onSuccess }) 
       {/* ADIM 1: Yükle */}
       {step === 'upload' && (
         <div>
-          <div className="bg-slate-800 rounded-lg p-4 mb-4">
-            <p className="text-white text-sm font-medium mb-2">Excel Format</p>
-            <p className="text-slate-400 text-xs mb-1">Zorunlu sutunlar:</p>
+          <div className="bg-slate-50 rounded-lg p-4 mb-4">
+            <p className="text-slate-700 text-sm font-medium mb-2">Excel Format</p>
+            <p className="text-slate-500 text-xs mb-1">Zorunlu sutunlar:</p>
             <div className="flex gap-2 flex-wrap mb-2">
               {['Ad Soyad', 'Email'].map(col => (
                 <code key={col} className="bg-slate-700 text-indigo-300 px-2 py-0.5 rounded text-xs">{col}</code>
               ))}
             </div>
-            <p className="text-slate-400 text-xs mb-1">Opsiyonel:</p>
+            <p className="text-slate-500 text-xs mb-1">Opsiyonel:</p>
             <div className="flex gap-2 flex-wrap">
               {['Sinif', 'Sifre'].map(col => (
-                <code key={col} className="bg-slate-700 text-slate-400 px-2 py-0.5 rounded text-xs">{col}</code>
+                <code key={col} className="bg-slate-700 text-slate-500 px-2 py-0.5 rounded text-xs">{col}</code>
               ))}
             </div>
             <p className="text-slate-500 text-xs mt-2">Sifre belirtilmezse varsayilan: Okul{schoolCode}123</p>
           </div>
           <input type="file" accept=".xlsx,.xls,.csv" onChange={handleFile}
-            className="w-full bg-slate-800 border border-slate-700 text-slate-300 rounded-lg px-3 py-2 text-sm
+            className="w-full bg-slate-50 border border-slate-200 text-slate-700 rounded-lg px-3 py-2 text-sm
               file:mr-3 file:bg-red-600 file:text-white file:border-0 file:rounded file:px-3 file:py-1.5 file:text-xs file:cursor-pointer" />
         </div>
       )}
@@ -156,19 +156,19 @@ export default function BulkStudentUpload({ classInfo, schoolCode, onSuccess }) 
       {step === 'preview' && (
         <div>
           <div className="flex items-center justify-between mb-3">
-            <p className="text-white font-medium">{students.length} ogrenci bulundu</p>
+            <p className="text-slate-700 font-medium">{students.length} ogrenci bulundu</p>
             <button onClick={() => { setStep('upload'); setStudents([]) }}
-              className="text-slate-400 hover:text-white text-sm">Geri</button>
+              className="text-slate-500 hover:text-white text-sm">Geri</button>
           </div>
           <div className="max-h-48 overflow-auto mb-4 space-y-1">
             {students.map((s, i) => (
-              <div key={i} className="flex items-center justify-between bg-slate-800 rounded-lg px-3 py-2">
+              <div key={i} className="flex items-center justify-between bg-slate-50 rounded-lg px-3 py-2">
                 <div>
-                  <p className="text-white text-sm">{s.fullName}</p>
+                  <p className="text-slate-700 text-sm">{s.fullName}</p>
                   <p className="text-slate-500 text-xs">{s.email}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-slate-400 text-xs">{s.gradeNumber ? `${s.gradeNumber}. sinif` : ''}</p>
+                  <p className="text-slate-500 text-xs">{s.gradeNumber ? `${s.gradeNumber}. sinif` : ''}</p>
                   <p className="text-slate-600 text-xs">Sifre: {s.password}</p>
                 </div>
               </div>
@@ -187,11 +187,11 @@ export default function BulkStudentUpload({ classInfo, schoolCode, onSuccess }) 
       {/* ADIM 3: İçe aktarılıyor */}
       {step === 'importing' && (
         <div className="text-center py-8">
-          <p className="text-white font-medium mb-4">Ogrenciler aktariliyor...</p>
-          <div className="bg-slate-800 rounded-full h-3 mb-2">
+          <p className="text-slate-700 font-medium mb-4">Ogrenciler aktariliyor...</p>
+          <div className="bg-slate-50 rounded-full h-3 mb-2">
             <div className="bg-red-500 h-3 rounded-full transition-all" style={{ width: `${progress}%` }} />
           </div>
-          <p className="text-slate-400 text-sm">{progress}%</p>
+          <p className="text-slate-500 text-sm">{progress}%</p>
         </div>
       )}
 
@@ -214,7 +214,7 @@ export default function BulkStudentUpload({ classInfo, schoolCode, onSuccess }) 
                 r.status === 'ok' ? 'bg-green-900/20' : 'bg-red-900/20'
               }`}>
                 <div>
-                  <p className="text-white text-sm">{r.name}</p>
+                  <p className="text-slate-700 text-sm">{r.name}</p>
                   <p className="text-slate-500 text-xs">{r.email}</p>
                   {r.status === 'error' && <p className="text-red-400 text-xs">{r.error}</p>}
                 </div>
@@ -225,7 +225,7 @@ export default function BulkStudentUpload({ classInfo, schoolCode, onSuccess }) 
             ))}
           </div>
           <button onClick={downloadReport}
-            className="w-full bg-slate-800 hover:bg-slate-700 text-slate-300 py-2 rounded-lg text-sm transition-colors">
+            className="w-full bg-slate-50 hover:bg-slate-700 text-slate-700 py-2 rounded-lg text-sm transition-colors">
             Raporu CSV Olarak Indir
           </button>
         </div>

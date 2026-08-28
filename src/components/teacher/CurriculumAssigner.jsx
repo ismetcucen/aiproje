@@ -72,13 +72,13 @@ export default function CurriculumAssigner() {
 
   const curriculum = selected ? (CURRICULUM[selected.grade] || []) : []
 
-  if (loading) return <div className="text-center py-20 text-slate-400">Yukleniyor...</div>
+  if (loading) return <div className="text-center py-20 text-slate-500">Yukleniyor...</div>
 
   return (
     <div className="max-w-5xl">
       <div className="mb-6">
-        <h2 className="text-white text-xl font-semibold">Haftalik Mufredat</h2>
-        <p className="text-slate-400 text-sm mt-0.5">Sinifa haftalik ders ata</p>
+        <h2 className="text-slate-800 text-xl font-semibold">Haftalik Mufredat</h2>
+        <p className="text-slate-500 text-sm mt-0.5">Sinifa haftalik ders ata</p>
       </div>
 
       {error   && <div className="mb-4 p-3 rounded-lg bg-red-900/40 border border-red-800 text-red-300 text-sm">{error}</div>}
@@ -88,7 +88,7 @@ export default function CurriculumAssigner() {
 
         {/* Sol — Sınıf Seç */}
         <div>
-          <p className="text-slate-400 text-xs font-medium uppercase tracking-wide mb-2">Sinif Sec</p>
+          <p className="text-slate-500 text-xs font-medium uppercase tracking-wide mb-2">Sinif Sec</p>
           {classes.length === 0 ? (
             <p className="text-slate-500 text-sm">Admin panelinden once sinif olusturun.</p>
           ) : (
@@ -98,7 +98,7 @@ export default function CurriculumAssigner() {
                   className={`w-full text-left px-3 py-2.5 rounded-xl border text-sm transition-colors ${
                     selected?.id === cls.id
                       ? 'bg-indigo-600/20 border-indigo-500 text-white'
-                      : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
+                      : 'bg-white shadow-sm border-slate-200 text-slate-700 hover:border-slate-600'
                   }`}>
                   <p className="font-semibold">{cls.name}</p>
                   <p className="text-xs text-slate-500">{cls.grade}. sinif</p>
@@ -111,20 +111,20 @@ export default function CurriculumAssigner() {
         {/* Sağ — Hafta Listesi */}
         <div className="lg:col-span-3">
           {!selected ? (
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-8 text-center">
+            <div className="bg-white shadow-sm border border-slate-200 rounded-xl p-8 text-center">
               <p className="text-slate-500">Sol taraftan bir sinif sec.</p>
             </div>
           ) : (
             <div>
               <div className="flex items-center justify-between mb-4">
-                <p className="text-white font-medium">{selected.name} — {selected.grade}. Sinif Mufredati</p>
+                <p className="text-slate-700 font-medium">{selected.name} — {selected.grade}. Sinif Mufredati</p>
                 <span className="text-xs bg-indigo-900/50 text-indigo-300 border border-indigo-800 px-2 py-1 rounded-full">
                   {assignments.length} / 36 hafta atandi
                 </span>
               </div>
 
               {/* İlerleme Barı */}
-              <div className="bg-slate-800 rounded-full h-2 mb-4">
+              <div className="bg-slate-50 rounded-full h-2 mb-4">
                 <div className="bg-indigo-500 h-2 rounded-full transition-all"
                   style={{ width: `${(assignments.length / 36) * 100}%` }} />
               </div>
@@ -138,12 +138,12 @@ export default function CurriculumAssigner() {
                       className={`flex items-center gap-3 p-3 rounded-xl border transition-colors ${
                         assigned
                           ? 'bg-green-900/20 border-green-800'
-                          : 'bg-slate-900 border-slate-800'
+                          : 'bg-white shadow-sm border-slate-200'
                       }`}>
 
                       {/* Hafta No */}
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold ${
-                        assigned ? 'bg-green-600 text-white' : 'bg-slate-800 text-slate-400'
+                        assigned ? 'bg-green-600 text-white' : 'bg-slate-50 text-slate-500'
                       }`}>
                         {week.week}
                       </div>

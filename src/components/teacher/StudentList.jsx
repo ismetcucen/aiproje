@@ -58,12 +58,12 @@ export default function StudentList() {
       {/* Başlık */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-white text-xl font-semibold">Öğrenciler</h2>
-          <p className="text-slate-400 text-sm mt-0.5">{students.length} kayıtlı öğrenci</p>
+          <h2 className="text-slate-800 text-xl font-semibold">Öğrenciler</h2>
+          <p className="text-slate-500 text-sm mt-0.5">{students.length} kayıtlı öğrenci</p>
         </div>
         <button
           onClick={loadData}
-          className="text-slate-400 hover:text-white text-sm transition-colors flex items-center gap-1.5"
+          className="text-slate-500 hover:text-white text-sm transition-colors flex items-center gap-1.5"
         >
           🔄 Yenile
         </button>
@@ -75,7 +75,7 @@ export default function StudentList() {
           value={search}
           onChange={e => setSearch(e.target.value)}
           placeholder="Öğrenci ara..."
-          className="flex-1 bg-slate-900 border border-slate-800 text-white rounded-lg px-3 py-2.5 text-sm placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+          className="flex-1 bg-white shadow-sm border border-slate-200 text-white rounded-lg px-3 py-2.5 text-sm placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
         />
         <div className="flex gap-2">
           {['all', 'ilkokul', 'ortaokul', 'lise'].map(level => (
@@ -85,7 +85,7 @@ export default function StudentList() {
               className={`px-3 py-2 rounded-lg text-xs font-medium border transition-colors ${
                 filterLevel === level
                   ? 'bg-indigo-600 border-indigo-500 text-white'
-                  : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-600'
+                  : 'bg-white shadow-sm border-slate-200 text-slate-500 hover:border-slate-600'
               }`}
             >
               {level === 'all' ? 'Tümü' : CLASS_LEVEL_LABELS[level]}
@@ -96,12 +96,12 @@ export default function StudentList() {
 
       {/* Liste */}
       {loading ? (
-        <div className="text-center py-20 text-slate-400">Yükleniyor...</div>
+        <div className="text-center py-20 text-slate-500">Yükleniyor...</div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-20">
           <p className="text-4xl mb-4">👨‍🎓</p>
-          <p className="text-white font-medium mb-2">Öğrenci bulunamadı</p>
-          <p className="text-slate-400 text-sm">
+          <p className="text-slate-700 font-medium mb-2">Öğrenci bulunamadı</p>
+          <p className="text-slate-500 text-sm">
             {search ? 'Arama kriterini değiştirin.' : 'Henüz kayıtlı öğrenci yok.'}
           </p>
         </div>
@@ -123,7 +123,7 @@ export default function StudentList() {
             return (
               <div
                 key={student.id}
-                className="grid grid-cols-12 gap-4 items-center bg-slate-900 border border-slate-800 rounded-xl px-4 py-3.5 hover:border-slate-700 transition-colors"
+                className="grid grid-cols-12 gap-4 items-center bg-white shadow-sm border border-slate-200 rounded-xl px-4 py-3.5 hover:border-slate-200 transition-colors"
               >
                 {/* İsim */}
                 <div className="col-span-3 flex items-center gap-3">
@@ -137,13 +137,13 @@ export default function StudentList() {
 
                 {/* Seviye */}
                 <div className="col-span-2">
-                  <span className="text-xs bg-slate-800 text-slate-400 px-2 py-1 rounded-md">
+                  <span className="text-xs bg-slate-50 text-slate-500 px-2 py-1 rounded-md">
                     {CLASS_LEVEL_LABELS[student.classLevel] || '-'}
                   </span>
                 </div>
 
                 {/* Sınıf numarası */}
-                <div className="col-span-1 text-slate-400 text-sm">
+                <div className="col-span-1 text-slate-500 text-sm">
                   {student.gradeNumber ? `${student.gradeNumber}. sınıf` : '-'}
                 </div>
 
@@ -155,7 +155,7 @@ export default function StudentList() {
                 </div>
 
                 {/* Son teslim */}
-                <div className="col-span-2 text-slate-400 text-xs">
+                <div className="col-span-2 text-slate-500 text-xs">
                   {last || '—'}
                 </div>
                 
@@ -186,9 +186,9 @@ export default function StudentList() {
             { label: 'Üretim Yapan',   value: students.filter(s => submissionCount(s.id) > 0).length, color: 'text-green-400' },
             { label: 'Toplam Üretim',  value: submissions.length, color: 'text-indigo-400' },
           ].map(stat => (
-            <div key={stat.label} className="bg-slate-900 border border-slate-800 rounded-xl p-4 text-center">
+            <div key={stat.label} className="bg-white shadow-sm border border-slate-200 rounded-xl p-4 text-center">
               <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
-              <p className="text-slate-400 text-xs mt-1">{stat.label}</p>
+              <p className="text-slate-500 text-xs mt-1">{stat.label}</p>
             </div>
           ))}
         </div>

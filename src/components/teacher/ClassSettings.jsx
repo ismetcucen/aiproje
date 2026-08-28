@@ -49,7 +49,7 @@ export default function ClassSettings() {
     }
   }
 
-  if (loading) return <div className="p-10 text-slate-400">Yükleniyor...</div>
+  if (loading) return <div className="p-10 text-slate-500">Yükleniyor...</div>
 
   return (
     <div className="max-w-4xl">

@@ -82,16 +82,16 @@ export default function UserManager() {
     .filter(u => (u.fullName || '').toLowerCase().includes(search.toLowerCase()) ||
                  (u.email || '').toLowerCase().includes(search.toLowerCase()))
 
-  if (loading) return <div className="text-center py-20 text-slate-400">Yukleniyor...</div>
+  if (loading) return <div className="text-center py-20 text-slate-500">Yukleniyor...</div>
 
   return (
     <div className="max-w-7xl mx-auto pb-10">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-white text-3xl font-bold tracking-tight mb-1">Kullanıcı Yönetimi</h2>
-          <p className="text-slate-400 text-sm mt-0.5">{users.length} kayitli kullanici</p>
+          <h2 className="text-slate-800 text-3xl font-bold tracking-tight mb-1">Kullanıcı Yönetimi</h2>
+          <p className="text-slate-500 text-sm mt-0.5">{users.length} kayitli kullanici</p>
         </div>
-        <button onClick={loadUsers} className="text-slate-400 hover:text-white text-sm transition-colors">
+        <button onClick={loadUsers} className="text-slate-500 hover:text-white text-sm transition-colors">
           Yenile
         </button>
       </div>
@@ -102,7 +102,7 @@ export default function UserManager() {
           value={search}
           onChange={e => setSearch(e.target.value)}
           placeholder="Ad veya e-posta ara..."
-          className="flex-1 bg-slate-900 border border-slate-800 text-white rounded-lg px-3 py-2.5 text-sm placeholder-slate-500 focus:outline-none focus:border-red-500 transition-colors"
+          className="flex-1 bg-white shadow-sm border border-slate-200 text-white rounded-lg px-3 py-2.5 text-sm placeholder-slate-500 focus:outline-none focus:border-red-500 transition-colors"
         />
         <div className="flex gap-2">
           {['all', 'student', 'teacher', 'admin'].map(role => (
@@ -112,7 +112,7 @@ export default function UserManager() {
               className={`px-3 py-2 rounded-lg text-xs font-medium border transition-colors ${
                 filterRole === role
                   ? 'bg-red-600 border-red-500 text-white'
-                  : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-600'
+                  : 'bg-white shadow-sm border-slate-200 text-slate-500 hover:border-slate-600'
               }`}
             >
               {role === 'all' ? 'Tumu' : ROLE_LABELS[role]}
@@ -124,12 +124,12 @@ export default function UserManager() {
       {/* Liste */}
       <div className="space-y-2">
         {filtered.map(user => (
-          <div key={user.id} className="bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 hover:border-slate-700 transition-colors">
+          <div key={user.id} className="bg-white shadow-sm border border-slate-200 rounded-xl px-4 py-3 hover:border-slate-200 transition-colors">
             <div className="flex items-center gap-4">
 
               {/* Avatar */}
-              <div className="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center flex-shrink-0">
-                <span className="text-slate-300 text-sm font-semibold">
+              <div className="w-9 h-9 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center flex-shrink-0">
+                <span className="text-slate-700 text-sm font-semibold">
                   {user.fullName?.charAt(0)?.toUpperCase() || '?'}
                 </span>
               </div>
@@ -137,12 +137,12 @@ export default function UserManager() {
               {/* Bilgi */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-0.5">
-                  <p className="text-white text-sm font-medium truncate">{user.fullName || 'Isimsiz'}</p>
+                  <p className="text-slate-700 text-sm font-medium truncate">{user.fullName || 'Isimsiz'}</p>
                   <span className={`text-xs border px-1.5 py-0.5 rounded-full ${ROLE_COLORS[user.role] || ''}`}>
                     {ROLE_LABELS[user.role] || user.role}
                   </span>
                   {!user.isActive && (
-                    <span className="text-xs bg-slate-800 text-slate-500 px-1.5 py-0.5 rounded-full">
+                    <span className="text-xs bg-slate-50 text-slate-500 px-1.5 py-0.5 rounded-full">
                       Pasif
                     </span>
                   )}
@@ -159,7 +159,7 @@ export default function UserManager() {
                   value={user.role}
                   onChange={e => changeRole(user.id, e.target.value)}
                   disabled={updating === user.id}
-                  className="bg-slate-800 border border-slate-700 text-slate-300 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:border-red-500 transition-colors"
+                  className="bg-slate-50 border border-slate-200 text-slate-700 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:border-red-500 transition-colors"
                 >
                   <option value="student">Ogrenci</option>
                   <option value="teacher">Ogretmen</option>
@@ -170,7 +170,7 @@ export default function UserManager() {
                   disabled={updating === user.id}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
                     user.isActive
-                      ? 'bg-slate-800 border-slate-700 text-slate-400 hover:border-yellow-700 hover:text-yellow-400'
+                      ? 'bg-slate-50 border-slate-200 text-slate-500 hover:border-yellow-700 hover:text-yellow-400'
                       : 'bg-green-900/30 border-green-800 text-green-400 hover:bg-green-900/50'
                   }`}
                 >

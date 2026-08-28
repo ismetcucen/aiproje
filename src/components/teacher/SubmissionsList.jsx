@@ -97,20 +97,20 @@ export default function SubmissionsList() {
     filterAssignment === 'all' || s.assignmentId === filterAssignment
   )
 
-  if (loading) return <div className="text-center py-20 text-slate-400">Yukleniyor...</div>
+  if (loading) return <div className="text-center py-20 text-slate-500">Yukleniyor...</div>
 
   return (
     <div className="max-w-6xl">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-white text-xl font-semibold">Uretimler</h2>
-          <p className="text-slate-400 text-sm mt-0.5">{filtered.length} teslim</p>
+          <h2 className="text-slate-800 text-xl font-semibold">Uretimler</h2>
+          <p className="text-slate-500 text-sm mt-0.5">{filtered.length} teslim</p>
         </div>
         <div className="flex items-center gap-4">
           <button onClick={exportToExcel} className="flex items-center gap-2 bg-emerald-600/20 hover:bg-emerald-600/40 text-emerald-400 border border-emerald-600/30 px-4 py-2 rounded-xl text-sm font-bold transition-all shadow-lg shadow-emerald-900/20">
             <span>📊</span> Excel İndir
           </button>
-          <button onClick={loadData} className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-bold transition-all border border-slate-700">
+          <button onClick={loadData} className="px-4 py-2 bg-slate-50 hover:bg-slate-700 text-slate-700 rounded-xl text-sm font-bold transition-all border border-slate-200">
             Yenile
           </button>
         </div>
@@ -119,12 +119,12 @@ export default function SubmissionsList() {
       <div className="flex gap-2 mb-8 flex-wrap">
         <button onClick={() => setFilterAssignment('all')}
           className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all ${
-            filterAssignment === 'all' ? 'bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-600/20 border' : 'bg-slate-800 text-slate-400 border border-slate-700 hover:border-slate-500 hover:text-slate-200'
+            filterAssignment === 'all' ? 'bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-600/20 border' : 'bg-slate-50 text-slate-500 border border-slate-200 hover:border-slate-500 hover:text-slate-800'
           }`}>Tümü</button>
         {assignmentList.map(a => (
           <button key={a.id} onClick={() => setFilterAssignment(a.id)}
             className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all ${
-              filterAssignment === a.id ? 'bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-600/20 border' : 'bg-slate-800 text-slate-400 border border-slate-700 hover:border-slate-500 hover:text-slate-200'
+              filterAssignment === a.id ? 'bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-600/20 border' : 'bg-slate-50 text-slate-500 border border-slate-200 hover:border-slate-500 hover:text-slate-800'
             }`}>{a.title}</button>
         ))}
       </div>
@@ -132,9 +132,9 @@ export default function SubmissionsList() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <div className="lg:col-span-5 flex flex-col gap-3 max-h-[700px] overflow-y-auto custom-scrollbar pr-2">
           {filtered.length === 0 ? (
-            <div className="text-center py-20 bg-slate-900/50 border border-slate-800/50 border-dashed rounded-3xl">
+            <div className="text-center py-20 bg-white border border-slate-200/50 border-dashed rounded-3xl">
               <div className="text-4xl mb-4">📭</div>
-              <p className="text-slate-300 font-bold mb-2">Henüz teslim yok</p>
+              <p className="text-slate-700 font-bold mb-2">Henüz teslim yok</p>
               <p className="text-slate-500 text-sm">Öğrenciler görev teslim ettiğinde burada görünecek.</p>
             </div>
           ) : filtered.map(sub => {
@@ -144,7 +144,7 @@ export default function SubmissionsList() {
                 className={`w-full text-left px-5 py-4 rounded-2xl border transition-all duration-200 ${
                   selected?.id === sub.id
                     ? 'bg-indigo-900/30 border-indigo-500/50 shadow-lg shadow-indigo-900/20'
-                    : 'bg-slate-900/50 border-slate-800 hover:bg-slate-800 hover:border-slate-700'
+                    : 'bg-white border-slate-200 hover:bg-slate-50 hover:border-slate-200'
                 }`}>
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">
@@ -155,7 +155,7 @@ export default function SubmissionsList() {
                         </span>
                       </div>
                       <div className="truncate">
-                        <span className="text-slate-200 text-sm font-bold mr-2">
+                        <span className="text-slate-800 text-sm font-bold mr-2">
                           {student?.fullName || 'Bilinmeyen Öğrenci'}
                         </span>
                         <span className="text-slate-500 text-[10px] font-medium uppercase tracking-wider">
@@ -163,8 +163,8 @@ export default function SubmissionsList() {
                         </span>
                       </div>
                     </div>
-                    <p className={`text-sm font-bold truncate ${selected?.id === sub.id ? 'text-indigo-300' : 'text-slate-400'}`}>{assignments[sub.assignmentId]?.title || 'Görev bulunamadı'}</p>
-                    <p className="text-slate-400 text-xs mt-2 line-clamp-2 leading-relaxed">{sub.content}</p>
+                    <p className={`text-sm font-bold truncate ${selected?.id === sub.id ? 'text-indigo-300' : 'text-slate-500'}`}>{assignments[sub.assignmentId]?.title || 'Görev bulunamadı'}</p>
+                    <p className="text-slate-500 text-xs mt-2 line-clamp-2 leading-relaxed">{sub.content}</p>
                     <p className="text-slate-500 text-[10px] mt-2 font-medium uppercase tracking-wider">{sub.createdAt?.toDate?.()?.toLocaleDateString('tr-TR') || ''}</p>
                   </div>
                   <div className="flex flex-col items-end gap-2 flex-shrink-0">
@@ -173,7 +173,7 @@ export default function SubmissionsList() {
                         {sub.score}
                       </span>
                     ) : (
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-800 px-2 py-1 rounded-md">Puansız</span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-50 px-2 py-1 rounded-md">Puansız</span>
                     )}
                     {sub.aiUsed && <span className="text-[10px] font-bold bg-cyan-900/40 text-cyan-400 border border-cyan-800/50 px-2 py-1 rounded-md">AI DESTEKLİ</span>}
                   </div>
@@ -185,7 +185,7 @@ export default function SubmissionsList() {
 
         <div className="lg:col-span-7">
         {selected ? (
-          <div className="bg-slate-900/80 backdrop-blur-xl border border-slate-700/60 rounded-3xl p-8 shadow-2xl relative overflow-hidden h-fit sticky top-6">
+          <div className="bg-white backdrop-blur-xl border border-slate-200/60 rounded-3xl p-8 shadow-2xl relative overflow-hidden h-fit sticky top-6">
             <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none"></div>
             <div className="mb-4">
               <div className="flex items-center gap-4 mb-6 relative z-10">
@@ -195,12 +195,12 @@ export default function SubmissionsList() {
                   </span>
                 </div>
                 <div>
-                  <p className="text-white text-xl font-bold">{students[selected.userId]?.fullName || 'Bilinmeyen Öğrenci'}</p>
-                  <p className="text-slate-400 text-sm font-medium">{assignments[selected.assignmentId]?.title || ''}</p>
+                  <p className="text-slate-700 text-xl font-bold">{students[selected.userId]?.fullName || 'Bilinmeyen Öğrenci'}</p>
+                  <p className="text-slate-500 text-sm font-medium">{assignments[selected.assignmentId]?.title || ''}</p>
                 </div>
               </div>
               <div className="flex gap-2 mb-6 relative z-10">
-                <span className="text-xs font-bold uppercase tracking-wider bg-slate-800 text-slate-300 px-3 py-1.5 rounded-lg">
+                <span className="text-xs font-bold uppercase tracking-wider bg-slate-50 text-slate-700 px-3 py-1.5 rounded-lg">
                   {CONTENT_TYPE_LABELS[selected.contentType] || selected.contentType}
                 </span>
                 {selected.aiUsed && (
@@ -209,10 +209,10 @@ export default function SubmissionsList() {
                   </span>
                 )}
               </div>
-              <div className="bg-slate-950/50 border border-slate-700/50 rounded-2xl p-6 max-h-64 overflow-y-auto custom-scrollbar relative z-10 mb-8">
-                <p className="text-slate-200 text-base whitespace-pre-wrap leading-relaxed">{selected.content}</p>
+              <div className="bg-white border border-slate-200/50 rounded-2xl p-6 max-h-64 overflow-y-auto custom-scrollbar relative z-10 mb-8">
+                <p className="text-slate-800 text-base whitespace-pre-wrap leading-relaxed">{selected.content}</p>
                 {selected.files && selected.files.length > 0 && (
-                  <div className="mt-4 pt-4 border-t border-slate-800 flex flex-wrap gap-2">
+                  <div className="mt-4 pt-4 border-t border-slate-200 flex flex-wrap gap-2">
                     {selected.files.map((f, i) => (
                       <a key={i} href={f.url} target="_blank" rel="noopener noreferrer" className="bg-indigo-900/30 border border-indigo-800/50 hover:bg-indigo-900/50 text-sm px-4 py-2 rounded-xl text-indigo-300 transition-colors font-medium">
                         📎 {f.name}
@@ -223,25 +223,25 @@ export default function SubmissionsList() {
               </div>
             </div>
             
-            <div className="border-t border-slate-800/50 pt-8 space-y-6 relative z-10">
-              <h4 className="text-white text-lg font-bold">Geri Bildirim & Değerlendirme</h4>
+            <div className="border-t border-slate-200/50 pt-8 space-y-6 relative z-10">
+              <h4 className="text-slate-800 text-lg font-bold">Geri Bildirim & Değerlendirme</h4>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div className="md:col-span-1">
-                  <label className="block text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Puan (0-100)</label>
+                  <label className="block text-slate-500 text-xs font-bold uppercase tracking-wider mb-2">Puan (0-100)</label>
                   <input type="number" min={0} max={100} value={score} onChange={e => setScore(e.target.value)}
                     placeholder="100"
-                    className="w-full bg-slate-950 border border-slate-700 text-white font-bold text-lg rounded-xl px-4 py-3 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-center" />
+                    className="w-full bg-white shadow-sm border border-slate-200 text-white font-bold text-lg rounded-xl px-4 py-3 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-center" />
                 </div>
                 <div className="md:col-span-3">
-                  <label className="block text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Öğretmen Yorumu</label>
+                  <label className="block text-slate-500 text-xs font-bold uppercase tracking-wider mb-2">Öğretmen Yorumu</label>
                   <textarea value={comment} onChange={e => setComment(e.target.value)}
                     placeholder="Harika bir tasarım olmuş, tebrikler!" rows={3}
-                    className="w-full bg-slate-950 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 resize-none custom-scrollbar transition-all" />
+                    className="w-full bg-white shadow-sm border border-slate-200 text-white rounded-xl px-4 py-3 text-sm placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 resize-none custom-scrollbar transition-all" />
                 </div>
               </div>
 
               <div className="flex items-center gap-3 bg-indigo-900/20 border border-indigo-500/30 p-4 rounded-xl">
-                <input type="checkbox" id="showcase" checked={isShowcase} onChange={e => setIsShowcase(e.target.checked)} className="w-5 h-5 rounded border-indigo-500 text-indigo-600 focus:ring-indigo-500 bg-slate-950" />
+                <input type="checkbox" id="showcase" checked={isShowcase} onChange={e => setIsShowcase(e.target.checked)} className="w-5 h-5 rounded border-indigo-500 text-indigo-600 focus:ring-indigo-500 bg-white shadow-sm" />
                 <label htmlFor="showcase" className="text-indigo-200 text-sm font-bold cursor-pointer">Vitrinde Sergile (Tüm sınıf ve okul panosunda görsün)</label>
               </div>
 
@@ -255,9 +255,9 @@ export default function SubmissionsList() {
             </div>
           </div>
         ) : (
-          <div className="bg-slate-900/50 border border-slate-800 rounded-3xl p-16 text-center flex flex-col items-center justify-center h-full min-h-[500px]">
-            <div className="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center mb-6 text-4xl">📝</div>
-            <p className="text-slate-400 text-lg font-medium">Değerlendirmek için sol taraftan bir teslim seçin.</p>
+          <div className="bg-white border border-slate-200 rounded-3xl p-16 text-center flex flex-col items-center justify-center h-full min-h-[500px]">
+            <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-6 text-4xl">📝</div>
+            <p className="text-slate-500 text-lg font-medium">Değerlendirmek için sol taraftan bir teslim seçin.</p>
           </div>
         )}
         </div>

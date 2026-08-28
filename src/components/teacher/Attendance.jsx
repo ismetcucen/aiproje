@@ -85,50 +85,50 @@ export default function Attendance() {
     XLSX.writeFile(wb, `Yoklama_${classObj.grade}_${classObj.section}_${startOfWeek.toLocaleDateString('tr-TR')}.xlsx`)
   }
 
-  if (loading) return <div className="text-center py-20 text-slate-400">Yükleniyor...</div>
+  if (loading) return <div className="text-center py-20 text-slate-500">Yükleniyor...</div>
 
   return (
     <div className="max-w-4xl">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-white text-xl font-semibold">Yoklama Takibi</h2>
-          <p className="text-slate-400 text-sm mt-0.5">Sisteme giriş yapan öğrencilerin otomatik yoklaması.</p>
+          <h2 className="text-slate-800 text-xl font-semibold">Yoklama Takibi</h2>
+          <p className="text-slate-500 text-sm mt-0.5">Sisteme giriş yapan öğrencilerin otomatik yoklaması.</p>
         </div>
         <button onClick={exportToExcel} className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
           Excel İndir
         </button>
       </div>
 
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 mb-6 flex flex-wrap gap-4 items-center justify-between">
+      <div className="bg-white shadow-sm border border-slate-200 rounded-xl p-5 mb-6 flex flex-wrap gap-4 items-center justify-between">
         <div>
-          <label className="block text-slate-400 text-xs mb-1">Sınıf Seçin</label>
+          <label className="block text-slate-500 text-xs mb-1">Sınıf Seçin</label>
           <select value={selectedClass} onChange={e => setSelectedClass(e.target.value)}
-            className="bg-slate-800 border border-slate-700 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500">
+            className="bg-slate-50 border border-slate-200 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500">
             {classes.map(c => (
               <option key={c.id} value={c.id}>{c.name}</option>
             ))}
           </select>
         </div>
 
-        <div className="flex items-center gap-4 bg-slate-800 p-2 rounded-lg border border-slate-700">
-          <button onClick={handlePrevWeek} className="text-slate-400 hover:text-white px-2">◀</button>
+        <div className="flex items-center gap-4 bg-slate-50 p-2 rounded-lg border border-slate-200">
+          <button onClick={handlePrevWeek} className="text-slate-500 hover:text-white px-2">◀</button>
           <div className="text-center min-w-[150px]">
-            <p className="text-white text-sm font-medium">
+            <p className="text-slate-700 text-sm font-medium">
               {startOfWeek.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })} - {endOfWeek.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}
             </p>
             <p className="text-slate-500 text-xs">Pzt - Paz</p>
           </div>
-          <button onClick={handleNextWeek} className="text-slate-400 hover:text-white px-2">▶</button>
+          <button onClick={handleNextWeek} className="text-slate-500 hover:text-white px-2">▶</button>
         </div>
       </div>
 
-      <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+      <div className="bg-white shadow-sm border border-slate-200 rounded-xl overflow-hidden">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-slate-800/50 border-b border-slate-800">
-              <th className="p-4 text-slate-400 text-sm font-medium">Öğrenci Adı</th>
-              <th className="p-4 text-slate-400 text-sm font-medium">Durum</th>
-              <th className="p-4 text-slate-400 text-sm font-medium text-right">Detay (Giriş Tarihleri)</th>
+            <tr className="bg-slate-50/50 border-b border-slate-200">
+              <th className="p-4 text-slate-500 text-sm font-medium">Öğrenci Adı</th>
+              <th className="p-4 text-slate-500 text-sm font-medium">Durum</th>
+              <th className="p-4 text-slate-500 text-sm font-medium text-right">Detay (Giriş Tarihleri)</th>
             </tr>
           </thead>
           <tbody>
@@ -138,10 +138,10 @@ export default function Attendance() {
               classStudents.map(student => {
                 const attended = didAttendThisWeek(student)
                 return (
-                  <tr key={student.id} className="border-b border-slate-800/50 hover:bg-slate-800/20 transition-colors">
+                  <tr key={student.id} className="border-b border-slate-200/50 hover:bg-slate-50/20 transition-colors">
                     <td className="p-4 text-white text-sm">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 font-bold text-xs">
+                        <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-700 font-bold text-xs">
                           {student.fullName.charAt(0)}
                         </div>
                         {student.fullName}
