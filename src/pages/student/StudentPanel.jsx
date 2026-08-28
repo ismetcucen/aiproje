@@ -21,6 +21,9 @@ const MENU = [
   { id: 'assignments', label: 'Görevler',  icon: '📋' },
   { id: 'studio',      label: 'Üret',      icon: '✏️' },
   { id: 'portfolio',   label: 'Portfolyo', icon: '🗂️' },
+  { id: 'leaderboard', label: 'Sıralama', icon: '🏆' },
+  { id: 'showcase', label: 'Vitrin', icon: '🌟' },
+  { id: 'ai', label: 'OHEP Zeka', icon: '🤖' },
 ]
 
 export default function StudentPanel() {
