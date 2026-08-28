@@ -176,6 +176,19 @@ export default function UserManager() {
                 >
                   {updating === user.id ? '...' : user.isActive ? 'Deaktif Et' : 'Aktif Et'}
                 </button>
+                {user.role === 'student' && (
+                  <button
+                    onClick={() => {
+                      const link = window.location.origin + '/p/' + user.id;
+                      navigator.clipboard.writeText(link);
+                      alert('Veli linki kopyalandı!\n' + link);
+                    }}
+                    className="bg-indigo-600/20 text-indigo-600 hover:bg-indigo-600 hover:text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-colors"
+                    title="Veli Portfolyo Linkini Kopyala"
+                  >
+                    🔗 Veli Linki
+                  </button>
+                )}
                 <button
                   onClick={() => handleDeleteUser(user.id)}
                   disabled={updating === user.id}
