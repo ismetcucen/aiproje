@@ -714,12 +714,12 @@ export async function awardDojoPoints(studentId, points, reason) {
 
 // --- ROBOT ANNOUNCEMENTS ---
 export const sendRobotAnnouncement = async (message) => {
-  const docRef = doc(db, 'system', 'robot_announcement')
+  const docRef = doc(db, 'classes', 'GLOBAL_ROBOT_ANNOUNCEMENT')
   await setDoc(docRef, { message, timestamp: Date.now() })
 }
 
 export const listenToRobotAnnouncement = (callback) => {
-  return onSnapshot(doc(db, 'system', 'robot_announcement'), (docSnap) => {
+  return onSnapshot(doc(db, 'classes', 'GLOBAL_ROBOT_ANNOUNCEMENT'), (docSnap) => {
     if (docSnap.exists()) {
       callback(docSnap.data())
     }
