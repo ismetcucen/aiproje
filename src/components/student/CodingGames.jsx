@@ -72,6 +72,14 @@ const GAMES = [
     url: 'https://arcade.makecode.com/',
     icon: '👾',
     external: true
+  },
+  {
+    id: 'worldguessr',
+    title: 'WorldGuessr',
+    desc: 'Dünyanın neresindesin? Sokak görünümünden bulunduğun yeri tahmin et!',
+    url: 'https://www.worldguessr.com/',
+    icon: '🌍',
+    external: false
   }
 ]
 
