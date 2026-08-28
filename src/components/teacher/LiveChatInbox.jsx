@@ -95,7 +95,7 @@ export default function LiveChatInbox() {
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between items-start mb-1">
                     <h4 className="font-bold text-slate-800 text-sm truncate">{room.studentName}</h4>
-                    <span className="text-[10px] text-slate-400 whitespace-nowrap">{room.time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                    <span className="text-[10px] text-slate-400 whitespace-nowrap">{room.time.toLocaleString('tr-TR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>
                   </div>
                   <p className="text-xs text-slate-500 truncate">{room.latestMessage}</p>
                 </div>
@@ -128,7 +128,7 @@ export default function LiveChatInbox() {
                       {!isMe && <span className="block text-[10px] font-bold text-indigo-500 mb-1">{msg.senderName}</span>}
                       <p className="leading-relaxed">{msg.text}</p>
                       <span className={`block text-[9px] mt-1 text-right ${isMe ? 'text-indigo-200' : 'text-slate-400'}`}>
-                        {msg.createdAt?.toDate ? msg.createdAt.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '...'}
+                        {msg.createdAt?.toDate ? msg.createdAt.toDate().toLocaleString('tr-TR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '...'}
                       </span>
                     </div>
                   </div>

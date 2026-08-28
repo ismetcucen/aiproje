@@ -69,7 +69,7 @@ export default function StudentLiveChat() {
                   <div className={`px-4 py-2 text-sm shadow-sm ${isMe ? 'bg-indigo-600 text-white rounded-2xl rounded-tr-sm' : 'bg-white border border-slate-200 text-slate-700 rounded-2xl rounded-tl-sm'}`}>
                     <p className="leading-relaxed">{msg.text}</p>
                     <span className={`block text-[9px] mt-1 text-right ${isMe ? 'text-indigo-200' : 'text-slate-400'}`}>
-                      {msg.createdAt?.toDate ? msg.createdAt.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '...'}
+                      {msg.createdAt?.toDate ? msg.createdAt.toDate().toLocaleString('tr-TR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '...'}
                     </span>
                   </div>
                 </div>
