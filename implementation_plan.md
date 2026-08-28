@@ -1,36 +1,30 @@
-# Canlı Sınıf (Nearpod Tarzı Etkileşimli Tahta)
+# OHEP Dojo (Sınıf Yıldızları - Puanlama Sistemi)
 
-Bu plan, öğretmenlerin tüm öğrencilerin ekranını anlık olarak kontrol edebildiği, slayt yansıtabildiği ve kilitli sorular sorabildiği "Canlı Sınıf" modülünü açıklar.
-
-## User Review Required
-
-- **Görsel Boyutu:** Veritabanını yormamak adına, öğretmenin yükleyeceği görseller otomatik olarak sıkıştırılacaktır (Max ~200KB).
-- **Zorunlu Soru Kilidi:** Öğretmen zorunlu soru gönderdiğinde, öğrenci uygulamanın neresinde olursa olsun (oyun oynuyor bile olsa) ekranı kilitlenecek ve cevap verene kadar hiçbir yere tıklayamayacaktır.
+Bu plan, öğretmenlerin ilkokul ve ortaokul (3,4,5,6,7) öğrencilerine anlık rozet ve puan gönderebildiği oyunlaştırma modülünü (ClassDojo benzeri) içerir.
 
 ## Proposed Changes
 
 ### `src/firebase/schema.js`
-- **[MODIFY] `schema.js`**: `live_sessions` ve `live_answers` koleksiyonları için okuma/yazma ve dinleme fonksiyonları eklenecek.
-  - `startLiveSession`, `updateLiveSlide`, `askLiveQuestion`, `submitLiveAnswer`, `endLiveSession` vb.
-  
-### `firestore/firestore.rules`
-- **[MODIFY] `firestore.rules`**: `live_sessions` ve `live_answers` koleksiyonları için gerekli güvenlik kuralları eklenecek (Öğrenci okuyabilir, öğretmen/admin yazabilir).
+- **[MODIFY]**: `awardDojoPoints(studentId, points, reason)` fonksiyonu eklenecek.
+- Bu fonksiyon öğrencinin profilindeki `dojoPoints` değerini artıracak ve bildirimi tetiklemek için `lastDojoAward` adında bir obje (puan, sebep, timestamp) güncelleyecek.
 
-### `src/components/teacher/LiveClassControl.jsx`
-- **[NEW] `LiveClassControl.jsx`**: Öğretmenin (veya adminin) canlı sınıfı başlattığı, görsel yüklediği (base64 sıkıştırılmış), soru sorduğu ve gelen cevapları anlık gördüğü kontrol masası.
+### `src/components/teacher/ClassDojoBoard.jsx`
+- **[NEW]**: Öğretmen ve Admin paneline eklenecek yeni kontrol arayüzü.
+- Seçilen sınıfın (3-7 arası) tüm öğrencilerini Avatar ve isimleriyle kartlar halinde listeleyecek.
+- Kartın üzerine tıklandığında "+1 Harika Fikir", "+2 Liderlik" gibi hazır rozet butonları çıkacak.
 
-### `src/components/student/LiveSessionLocker.jsx`
-- **[NEW] `LiveSessionLocker.jsx`**: Öğrenci ekranında sürekli arka planda çalışan dinleyici (Listener). Eğer aktif bir zorunlu soru varsa, tüm ekranı kaplayan ve sadece cevap yazıldığında kapanan bir tam ekran kilit arayüzü çıkarır.
-
-### `src/pages/teacher/TeacherPanel.jsx` & `src/pages/admin/AdminPanel.jsx`
-- **[MODIFY]**: Menülere "Canlı Sınıf" (Live Class) sekmesi eklenecek ve `LiveClassControl` bileşenini render edecek.
+### `src/components/student/DojoNotificationListener.jsx`
+- **[NEW]**: Öğrenci ekranında arka planda çalışan dinleyici.
+- Kendi profilindeki `lastDojoAward` değiştiği an (yeni bir rozet geldiğinde) ekranın ortasında kocaman bir görsel, havai fişek animasyonu ve "Öğretmeninden +X Puan Kazandın: [Sebep]" yazısı çıkaracak.
 
 ### `src/pages/student/StudentPanel.jsx`
-- **[MODIFY]**: En dış kapsayıcıya `<LiveSessionLocker />` eklenecek, böylece öğrenci hangi sekmede olursa olsun öğretmenin komutu anında ekranını kilitleyebilecek.
+- **[MODIFY]**: Sol menüye öğrencinin güncel yıldız puanı eklenecek (Örn: ⭐️ 45).
+- Bileşenin en altına `<DojoNotificationListener />` eklenecek.
+
+### `src/pages/teacher/TeacherPanel.jsx` & `src/pages/admin/AdminPanel.jsx`
+- **[MODIFY]**: Sol menüye "🌟 Sınıf Yıldızları" sekmesi eklenecek. Tıklandığında `ClassDojoBoard` açılacak.
 
 ## Verification Plan
-
-### Manual Verification
-1. Öğretmen hesabından "Canlı Sınıf" açılacak, bir resim ve soru gönderilecek.
-2. Farklı bir tarayıcıda öğrenci hesabıyla giriş yapılacak. Öğrencinin o an ekranının kilitlenip kilitlenmediği test edilecek.
-3. Öğrenci cevap verdikten sonra kilidin kalktığı ve cevabın anında öğretmen ekranına düştüğü doğrulanacak.
+1. Admin hesabından 5. sınıf seçilerek bir öğrenciye "+2 Harika Fikir" rozeti gönderilecek.
+2. Öğrenci panelinde anında ekranda animasyonla rozetin belirdiği test edilecek.
+3. Sol menüde öğrencinin yıldız sayısının arttığı doğrulanacak.

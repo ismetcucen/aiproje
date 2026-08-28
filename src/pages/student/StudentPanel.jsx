@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import LiveSessionLocker from '../../components/student/LiveSessionLocker'
+import DojoNotificationListener from '../../components/student/DojoNotificationListener'
 import AvatarCreatorModal from '../../components/student/AvatarCreatorModal'
 import NotificationBell from '../../components/NotificationBell'
 import { logAttendance } from '../../firebase/schema'
@@ -65,6 +66,7 @@ export default function StudentPanel() {
   return (
     <>
       <LiveSessionLocker />
+      <DojoNotificationListener />
     <div className="min-h-screen bg-[#f4f7fc] flex">
 
       {/* Sol Menü */}
@@ -115,6 +117,11 @@ export default function StudentPanel() {
               </button>
               <div>
             <p className="text-white text-sm font-bold truncate">{profile?.fullName}</p>
+              {(profile?.gradeNumber && ['3','4','5','6','7'].includes(String(profile.gradeNumber))) && (
+                <div className="flex items-center gap-1 mt-0.5 bg-yellow-500/20 text-yellow-300 text-[10px] px-2 py-0.5 rounded-full border border-yellow-500/30 w-max font-bold">
+                  <span>⭐️</span> {profile?.dojoPoints || 0} Puan
+                </div>
+              )}
             <div className="flex items-center gap-2 mt-1">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
               <p className="text-indigo-200 text-xs font-medium uppercase tracking-wider">

@@ -1,4 +1,4 @@
-import { doc, collection, addDoc, setDoc, getDoc, getDocs, updateDoc, query, where, orderBy, serverTimestamp, Timestamp, writeBatch, limit, deleteDoc, onSnapshot } from 'firebase/firestore'
+import { doc, collection, addDoc, setDoc, getDoc, getDocs, updateDoc, query, where, orderBy, serverTimestamp, Timestamp, writeBatch, limit, deleteDoc, onSnapshot, increment } from 'firebase/firestore'
 import { db, storage } from './config'
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import { generateCurriculumList } from '../data/defaultCurriculum'
@@ -692,5 +692,21 @@ export function listenToLiveAnswers(sessionId, questionId, callback) {
   );
   return onSnapshot(q, (snap) => {
     callback(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+  });
+}
+
+
+// ─── OHEP DOJO (SINIF YILDIZLARI) ────────────────────────────────
+
+export async function awardDojoPoints(studentId, points, reason) {
+  const userRef = doc(db, 'users', studentId);
+  await updateDoc(userRef, {
+    dojoPoints: increment(points),
+    lastDojoAward: {
+      id: Date.now().toString(),
+      points: points,
+      reason: reason,
+      timestamp: serverTimestamp()
+    }
   });
 }

@@ -16,6 +16,7 @@ import Stats from '../../components/admin/Stats'
 import ClassManager from '../../components/admin/ClassManager'
 import CurriculumEditor from '../../components/admin/CurriculumEditor'
 import ClassSettings from '../../components/teacher/ClassSettings'
+import ClassDojoBoard from '../../components/teacher/ClassDojoBoard'
 import LiveClassControl from '../../components/teacher/LiveClassControl'
 import Attendance from '../../components/teacher/Attendance'
 
@@ -36,6 +37,7 @@ const MENU = [
   { id: 'ailab', label: 'Lise AI Lab', icon: '🧠' },
   { id: 'aiedu', label: 'Eğitimde YZ', icon: '🏫' },
   { id: 'live',       label: 'Canlı Sınıf',  icon: '📡' },
+  { id: 'dojo',       label: 'Sınıf Yıldızları', icon: '🌟' },
   { id: 'settings',   label: 'Ayarlar',      icon: '⚙️' },
 ]
 
@@ -109,6 +111,7 @@ export default function AdminPanel() {
           {active === 'aiedu'       && <AIEducationTools />}
           {active === 'settings'   && <ClassSettings />}
           {active === 'live'       && <LiveClassControl />}
+          {active === 'dojo'       && <ClassDojoBoard />}
         </div>
       </main>
     </div>
