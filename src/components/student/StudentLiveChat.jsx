@@ -59,7 +59,7 @@ export default function StudentLiveChat() {
           </div>
           
           <div ref={chatRef} className="flex-1 p-4 bg-[#f0f2f5] overflow-y-auto flex flex-col gap-3">
-            <div className="text-center text-xs text-slate-400 mb-4 bg-slate-200/50 py-1 px-3 rounded-full self-center">
+            <div className="text-center text-xs text-slate-500 mb-4 bg-slate-200/50 py-1 px-3 rounded-full self-center">
               Öğretmenine aklına takılanları sorabilirsin.
             </div>
             {messages.map((msg, idx) => {
@@ -68,7 +68,7 @@ export default function StudentLiveChat() {
                 <div key={idx} className={`flex max-w-[85%] ${isMe ? 'self-end' : 'self-start'}`}>
                   <div className={`px-4 py-2 text-sm shadow-sm ${isMe ? 'bg-indigo-600 text-white rounded-2xl rounded-tr-sm' : 'bg-white border border-slate-200 text-slate-700 rounded-2xl rounded-tl-sm'}`}>
                     <p className="leading-relaxed">{msg.text}</p>
-                    <span className={`block text-[9px] mt-1 text-right ${isMe ? 'text-indigo-200' : 'text-slate-400'}`}>
+                    <span className={`block text-[9px] mt-1 text-right ${isMe ? 'text-indigo-200' : 'text-slate-500'}`}>
                       {msg.createdAt?.toDate ? msg.createdAt.toDate().toLocaleString('tr-TR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '...'}
                     </span>
                   </div>

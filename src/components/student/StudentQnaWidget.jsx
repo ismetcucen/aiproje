@@ -66,9 +66,9 @@ export default function StudentQnaWidget({ teacherId }) {
           
           <div className="flex-1 bg-slate-50 p-4 overflow-y-auto custom-scrollbar flex flex-col-reverse gap-4">
             {loading ? (
-              <div className="text-center text-slate-400 text-sm py-4">Yükleniyor...</div>
+              <div className="text-center text-slate-500 text-sm py-4">Yükleniyor...</div>
             ) : qnaHistory.length === 0 ? (
-              <div className="text-center text-slate-400 text-sm py-10 flex flex-col items-center gap-2">
+              <div className="text-center text-slate-500 text-sm py-10 flex flex-col items-center gap-2">
                 <span className="text-4xl">👋</span>
                 <p>Merhaba! Anlamadığın bir yer varsa veya projende yardıma ihtiyacın varsa çekinmeden sorabilirsin.</p>
               </div>
@@ -81,11 +81,11 @@ export default function StudentQnaWidget({ teacherId }) {
                     </div>
                     {q.isAnswered ? (
                       <div className="self-start bg-white border border-slate-200 text-slate-700 rounded-2xl rounded-tl-sm px-4 py-2 max-w-[85%] shadow-sm text-sm">
-                        <span className="text-[10px] font-bold text-slate-400 block mb-1">Öğretmen Yanıtı:</span>
+                        <span className="text-[10px] font-bold text-slate-500 block mb-1">Öğretmen Yanıtı:</span>
                         {q.answer}
                       </div>
                     ) : (
-                      <div className="self-start text-[10px] text-slate-400 italic px-2">
+                      <div className="self-start text-[10px] text-slate-500 italic px-2">
                         Öğretmen yanıtı bekleniyor...
                       </div>
                     )}
@@ -116,7 +116,7 @@ export default function StudentQnaWidget({ teacherId }) {
           className="w-14 h-14 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform hover:shadow-indigo-500/50 relative group"
         >
           <span className="text-2xl">💬</span>
-          <span className="absolute -top-10 right-0 bg-slate-800 text-white text-xs font-bold px-3 py-1.5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+          <span className="absolute -top-10 right-0 bg-slate-50 text-white text-xs font-bold px-3 py-1.5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
             Soru Sor
           </span>
         </button>

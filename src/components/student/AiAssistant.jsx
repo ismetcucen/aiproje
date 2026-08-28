@@ -100,10 +100,10 @@ Amacın öğrencinin kendi kendine öğrenmesini sağlamak. Anlaşılır, cesare
 
   if (!apiKey) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center p-8 text-center h-[500px] bg-slate-900 border border-slate-700 rounded-3xl m-4 md:m-8">
+      <div className="flex-1 flex flex-col items-center justify-center p-8 text-center h-[500px] bg-white shadow-sm border border-slate-200 rounded-3xl m-4 md:m-8">
         <div className="text-6xl mb-4">⚠️</div>
         <h2 className="text-xl font-bold text-white mb-2">API Anahtarı Eksik</h2>
-        <p className="text-slate-400 max-w-md">
+        <p className="text-slate-500 max-w-md">
           Yapay zeka asistanının çalışması için sistem yöneticinizin bir Gemini API anahtarı eklemesi gerekiyor. (<code>.env</code> dosyasına <code>VITE_GEMINI_API_KEY</code> eklenmelidir)
         </p>
       </div>
@@ -118,7 +118,7 @@ Amacın öğrencinin kendi kendine öğrenmesini sağlamak. Anlaşılır, cesare
           🤖
         </div>
         <div>
-          <h2 className="text-white font-bold text-lg">OHEP AI</h2>
+          <h2 className="text-slate-800 font-bold text-lg">OHEP AI</h2>
           <p className="text-blue-100 text-xs font-medium">Bilişim ve Robotik Öğretmeni</p>
         </div>
       </div>
@@ -143,7 +143,7 @@ Amacın öğrencinin kendi kendine öğrenmesini sağlamak. Anlaşılır, cesare
         {loading && (
           <div className="flex gap-3 max-w-[85%] self-start">
             <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm bg-blue-600 text-white animate-pulse">🤖</div>
-            <div className="px-5 py-3 rounded-2xl bg-white border border-slate-200 text-slate-400 rounded-tl-sm flex gap-1 items-center">
+            <div className="px-5 py-3 rounded-2xl bg-white border border-slate-200 text-slate-500 rounded-tl-sm flex gap-1 items-center">
               <span className="w-2 h-2 bg-slate-300 rounded-full animate-bounce"></span>
               <span className="w-2 h-2 bg-slate-300 rounded-full animate-bounce delay-75"></span>
               <span className="w-2 h-2 bg-slate-300 rounded-full animate-bounce delay-150"></span>
@@ -163,7 +163,7 @@ Amacın öğrencinin kendi kendine öğrenmesini sağlamak. Anlaşılır, cesare
         <div className="px-4 py-2 border-t border-slate-100 flex items-center gap-2">
           <div className="relative">
             <img src={imagePreview} alt="Preview" className="h-16 w-16 object-cover rounded-xl shadow-sm border border-slate-200" />
-            <button type="button" onClick={() => {setImageFile(null); setImagePreview(null); if(fileInputRef.current) fileInputRef.current.value='';}} className="absolute -top-2 -right-2 bg-slate-800 text-white w-6 h-6 rounded-full text-xs flex items-center justify-center hover:bg-red-500 shadow-md">✕</button>
+            <button type="button" onClick={() => {setImageFile(null); setImagePreview(null); if(fileInputRef.current) fileInputRef.current.value='';}} className="absolute -top-2 -right-2 bg-slate-50 text-white w-6 h-6 rounded-full text-xs flex items-center justify-center hover:bg-red-500 shadow-md">✕</button>
           </div>
           <span className="text-xs text-slate-500 font-medium ml-2">Görsel eklendi, mesajınızı yazabilirsiniz...</span>
         </div>
@@ -203,7 +203,7 @@ Amacın öğrencinin kendi kendine öğrenmesini sağlamak. Anlaşılır, cesare
             ➤
           </button>
         </form>
-        <p className="text-center text-[10px] text-slate-400 mt-2">
+        <p className="text-center text-[10px] text-slate-500 mt-2">
           Yapay zeka asistanı size doğrudan kodu vermek yerine ipucu vererek öğrenmenizi destekler.
         </p>
       </div>

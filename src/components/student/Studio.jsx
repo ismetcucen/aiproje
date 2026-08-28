@@ -76,7 +76,7 @@ export default function Studio({ assignment, onBack }) {
   return (
     <div className="max-w-4xl">
       <div className="flex items-center gap-3 mb-6">
-        <button onClick={onBack} className="text-slate-400 hover:text-slate-600 transition-colors text-sm flex items-center gap-1">
+        <button onClick={onBack} className="text-slate-500 hover:text-slate-600 transition-colors text-sm flex items-center gap-1">
           ← Geri
         </button>
         <div className="w-px h-4 bg-slate-300" />
@@ -160,7 +160,7 @@ export default function Studio({ assignment, onBack }) {
             {uploading ? `Yükleniyor... %${Math.round(progress)}` : '📁 Dosya / Görsel Seç'}
             <input type="file" className="hidden" onChange={handleFileSelect} disabled={uploading} />
           </label>
-          <span className="text-slate-400 text-xs">Maks 10MB. (Resim, Ses, PDF)</span>
+          <span className="text-slate-500 text-xs">Maks 10MB. (Resim, Ses, PDF)</span>
         </div>
       </div>
 
@@ -175,7 +175,7 @@ export default function Studio({ assignment, onBack }) {
 
         <div className="flex items-center justify-between mt-3">
           <div className="flex items-center gap-4">
-            <span className="text-slate-400 text-xs">{content.length} karakter</span>
+            <span className="text-slate-500 text-xs">{content.length} karakter</span>
             <label className="flex items-center gap-2 cursor-pointer">
               <input type="checkbox" checked={aiUsed} onChange={e => setAiUsed(e.target.checked)}
                 className="w-4 h-4 accent-blue-600" />

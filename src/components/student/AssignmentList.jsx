@@ -44,7 +44,7 @@ export default function AssignmentList({ onStart }) {
     return 'submitted'
   }
 
-  if (loading) return <div className="text-center py-20 text-slate-400">Yükleniyor...</div>
+  if (loading) return <div className="text-center py-20 text-slate-500">Yükleniyor...</div>
   if (error)   return <div className="text-center py-20 text-red-500">{error}</div>
 
   // profile.gradeNumber might be "3", "4" etc.
@@ -149,11 +149,11 @@ export default function AssignmentList({ onStart }) {
               <div className="flex-1">
                 <div className="flex items-center gap-2">
                   <h3 className="text-slate-700 font-semibold">{week.title}</h3>
-                  <span className="text-slate-400 text-xs font-medium">({week.dateRange})</span>
+                  <span className="text-slate-500 text-xs font-medium">({week.dateRange})</span>
                 </div>
                 <p className="text-slate-500 text-sm line-clamp-1">{week.description}</p>
               </div>
-              <div className="text-slate-400 text-xs font-medium px-3 py-1 bg-slate-50 rounded-full border border-slate-100">
+              <div className="text-slate-500 text-xs font-medium px-3 py-1 bg-slate-50 rounded-full border border-slate-100">
                 Kilitli
               </div>
             </div>
