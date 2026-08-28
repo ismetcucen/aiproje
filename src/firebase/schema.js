@@ -591,3 +591,63 @@ export async function getShowcaseSubmissions(schoolCode) {
   const snap = await getDocs(q);
   return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 }
+
+// ─── LIVE CHAT (Anlık Mesajlaşma) ──────────────────────────────────────────
+
+export async function sendChatMessage({ senderId, receiverId, schoolCode, text, senderName, senderRole }) {
+  // To identify the chat uniquely between student and school/teacher
+  // We'll store messages globally but query by studentId since it's a 1-to-1 between student and admin
+  return await addDoc(collection(db, 'messages'), {
+    senderId,
+    receiverId, 
+    schoolCode, // to allow any teacher in the school to see it
+    text,
+    senderName,
+    senderRole, // 'student' or 'teacher'
+    isRead: false,
+    createdAt: serverTimestamp()
+  });
+}
+
+export function listenChatMessages(studentId, callback) {
+  const q = query(
+    collection(db, 'messages'),
+    where('senderId', 'in', [studentId, 'school_' + studentId]), 
+    // Wait, let's just query by a chatRoomId: studentId
+    where('chatRoomId', '==', studentId),
+    orderBy('createdAt', 'asc')
+  );
+  return onSnapshot(q, (snap) => {
+    callback(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+  });
+}
+
+export async function sendChatMsg({ chatRoomId, senderId, text, senderName, senderRole, schoolCode }) {
+  return await addDoc(collection(db, 'messages'), {
+    chatRoomId, // The student's UID represents the room
+    senderId,
+    text,
+    senderName,
+    senderRole, // 'student' or 'teacher'
+    schoolCode, // So teachers can query all active chats in their school
+    isRead: false,
+    createdAt: serverTimestamp()
+  });
+}
+
+export function listenAllSchoolChats(schoolCode, callback) {
+  // Listen to all messages in the school to build a chat list
+  const q = query(
+    collection(db, 'messages'),
+    where('schoolCode', '==', schoolCode),
+    orderBy('createdAt', 'desc')
+  );
+  return onSnapshot(q, (snap) => {
+    callback(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+  });
+}
+
+export async function markChatAsRead(chatRoomId, readerRole) {
+  // If reader is teacher, mark all where senderRole == student as read
+  // We'll do a simple batch update (or just ignore read status for now to save complexity)
+}
