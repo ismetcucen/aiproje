@@ -6,10 +6,10 @@ const GAMES = [
   {
     id: 'vexcodevr',
     title: 'VEXcode VR (Sanal Robotik)',
-    desc: 'Fiziksel bir robota ihtiyacın yok! Sanal robotunu 3 boyutlu simülatörde kodlayarak görevleri tamamla.',
+    desc: 'Fiziksel bir robota ihtiyacın yok! Sanal robotunu 3 boyutlu simülatörde kodlayarak görevleri tamamla. (Yeni sekmede açılır)',
     url: 'https://vr.vex.com/',
     icon: '🏎️',
-    external: false
+    external: true
   },
   {
     id: 'codecombat',
