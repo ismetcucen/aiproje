@@ -23,7 +23,7 @@ const MENU = [
   { id: 'portfolio',   label: 'Portfolyo', icon: '🗂️' },
   { id: 'leaderboard', label: 'Sıralama', icon: '🏆' },
   { id: 'showcase', label: 'Vitrin', icon: '🌟' },
-  { id: 'ai', label: 'OHEP Zeka', icon: '🤖' },
+  
 ]
 
 export default function StudentPanel() {
@@ -42,7 +42,7 @@ export default function StudentPanel() {
     setShowRules(false)
   }
   const [selectedAssignment, setSelectedAssignment] = useState(null)
-  const [settings, setSettings] = useState({ codingModuleEnabled: false })
+  const [settings, setSettings] = useState({ codingModuleEnabled: false, aiAssistantEnabled: false })
 
   useEffect(() => {
     if (user?.uid) {
@@ -79,7 +79,8 @@ export default function StudentPanel() {
             ...(settings.codingModuleEnabled ? [
               { id: "games", label: "Oyunlar", icon: "🎮" }, 
               { id: "tools", label: "Araçlar", icon: "🛠️" },
-              ...(profile?.gradeNumber >= 9 ? [{ id: "ailab", label: "Lise Yapay Zeka", icon: "🧠" }] : [])
+              ...(profile?.gradeNumber >= 9 ? [{ id: "ailab", label: "Lise Yapay Zeka", icon: "🧠" }] : []),
+              ...(settings.aiAssistantEnabled ? [{ id: 'ai', label: 'OHEP Zeka', icon: '🤖' }] : [])
             ] : [])
           ].map(item => (
             <button key={item.id} onClick={() => setActive(item.id)}

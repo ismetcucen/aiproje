@@ -6,7 +6,7 @@ export default function ClassSettings() {
   const { profile } = useAuth()
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
-  const [settings, setSettings] = useState({ codingModuleEnabled: false })
+  const [settings, setSettings] = useState({ codingModuleEnabled: false, aiAssistantEnabled: false })
 
   useEffect(() => {
     loadSettings()
@@ -21,6 +21,18 @@ export default function ClassSettings() {
     } finally {
       setLoading(false)
     }
+  }
+
+  async function toggleAiAssistant() {
+    setSaving(true)
+    try {
+      const newVal = !settings.aiAssistantEnabled
+      await updateSchoolSettings("global_school", { aiAssistantEnabled: newVal })
+      setSettings(prev => ({ ...prev, aiAssistantEnabled: newVal }))
+    } catch (err) {
+      console.error(err)
+    }
+    setSaving(false)
   }
 
   async function toggleCodingModule() {
