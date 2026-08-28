@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import NotificationBell from '../../components/NotificationBell'
+import RobotAnnouncer from '../../components/teacher/RobotAnnouncer'
 import CodingGames from '../../components/student/CodingGames'
 import LessonTools from '../../components/student/LessonTools'
 import HighSchoolAILab from '../../components/student/HighSchoolAILab'
