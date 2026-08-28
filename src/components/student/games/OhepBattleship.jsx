@@ -9,7 +9,7 @@ export default function OhepBattleship() {
   const [message, setMessage] = useState('')
 
   const GRID_SIZE = 10
-  const NUM_SHIPS = 5
+  const SHIP_SIZES = [3, 2, 2, 1, 1] // 1 tane 3'lük, 2 tane 2'lik, 2 tane 1'lik
 
   useEffect(() => {
     initGame()
@@ -23,11 +23,32 @@ export default function OhepBattleship() {
     setErrorMsg('')
     
     const newShips = []
-    while(newShips.length < NUM_SHIPS) {
-      const x = Math.floor(Math.random() * GRID_SIZE) + 1
-      const y = Math.floor(Math.random() * GRID_SIZE) + 1
-      if (!newShips.find(s => s.x === x && s.y === y)) {
-        newShips.push({ x, y, hit: false })
+    let shipId = 1
+    for (let size of SHIP_SIZES) {
+      let placed = false
+      let attempts = 0
+      while (!placed && attempts < 100) {
+        attempts++
+        const isVertical = Math.random() < 0.5
+        const startX = Math.floor(Math.random() * GRID_SIZE) + 1
+        const startY = Math.floor(Math.random() * GRID_SIZE) + 1
+
+        let canPlace = true
+        const currentShipCoords = []
+        for (let i = 0; i < size; i++) {
+          const cx = isVertical ? startX : startX + i
+          const cy = isVertical ? startY + i : startY
+          
+          if (cx > 10 || cy > 10) { canPlace = false; break }
+          if (newShips.find(s => s.x === cx && s.y === cy)) { canPlace = false; break }
+          currentShipCoords.push({ x: cx, y: cy, hit: false, id: shipId, size })
+        }
+
+        if (canPlace) {
+          newShips.push(...currentShipCoords)
+          placed = true
+          shipId++
+        }
       }
     }
     setShips(newShips)
@@ -72,13 +93,13 @@ export default function OhepBattleship() {
     setInputCode('')
 
     if (isHit) {
-      setMessage("💥 TAM İSABET! Bir düşman gemisi battı!")
+      setMessage("💥 TAM İSABET! Hedefi vurdun!")
       if (updatedShips.every(s => s.hit)) {
         setGameWon(true)
-        setMessage("🏆 GÖREV TAMAMLANDI! OHEP Karargahı seninle gurur duyuyor!")
+        setMessage("🏆 GÖREV TAMAMLANDI! Tüm düşman filosu yok edildi!")
       }
     } else {
-      setMessage("💦 ISKA! Füze denize düştü. Pes etme, tekrar dene!")
+      setMessage("💦 ISKA! Füze denize düştü. Pes etme!")
     }
   }
 
@@ -93,7 +114,7 @@ export default function OhepBattleship() {
         </div>
 
         <div className="bg-slate-900 rounded-xl p-4 mb-6 border border-slate-700 shadow-inner text-sm leading-relaxed text-slate-300">
-          <p className="mb-2"><strong className="text-white">Görev:</strong> Düşman filosu radarımıza girdi. 10x10'luk alanda 5 adet gizli düşman gemisi var.</p>
+          <p className="mb-2"><strong className="text-white">Görev:</strong> Radarımıza giren 5 farklı boyutta düşman gemisi var (1, 2 ve 3 karelik). Görünmezler, onları kod yazarak avlamalısın!</p>
           <p className="mb-2"><strong className="text-white">Nasıl Oynanır?</strong> Füzeleri ateşlemek için fareyle tıklayamazsın. Sisteme komut göndermek zorundasın.</p>
           <p className="mb-2"><strong className="text-white">Kod Sözdizimi:</strong></p>
           <code className="block bg-slate-950 text-emerald-400 p-2 rounded-lg font-bold border border-slate-800 mb-2">atesEt(X, Y)</code>
@@ -173,13 +194,12 @@ export default function OhepBattleship() {
                 const shot = shots.find(s => s.x === x && s.y === y)
                 const isHit = shot?.result === 'hit'
                 const isMiss = shot?.result === 'miss'
-                const isShip = ships.find(s => s.x === x && s.y === y)
+                // isShip gizlendi, sadece hile için açık bırakılabilir: const isShip = ships.find(s => s.x === x && s.y === y)
 
                 return (
                   <div key={i} className={`w-8 h-8 sm:w-10 sm:h-10 rounded-sm flex items-center justify-center transition-all duration-300 ${isHit ? 'bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.8)]' : isMiss ? 'bg-slate-300/20' : 'bg-cyan-800/40'}`}>
                     {isHit && <span className="text-sm sm:text-xl animate-bounce-in">💥</span>}
                     {isMiss && <span className="text-xs sm:text-lg opacity-50">💦</span>}
-                    {(!shot && isShip) && <span className="text-sm sm:text-xl opacity-80 animate-pulse">👾</span>}
                   </div>
                 )
               })}
