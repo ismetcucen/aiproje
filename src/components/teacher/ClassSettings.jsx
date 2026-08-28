@@ -6,7 +6,7 @@ export default function ClassSettings() {
   const { profile } = useAuth()
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
-  const [settings, setSettings] = useState({ codingModuleEnabled: false, aiAssistantEnabled: false })
+  const [settings, setSettings] = useState({ codingModuleEnabled: false, aiAssistantEnabled: false, messagingEnabled: false })
 
   useEffect(() => {
     loadSettings()
@@ -29,6 +29,18 @@ export default function ClassSettings() {
       const newVal = !settings.aiAssistantEnabled
       await updateSchoolSettings("global_school", { aiAssistantEnabled: newVal })
       setSettings(prev => ({ ...prev, aiAssistantEnabled: newVal }))
+    } catch (err) {
+      console.error(err)
+    }
+    setSaving(false)
+  }
+
+    async function toggleMessaging() {
+    setSaving(true)
+    try {
+      const newVal = !settings.messagingEnabled
+      await updateSchoolSettings("global_school", { messagingEnabled: newVal })
+      setSettings(prev => ({ ...prev, messagingEnabled: newVal }))
     } catch (err) {
       console.error(err)
     }
@@ -118,6 +130,37 @@ export default function ClassSettings() {
           </button>
         </div>
       </div>
+      <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm mt-6">
+        <div className="flex items-center justify-between gap-6">
+          <div className="flex gap-6 items-start">
+            <div className="w-16 h-16 bg-gradient-to-br from-rose-400 to-pink-500 rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-pink-500/20 flex-shrink-0">
+              💬
+            </div>
+            <div>
+              <h3 className="text-xl font-bold text-slate-800 mb-2">Öğretmenle Mesajlaşma (Soru-Cevap)</h3>
+              <p className="text-slate-500 text-sm leading-relaxed max-w-xl mb-4">
+                Öğrencilerin sol menüsündeki "Mesajlar" bölümünü açıp kapatır. Robot (F1) üzerinden anons yapıyorsanız ve öğrencilerin bireysel mesaj atmasını (Soru-Cevap) istemiyorsanız kapalı tutabilirsiniz.
+              </p>
+              <div className="flex gap-2 items-center">
+                <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${settings.messagingEnabled ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-500 border border-slate-200'}`}>
+                  {settings.messagingEnabled ? 'Aktif - Açık' : 'Pasif - Kapalı'}
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          <button 
+            onClick={toggleMessaging}
+            disabled={saving}
+            className={`relative inline-flex h-10 w-20 items-center rounded-full transition-colors focus:outline-none ${settings.messagingEnabled ? 'bg-emerald-500' : 'bg-slate-300'}`}
+          >
+            <span
+              className={`inline-block h-8 w-8 transform rounded-full bg-white transition-transform ${settings.messagingEnabled ? 'translate-x-11' : 'translate-x-1'}`}
+            />
+          </button>
+        </div>
+      </div>
+      
     </div>
   )
 

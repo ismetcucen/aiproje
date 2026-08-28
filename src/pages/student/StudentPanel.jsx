@@ -26,7 +26,7 @@ const MENU = [
   { id: 'portfolio',   label: 'Portfolyo', icon: '🗂️' },
   { id: 'leaderboard', label: 'Sıralama', icon: '🏆' },
   { id: 'showcase', label: 'Vitrin', icon: '🌟' },
-  { id: 'chat', label: 'Mesajlar', icon: '💬' },
+
   
 ]
 
@@ -84,6 +84,7 @@ export default function StudentPanel() {
         <nav className="flex-1 p-4 space-y-1.5 overflow-y-auto custom-scrollbar">
           {[
             ...MENU, 
+            ...(settings.messagingEnabled ? [{ id: 'chat', label: 'Mesajlar', icon: '💬' }] : []),
             ...(settings.codingModuleEnabled ? [
               { id: "games", label: "Oyunlar", icon: "🎮" }, 
               { id: "tools", label: "Araçlar", icon: "🛠️" },
