@@ -710,3 +710,18 @@ export async function awardDojoPoints(studentId, points, reason) {
     }
   });
 }
+
+
+// --- ROBOT ANNOUNCEMENTS ---
+export const sendRobotAnnouncement = async (message) => {
+  const docRef = doc(db, 'system', 'robot_announcement')
+  await setDoc(docRef, { message, timestamp: Date.now() })
+}
+
+export const listenToRobotAnnouncement = (callback) => {
+  return onSnapshot(doc(db, 'system', 'robot_announcement'), (docSnap) => {
+    if (docSnap.exists()) {
+      callback(docSnap.data())
+    }
+  })
+}
