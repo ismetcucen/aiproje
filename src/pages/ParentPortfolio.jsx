@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getPublicPortfolio } from '../firebase/schema'
+import { getPublicPortfolio, BADGES } from '../firebase/schema'
 import { CONTENT_TYPE_LABELS } from '../components/student/Portfolio' // Need to export it or redefine it
 
 export default function ParentPortfolio({ studentId }) {

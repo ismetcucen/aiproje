@@ -319,7 +319,7 @@ export async function getPublicPortfolio(userId) {
 
   const submissions = await getSubmissionsByStudent(userId);
   return {
-    student: { fullName: userData.fullName, gradeNumber: userData.gradeNumber },
+    student: { fullName: userData.fullName, gradeNumber: userData.gradeNumber, badges: userData.badges || [] },
     submissions: submissions.filter(s => s.score !== null) // only graded
   };
 }
@@ -514,4 +514,80 @@ export async function getLeaderboard(schoolCode) {
   const snap = await getDocs(q);
   const students = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   return students.sort((a, b) => (b.xp || 0) - (a.xp || 0)).slice(0, 10);
+}
+
+// ─── Q&A (Soru-Cevap) ──────────────────────────────────────────
+
+export async function askQuestion({ studentId, teacherId, question, studentName }) {
+  return await addDoc(collection(db, 'qna'), {
+    studentId,
+    teacherId,
+    question,
+    studentName,
+    answer: null,
+    isAnswered: false,
+    createdAt: serverTimestamp()
+  });
+}
+
+export async function answerQuestion(qnaId, answer, teacherName) {
+  const qRef = doc(db, 'qna', qnaId);
+  await updateDoc(qRef, {
+    answer,
+    answeredBy: teacherName,
+    isAnswered: true,
+    answeredAt: serverTimestamp()
+  });
+}
+
+export async function getQnaByStudent(studentId) {
+  const q = query(collection(db, 'qna'), where('studentId', '==', studentId));
+  const snap = await getDocs(q);
+  const items = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  return items.sort((a, b) => {
+    const dA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date();
+    const dB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date();
+    return dB - dA; // desc
+  });
+}
+
+export async function getQnaForTeacher(teacherId) {
+  const q = query(collection(db, 'qna'), where('teacherId', '==', teacherId));
+  const snap = await getDocs(q);
+  const items = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  return items.sort((a, b) => {
+    const dA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date();
+    const dB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date();
+    return dB - dA; // desc
+  });
+}
+
+// ─── BADGES ───────────────────────────────────────────────────
+
+export const BADGES = {
+  FIRST_STEP: { id: 'first_step', icon: '🥉', title: 'İlk Adım', desc: 'Sisteme ilk görevini başarıyla teslim ettin!' },
+  SPEED_DEMON: { id: 'speed_demon', icon: '🚀', title: 'Hız Canavarı', desc: 'Görevini verildiği gün tamamladın!' },
+  STAR_STUDENT: { id: 'star_student', icon: '⭐', title: 'Yıldız Öğrenci', desc: '100 XP barajını aştın!' },
+  AI_MASTER: { id: 'ai_master', icon: '🧠', title: 'Yapay Zeka Uzmanı', desc: 'Yapay zekayı projelerinde etkili kullandın.' }
+};
+
+export async function awardBadge(userId, badgeId) {
+  const userRef = doc(db, 'users', userId);
+  const snap = await getDoc(userRef);
+  if (snap.exists()) {
+    const currentBadges = snap.data().badges || [];
+    if (!currentBadges.includes(badgeId)) {
+      await updateDoc(userRef, { badges: arrayUnion(badgeId) });
+      return true; // Newly awarded
+    }
+  }
+  return false;
+}
+
+// ─── SHOWCASE ─────────────────────────────────────────────────
+
+export async function getShowcaseSubmissions(schoolCode) {
+  const q = query(collection(db, 'submissions'), where('schoolCode', '==', schoolCode), where('isShowcase', '==', true));
+  const snap = await getDocs(q);
+  return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 }

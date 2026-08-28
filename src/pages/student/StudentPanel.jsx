@@ -9,6 +9,8 @@ import StudentHome from '../../components/student/StudentHome'
 import CodingGames from '../../components/student/CodingGames'
 import LessonTools from '../../components/student/LessonTools'
 import Leaderboard from '../../components/student/Leaderboard'
+import ShowcaseGallery from '../../components/ShowcaseGallery'
+import StudentQnaWidget from '../../components/student/StudentQnaWidget'
 import LiveMarquee from '../../components/LiveMarquee'
 import HighSchoolAILab from '../../components/student/HighSchoolAILab'
 import { getSchoolSettings } from '../../firebase/schema'
@@ -135,6 +137,7 @@ export default function StudentPanel() {
           {active === 'games'       && <CodingGames />}
           {active === 'tools'       && <LessonTools />}
           {active === 'leaderboard' && <Leaderboard />}
+          {active === 'showcase'    && <ShowcaseGallery />}
           {active === 'ailab'       && <HighSchoolAILab />}
         </div>
       </main>

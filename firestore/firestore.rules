@@ -231,5 +231,9 @@ service cloud.firestore {
       allow create: if isAuth();
       allow update, delete: if isAdmin();
     }
+    match /qna/{docId} {
+      allow read: if isAuth();
+      allow write: if isAuth();
+    }
   }
 }

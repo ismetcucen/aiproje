@@ -80,6 +80,38 @@ const GAMES = [
     url: 'https://www.worldguessr.com/',
     icon: '🌍',
     external: false
+  },
+  {
+    id: 'typingclub',
+    title: 'TypingClub',
+    desc: 'Hızlı ve on parmak klavye kullanmayı oyun oynayarak öğren!',
+    url: 'https://www.typingclub.com/sportal/program-3.game',
+    icon: '⌨️',
+    external: true
+  },
+  {
+    id: 'tinkercad',
+    title: 'Tinkercad 3D',
+    desc: 'Hayal gücünü kullan, 3D modelleme ve elektronik devreler tasarla!',
+    url: 'https://www.tinkercad.com/',
+    icon: '🧊',
+    external: true
+  },
+  {
+    id: 'scratch',
+    title: 'Scratch',
+    desc: 'Kendi interaktif hikayelerini, oyunlarını ve animasyonlarını kodla!',
+    url: 'https://scratch.mit.edu/projects/editor/',
+    icon: '😺',
+    external: true
+  },
+  {
+    id: 'lightbot',
+    title: 'Lightbot',
+    desc: 'Algoritma mantığını öğrenmek için sevimli robotu hedefe ulaştır.',
+    url: 'https://lightbot.com/flash.html',
+    icon: '💡',
+    external: true
   }
 ]
 

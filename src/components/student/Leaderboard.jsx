@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getLeaderboard } from '../../firebase/schema'
+import { getLeaderboard, BADGES } from '../../firebase/schema'
 import { useAuth } from '../../hooks/useAuth'
 
 export default function Leaderboard() {
@@ -47,6 +47,11 @@ export default function Leaderboard() {
                 </div>
               </div>
               <div className="text-right">
+                <div className="flex items-center gap-2 justify-end mb-1">
+                  {student.badges?.map(bId => BADGES[bId] && (
+                    <span key={bId} title={BADGES[bId].title} className="text-lg cursor-help">{BADGES[bId].icon}</span>
+                  ))}
+                </div>
                 <span className="text-xl font-black text-indigo-600">{student.xp || 0}</span>
                 <span className="text-xs text-indigo-400 font-bold ml-1">XP</span>
               </div>
