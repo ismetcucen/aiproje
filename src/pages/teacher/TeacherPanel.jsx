@@ -10,6 +10,7 @@ import StudentList from '../../components/teacher/StudentList'
 import SubmissionsList from '../../components/teacher/SubmissionsList'
 import CurriculumAssigner from '../../components/teacher/CurriculumAssigner'
 import ClassSettings from '../../components/teacher/ClassSettings'
+import LiveClassControl from '../../components/teacher/LiveClassControl'
 
 const MENU = [
   { id: 'curriculum',  label: 'Müfredat',   icon: '📚' },
@@ -20,6 +21,7 @@ const MENU = [
   { id: 'games', label: 'Oyunlar', icon: '🎮' },
   { id: 'tools', label: 'Araçlar', icon: '🛠️' },
   { id: 'ailab', label: 'Lise AI Lab', icon: '🧠' },
+  { id: 'live', label: 'Canlı Sınıf', icon: '📡' },
   { id: 'settings', label: 'Ayarlar', icon: '⚙️' },
 ]
 
@@ -114,6 +116,7 @@ export default function TeacherPanel() {
           {active === 'tools'       && <LessonTools />}
           {active === 'ailab'       && <HighSchoolAILab />}
           {active === 'settings' && <ClassSettings />}
+          {active === 'live' && <LiveClassControl />}
         </div>
       </main>
     </div>

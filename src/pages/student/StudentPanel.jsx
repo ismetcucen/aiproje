@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../hooks/useAuth'
+import LiveSessionLocker from '../../components/student/LiveSessionLocker'
 import AvatarCreatorModal from '../../components/student/AvatarCreatorModal'
 import NotificationBell from '../../components/NotificationBell'
 import { logAttendance } from '../../firebase/schema'
@@ -62,6 +63,8 @@ export default function StudentPanel() {
   }
 
   return (
+    <>
+      <LiveSessionLocker />
     <div className="min-h-screen bg-[#f4f7fc] flex">
 
       {/* Sol Menü */}
@@ -208,5 +211,6 @@ export default function StudentPanel() {
         </div>
       )}
     </div>
+    </>
   )
 }

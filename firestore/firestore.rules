@@ -243,5 +243,16 @@ service cloud.firestore {
       allow read: if isAuth();
       allow write: if isAuth();
     }
+
+    match /live_sessions/{docId} {
+      allow read: if isAuth();
+      allow write: if isAdmin() || isTeacher();
+    }
+    match /live_answers/{docId} {
+      allow read: if isAuth();
+      allow create: if isAuth();
+      allow write: if isAdmin() || isTeacher();
+    }
   }
 }
+

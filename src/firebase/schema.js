@@ -651,3 +651,47 @@ export async function markChatAsRead(chatRoomId, readerRole) {
   // If reader is teacher, mark all where senderRole == student as read
   // We'll do a simple batch update (or just ignore read status for now to save complexity)
 }
+
+
+// ─── LIVE SESSIONS (CANLI SINIF) ────────────────────────────────
+
+export function listenToLiveSession(schoolCode, gradeNumber, callback) {
+  if (!schoolCode || !gradeNumber) return () => {};
+  const docId = schoolCode + '_' + gradeNumber;
+  return onSnapshot(doc(db, 'live_sessions', docId), (snap) => {
+    if (snap.exists()) callback({ id: snap.id, ...snap.data() });
+    else callback(null);
+  });
+}
+
+export async function setLiveSession(schoolCode, gradeNumber, data) {
+  const docId = schoolCode + '_' + gradeNumber;
+  await setDoc(doc(db, 'live_sessions', docId), {
+    ...data,
+    updatedAt: serverTimestamp()
+  }, { merge: true });
+}
+
+export async function submitLiveAnswer(sessionId, questionId, studentId, studentName, answer) {
+  await addDoc(collection(db, 'live_answers'), {
+    sessionId,
+    questionId,
+    studentId,
+    studentName,
+    answer,
+    createdAt: serverTimestamp()
+  });
+}
+
+export function listenToLiveAnswers(sessionId, questionId, callback) {
+  if (!sessionId || !questionId) return () => {};
+  const q = query(
+    collection(db, 'live_answers'),
+    where('sessionId', '==', sessionId),
+    where('questionId', '==', questionId),
+    orderBy('createdAt', 'desc')
+  );
+  return onSnapshot(q, (snap) => {
+    callback(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+  });
+}
