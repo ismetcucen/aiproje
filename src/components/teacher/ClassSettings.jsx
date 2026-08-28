@@ -87,6 +87,38 @@ export default function ClassSettings() {
           </button>
         </div>
       </div>
+
+      <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm mt-6">
+        <div className="flex items-center justify-between gap-6">
+          <div className="flex gap-6 items-start">
+            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-blue-500/20 flex-shrink-0">
+              🤖
+            </div>
+            <div>
+              <h3 className="text-xl font-bold text-slate-800 mb-2">OHEP Zeka (AI Asistan) Modülü</h3>
+              <p className="text-slate-500 text-sm leading-relaxed max-w-xl mb-4">
+                Öğrenci panelindeki yapay zeka sohbet asistanını (OHEP Zeka) açıp kapatır. Kapalı olduğunda öğrenciler asistan sekmesini göremez. Dikkat dağınıklığını önlemek veya sınav anlarında kapatmak için kullanabilirsiniz.
+              </p>
+              <div className="flex gap-2 items-center">
+                <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${settings.aiAssistantEnabled ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-500 border border-slate-200'}`}>
+                  {settings.aiAssistantEnabled ? 'Aktif - Açık' : 'Pasif - Kapalı'}
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          <button 
+            onClick={toggleAiAssistant}
+            disabled={saving}
+            className={`relative inline-flex h-10 w-20 items-center rounded-full transition-colors focus:outline-none ${settings.aiAssistantEnabled ? 'bg-emerald-500' : 'bg-slate-300'}`}
+          >
+            <span
+              className={`inline-block h-8 w-8 transform rounded-full bg-white transition-transform ${settings.aiAssistantEnabled ? 'translate-x-11' : 'translate-x-1'}`}
+            />
+          </button>
+        </div>
+      </div>
     </div>
   )
+
 }
