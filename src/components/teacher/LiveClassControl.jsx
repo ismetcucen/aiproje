@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import { setLiveSession, listenToLiveSession, listenToLiveAnswers } from '../../firebase/schema'
-const GRADES = ['9', '10', '11', '12'] // using GRADES from schema or just array
+const GRADES = ['3', '4', '5', '6', '7', '9', '10'] // using GRADES from schema or just array
 
 export default function LiveClassControl() {
   const { profile } = useAuth()
@@ -63,6 +63,7 @@ export default function LiveClassControl() {
     })
     setQuestionText('')
     setLoading(false)
+    alert('Soru sınıfa başarıyla gönderildi! Öğrenci ekranları kilitlendi.')
   }
   
   async function handleClearScreen() {
@@ -112,7 +113,7 @@ export default function LiveClassControl() {
           <p className="text-slate-500 text-sm">Öğrencilerin ekranlarına anlık soru ve görsel gönderin, cevapları toplayın.</p>
         </div>
         <div className="mt-4 md:mt-0 flex gap-2">
-          {['9', '10', '11', '12'].map(g => (
+          {GRADES.map(g => (
             <button key={g} onClick={() => setSelectedGrade(g)}
               className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${selectedGrade === g ? 'bg-indigo-600 text-white shadow-md' : 'bg-white border border-slate-200 text-slate-600'}`}>
               {g}. Sınıf
@@ -140,7 +141,18 @@ export default function LiveClassControl() {
             {session?.isActive ? (
               <div className="space-y-5 animate-fade-in">
                 
+                
+                {/* AKTIF SORU GÖSTERIMI */}
+                {session.questionId && (
+                  <div className="bg-indigo-50 border border-indigo-200 rounded-2xl p-4 mb-4">
+                    <h4 className="text-indigo-800 text-xs font-bold uppercase tracking-wider mb-2">Şu An Öğrencilerin Ekranındaki Soru:</h4>
+                    {session.currentSlide && <img src={session.currentSlide} className="max-h-24 rounded-lg mb-2 border border-indigo-200" />}
+                    <p className="text-indigo-900 font-medium">{session.currentQuestion || '(Sadece Görsel)'}</p>
+                  </div>
+                )}
+                
                 {/* Görsel Yükle */}
+
                 <div>
                   <label className="block text-slate-500 text-xs font-bold uppercase tracking-wider mb-2">Görsel / Slayt Ekle</label>
                   {imageUrl ? (
