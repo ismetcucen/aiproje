@@ -20,7 +20,7 @@ export default function OhepBattleship() {
     setShots([])
     setGameWon(false)
     setMessage('Savaşa Hazırsın! Kodlarını yazmaya başla.')
-    setInputCode('atesEt( , )')
+    setInputCode('')
     setErrorMsg('')
     
     // Generate 5 random single-cell ships
@@ -74,7 +74,7 @@ export default function OhepBattleship() {
 
     setShips(updatedShips)
     setShots([...shots, { x, y, result: isHit ? 'hit' : 'miss' }])
-    setInputCode('atesEt( , )')
+    setInputCode('')
 
     if (isHit) {
       setMessage("💥 TAM İSABET! Bir düşman gemisi battı!")

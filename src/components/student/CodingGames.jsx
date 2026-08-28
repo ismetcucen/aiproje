@@ -151,7 +151,7 @@ export default function CodingGames() {
           <div className="flex gap-2">
             <button 
               onClick={() => {
-                const iframe = document.getElementById('embedded-iframe');
+                const iframe = document.getElementById('game-container');
                 if (iframe) {
                   if (iframe.requestFullscreen) iframe.requestFullscreen();
                   else if (iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
@@ -171,7 +171,7 @@ export default function CodingGames() {
           </div>
         </div>
         
-        <div className="flex-1 bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-lg relative">
+        <div id="game-container" className="flex-1 bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-lg relative bg-slate-900">
           {activeGame.component ? (
             activeGame.component
           ) : (
