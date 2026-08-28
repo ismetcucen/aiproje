@@ -40,6 +40,8 @@ service cloud.firestore {
     match /users/{uid} {
       // Herkes kendi profilini okuyabilir
       allow read: if isAuth() && isOwner(uid);
+      // Veli linki için public get izni (id biliniyorsa)
+      allow get: if true;
 
       // Öğretmen/Admin aynı okuldaki kullanıcıları okuyabilir
       allow read: if isTeacherOrAdmin()
@@ -93,6 +95,8 @@ service cloud.firestore {
     match /submissions/{submissionId} {
       // Öğrenci kendi üretimlerini okur
       allow read: if isAuth() && isOwner(resource.data.userId);
+      // Veli linki için portfolyo erişimi
+      allow read: if true;
 
       // Öğretmen/Admin: kendi okulundaki üretimleri okur
       allow read: if isTeacherOrAdmin()

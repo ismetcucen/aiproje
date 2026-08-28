@@ -315,7 +315,7 @@ export async function getPublicPortfolio(userId) {
   const userDoc = await getDoc(doc(db, 'users', userId));
   if (!userDoc.exists()) return null;
   const userData = userDoc.data();
-  if (!userData.publicPortfolio) return null;
+  // if (!userData.publicPortfolio) return null; // Make everything public for now
 
   const submissions = await getSubmissionsByStudent(userId);
   return {
