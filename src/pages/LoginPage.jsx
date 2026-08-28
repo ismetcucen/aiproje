@@ -122,18 +122,38 @@ export default function LoginPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 max-w-lg mt-4">
-            {[
-              { i: '🚀', t: 'Yeni Nesil Öğrenme' },
-              { i: '🤖', t: 'AI Destekli' },
-              { i: '🎨', t: 'Üretkenlik' },
-              { i: '🏆', t: 'Dijital Portfolyo' }
-            ].map((f, i) => (
-              <div key={i} className="flex items-center gap-3 bg-slate-900/40 backdrop-blur-md border border-slate-800/50 rounded-2xl p-4 shadow-sm hover:bg-slate-800/50 transition-colors">
-                <span className="text-2xl">{f.i}</span>
-                <span className="text-slate-300 text-sm font-semibold">{f.t}</span>
+          <div className="flex flex-col gap-4 mt-2 max-w-xl w-full">
+            <div className="flex items-start gap-4 p-4 rounded-2xl bg-slate-900/40 border border-slate-800/50 backdrop-blur-md hover:bg-slate-800/60 transition-colors shadow-lg">
+              <span className="text-4xl">🤖</span>
+              <div>
+                <h3 className="text-white font-black text-lg">Yapay Zeka Destekli LMS</h3>
+                <p className="text-slate-300 text-sm leading-relaxed mt-1">Ödevlerinizi ve projelerinizi Gemini AI ile değerlendiren yeni nesil öğrenim yönetim sistemi.</p>
               </div>
-            ))}
+            </div>
+            
+            <div className="flex items-start gap-4 p-4 rounded-2xl bg-slate-900/40 border border-slate-800/50 backdrop-blur-md hover:bg-slate-800/60 transition-colors shadow-lg">
+              <span className="text-4xl">📺</span>
+              <div>
+                <h3 className="text-white font-black text-lg">İnteraktif Canlı Sınıf</h3>
+                <p className="text-slate-300 text-sm leading-relaxed mt-1">Öğretmen tahtasını öğrenci ekranına kilitleyen, canlı soru-cevap ve anlık ilerleme takibi.</p>
+              </div>
+            </div>
+            
+            <div className="flex items-start gap-4 p-4 rounded-2xl bg-slate-900/40 border border-slate-800/50 backdrop-blur-md hover:bg-slate-800/60 transition-colors shadow-lg">
+              <span className="text-4xl">🎮</span>
+              <div>
+                <h3 className="text-white font-black text-lg">Küresel Kodlama Dünyası</h3>
+                <p className="text-slate-300 text-sm leading-relaxed mt-1">Minecraft, VEXcode VR, Code.org ve koordinat tabanlı özel OHEP Amiral Battı oyunu tek çatı altında.</p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4 p-4 rounded-2xl bg-slate-900/40 border border-slate-800/50 backdrop-blur-md hover:bg-slate-800/60 transition-colors shadow-lg">
+              <span className="text-4xl">🏆</span>
+              <div>
+                <h3 className="text-white font-black text-lg">Sınıf Yıldızları (OHEP Dojo)</h3>
+                <p className="text-slate-300 text-sm leading-relaxed mt-1">Canlı konfeti animasyonları ile öğrencileri anında motive eden harika bir dijital rozet sistemi.</p>
+              </div>
+            </div>
           </div>
         </div>
 
