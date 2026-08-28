@@ -2,6 +2,24 @@ import { useState } from 'react'
 import OhepBattleship from './games/OhepBattleship'
 
 const GAMES = [
+
+  {
+    id: 'vexcodevr',
+    title: 'VEXcode VR (Sanal Robotik)',
+    desc: 'Fiziksel bir robota ihtiyacın yok! Sanal robotunu 3 boyutlu simülatörde kodlayarak görevleri tamamla.',
+    url: 'https://vr.vex.com/',
+    icon: '🏎️',
+    external: false
+  },
+  {
+    id: 'codecombat',
+    title: 'CodeCombat (Python/JS)',
+    desc: 'Blokları unut, gerçek kod yazma vakti! Python veya JavaScript yazarak şövalyeni zindanlardan kurtar.',
+    url: 'https://codecombat.com/play',
+    icon: '⚔️',
+    external: true
+  },
+
   {
     id: 'ohep-battleship',
     title: 'OHEP Amiral Battı',
