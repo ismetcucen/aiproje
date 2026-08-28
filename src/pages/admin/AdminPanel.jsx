@@ -98,7 +98,7 @@ export default function AdminPanel() {
           {active === 'tubitak'    && <TubitakProjects />}
           {active === 'calendar'   && <CalendarPlanner />}
           {active === 'announcements' && <Announcements />}
-          {active === 'qna'           && <QnaInbox />}
+          {active === 'qna'           && <LiveChatInbox />}
           {active === 'showcase'      && <ShowcaseGallery />}
           {active === 'attendance' && <Attendance />}
           {active === 'games'       && <CodingGames />}
