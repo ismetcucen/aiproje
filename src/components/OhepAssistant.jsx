@@ -57,22 +57,21 @@ export default function OhepAssistant() {
         agentRef.current._animationInterval = interval;
 
         // Listen for live announcements
+        let isFirstSnapshot = true;
         unsub = listenToRobotAnnouncement((data) => {
-          console.log("ROBOT ANNOUNCEMENT RECEIVED:", data);
+          if (isFirstSnapshot) {
+            isFirstSnapshot = false;
+            return;
+          }
+          
           if (agentRef.current && data && data.message) {
-            // Ensure we don't repeat the exact same timestamp
-            if (data.timestamp > lastAnnounceTimeRef.current) {
-               console.log("New announcement detected!");
-               // Play if it's not a stale message on first load
-               if (lastAnnounceTimeRef.current !== 0 || Date.now() - data.timestamp < 60000) {
-                  agentRef.current.stop(); // Stop current animation/speech
-                  agentRef.current.play("Alert"); // Play alert animation first
-                  agentRef.current.speak(data.message);
-               } else {
-                  console.log("Stale announcement, ignoring.");
-               }
-               lastAnnounceTimeRef.current = data.timestamp;
-            }
+             console.log("New announcement:", data.message);
+             try {
+                agentRef.current.stop();
+                agentRef.current.speak(`📢 DİKKAT: ${data.message}`);
+             } catch (e) {
+                console.error("Robot speak error:", e);
+             }
           }
         });
 
