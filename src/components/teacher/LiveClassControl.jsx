@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import { setLiveSession, listenToLiveSession, listenToLiveAnswers } from '../../firebase/schema'
+import { collection, query, where, getDocs } from 'firebase/firestore'
+import { db } from '../../firebase/config'
 const GRADES = ['3', '4', '5', '6', '7', '9', '10'] // using GRADES from schema or just array
 
 export default function LiveClassControl() {
@@ -8,6 +10,7 @@ export default function LiveClassControl() {
   const [selectedGrade, setSelectedGrade] = useState(GRADES?.[0] || '9')
   const [session, setSession] = useState(null)
   const [answers, setAnswers] = useState([])
+  const [students, setStudents] = useState([])
   
   const [questionText, setQuestionText] = useState('')
   const [imageUrl, setImageUrl] = useState('')
@@ -15,6 +18,27 @@ export default function LiveClassControl() {
   const [loading, setLoading] = useState(false)
 
   const fileInputRef = useRef(null)
+
+  useEffect(() => {
+    if (!profile?.schoolCode) return
+    async function loadStudents() {
+      try {
+        const q = query(
+          collection(db, 'users'),
+          where('role', '==', 'student'),
+          where('schoolCode', '==', profile.schoolCode)
+        )
+        const snap = await getDocs(q)
+        const allStudents = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+        const gradeStudents = allStudents.filter(s => String(s.gradeNumber) === String(selectedGrade))
+        setStudents(gradeStudents)
+      } catch (err) {
+        console.error(err)
+      }
+    }
+    loadStudents()
+  }, [profile?.schoolCode, selectedGrade])
+
 
   useEffect(() => {
     if (!profile?.schoolCode) return
@@ -215,6 +239,24 @@ export default function LiveClassControl() {
                 {answers.length} Yanıt
               </div>
             </div>
+
+            
+            {/* OGRENCI TAKIP TABLOSU */}
+            {session?.isActive && session?.questionId && students.length > 0 && (
+              <div className="mb-6 bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                <h4 className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-3">Sınıf Katılım Durumu</h4>
+                <div className="flex flex-wrap gap-2">
+                  {students.map(stu => {
+                    const hasAnswered = answers.some(a => a.studentId === stu.id);
+                    return (
+                      <div key={stu.id} title={hasAnswered ? 'Cevap Verdi' : 'Bekleniyor'} className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors ${hasAnswered ? 'bg-emerald-100 text-emerald-700 border-emerald-200' : 'bg-red-50 text-red-500 border-red-200 animate-pulse'}`}>
+                        {hasAnswered ? '✓' : '⏳'} {stu.fullName}
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
 
             <div className="flex-1 bg-slate-50 rounded-2xl border border-slate-100 p-4 overflow-y-auto max-h-[600px] custom-scrollbar space-y-3">
               {answers.length === 0 ? (
