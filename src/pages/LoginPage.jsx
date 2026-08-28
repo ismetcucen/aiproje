@@ -144,10 +144,6 @@ export default function LoginPage() {
             <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
             <div className="flex bg-slate-950 p-1.5 rounded-2xl mb-8 relative z-10 border border-slate-800/50">
-              <button onClick={() => setTab(TABS.VISUAL)}
-                className={`flex-1 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${tab === TABS.VISUAL ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-500 hover:text-slate-300'}`}>
-                🦄 Görsel
-              </button>
               <button onClick={() => setTab(TABS.LOGIN)}
                 className={`flex-1 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${tab === TABS.LOGIN ? 'bg-slate-800 text-white shadow-sm border border-slate-700' : 'text-slate-500 hover:text-slate-300'}`}>
                 Giriş
@@ -155,6 +151,10 @@ export default function LoginPage() {
               <button onClick={() => setTab(TABS.REGISTER)}
                 className={`flex-1 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${tab === TABS.REGISTER ? 'bg-slate-800 text-white shadow-sm border border-slate-700' : 'text-slate-500 hover:text-slate-300'}`}>
                 Kayıt
+              </button>
+              <button onClick={() => setTab(TABS.VISUAL)}
+                className={`flex-1 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${tab === TABS.VISUAL ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-500 hover:text-slate-300'}`}>
+                🦄 Görsel
               </button>
             </div>
 
