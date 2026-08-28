@@ -174,7 +174,7 @@ export default function StudentPanel() {
           {active === 'chat'        && <StudentLiveChat />}
         </div>
       </main>
-      <StudentLiveChat />
+      {settings.messagingEnabled && <StudentLiveChat />}
       {showRules && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
           <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200">
