@@ -51,7 +51,7 @@ export default function LiveClassControl() {
   useEffect(() => {
     if (session?.isActive && session?.questionId) {
       const unsub = listenToLiveAnswers(session.id, session.questionId, (data) => {
-        setAnswers(data)
+        setAnswers(data.sort((a, b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0)))
       })
       return () => unsub()
     } else {

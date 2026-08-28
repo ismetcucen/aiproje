@@ -50,7 +50,7 @@ export async function getAssignmentsForStudent({ classLevel, schoolCode, gradeNu
     collection(db, 'assignments'), 
     where('schoolCode', '==', schoolCode), 
     where('isActive', '==', true),
-    orderBy('createdAt', 'desc')
+    // Removed orderBy to prevent Firestore index requirements, sorting will happen client-side
   )
   const snap = await getDocs(q)
   return snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(a => {
