@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../hooks/useAuth'
+import AvatarCreatorModal from '../../components/student/AvatarCreatorModal'
 import NotificationBell from '../../components/NotificationBell'
 import { logAttendance } from '../../firebase/schema'
 import AssignmentList from '../../components/student/AssignmentList'
@@ -30,6 +31,7 @@ const MENU = [
 export default function StudentPanel() {
   const { user, profile, logout } = useAuth()
   const [active, setActive]                     = useState('home')
+  const [showAvatarModal, setShowAvatarModal] = useState(false)
   const [showRules, setShowRules] = useState(!localStorage.getItem('aiLabRulesAccepted_v3'))
 
   useEffect(() => {
@@ -97,13 +99,25 @@ export default function StudentPanel() {
         </nav>
 
         <div className="p-4 border-t border-white/10 bg-black/10 relative z-10">
-          <div className="px-2 mb-3">
+          <div className="px-2 mb-3 flex items-center gap-3">
+              <button onClick={() => setShowAvatarModal(true)} title="Avatarı Değiştir" className="w-12 h-12 rounded-full border-2 border-white/20 overflow-hidden flex-shrink-0 relative group hover:border-white transition-colors bg-white/10">
+                {profile?.avatarUrl ? (
+                  <img src={profile.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-white font-bold text-lg">{profile?.fullName?.charAt(0)}</div>
+                )}
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <span className="text-white text-xs">✏️</span>
+                </div>
+              </button>
+              <div>
             <p className="text-white text-sm font-bold truncate">{profile?.fullName}</p>
             <div className="flex items-center gap-2 mt-1">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
               <p className="text-indigo-200 text-xs font-medium uppercase tracking-wider">
                 {profile?.classLevel} {profile?.gradeNumber ? `· ${profile.gradeNumber}. SINIF` : ''}
               </p>
+            </div>
             </div>
           </div>
           <button onClick={logout}
