@@ -294,7 +294,7 @@ export default function LoginPage() {
       {/* Geliştirici İmzası */}
       <div className="absolute bottom-4 text-center z-10 w-full opacity-60 hover:opacity-100 transition-opacity">
         <p className="text-white/70 text-sm font-medium tracking-wide">
-          <span className="text-fuchsia-400">OHEP AI Studio</span> • İsmet ÇÜÇEN tarafından sevgiyle 💖 ve yapay zekayla 🤖 geliştirildi.
+          İsmet ÇÜÇEN & AI
         </p>
       </div>
     </div>
