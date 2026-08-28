@@ -4,6 +4,7 @@ import TeacherPanel from './pages/teacher/TeacherPanel'
 import StudentPanel from './pages/student/StudentPanel'
 import AdminPanel from './pages/admin/AdminPanel'
 import ParentPortfolio from './pages/ParentPortfolio'
+import OhepAssistant from './components/OhepAssistant'
 
 function AppContent() {
   
@@ -31,6 +32,7 @@ export default function App() {
   return (
     <AuthProvider>
       <AppContent />
+      <OhepAssistant />
     </AuthProvider>
   )
 }
