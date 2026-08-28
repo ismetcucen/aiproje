@@ -688,8 +688,7 @@ export function listenToLiveAnswers(sessionId, questionId, callback) {
   const q = query(
     collection(db, 'live_answers'),
     where('sessionId', '==', sessionId),
-    where('questionId', '==', questionId),
-    orderBy('createdAt', 'desc')
+    where('questionId', '==', questionId)
   );
   return onSnapshot(q, (snap) => {
     callback(snap.docs.map(d => ({ id: d.id, ...d.data() })));
