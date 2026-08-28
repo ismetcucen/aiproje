@@ -1,6 +1,16 @@
 import { useState } from 'react'
+import OhepBattleship from './games/OhepBattleship'
 
 const GAMES = [
+  {
+    id: 'ohep-battleship',
+    title: 'OHEP Amiral Battı',
+    desc: 'OHEP Karargahı seni çağırıyor! X ve Y eksenlerini kullanarak hedefi bul, kod yazarak füzeyi ateşle ve düşman gemilerini yok et!',
+    component: <OhepBattleship />,
+    icon: '🚀',
+    external: false
+  },
+
   {
     id: 'minecraft',
     title: 'OHEP Minecraft (Tam Sürüm)',
@@ -160,14 +170,20 @@ export default function CodingGames() {
           </button>
           </div>
         </div>
+        
         <div className="flex-1 bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-lg relative">
-          <iframe id="embedded-iframe" 
-            src={activeGame.url} 
-            className="w-full h-full border-0 absolute inset-0"
-            title={activeGame.title}
-            allow="fullscreen; pointer-lock" allowFullScreen={true}
-          />
+          {activeGame.component ? (
+            activeGame.component
+          ) : (
+            <iframe id="embedded-iframe" 
+              src={activeGame.url} 
+              className="w-full h-full border-0 absolute inset-0"
+              title={activeGame.title}
+              allow="fullscreen; pointer-lock" allowFullScreen={true}
+            />
+          )}
         </div>
+
       </div>
     )
   }
