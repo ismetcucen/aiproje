@@ -28,7 +28,7 @@ const MENU = [
   { id: 'tubitak',    label: 'Tübitak & Teknofest', icon: '🏆' },
   { id: 'calendar',   label: 'Ajanda', icon: '📅' },
   { id: 'announcements', label: 'Duyurular', icon: '📢' },
-  { id: 'qna', label: 'Sorular', icon: '💬' },
+  { id: 'qna', label: 'Mesajlar', icon: '💬' },
   { id: 'showcase', label: 'Vitrin', icon: '🏆' },
   { id: 'games', label: 'Oyunlar', icon: '🎮' },
   { id: 'tools', label: 'Araçlar', icon: '🛠️' },
