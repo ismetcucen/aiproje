@@ -92,7 +92,11 @@ export default function AdminPanel() {
       <main className="flex-1 flex flex-col overflow-hidden">
         <header className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm">
           <h1 className="text-slate-800 font-semibold">{MENU.find(m => m.id === active)?.label}</h1>
-          <span className="text-xs bg-red-50 text-red-500 border border-red-200 px-2 py-1 rounded-full">Admin Erişimi</span>
+          <div className="flex items-center gap-4">
+            <span className="text-xs bg-red-50 text-red-500 border border-red-200 px-2 py-1 rounded-full">Admin Erişimi</span>
+            <RobotAnnouncer />
+            <NotificationBell />
+          </div>
         </header>
         <div className="flex-1 overflow-auto p-6">
           {active === 'stats'      && <Stats />}
