@@ -4,7 +4,7 @@ import { useAuth } from '../../hooks/useAuth'
 
 export default function StudentLiveChat() {
   const { user, profile } = useAuth()
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(true) // Always open in full page mode
   const [messages, setMessages] = useState([])
   const [text, setText] = useState('')
   const chatRef = useRef(null)
@@ -42,12 +42,9 @@ export default function StudentLiveChat() {
     })
   }
 
-  // Floating Chat Widget UI
+  // Full Page UI
   return (
-    <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end">
-      {/* Chat Penceresi */}
-      {isOpen && (
-        <div className="bg-white w-[340px] md:w-[380px] h-[500px] mb-4 rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-slate-200 animate-slide-up transform origin-bottom-right">
+    <div className="max-w-4xl mx-auto h-[calc(100vh-10rem)] bg-white rounded-3xl shadow-xl flex flex-col overflow-hidden border border-slate-200">
           <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 flex justify-between items-center text-white shadow-md z-10">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-xl">👨‍🏫</div>
@@ -58,9 +55,7 @@ export default function StudentLiveChat() {
                 </span>
               </div>
             </div>
-            <button onClick={() => setIsOpen(false)} className="w-8 h-8 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-full transition-colors">
-              ✕
-            </button>
+            
           </div>
           
           <div ref={chatRef} className="flex-1 p-4 bg-[#f0f2f5] overflow-y-auto flex flex-col gap-3">
@@ -70,10 +65,10 @@ export default function StudentLiveChat() {
             {messages.map((msg, idx) => {
               const isMe = msg.senderRole === 'student'
               return (
-                <div key={idx} className={`flex max-w-[85%] \${isMe ? 'self-end' : 'self-start'}`}>
-                  <div className={`px-4 py-2 text-sm shadow-sm \${isMe ? 'bg-indigo-600 text-white rounded-2xl rounded-tr-sm' : 'bg-white border border-slate-200 text-slate-700 rounded-2xl rounded-tl-sm'}`}>
+                <div key={idx} className={`flex max-w-[85%] ${isMe ? 'self-end' : 'self-start'}`}>
+                  <div className={`px-4 py-2 text-sm shadow-sm ${isMe ? 'bg-indigo-600 text-white rounded-2xl rounded-tr-sm' : 'bg-white border border-slate-200 text-slate-700 rounded-2xl rounded-tl-sm'}`}>
                     <p className="leading-relaxed">{msg.text}</p>
-                    <span className={`block text-[9px] mt-1 text-right \${isMe ? 'text-indigo-200' : 'text-slate-400'}`}>
+                    <span className={`block text-[9px] mt-1 text-right ${isMe ? 'text-indigo-200' : 'text-slate-400'}`}>
                       {msg.createdAt?.toDate ? msg.createdAt.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '...'}
                     </span>
                   </div>
@@ -100,19 +95,6 @@ export default function StudentLiveChat() {
               </button>
             </form>
           </div>
-        </div>
-      )}
-
-      {/* Floating Buton */}
-      <button 
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-16 h-16 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full shadow-2xl flex items-center justify-center text-3xl transition-transform hover:scale-110 active:scale-95 group relative"
-      >
-        <span className="group-hover:animate-bounce">💬</span>
-        {messages.filter(m => m.senderRole === 'teacher' && !m.isRead).length > 0 && !isOpen && (
-          <span className="absolute top-0 right-0 w-4 h-4 bg-red-500 border-2 border-white rounded-full animate-pulse"></span>
-        )}
-      </button>
     </div>
   )
 }

@@ -87,7 +87,7 @@ export default function LiveChatInbox() {
               <div 
                 key={room.studentId}
                 onClick={() => setActiveRoom(room.studentId)}
-                className={`p-4 border-b border-slate-100 cursor-pointer transition-colors flex items-center gap-3 \${activeRoom === room.studentId ? 'bg-indigo-50 border-l-4 border-l-indigo-600' : 'hover:bg-slate-100'}`}
+                className={`p-4 border-b border-slate-100 cursor-pointer transition-colors flex items-center gap-3 ${activeRoom === room.studentId ? 'bg-indigo-50 border-l-4 border-l-indigo-600' : 'hover:bg-slate-100'}`}
               >
                 <div className="w-12 h-12 bg-indigo-100 text-indigo-700 rounded-2xl flex items-center justify-center font-bold text-xl flex-shrink-0">
                   {room.studentName.charAt(0)}
@@ -123,11 +123,11 @@ export default function LiveChatInbox() {
               {roomMessages.map((msg, idx) => {
                 const isMe = msg.senderRole === 'teacher'
                 return (
-                  <div key={idx} className={`flex max-w-[80%] \${isMe ? 'self-end' : 'self-start'}`}>
-                    <div className={`px-4 py-2.5 rounded-2xl text-sm shadow-sm \${isMe ? 'bg-indigo-600 text-white rounded-tr-sm' : 'bg-white border border-slate-200 text-slate-700 rounded-tl-sm'}`}>
+                  <div key={idx} className={`flex max-w-[80%] ${isMe ? 'self-end' : 'self-start'}`}>
+                    <div className={`px-4 py-2.5 rounded-2xl text-sm shadow-sm ${isMe ? 'bg-indigo-600 text-white rounded-tr-sm' : 'bg-white border border-slate-200 text-slate-700 rounded-tl-sm'}`}>
                       {!isMe && <span className="block text-[10px] font-bold text-indigo-500 mb-1">{msg.senderName}</span>}
                       <p className="leading-relaxed">{msg.text}</p>
-                      <span className={`block text-[9px] mt-1 text-right \${isMe ? 'text-indigo-200' : 'text-slate-400'}`}>
+                      <span className={`block text-[9px] mt-1 text-right ${isMe ? 'text-indigo-200' : 'text-slate-400'}`}>
                         {msg.createdAt?.toDate ? msg.createdAt.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '...'}
                       </span>
                     </div>

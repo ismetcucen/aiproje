@@ -145,6 +145,7 @@ export default function StudentPanel() {
           {active === 'showcase'    && <ShowcaseGallery />}
           {active === 'ai'          && <AiAssistant />}
           {active === 'ailab'       && <HighSchoolAILab />}
+          {active === 'chat'        && <StudentLiveChat />}
         </div>
       </main>
       <StudentLiveChat />
