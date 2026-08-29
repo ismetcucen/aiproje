@@ -20,7 +20,7 @@ export default function LiveMarquee() {
     } catch(err) {}
   }
 
-  const displayAnnouncements = displayAnnouncements.length > 0 ? announcements : [{ id: 'empty', message: 'Şu an aktif bir duyuru bulunmamaktadır.' }];
+  const displayAnnouncements = announcements.length > 0 ? announcements : [{ id: 'empty', message: 'Şu an aktif bir duyuru bulunmamaktadır.' }];
 
   return (
     <div className="w-full bg-slate-900/95 backdrop-blur-xl border-b border-white/10 text-slate-200 overflow-hidden shadow-2xl flex items-center relative z-50 h-12">
