@@ -36,7 +36,7 @@ export default function LiveMarquee() {
             <span className="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
           </span>
           <span className="font-black text-white text-xs md:text-sm uppercase tracking-widest">
-            ÖHEP DUYURU
+            ÖHEP BİLİŞİM DUYURU
           </span>
         </div>
         {/* Sağa doğru üçgen kesimi (CSS üçgen hilesi) */}
