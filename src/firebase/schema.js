@@ -485,6 +485,11 @@ export async function getLatestAnnouncements(targetRole = 'all') {
   const q = query(collection(db, 'announcements'), orderBy('createdAt', 'desc'), limit(5));
   const snap = await getDocs(q);
   const allAnnouncements = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  
+  // If we are explicitly asking for 'admin', return all of them so admin sees everything
+  if (targetRole === 'admin') return allAnnouncements;
+  
+  // Otherwise filter properly
   return allAnnouncements.filter(a => a.targetRole === 'all' || a.targetRole === targetRole);
 }
 
