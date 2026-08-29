@@ -16,8 +16,12 @@ export default function LiveMarquee() {
   async function loadData() {
     try {
       const data = await getLatestAnnouncements(profile?.role || 'all')
+      console.log("Fetched announcements:", data)
       setAnnouncements(data)
-    } catch(err) {}
+    } catch(err) {
+      console.error("Error fetching announcements:", err)
+      setAnnouncements([{ id: 'err', message: 'Veri çekilirken hata oluştu: ' + err.message }]);
+    }
   }
 
   const displayAnnouncements = announcements.length > 0 ? announcements : [{ id: 'empty', message: 'Şu an aktif bir duyuru bulunmamaktadır.' }];
