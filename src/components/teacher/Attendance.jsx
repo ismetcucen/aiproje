@@ -36,6 +36,7 @@ export default function Attendance() {
 
   function getStartOfWeek(date) {
     const d = new Date(date)
+    d.setHours(0, 0, 0, 0)
     const day = d.getDay()
     const diff = d.getDate() - day + (day === 0 ? -6 : 1) // adjust when day is sunday
     return new Date(d.setDate(diff))
@@ -44,10 +45,11 @@ export default function Attendance() {
   const startOfWeek = getStartOfWeek(selectedDate)
   const endOfWeek = new Date(startOfWeek)
   endOfWeek.setDate(startOfWeek.getDate() + 6)
+  endOfWeek.setHours(23, 59, 59, 999)
 
   const classObj = classes.find(c => c.id === selectedClass)
   const classStudents = students.filter(s => 
-    s.gradeNumber == classObj?.grade && s.section == classObj?.section
+    String(s.gradeNumber) === String(classObj?.grade)
   )
 
   function didAttendThisWeek(student) {
