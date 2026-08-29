@@ -20,7 +20,7 @@ export default function LiveMarquee() {
     } catch(err) {}
   }
 
-  if (announcements.length === 0) return null
+  const displayAnnouncements = displayAnnouncements.length > 0 ? announcements : [{ id: 'empty', message: 'Şu an aktif bir duyuru bulunmamaktadır.' }];
 
   return (
     <div className="w-full bg-slate-900/95 backdrop-blur-xl border-b border-white/10 text-slate-200 overflow-hidden shadow-2xl flex items-center relative z-50 h-12">
@@ -42,12 +42,12 @@ export default function LiveMarquee() {
       {/* Kayan Yazı Alanı */}
       <div className="flex-1 overflow-hidden whitespace-nowrap relative ml-6">
         <div className="inline-block animate-[marquee_25s_linear_infinite] hover:pause pl-4">
-          {announcements.map((a, i) => (
+          {displayAnnouncements.map((a, i) => (
             <span key={a.id} className="inline-flex items-center">
               <span className="text-sm md:text-base font-medium text-slate-100 tracking-wide">
                 {a.message}
               </span>
-              {i !== announcements.length - 1 && (
+              {i !== displayAnnouncements.length - 1 && (
                 <span className="mx-12 text-red-500 font-black text-lg">•</span>
               )}
             </span>
