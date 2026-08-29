@@ -7,7 +7,7 @@ export default function LiveMarquee() {
   const [announcements, setAnnouncements] = useState([])
 
   useEffect(() => {
-    if (!profile) return
+    // allow fetching if not logged in
     loadData()
     const interval = setInterval(loadData, 60000) // 1 dakikada bir yenile
     return () => clearInterval(interval)
