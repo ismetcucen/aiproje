@@ -36,12 +36,12 @@ export default function Announcements() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
             <label className="block text-slate-500 text-sm mb-2">Duyuru Mesajı</label>
-            <input required value={message} onChange={e => setMessage(e.target.value)} className="w-full bg-white shadow-sm border border-slate-200 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500" placeholder="Örn: Yarınki kodlama dersi 15:00'e alınmıştır..." />
+            <input required value={message} onChange={e => setMessage(e.target.value)} className="w-full bg-white shadow-sm border border-slate-200 rounded-lg px-4 py-3 text-slate-800 focus:outline-none focus:border-indigo-500" placeholder="Örn: Yarınki kodlama dersi 15:00'e alınmıştır..." />
           </div>
           <div className="flex justify-between items-end">
             <div>
               <label className="block text-slate-500 text-sm mb-2">Hedef Kitle</label>
-              <select value={targetRole} onChange={e => setTargetRole(e.target.value)} className="bg-white shadow-sm border border-slate-200 rounded-lg px-4 py-2 text-white outline-none">
+              <select value={targetRole} onChange={e => setTargetRole(e.target.value)} className="bg-white shadow-sm border border-slate-200 rounded-lg px-4 py-2 text-slate-800 outline-none">
                 <option value="all">Tüm Okul (Öğrenci + Öğretmen)</option>
                 <option value="student">Sadece Öğrenciler</option>
                 <option value="teacher">Sadece Öğretmenler</option>
@@ -55,7 +55,7 @@ export default function Announcements() {
       </div>
 
       <div className="space-y-3">
-        <h3 className="text-lg font-bold text-white mb-4">Aktif Duyurular (Son 5)</h3>
+        <h3 className="text-lg font-bold text-slate-800 mb-4">Aktif Duyurular (Son 5)</h3>
         {list.map(a => (
           <div key={a.id} className="bg-white shadow-sm border border-slate-200 rounded-xl p-4 flex justify-between items-center group">
             <div>
