@@ -194,7 +194,17 @@ export default function LiveClassControl() {
                   )}
                 </div>
 
-                {/* Soru */}
+                {/* Soru Tipi ve Soru */}
+                <div className="flex items-center gap-4 mb-2">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="radio" checked={questionType === 'text'} onChange={() => setQuestionType('text')} className="accent-indigo-600" />
+                    <span className="text-sm font-bold text-slate-700">Açık Uçlu Soru</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="radio" checked={questionType === 'poll'} onChange={() => setQuestionType('poll')} className="accent-indigo-600" />
+                    <span className="text-sm font-bold text-slate-700">Canlı Anket (Çoktan Seçmeli)</span>
+                  </label>
+                </div>
                 <div>
                   <label className="block text-slate-500 text-xs font-bold uppercase tracking-wider mb-2">Soru Metni</label>
                   <textarea 
@@ -204,6 +214,21 @@ export default function LiveClassControl() {
                     className="w-full border border-slate-200 rounded-2xl p-4 text-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 resize-none h-24"
                   />
                 </div>
+                
+                {questionType === 'poll' && (
+                  <div className="space-y-3 bg-indigo-50/50 p-4 rounded-2xl border border-indigo-100">
+                    <label className="block text-indigo-700 text-xs font-bold uppercase tracking-wider">Anket Seçenekleri</label>
+                    <div className="grid grid-cols-2 gap-3">
+                      {pollOptions.map((opt, idx) => (
+                        <input key={idx} type="text" value={opt} onChange={e => {
+                          const newOpts = [...pollOptions];
+                          newOpts[idx] = e.target.value;
+                          setPollOptions(newOpts);
+                        }} placeholder={`${String.fromCharCode(65 + idx)} Şıkkı`} className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" />
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 <div className="flex items-center gap-3 bg-red-50 p-3 rounded-xl border border-red-100">
                   <input type="checkbox" id="req" checked={requireAnswer} onChange={e => setRequireAnswer(e.target.checked)} className="w-5 h-5 accent-red-600" />
@@ -263,6 +288,46 @@ export default function LiveClassControl() {
                 <div className="h-full flex flex-col items-center justify-center text-slate-400">
                   <p>Henüz yanıt yok...</p>
                   <p className="text-xs mt-1">Öğrencilerin gönderdiği cevaplar anında burada belirecek.</p>
+                </div>
+              ) : session?.type === 'poll' ? (
+                <div className="space-y-4">
+                  {(() => {
+                    const total = answers.length;
+                    const counts = {};
+                    session.options.forEach(opt => counts[opt] = 0);
+                    answers.forEach(ans => {
+                      if (counts[ans.answer] !== undefined) counts[ans.answer]++;
+                      else counts[ans.answer] = 1;
+                    });
+                    
+                    return session.options.map((opt, idx) => {
+                      const count = counts[opt] || 0;
+                      const percent = Math.round((count / total) * 100);
+                      return (
+                        <div key={idx} className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                          <div className="flex justify-between items-end mb-2">
+                            <span className="font-bold text-slate-700">{opt}</span>
+                            <span className="text-sm font-bold text-indigo-600">{count} Oy (%{percent})</span>
+                          </div>
+                          <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+                            <div className="bg-gradient-to-r from-indigo-500 to-purple-500 h-3 rounded-full transition-all duration-1000" style={{ width: `${percent}%` }}></div>
+                          </div>
+                        </div>
+                      )
+                    });
+                  })()}
+                  
+                  <div className="mt-8 pt-4 border-t border-slate-200">
+                    <h5 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Kim Ne Dedi?</h5>
+                    <div className="space-y-2">
+                      {answers.map(ans => (
+                        <div key={ans.id} className="flex justify-between items-center bg-white px-3 py-2 rounded-lg border border-slate-100">
+                          <span className="text-sm font-medium text-slate-600">{ans.studentName}</span>
+                          <span className="text-xs font-bold bg-indigo-50 text-indigo-700 px-2 py-1 rounded">{ans.answer}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               ) : (
                 answers.map(ans => (

@@ -79,20 +79,53 @@ export default function LiveSessionLocker() {
           )}
 
           <div className="w-full max-w-2xl bg-slate-50 p-6 rounded-3xl border border-slate-200">
-            <label className="block text-slate-500 text-xs font-bold uppercase tracking-wider mb-3">Cevabınız</label>
-            <textarea
-              value={answer}
-              onChange={e => setAnswer(e.target.value)}
-              placeholder="Cevabınızı buraya yazın..."
-              className="w-full bg-white border border-slate-300 rounded-2xl p-4 text-lg focus:outline-none focus:border-red-500 focus:ring-4 focus:ring-red-500/20 resize-none h-32 mb-4 transition-all"
-            />
-            <button
-              onClick={handleSubmit}
-              disabled={submitting || !answer.trim()}
-              className="w-full bg-red-500 hover:bg-red-600 disabled:opacity-50 text-white font-black text-lg py-4 rounded-2xl transition-colors shadow-lg shadow-red-500/30"
-            >
-              {submitting ? 'Gönderiliyor...' : 'Cevabı Gönder ve Ekrana Dön'}
-            </button>
+            <label className="block text-slate-500 text-xs font-bold uppercase tracking-wider mb-3">
+              {session.type === 'poll' ? 'Anket Seçenekleri' : 'Cevabınız'}
+            </label>
+            
+            {session.type === 'poll' && session.options ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {session.options.map((opt, idx) => (
+                  <button
+                    key={idx}
+                    disabled={submitting}
+                    onClick={async () => {
+                      setSubmitting(true)
+                      try {
+                        await submitLiveAnswer(session.id, session.questionId, user.uid, profile.fullName, opt)
+                        const updated = { ...answeredQuestions, [session.questionId]: true }
+                        setAnsweredQuestions(updated)
+                        localStorage.setItem('answeredLiveQuestions', JSON.stringify(updated))
+                      } catch(err) {
+                        alert('Cevap gönderilirken hata oluştu.')
+                      } finally {
+                        setSubmitting(false)
+                      }
+                    }}
+                    className="bg-white hover:bg-indigo-50 border-2 border-indigo-100 hover:border-indigo-500 text-slate-700 hover:text-indigo-700 font-bold text-lg py-6 rounded-2xl transition-all shadow-sm flex items-center justify-center gap-3 disabled:opacity-50 group"
+                  >
+                    <span className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-sm group-hover:bg-indigo-600 group-hover:text-white transition-colors">{String.fromCharCode(65 + idx)}</span>
+                    {opt}
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <>
+                <textarea
+                  value={answer}
+                  onChange={e => setAnswer(e.target.value)}
+                  placeholder="Cevabınızı buraya yazın..."
+                  className="w-full bg-white border border-slate-300 rounded-2xl p-4 text-lg focus:outline-none focus:border-red-500 focus:ring-4 focus:ring-red-500/20 resize-none h-32 mb-4 transition-all"
+                />
+                <button
+                  onClick={handleSubmit}
+                  disabled={submitting || !answer.trim()}
+                  className="w-full bg-red-500 hover:bg-red-600 disabled:opacity-50 text-white font-black text-lg py-4 rounded-2xl transition-colors shadow-lg shadow-red-500/30"
+                >
+                  {submitting ? 'Gönderiliyor...' : 'Cevabı Gönder ve Ekrana Dön'}
+                </button>
+              </>
+            )}
           </div>
 
         </div>
