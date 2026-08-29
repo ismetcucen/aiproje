@@ -93,8 +93,12 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-fuchsia-900 flex flex-col items-center justify-center relative overflow-hidden font-sans">
+    <div className="min-h-screen flex flex-col font-sans">
+      <div className="fixed top-0 left-0 w-full z-[100]">
+        <LiveMarquee />
+      </div>
       
+      <div className="flex-1 bg-gradient-to-br from-indigo-900 via-purple-900 to-fuchsia-900 flex flex-col items-center justify-center relative overflow-hidden pt-12">
       <div className="absolute inset-0 z-0">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-600/20 rounded-full blur-[120px] mix-blend-screen animate-pulse"></div>
         <div className="absolute bottom-1/4 right-1/4 w-[30rem] h-[30rem] bg-purple-600/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" style={{animationDelay: '2s'}}></div>
@@ -323,6 +327,7 @@ export default function LoginPage() {
         <p className="text-white/70 text-sm font-medium tracking-wide">
           İsmet ÇÜÇEN & AI
         </p>
+      </div>
       </div>
     </div>
   )
