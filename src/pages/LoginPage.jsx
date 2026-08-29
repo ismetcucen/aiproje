@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import { CLASS_LEVELS, ROLES } from '../firebase/schema'
-import { VISUAL_PASSWORDS } from '../components/admin/AddStudentModal'
+import { VISUAL_PASSWORDS }
+from '../components/admin/AddStudentModal'
+import InstagramWidget from '../components/InstagramWidget'
 
 const TABS = { LOGIN: 'login', VISUAL: 'visual', REGISTER: 'register' }
 
@@ -153,6 +155,10 @@ export default function LoginPage() {
                 <h3 className="text-white font-black text-lg">Sınıf Yıldızları (OHEP Dojo)</h3>
                 <p className="text-slate-300 text-sm leading-relaxed mt-1">Canlı konfeti animasyonları ile öğrencileri anında motive eden harika bir dijital rozet sistemi.</p>
               </div>
+            </div>
+            
+            <div className="mt-2 w-full max-w-[280px]">
+              <InstagramWidget />
             </div>
           </div>
         </div>

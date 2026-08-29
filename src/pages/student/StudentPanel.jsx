@@ -17,6 +17,7 @@ import StudentLiveChat from '../../components/student/StudentLiveChat'
 import AiAssistant from '../../components/student/AiAssistant'
 import LiveMarquee from '../../components/LiveMarquee'
 import HighSchoolAILab from '../../components/student/HighSchoolAILab'
+import InstagramWidget from '../../components/InstagramWidget'
 import { getSchoolSettings } from '../../firebase/schema'
 
 const MENU = [
@@ -103,6 +104,10 @@ export default function StudentPanel() {
             </button>
           ))}
         </nav>
+
+        <div className="px-3 pb-4">
+          <InstagramWidget />
+        </div>
 
         <div className="p-4 border-t border-white/10 bg-black/10 relative z-10">
           <div className="px-2 mb-3 flex items-center gap-3">
