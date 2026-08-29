@@ -16,6 +16,8 @@ export default function LiveClassControl() {
   const [imageUrl, setImageUrl] = useState('')
   const [requireAnswer, setRequireAnswer] = useState(true)
   const [loading, setLoading] = useState(false)
+  const [questionType, setQuestionType] = useState('text')
+  const [pollOptions, setPollOptions] = useState(['', '', '', ''])
 
   const fileInputRef = useRef(null)
 
