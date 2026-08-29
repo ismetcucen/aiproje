@@ -488,6 +488,16 @@ export async function getLatestAnnouncements(targetRole = 'all') {
   return allAnnouncements.filter(a => a.targetRole === 'all' || a.targetRole === targetRole);
 }
 
+export async function deleteAllAnnouncements() {
+  const q = query(collection(db, 'announcements'))
+  const snapshot = await getDocs(q)
+  const batch = writeBatch(db)
+  snapshot.docs.forEach(doc => {
+    batch.delete(doc.ref)
+  })
+  await batch.commit()
+}
+
 export async function deleteAnnouncement(id) {
   await deleteDoc(doc(db, 'announcements', id));
 }

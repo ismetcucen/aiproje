@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { createAnnouncement, getLatestAnnouncements, deleteAnnouncement } from '../../firebase/schema'
+import { createAnnouncement, getLatestAnnouncements, deleteAnnouncement, deleteAllAnnouncements } from '../../firebase/schema'
 import { useAuth } from '../../hooks/useAuth'
 
 export default function Announcements() {
@@ -55,7 +55,22 @@ export default function Announcements() {
       </div>
 
       <div className="space-y-3">
-        <h3 className="text-lg font-bold text-slate-800 mb-4">Aktif Duyurular (Son 5)</h3>
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-bold text-slate-800">Aktif Duyurular (Son 5)</h3>
+          {list.length > 0 && (
+            <button 
+              onClick={async () => {
+                if(window.confirm('Tüm duyuruları silmek istediğinize emin misiniz?')) {
+                  await deleteAllAnnouncements();
+                  loadData();
+                }
+              }} 
+              className="text-xs bg-red-100 hover:bg-red-200 text-red-600 px-3 py-1.5 rounded-lg font-bold transition-colors"
+            >
+              Tümünü Sil
+            </button>
+          )}
+        </div>
         {list.map(a => (
           <div key={a.id} className="bg-white shadow-sm border border-slate-200 rounded-xl p-4 flex justify-between items-center group">
             <div>
