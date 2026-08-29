@@ -4,6 +4,7 @@ import { CLASS_LEVELS, ROLES } from '../firebase/schema'
 import { VISUAL_PASSWORDS }
 from '../components/admin/AddStudentModal'
 import InstagramWidget from '../components/InstagramWidget'
+import LiveMarquee from '../components/LiveMarquee'
 
 const TABS = { LOGIN: 'login', VISUAL: 'visual', REGISTER: 'register' }
 
