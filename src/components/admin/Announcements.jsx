@@ -57,7 +57,7 @@ export default function Announcements() {
       <div className="space-y-3">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-bold text-slate-800">Aktif Duyurular (Son 5)</h3>
-          {list.length > 0 && (
+          {true && (
             <button 
               onClick={async () => {
                 if(window.confirm('Tüm duyuruları silmek istediğinize emin misiniz?')) {
