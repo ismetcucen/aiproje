@@ -24,6 +24,25 @@ export default function LiveClassControl() {
 
   useEffect(() => {
     if (!profile?.schoolCode) return
+    const q = query(
+      collection(db, 'student_status'),
+      where('schoolCode', '==', profile.schoolCode)
+    )
+    const unsub = onSnapshot(q, (snap) => {
+      const statuses = {}
+      snap.forEach(doc => {
+        const data = doc.data()
+        if (String(data.gradeNumber) === String(selectedGrade)) {
+          statuses[doc.id] = data.status
+        }
+      })
+      setStudentStatuses(statuses)
+    })
+    return () => unsub()
+  }, [profile?.schoolCode, selectedGrade])
+
+  useEffect(() => {
+    if (!profile?.schoolCode) return
     async function loadStudents() {
       try {
         const q = query(
