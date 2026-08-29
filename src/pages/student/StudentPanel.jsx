@@ -164,6 +164,8 @@ export default function StudentPanel() {
             </div>
           </div>
         </header>
+        
+        <LiveMarquee />
 
         <div className="flex-1 overflow-auto p-6">
           {active === 'home'        && <StudentHome onNavigate={setActive} />}
