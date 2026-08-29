@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import LiveSessionLocker from '../../components/student/LiveSessionLocker'
+import StudentStatusWidget from '../../components/student/StudentStatusWidget'
 import DojoNotificationListener from '../../components/student/DojoNotificationListener'
 import AvatarCreatorModal from '../../components/student/AvatarCreatorModal'
 import NotificationBell from '../../components/NotificationBell'
@@ -67,6 +68,7 @@ export default function StudentPanel() {
   return (
     <>
       <LiveSessionLocker />
+      <StudentStatusWidget />
       <DojoNotificationListener />
     <div className="min-h-screen bg-[#f4f7fc] flex">
 

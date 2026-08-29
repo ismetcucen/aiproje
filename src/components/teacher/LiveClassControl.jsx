@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import { setLiveSession, listenToLiveSession, listenToLiveAnswers } from '../../firebase/schema'
-import { collection, query, where, getDocs } from 'firebase/firestore'
+import { collection, query, where, getDocs, onSnapshot } from 'firebase/firestore'
 import { db } from '../../firebase/config'
 const GRADES = ['3', '4', '5', '6', '7', '9', '10'] // using GRADES from schema or just array
 
@@ -11,6 +11,7 @@ export default function LiveClassControl() {
   const [session, setSession] = useState(null)
   const [answers, setAnswers] = useState([])
   const [students, setStudents] = useState([])
+  const [studentStatuses, setStudentStatuses] = useState({})
   
   const [questionText, setQuestionText] = useState('')
   const [imageUrl, setImageUrl] = useState('')
@@ -145,6 +146,73 @@ export default function LiveClassControl() {
               {g}. Sınıf
             </button>
           ))}
+        </div>
+      </div>
+
+      
+      {/* DERS KOKPİTİ BÖLÜMÜ */}
+      <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 rounded-3xl p-6 mb-8 shadow-2xl border border-slate-700 relative overflow-hidden">
+        {/* Background effects */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-emerald-500/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/4"></div>
+        
+        <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div>
+            <h3 className="text-white text-2xl md:text-3xl font-black tracking-wide flex items-center gap-3">
+              {selectedGrade}. SINIF <span className="text-slate-500 font-light">|</span> <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-fuchsia-400">DERS KOKPİTİ</span>
+            </h3>
+            <p className="text-slate-400 font-medium mt-2 flex items-center gap-3">
+              <span className="bg-white/10 px-3 py-1 rounded-md text-sm shadow-sm flex items-center gap-1.5">
+                <span className="text-base">👥</span> {students.length} Toplam Öğrenci
+              </span>
+            </p>
+          </div>
+          
+          <div className="flex gap-3 w-full md:w-auto overflow-x-auto pb-2 md:pb-0 custom-scrollbar">
+            {(() => {
+              const activeCount = Object.values(studentStatuses).filter(s => s === 'active').length;
+              const taskCount = Object.values(studentStatuses).filter(s => s === 'task').length;
+              const helpCount = Object.values(studentStatuses).filter(s => s === 'help').length;
+              
+              return (
+                <>
+                  <div className="bg-slate-800/80 backdrop-blur border border-emerald-500/30 rounded-2xl px-5 py-3 flex flex-col items-center min-w-[100px] flex-shrink-0 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+                    <span className="text-emerald-400 text-3xl font-black">{activeCount}</span>
+                    <span className="text-slate-300 text-xs font-bold uppercase mt-1 flex items-center gap-1"><span>🟢</span> Aktif</span>
+                  </div>
+                  <div className="bg-slate-800/80 backdrop-blur border border-amber-500/30 rounded-2xl px-5 py-3 flex flex-col items-center min-w-[100px] flex-shrink-0 shadow-[0_0_15px_rgba(245,158,11,0.1)]">
+                    <span className="text-amber-400 text-3xl font-black">{taskCount}</span>
+                    <span className="text-slate-300 text-xs font-bold uppercase mt-1 flex items-center gap-1"><span>🟡</span> Görevde</span>
+                  </div>
+                  <div className="bg-slate-800/80 backdrop-blur border border-rose-500/30 rounded-2xl px-5 py-3 flex flex-col items-center min-w-[100px] flex-shrink-0 shadow-[0_0_15px_rgba(244,63,94,0.1)]">
+                    <span className="text-rose-400 text-3xl font-black">{helpCount}</span>
+                    <span className="text-slate-300 text-xs font-bold uppercase mt-1 flex items-center gap-1"><span>🔴</span> Yardım</span>
+                  </div>
+                </>
+              )
+            })()}
+          </div>
+        </div>
+        
+        {/* Öğrenci İsim Listesi Mini Görünüm */}
+        <div className="relative z-10 mt-6 pt-5 border-t border-slate-700/50">
+          <div className="flex flex-wrap gap-2">
+            {students.map(stu => {
+              const st = studentStatuses[stu.id];
+              let dot = '⚪';
+              let border = 'border-slate-700';
+              if (st === 'active') { dot = '🟢'; border = 'border-emerald-500/50 bg-emerald-500/10 text-emerald-100'; }
+              if (st === 'task') { dot = '🟡'; border = 'border-amber-500/50 bg-amber-500/10 text-amber-100'; }
+              if (st === 'help') { dot = '🔴'; border = 'border-rose-500/50 bg-rose-500/10 text-rose-100'; }
+              
+              return (
+                <div key={stu.id} className={`px-2.5 py-1 rounded-md border text-xs font-medium text-slate-300 flex items-center gap-1.5 transition-colors ${border}`}>
+                  <span className="text-[10px]">{dot}</span> {stu.fullName}
+                </div>
+              )
+            })}
+            {students.length === 0 && <span className="text-slate-500 text-xs italic">Bu sınıfa kayıtlı öğrenci bulunmuyor.</span>}
+          </div>
         </div>
       </div>
 
