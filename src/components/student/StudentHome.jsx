@@ -25,7 +25,7 @@ export default function StudentHome({ onNavigate }) {
             Merhaba, {profile?.fullName.split(' ')[0]}!
           </h2>
           
-          <p className="text-slate-700 text-lg md:text-xl max-w-2xl leading-relaxed mb-8">
+          <p className="text-white text-lg md:text-xl max-w-2xl leading-relaxed mb-8 font-medium">
             Yapay zeka (AI) sadece bir araç değil, senin yeni süper gücün. 
             Burada kelimelerle resim çizmeyi, kendi hikayelerini yazmayı ve 
             hayalindeki projeleri saniyeler içinde hayata geçirmeyi öğreneceksin. 
