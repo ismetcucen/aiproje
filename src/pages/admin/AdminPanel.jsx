@@ -27,6 +27,7 @@ const MENU = [
   { id: 'settings',   label: 'Ayarlar',      icon: '⚙️' },
   { id: 'live',       label: 'Canlı Sınıf',  icon: '📡' },
   { id: 'announcements', label: 'Duyurular', icon: '📢' },
+  { id: 'digital_board', label: 'Dijital Pano', icon: '🖥️' },
   { id: 'aiedu', label: 'Eğitimde YZ', icon: '🏫' },
   { id: 'stats',      label: 'İstatistikler', icon: '📊' },
   { id: 'users',      label: 'Kullanıcılar',  icon: '👥' },
@@ -107,6 +108,7 @@ export default function AdminPanel() {
           {active === 'tubitak'    && <TubitakProjects />}
           {active === 'calendar'   && <CalendarPlanner />}
           {active === 'announcements' && <Announcements />}
+          {active === 'digital_board' && <DigitalBoardSettings />}
           {active === 'qna'           && <LiveChatInbox />}
           {active === 'showcase'      && <ShowcaseGallery />}
           {active === 'attendance' && <Attendance />}
