@@ -20,6 +20,7 @@ import ClassSettings from '../../components/teacher/ClassSettings'
 import ClassDojoBoard from '../../components/teacher/ClassDojoBoard'
 import LiveClassControl from '../../components/teacher/LiveClassControl'
 import Attendance from '../../components/teacher/Attendance'
+import DigitalBoardSettings from '../../components/admin/DigitalBoardSettings'
 
 const MENU = [
   { id: 'calendar',   label: 'Ajanda', icon: '📅' },
