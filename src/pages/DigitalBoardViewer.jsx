@@ -86,10 +86,10 @@ export default function DigitalBoardViewer() {
       <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm z-0"></div>
 
       {/* Main Content Area */}
-      <div className="relative z-10 h-full flex flex-col p-8 pb-20">
+      <div className="relative z-10 h-full flex flex-col p-4 md:p-6 pb-16 md:pb-20 box-border">
         
         {/* Header: Logo / School Name & Clock */}
-        <header className="flex justify-between items-center mb-10">
+        <header className="flex justify-between items-center mb-4 md:mb-6 shrink-0">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center p-2 shadow-[0_0_30px_rgba(255,255,255,0.3)]">
               <img src="/ohep.jpeg" alt="Logo" className="w-full h-full object-contain rounded-xl" />
@@ -116,16 +116,16 @@ export default function DigitalBoardViewer() {
         </header>
 
         {/* 3-Column Layout */}
-        <div className="flex-1 grid grid-cols-12 gap-8">
+        <div className="flex-1 grid grid-cols-12 gap-4 md:gap-6 min-h-0">
           
           {/* LEFT: Timetable & Menu */}
-          <div className="col-span-4 flex flex-col gap-8">
+          <div className="col-span-4 flex flex-col gap-4 md:gap-6 min-h-0">
             {/* Zaman Çizelgesi */}
-            <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-6 border border-white/10 shadow-2xl flex-1 flex flex-col">
+            <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-4 md:p-6 border border-white/10 shadow-2xl flex-1 flex flex-col min-h-0">
               <h2 className="text-2xl font-bold uppercase tracking-widest text-indigo-300 mb-6 flex items-center gap-3">
                 <span>⏱️</span> Zaman Çizelgesi
               </h2>
-              <div className="space-y-3 flex-1 overflow-hidden">
+              <div className="space-y-2 md:space-y-3 flex-1 overflow-y-auto pr-2 custom-scrollbar">
                 {(settings.timetable || []).map((t, idx) => {
                   let isCurrent = false;
                   // Basic time parsing logic for active row highlight (e.g., "08:30 - 09:10")
@@ -157,7 +157,7 @@ export default function DigitalBoardViewer() {
             </div>
 
             {/* Günün Menüsü */}
-            <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-6 border border-white/10 shadow-2xl relative overflow-hidden">
+            <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-4 md:p-6 border border-white/10 shadow-2xl relative overflow-hidden shrink-0">
               <div className="absolute -right-10 -bottom-10 text-9xl opacity-10">🍲</div>
               <h2 className="text-2xl font-bold uppercase tracking-widest text-orange-300 mb-5 flex items-center gap-3 relative z-10">
                 <span>🍽️</span> Günün Menüsü
@@ -177,10 +177,10 @@ export default function DigitalBoardViewer() {
           </div>
 
           {/* MIDDLE: Weather & Exams Countdowns */}
-          <div className="col-span-4 flex flex-col gap-6">
+          <div className="col-span-4 flex flex-col gap-4 md:gap-6 min-h-0">
             
             {/* Hava Durumu */}
-            <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-6 border border-white/10 shadow-2xl flex items-center justify-between">
+            <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-4 md:p-6 border border-white/10 shadow-2xl flex items-center justify-between shrink-0">
               <div>
                 <h2 className="text-xl font-bold uppercase tracking-widest text-sky-300 mb-1 flex items-center gap-2">
                   <span>📍</span> Alanya
@@ -201,7 +201,7 @@ export default function DigitalBoardViewer() {
             </div>
 
             {/* Sınavlara Kalan Zaman (Küçültüldü) */}
-            <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-6 border border-white/10 shadow-2xl flex-1 flex flex-col">
+            <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-4 md:p-6 border border-white/10 shadow-2xl flex-1 flex flex-col min-h-0">
                <h2 className="text-xl font-bold uppercase tracking-widest text-fuchsia-300 mb-6 flex items-center gap-3">
                  <span>🎯</span> Sınavlara Kalan Zaman
                </h2>
@@ -250,13 +250,13 @@ export default function DigitalBoardViewer() {
           </div>
 
           {/* RIGHT: Duty Teachers & Quote */}
-          <div className="col-span-4 flex flex-col gap-8">
+          <div className="col-span-4 flex flex-col gap-4 md:gap-6 min-h-0">
             {/* Nöbetçi Öğretmenler */}
-            <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-6 border border-white/10 shadow-2xl flex-1">
+            <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-4 md:p-6 border border-white/10 shadow-2xl flex-1 flex flex-col min-h-0">
               <h2 className="text-2xl font-bold uppercase tracking-widest text-emerald-300 mb-6 flex items-center gap-3">
                 <span>🛡️</span> Nöbetçi Öğretmenler
               </h2>
-              <div className="space-y-4">
+              <div className="space-y-3 flex-1 overflow-y-auto pr-2 custom-scrollbar">
                 <div className="bg-white/5 rounded-2xl p-5 border border-white/10 flex flex-col">
                   <span className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">İLKOKUL</span>
                   <span className="text-2xl font-black text-white">{settings.dutyTeachers?.primary || '-'}</span>
@@ -274,7 +274,7 @@ export default function DigitalBoardViewer() {
 
             {/* Günün Sözü */}
             {settings.quoteOfTheDay && (
-              <div className="bg-gradient-to-br from-indigo-900/80 to-purple-900/80 backdrop-blur-xl rounded-3xl p-8 border border-indigo-500/30 shadow-2xl text-center relative overflow-hidden">
+              <div className="bg-gradient-to-br from-indigo-900/80 to-purple-900/80 backdrop-blur-xl rounded-3xl p-4 md:p-6 border border-indigo-500/30 shadow-2xl text-center relative overflow-hidden shrink-0">
                  <div className="text-6xl text-indigo-400/20 absolute -top-4 -left-2 font-serif">"</div>
                  <p className="text-xl font-medium text-white italic leading-relaxed relative z-10">
                    "{settings.quoteOfTheDay}"
