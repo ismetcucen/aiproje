@@ -740,3 +740,27 @@ export const listenToRobotAnnouncement = (callback) => {
     }
   })
 }
+
+// --- DIGITAL BOARD ---
+export async function getDigitalBoardSettings(schoolCode) {
+  if (!schoolCode) schoolCode = 'OHEP'
+  const docRef = doc(db, 'school_settings', `digital_board_${schoolCode}`)
+  const snap = await getDoc(docRef)
+  if (snap.exists()) {
+    return snap.data()
+  }
+  return {
+    backgroundImageUrl: '',
+    dutyTeachers: { primary: '', middle: '', high: '' },
+    examDates: { lgs: '', tyt: '', ayt: '' },
+    timetable: [],
+    dailyMenu: [],
+    quoteOfTheDay: ''
+  }
+}
+
+export async function updateDigitalBoardSettings(schoolCode, data) {
+  if (!schoolCode) schoolCode = 'OHEP'
+  const docRef = doc(db, 'school_settings', `digital_board_${schoolCode}`)
+  await setDoc(docRef, data, { merge: true })
+}
