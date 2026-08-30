@@ -5,6 +5,7 @@ import LiveMarquee from '../components/LiveMarquee'
 export default function DigitalBoardViewer() {
   const [settings, setSettings] = useState(null)
   const [time, setTime] = useState(new Date())
+  const [weather, setWeather] = useState(null)
 
   // Config: 'OHEP' is the default school code
   const schoolCode = 'OHEP'
@@ -19,6 +20,22 @@ export default function DigitalBoardViewer() {
     }, 600000)
     
     return () => clearInterval(interval)
+  }, [])
+
+  // Hava durumu çek (Alanya)
+  useEffect(() => {
+    const fetchWeather = async () => {
+      try {
+        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=36.5438&longitude=31.9998&current_weather=true&timezone=Europe%2FIstanbul')
+        const data = await res.json()
+        setWeather(data.current_weather)
+      } catch (e) {
+        console.error("Hava durumu hatası", e)
+      }
+    }
+    fetchWeather()
+    const weatherInterval = setInterval(fetchWeather, 1800000) // 30 mins
+    return () => clearInterval(weatherInterval)
   }, [])
 
   // Clock tick every second
@@ -43,6 +60,18 @@ export default function DigitalBoardViewer() {
 
   // Check current timetable
   const currentMinutes = time.getHours() * 60 + time.getMinutes()
+
+  const getWeatherIcon = (code) => {
+    if (code === 0) return '☀️' // clear
+    if (code === 1 || code === 2 || code === 3) return '⛅' // partly cloudy
+    if (code >= 45 && code <= 48) return '🌫️' // fog
+    if (code >= 51 && code <= 67) return '🌧️' // rain/drizzle
+    if (code >= 71 && code <= 77) return '❄️' // snow
+    if (code >= 80 && code <= 82) return '🌦️' // rain showers
+    if (code >= 95) return '⛈️' // thunderstorm
+    return '🌡️'
+  }
+
   
   return (
     <div 
@@ -128,65 +157,96 @@ export default function DigitalBoardViewer() {
             </div>
 
             {/* Günün Menüsü */}
-            <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-6 border border-white/10 shadow-2xl">
-              <h2 className="text-2xl font-bold uppercase tracking-widest text-orange-300 mb-4 flex items-center gap-3">
+            <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-6 border border-white/10 shadow-2xl relative overflow-hidden">
+              <div className="absolute -right-10 -bottom-10 text-9xl opacity-10">🍲</div>
+              <h2 className="text-2xl font-bold uppercase tracking-widest text-orange-300 mb-5 flex items-center gap-3 relative z-10">
                 <span>🍽️</span> Günün Menüsü
               </h2>
-              <ul className="space-y-3">
+              <ul className="space-y-4 relative z-10">
                 {(settings.dailyMenu || []).map((item, idx) => (
-                  <li key={idx} className="flex items-center gap-3 text-lg font-medium text-slate-200">
-                    <span className="w-2 h-2 rounded-full bg-orange-400"></span> {item}
+                  <li key={idx} className="flex items-center gap-4 text-xl font-medium text-slate-200 bg-white/5 p-3 rounded-xl border border-white/5">
+                    <span className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-tr from-orange-400 to-yellow-400 flex items-center justify-center text-white font-bold shadow-lg">✓</span>
+                    <span>{item}</span>
                   </li>
                 ))}
                 {(!settings.dailyMenu || settings.dailyMenu.length === 0) && (
-                  <p className="text-slate-500 italic">Günün menüsü henüz girilmedi.</p>
+                  <p className="text-slate-400 italic bg-white/5 p-4 rounded-xl text-center">Günün menüsü henüz girilmedi.</p>
                 )}
               </ul>
             </div>
           </div>
 
-          {/* MIDDLE: Exams Countdowns */}
-          <div className="col-span-4 flex flex-col gap-6 justify-center">
-             <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-8 border border-white/10 shadow-2xl">
-                <h2 className="text-2xl font-bold uppercase tracking-widest text-fuchsia-300 mb-8 flex items-center gap-3">
-                  <span>🎯</span> Sınavlara Kalan Zaman
+          {/* MIDDLE: Weather & Exams Countdowns */}
+          <div className="col-span-4 flex flex-col gap-6">
+            
+            {/* Hava Durumu */}
+            <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-6 border border-white/10 shadow-2xl flex items-center justify-between">
+              <div>
+                <h2 className="text-xl font-bold uppercase tracking-widest text-sky-300 mb-1 flex items-center gap-2">
+                  <span>📍</span> Alanya
                 </h2>
-                <div className="space-y-6">
-                  {/* LGS */}
-                  <div className="bg-white/10 rounded-2xl p-6 flex flex-col items-center justify-center border border-white/20 relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-fuchsia-500 to-purple-500"></div>
-                    <span className="text-2xl font-black text-white tracking-widest mb-2">LGS</span>
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 to-purple-400 drop-shadow-lg">
-                        {calculateDaysLeft(settings.examDates?.lgs)}
-                      </span>
-                      <span className="text-xl text-slate-400 uppercase tracking-wider font-bold">GÜN</span>
-                    </div>
-                  </div>
-                  {/* TYT */}
-                  <div className="bg-white/10 rounded-2xl p-6 flex flex-col items-center justify-center border border-white/20 relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-teal-500"></div>
-                    <span className="text-2xl font-black text-white tracking-widest mb-2">TYT</span>
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400 drop-shadow-lg">
-                        {calculateDaysLeft(settings.examDates?.tyt)}
-                      </span>
-                      <span className="text-xl text-slate-400 uppercase tracking-wider font-bold">GÜN</span>
-                    </div>
-                  </div>
-                  {/* AYT */}
-                  <div className="bg-white/10 rounded-2xl p-6 flex flex-col items-center justify-center border border-white/20 relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-cyan-500"></div>
-                    <span className="text-2xl font-black text-white tracking-widest mb-2">AYT</span>
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 drop-shadow-lg">
-                        {calculateDaysLeft(settings.examDates?.ayt)}
-                      </span>
-                      <span className="text-xl text-slate-400 uppercase tracking-wider font-bold">GÜN</span>
-                    </div>
+                <p className="text-slate-400 text-sm">Anlık Hava Durumu</p>
+              </div>
+              {weather ? (
+                <div className="flex items-center gap-4">
+                  <span className="text-6xl drop-shadow-lg">{getWeatherIcon(weather.weathercode)}</span>
+                  <div className="flex flex-col">
+                    <span className="text-4xl font-black text-white">{Math.round(weather.temperature)}°</span>
+                    <span className="text-sky-200 text-xs font-bold uppercase">{weather.windspeed} km/s</span>
                   </div>
                 </div>
-             </div>
+              ) : (
+                <span className="text-slate-400 text-sm">Yükleniyor...</span>
+              )}
+            </div>
+
+            {/* Sınavlara Kalan Zaman (Küçültüldü) */}
+            <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-6 border border-white/10 shadow-2xl flex-1 flex flex-col">
+               <h2 className="text-xl font-bold uppercase tracking-widest text-fuchsia-300 mb-6 flex items-center gap-3">
+                 <span>🎯</span> Sınavlara Kalan Zaman
+               </h2>
+               <div className="flex flex-col gap-4 flex-1 justify-center">
+                 {/* LGS */}
+                 <div className="bg-white/5 rounded-2xl p-4 flex items-center justify-between border border-white/10">
+                   <div className="flex items-center gap-3">
+                     <div className="w-2 h-10 bg-gradient-to-b from-fuchsia-500 to-purple-500 rounded-full"></div>
+                     <span className="text-2xl font-black text-white tracking-widest">LGS</span>
+                   </div>
+                   <div className="flex items-baseline gap-1.5">
+                     <span className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 to-purple-400">
+                       {calculateDaysLeft(settings.examDates?.lgs)}
+                     </span>
+                     <span className="text-sm text-slate-400 uppercase font-bold">GÜN</span>
+                   </div>
+                 </div>
+                 {/* TYT */}
+                 <div className="bg-white/5 rounded-2xl p-4 flex items-center justify-between border border-white/10">
+                   <div className="flex items-center gap-3">
+                     <div className="w-2 h-10 bg-gradient-to-b from-emerald-500 to-teal-500 rounded-full"></div>
+                     <span className="text-2xl font-black text-white tracking-widest">TYT</span>
+                   </div>
+                   <div className="flex items-baseline gap-1.5">
+                     <span className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">
+                       {calculateDaysLeft(settings.examDates?.tyt)}
+                     </span>
+                     <span className="text-sm text-slate-400 uppercase font-bold">GÜN</span>
+                   </div>
+                 </div>
+                 {/* AYT */}
+                 <div className="bg-white/5 rounded-2xl p-4 flex items-center justify-between border border-white/10">
+                   <div className="flex items-center gap-3">
+                     <div className="w-2 h-10 bg-gradient-to-b from-blue-500 to-cyan-500 rounded-full"></div>
+                     <span className="text-2xl font-black text-white tracking-widest">AYT</span>
+                   </div>
+                   <div className="flex items-baseline gap-1.5">
+                     <span className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+                       {calculateDaysLeft(settings.examDates?.ayt)}
+                     </span>
+                     <span className="text-sm text-slate-400 uppercase font-bold">GÜN</span>
+                   </div>
+                 </div>
+               </div>
+            </div>
           </div>
 
           {/* RIGHT: Duty Teachers & Quote */}
