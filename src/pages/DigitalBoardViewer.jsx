@@ -46,9 +46,7 @@ export default function DigitalBoardViewer() {
     return () => clearInterval(timer)
   }, [])
 
-  if (!settings) {
-    return <div className="h-screen bg-slate-900 flex items-center justify-center text-white">Yükleniyor...</div>
-  }
+
 
 
   // F1 Robot Facts
@@ -92,6 +90,10 @@ export default function DigitalBoardViewer() {
       clearInterval(intervalTimer)
     }
   }, [])
+
+  if (!settings) {
+    return <div className="h-screen bg-slate-900 flex items-center justify-center text-white">Yükleniyor...</div>
+  }
 
   // Calculate Full Countdowns
   const getCountdown = (targetDate) => {
