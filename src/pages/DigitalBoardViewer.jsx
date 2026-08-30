@@ -6,6 +6,8 @@ export default function DigitalBoardViewer() {
   const [settings, setSettings] = useState(null)
   const [time, setTime] = useState(new Date())
   const [weather, setWeather] = useState(null)
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
+  const [robotState, setRobotState] = useState({ visible: false, message: '' })
 
   // Config: 'OHEP' is the default school code
   const schoolCode = 'OHEP'
@@ -47,6 +49,49 @@ export default function DigitalBoardViewer() {
   if (!settings) {
     return <div className="h-screen bg-slate-900 flex items-center justify-center text-white">Yükleniyor...</div>
   }
+
+
+  // F1 Robot Facts
+  const FACTS = [
+    "Biliyor muydunuz? Mars'ta gün batımı mavi renktir.",
+    "İnsan beyni, çalışırken yaklaşık 20 watt elektrik üretir.",
+    "Venüs'te bir gün, Dünya'daki bir yıldan daha uzundur.",
+    "Ahtapotların 3 kalbi ve mavi renkte kanları vardır.",
+    "Everest Dağı her yıl yaklaşık 4 milimetre yükselmektedir.",
+    "Bal bozulmayan tek yiyecektir. 3000 yıllık bal bile yenebilir.",
+    "DNA'mızın %50'si muzlarınkiyle aynıdır.",
+    "Sıcak su, soğuk sudan daha hızlı donar (Mpemba Etkisi).",
+    "Güneş Sistemindeki en yüksek dağ Mars'taki Olympus Mons'tur.",
+    "Jüpiter ve Satürn'de elmas yağmurları yağar!"
+  ]
+
+  // Slayt Gösterisi (Background Rotation)
+  useEffect(() => {
+    if (!settings?.backgroundImages || settings.backgroundImages.length <= 1) return;
+    const slideTimer = setInterval(() => {
+      setCurrentSlideIndex(prev => (prev + 1) % settings.backgroundImages.length)
+    }, 15000) // Change every 15 seconds
+    return () => clearInterval(slideTimer)
+  }, [settings?.backgroundImages])
+
+  // F1 Robot Popup Logic
+  useEffect(() => {
+    // Pop up every 3 minutes (180000ms) for 20 seconds
+    // For demo purposes, we can trigger it first after 30 seconds
+    const showRobot = () => {
+      const randomFact = FACTS[Math.floor(Math.random() * FACTS.length)]
+      setRobotState({ visible: true, message: randomFact })
+      setTimeout(() => setRobotState({ visible: false, message: '' }), 20000)
+    }
+    
+    const initialTimer = setTimeout(showRobot, 15000) // Show first fact after 15 seconds!
+    const intervalTimer = setInterval(showRobot, 180000) // Then every 3 minutes
+    
+    return () => {
+      clearTimeout(initialTimer)
+      clearInterval(intervalTimer)
+    }
+  }, [])
 
   // Calculate Full Countdowns
   const getCountdown = (targetDate) => {
@@ -97,9 +142,14 @@ export default function DigitalBoardViewer() {
     <div 
       className="h-screen w-full relative overflow-hidden text-white font-sans selection:bg-none"
       style={{
-        backgroundImage: `url('${settings.backgroundImageUrl || "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=3540&auto=format&fit=crop"}')`,
+        backgroundImage: `url('${
+          settings.backgroundImages?.length > 0 
+            ? (settings.backgroundImages[currentSlideIndex] || settings.backgroundImageUrl)
+            : (settings.backgroundImageUrl || "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=3540&auto=format&fit=crop")
+        }')`,
         backgroundSize: 'cover',
-        backgroundPosition: 'center'
+        backgroundPosition: 'center',
+        transition: 'background-image 1.5s ease-in-out'
       }}
     >
       {/* Overlay for readability */}
@@ -297,6 +347,21 @@ export default function DigitalBoardViewer() {
             )}
           </div>
           
+        </div>
+      </div>
+
+            {/* F1 Robot Asistan Popup */}
+      <div className={`absolute bottom-24 right-8 z-40 flex items-end gap-4 transition-all duration-700 transform ${robotState.visible ? 'translate-y-0 opacity-100' : 'translate-y-32 opacity-0 pointer-events-none'}`}>
+        <div className="bg-white text-slate-800 p-5 rounded-3xl rounded-br-none shadow-2xl max-w-sm border-2 border-indigo-500 relative animate-bounce-slight">
+          <div className="absolute w-4 h-4 bg-white border-r-2 border-b-2 border-indigo-500 transform rotate-45 -bottom-2 right-4"></div>
+          <p className="font-bold text-lg leading-relaxed">{robotState.message}</p>
+        </div>
+        <div className="w-32 h-32 relative group">
+           <div className="absolute inset-0 bg-indigo-500 rounded-full blur-xl opacity-50 animate-pulse"></div>
+           <div className="relative w-full h-full bg-slate-900 border-4 border-indigo-400 rounded-full overflow-hidden shadow-[0_0_30px_rgba(99,102,241,0.6)] flex items-center justify-center text-6xl">
+             🤖
+           </div>
+           <div className="absolute -bottom-2 bg-indigo-600 text-white text-xs font-black px-4 py-1 rounded-full left-1/2 transform -translate-x-1/2 whitespace-nowrap shadow-lg">F1 ASİSTAN</div>
         </div>
       </div>
 

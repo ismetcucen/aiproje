@@ -7,7 +7,7 @@ export default function DigitalBoardSettings() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [settings, setSettings] = useState({
-    backgroundImageUrl: '',
+    backgroundImageUrl: '', backgroundImages: [],
     dutyTeachers: { primary: '', middle: '', high: '' },
     examDates: { lgs: '2027-06-13T09:00', tyt: '2027-06-19T10:15', ayt: '2027-06-20T10:15', ydt: '2027-06-20T15:45' },
     timetable: [],
@@ -41,14 +41,43 @@ export default function DigitalBoardSettings() {
         <p className="mt-2 text-indigo-600 font-bold text-xs">Pano Linki: <a href="/pano" target="_blank" className="underline">SiteAdresi.com/pano</a></p>
       </div>
 
-      {/* Arka Plan & Söz */}
-      <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* Arka Plan Slayt & Söz */}
+      <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-xs font-bold text-slate-500 mb-1">Arka Plan Görsel URL (Yatay / 1920x1080)</label>
-          <input type="text" className="w-full border rounded-lg px-3 py-2 text-sm" 
-                 value={settings.backgroundImageUrl || ''} 
-                 onChange={e => setSettings({...settings, backgroundImageUrl: e.target.value})}
-                 placeholder="https://..." />
+          <div className="flex justify-between items-center mb-2">
+            <label className="block text-xs font-bold text-slate-500">Slayt Arka Plan Fotoğrafları (URL)</label>
+            <button onClick={() => setSettings({...settings, backgroundImages: [...(settings.backgroundImages||[settings.backgroundImageUrl].filter(Boolean)), '']})} 
+                    className="text-xs bg-indigo-50 text-indigo-600 px-2 py-1 rounded font-bold">+ Fotoğraf Ekle</button>
+          </div>
+          <div className="space-y-2 max-h-40 overflow-y-auto custom-scrollbar">
+            {/* Geriye dönük uyumluluk için eski tekli URL'yi de array gibi gösterelim */}
+            {(!(settings.backgroundImages) || settings.backgroundImages.length === 0) && (
+              <div className="flex gap-2">
+                <input type="text" className="flex-1 border rounded-lg px-3 py-1.5 text-sm" 
+                       value={settings.backgroundImageUrl || ''} 
+                       onChange={e => setSettings({...settings, backgroundImages: [e.target.value]})}
+                       placeholder="https://..." />
+              </div>
+            )}
+            
+            {(settings.backgroundImages || []).map((img, idx) => (
+              <div key={idx} className="flex gap-2">
+                <input type="text" className="flex-1 border rounded-lg px-3 py-1.5 text-sm" value={img}
+                       placeholder="Fotoğraf Linki (https://...)"
+                       onChange={e => {
+                         const newArr = [...settings.backgroundImages]
+                         newArr[idx] = e.target.value
+                         setSettings({...settings, backgroundImages: newArr})
+                       }} />
+                <button onClick={() => {
+                  const newArr = [...settings.backgroundImages]
+                  newArr.splice(idx, 1)
+                  setSettings({...settings, backgroundImages: newArr})
+                }} className="text-red-500 px-2 font-bold hover:bg-red-50 rounded">X</button>
+              </div>
+            ))}
+          </div>
+          <p className="text-[10px] text-slate-400 mt-1">Birden fazla link eklendiğinde panoda her 15 saniyede bir fotoğraf değişir (Slayt Gösterisi).</p>
         </div>
         <div>
           <label className="block text-xs font-bold text-slate-500 mb-1">Günün Sözü / Motivasyon</label>
