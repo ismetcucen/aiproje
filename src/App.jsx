@@ -9,13 +9,15 @@ import OhepAssistant from './components/OhepAssistant'
 
 function AppContent() {
   
+  const { user, profile } = useAuth()
+
   const path = window.location.pathname;
+  if (path === '/pano') return <DigitalBoardViewer />
+
   if (path.startsWith('/p/')) {
     const studentId = path.split('/')[2];
     return <ParentPortfolio studentId={studentId} />
   }
-
-  const { user, profile } = useAuth()
 
   if (!user || !profile) return <LoginPage />
   if (profile.role === 'admin')   return <AdminPanel />
