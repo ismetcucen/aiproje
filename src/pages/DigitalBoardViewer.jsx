@@ -48,14 +48,34 @@ export default function DigitalBoardViewer() {
     return <div className="h-screen bg-slate-900 flex items-center justify-center text-white">Yükleniyor...</div>
   }
 
-  // Calculate Countdowns
-  const calculateDaysLeft = (targetDate) => {
-    if (!targetDate) return '-'
+  // Calculate Full Countdowns
+  const getCountdown = (targetDate) => {
+    if (!targetDate) return null
     const target = new Date(targetDate)
     const now = new Date()
     const diff = target - now
-    if (diff <= 0) return 'GELDi!'
-    return Math.ceil(diff / (1000 * 60 * 60 * 24))
+    if (diff <= 0) return { expired: true }
+    
+    const d = Math.floor(diff / (1000 * 60 * 60 * 24))
+    const h = Math.floor((diff / (1000 * 60 * 60)) % 24)
+    const m = Math.floor((diff / 1000 / 60) % 60)
+    return { d, h, m, expired: false }
+  }
+  
+  const renderCountdown = (targetDate) => {
+    const cd = getCountdown(targetDate)
+    if (!cd) return <span className="text-xl text-slate-500">-</span>
+    if (cd.expired) return <span className="text-2xl font-black text-green-400 animate-pulse">GELDİ!</span>
+    
+    return (
+      <div className="flex items-baseline gap-2">
+        <div className="flex flex-col items-center"><span className="text-3xl font-black text-white">{cd.d}</span><span className="text-[10px] text-slate-400">GÜN</span></div>
+        <span className="text-xl text-slate-600">:</span>
+        <div className="flex flex-col items-center"><span className="text-3xl font-black text-white">{cd.h}</span><span className="text-[10px] text-slate-400">SAAT</span></div>
+        <span className="text-xl text-slate-600">:</span>
+        <div className="flex flex-col items-center"><span className="text-3xl font-black text-white">{cd.m}</span><span className="text-[10px] text-slate-400">DK</span></div>
+      </div>
+    )
   }
 
   // Check current timetable
@@ -205,45 +225,38 @@ export default function DigitalBoardViewer() {
                <h2 className="text-xl font-bold uppercase tracking-widest text-fuchsia-300 mb-6 flex items-center gap-3">
                  <span>🎯</span> Sınavlara Kalan Zaman
                </h2>
-               <div className="flex flex-col gap-4 flex-1 justify-center">
+               <div className="flex flex-col gap-3 flex-1 justify-center">
                  {/* LGS */}
-                 <div className="bg-white/5 rounded-2xl p-4 flex items-center justify-between border border-white/10">
+                 <div className="bg-white/5 rounded-2xl p-3 flex items-center justify-between border border-white/10 shadow-inner">
                    <div className="flex items-center gap-3">
                      <div className="w-2 h-10 bg-gradient-to-b from-fuchsia-500 to-purple-500 rounded-full"></div>
-                     <span className="text-2xl font-black text-white tracking-widest">LGS</span>
+                     <span className="text-xl font-black text-white tracking-widest">LGS</span>
                    </div>
-                   <div className="flex items-baseline gap-1.5">
-                     <span className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 to-purple-400">
-                       {calculateDaysLeft(settings.examDates?.lgs)}
-                     </span>
-                     <span className="text-sm text-slate-400 uppercase font-bold">GÜN</span>
-                   </div>
+                   {renderCountdown(settings.examDates?.lgs || '2027-06-13T09:00')}
                  </div>
                  {/* TYT */}
-                 <div className="bg-white/5 rounded-2xl p-4 flex items-center justify-between border border-white/10">
+                 <div className="bg-white/5 rounded-2xl p-3 flex items-center justify-between border border-white/10 shadow-inner">
                    <div className="flex items-center gap-3">
                      <div className="w-2 h-10 bg-gradient-to-b from-emerald-500 to-teal-500 rounded-full"></div>
-                     <span className="text-2xl font-black text-white tracking-widest">TYT</span>
+                     <span className="text-xl font-black text-white tracking-widest">TYT</span>
                    </div>
-                   <div className="flex items-baseline gap-1.5">
-                     <span className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">
-                       {calculateDaysLeft(settings.examDates?.tyt)}
-                     </span>
-                     <span className="text-sm text-slate-400 uppercase font-bold">GÜN</span>
-                   </div>
+                   {renderCountdown(settings.examDates?.tyt || '2027-06-19T10:15')}
                  </div>
                  {/* AYT */}
-                 <div className="bg-white/5 rounded-2xl p-4 flex items-center justify-between border border-white/10">
+                 <div className="bg-white/5 rounded-2xl p-3 flex items-center justify-between border border-white/10 shadow-inner">
                    <div className="flex items-center gap-3">
                      <div className="w-2 h-10 bg-gradient-to-b from-blue-500 to-cyan-500 rounded-full"></div>
-                     <span className="text-2xl font-black text-white tracking-widest">AYT</span>
+                     <span className="text-xl font-black text-white tracking-widest">AYT</span>
                    </div>
-                   <div className="flex items-baseline gap-1.5">
-                     <span className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
-                       {calculateDaysLeft(settings.examDates?.ayt)}
-                     </span>
-                     <span className="text-sm text-slate-400 uppercase font-bold">GÜN</span>
+                   {renderCountdown(settings.examDates?.ayt || '2027-06-20T10:15')}
+                 </div>
+                 {/* YDT */}
+                 <div className="bg-white/5 rounded-2xl p-3 flex items-center justify-between border border-white/10 shadow-inner">
+                   <div className="flex items-center gap-3">
+                     <div className="w-2 h-10 bg-gradient-to-b from-amber-500 to-orange-500 rounded-full"></div>
+                     <span className="text-xl font-black text-white tracking-widest">YDT</span>
                    </div>
+                   {renderCountdown(settings.examDates?.ydt || '2027-06-20T15:45')}
                  </div>
                </div>
             </div>

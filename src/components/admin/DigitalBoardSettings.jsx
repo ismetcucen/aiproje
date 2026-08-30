@@ -9,7 +9,7 @@ export default function DigitalBoardSettings() {
   const [settings, setSettings] = useState({
     backgroundImageUrl: '',
     dutyTeachers: { primary: '', middle: '', high: '' },
-    examDates: { lgs: '', tyt: '', ayt: '' },
+    examDates: { lgs: '2027-06-13T09:00', tyt: '2027-06-19T10:15', ayt: '2027-06-20T10:15', ydt: '2027-06-20T15:45' },
     timetable: [],
     dailyMenu: [],
     quoteOfTheDay: ''
@@ -87,24 +87,30 @@ export default function DigitalBoardSettings() {
       {/* Sınav Tarihleri */}
       <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
         <h3 className="font-bold text-slate-700 mb-4 border-b pb-2">Sınav Tarihleri (Geri Sayım İçin)</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
             <label className="block text-xs font-bold text-slate-500 mb-1">LGS Tarihi</label>
-            <input type="date" className="w-full border rounded-lg px-3 py-2 text-sm" 
+            <input type="datetime-local" className="w-full border rounded-lg px-3 py-2 text-sm" 
                    value={settings.examDates?.lgs || ''} 
                    onChange={e => setSettings({...settings, examDates: {...settings.examDates, lgs: e.target.value}})} />
           </div>
           <div>
             <label className="block text-xs font-bold text-slate-500 mb-1">TYT Tarihi</label>
-            <input type="date" className="w-full border rounded-lg px-3 py-2 text-sm" 
+            <input type="datetime-local" className="w-full border rounded-lg px-3 py-2 text-sm" 
                    value={settings.examDates?.tyt || ''} 
                    onChange={e => setSettings({...settings, examDates: {...settings.examDates, tyt: e.target.value}})} />
           </div>
           <div>
             <label className="block text-xs font-bold text-slate-500 mb-1">AYT Tarihi</label>
-            <input type="date" className="w-full border rounded-lg px-3 py-2 text-sm" 
+            <input type="datetime-local" className="w-full border rounded-lg px-3 py-2 text-sm" 
                    value={settings.examDates?.ayt || ''} 
                    onChange={e => setSettings({...settings, examDates: {...settings.examDates, ayt: e.target.value}})} />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-slate-500 mb-1">YDT Tarihi</label>
+            <input type="datetime-local" className="w-full border rounded-lg px-3 py-2 text-sm" 
+                   value={settings.examDates?.ydt || ''} 
+                   onChange={e => setSettings({...settings, examDates: {...settings.examDates, ydt: e.target.value}})} />
           </div>
         </div>
       </div>
