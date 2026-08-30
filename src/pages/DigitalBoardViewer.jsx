@@ -49,19 +49,17 @@ export default function DigitalBoardViewer() {
 
 
 
-  // F1 Robot Facts
-  const FACTS = [
+  // F1 Robot Facts (Kullanıcı girdiyse onu, girmediyse varsayılanı kullanır)
+  const defaultFacts = [
     "Biliyor muydunuz? Mars'ta gün batımı mavi renktir.",
     "İnsan beyni, çalışırken yaklaşık 20 watt elektrik üretir.",
     "Venüs'te bir gün, Dünya'daki bir yıldan daha uzundur.",
     "Ahtapotların 3 kalbi ve mavi renkte kanları vardır.",
     "Everest Dağı her yıl yaklaşık 4 milimetre yükselmektedir.",
     "Bal bozulmayan tek yiyecektir. 3000 yıllık bal bile yenebilir.",
-    "DNA'mızın %50'si muzlarınkiyle aynıdır.",
-    "Sıcak su, soğuk sudan daha hızlı donar (Mpemba Etkisi).",
-    "Güneş Sistemindeki en yüksek dağ Mars'taki Olympus Mons'tur.",
-    "Jüpiter ve Satürn'de elmas yağmurları yağar!"
+    "DNA'mızın %50'si muzlarınkiyle aynıdır."
   ]
+  const FACTS = (settings?.robotFacts && settings.robotFacts.length > 0) ? settings.robotFacts : defaultFacts;
 
   // Slayt Gösterisi (Background Rotation)
   useEffect(() => {
@@ -74,10 +72,10 @@ export default function DigitalBoardViewer() {
 
   // F1 Robot Popup Logic
   useEffect(() => {
-    // Pop up every 3 minutes (180000ms) for 20 seconds
-    // For demo purposes, we can trigger it first after 30 seconds
     const showRobot = () => {
-      const randomFact = FACTS[Math.floor(Math.random() * FACTS.length)]
+      // Use the latest settings or fallback
+      const activeFacts = (settings?.robotFacts && settings.robotFacts.length > 0) ? settings.robotFacts : defaultFacts;
+      const randomFact = activeFacts[Math.floor(Math.random() * activeFacts.length)]
       setRobotState({ visible: true, message: randomFact })
       setTimeout(() => setRobotState({ visible: false, message: '' }), 20000)
     }

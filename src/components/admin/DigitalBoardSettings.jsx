@@ -11,7 +11,7 @@ export default function DigitalBoardSettings() {
     dutyTeachers: { primary: '', middle: '', high: '' },
     examDates: { lgs: '2027-06-13T09:00', tyt: '2027-06-19T10:15', ayt: '2027-06-20T10:15', ydt: '2027-06-20T15:45' },
     timetable: [],
-    dailyMenu: [],
+    dailyMenu: [], robotFacts: [],
     quoteOfTheDay: ''
   })
 
@@ -140,6 +140,36 @@ export default function DigitalBoardSettings() {
             <input type="datetime-local" className="w-full border rounded-lg px-3 py-2 text-sm" 
                    value={settings.examDates?.ydt || ''} 
                    onChange={e => setSettings({...settings, examDates: {...settings.examDates, ydt: e.target.value}})} />
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-6">
+        {/* F1 Robot Bilgileri */}
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+          <div className="flex justify-between items-center mb-4 border-b pb-2">
+            <h3 className="font-bold text-slate-700">🤖 F1 Robotun Söyleyeceği Bilgiler</h3>
+            <button onClick={() => setSettings({...settings, robotFacts: [...(settings.robotFacts||[]), '']})} 
+                    className="text-xs bg-indigo-50 text-indigo-600 px-2 py-1 rounded font-bold">+ Yeni Bilgi Ekle</button>
+          </div>
+          <div className="space-y-2">
+            {(settings.robotFacts || []).map((fact, idx) => (
+              <div key={idx} className="flex gap-2">
+                <input type="text" className="flex-1 border rounded-lg px-3 py-1.5 text-sm" value={fact}
+                       placeholder="Örn: Biliyor muydunuz? Uzayda ağlayamazsınız..."
+                       onChange={e => {
+                         const newFacts = [...settings.robotFacts]
+                         newFacts[idx] = e.target.value
+                         setSettings({...settings, robotFacts: newFacts})
+                       }} />
+                <button onClick={() => {
+                  const newFacts = [...settings.robotFacts]
+                  newFacts.splice(idx, 1)
+                  setSettings({...settings, robotFacts: newFacts})
+                }} className="text-red-500 px-2 font-bold hover:bg-red-50 rounded">X</button>
+              </div>
+            ))}
+            {(!settings.robotFacts || settings.robotFacts.length === 0) && <p className="text-xs text-slate-400">Özel bilgi girmediniz. Sistem kendi varsayılan bilimsel gerçeklerini kullanacak.</p>}
           </div>
         </div>
       </div>
