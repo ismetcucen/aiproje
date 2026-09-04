@@ -26,7 +26,7 @@ export default function DigitalBoardSettings() {
 
   async function handleSave() {
     setSaving(true)
-    await updateDigitalBoardSettings(profile.schoolCode, settings)
+    await updateDigitalBoardSettings(profile.schoolCode, settings, profile)
     setSaving(false)
     alert('Pano ayarları başarıyla kaydedildi!')
   }

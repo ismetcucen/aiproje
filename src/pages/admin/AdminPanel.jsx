@@ -21,6 +21,7 @@ import ClassDojoBoard from '../../components/teacher/ClassDojoBoard'
 import LiveClassControl from '../../components/teacher/LiveClassControl'
 import Attendance from '../../components/teacher/Attendance'
 import DigitalBoardSettings from '../../components/admin/DigitalBoardSettings'
+import AuditLogs from '../../components/admin/AuditLogs'
 
 const MENU = [
   { id: 'calendar',   label: 'Ajanda', icon: '📅' },
@@ -29,6 +30,7 @@ const MENU = [
   { id: 'live',       label: 'Canlı Sınıf',  icon: '📡' },
   { id: 'announcements', label: 'Duyurular', icon: '📢' },
   { id: 'digital_board', label: 'Dijital Pano', icon: '🖥️' },
+  { id: 'audit_logs', label: 'Sistem Kayıtları', icon: '🕵️‍♂️' },
   { id: 'aiedu', label: 'Eğitimde YZ', icon: '🏫' },
   { id: 'stats',      label: 'İstatistikler', icon: '📊' },
   { id: 'users',      label: 'Kullanıcılar',  icon: '👥' },
@@ -127,6 +129,7 @@ export default function AdminPanel() {
           {active === 'calendar'   && <CalendarPlanner />}
           {active === 'announcements' && <Announcements />}
           {active === 'digital_board' && <DigitalBoardSettings />}
+          {active === 'audit_logs' && <AuditLogs />}
           {active === 'qna'           && <LiveChatInbox />}
           {active === 'showcase'      && <ShowcaseGallery />}
           {active === 'attendance' && <Attendance />}
