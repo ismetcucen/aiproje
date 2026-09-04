@@ -15,6 +15,60 @@ export default function AiAssistant() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const chatRef = useRef(null);
+
+  // Robot Send Sound (Web Audio API)
+  const playSendSound = () => {
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      const ctx = new AudioContext();
+      const osc = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(880, ctx.currentTime); // A5
+      osc.frequency.exponentialRampToValueAtTime(1760, ctx.currentTime + 0.1); // A6
+      gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+      osc.connect(gainNode);
+      gainNode.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.1);
+    } catch(e) { console.log("Audio not supported"); }
+  };
+
+  // Robot Receive Sound
+  const playReceiveSound = () => {
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      const ctx = new AudioContext();
+      const osc = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(440, ctx.currentTime); 
+      osc.frequency.setValueAtTime(660, ctx.currentTime + 0.1);
+      gainNode.gain.setValueAtTime(0.1, ctx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+      osc.connect(gainNode);
+      gainNode.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.2);
+    } catch(e) { console.log("Audio not supported"); }
+  };
+
+  // Text to Speech
+  const [isMuted, setIsMuted] = useState(false);
+  const speakText = (text) => {
+    if (isMuted) return;
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel(); // Stop current speaking
+      const cleanText = text.replace(/[*#_`]/g, '');
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.lang = 'tr-TR';
+      utterance.rate = 1.05;
+      utterance.pitch = 1.3; // Cute robot pitch
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
   
   // VITE_GEMINI_API_KEY ortam değişkeninden anahtarı alıyoruz
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
@@ -48,6 +102,7 @@ export default function AiAssistant() {
     }
     setMessages(prev => [...prev, { role: 'user', parts: userParts }]);
     setLoading(true);
+    playSendSound();
     setError('');
 
     try {
@@ -105,6 +160,12 @@ export default function AiAssistant() {
 
       if (response.text) {
          setMessages(prev => [...prev, { role: 'model', parts: [{ text: response.text }] }]);
+         playReceiveSound();
+         speakText(response.text);
+         
+         if (profile?.uid) {
+           await logAIPrompt(profile.schoolCode, profile, userMsg, response.text);
+         }
       }
     } catch (err) {
       console.error(err);
