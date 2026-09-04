@@ -12,6 +12,14 @@ export default function DigitalBoardSettings() {
     examDates: { lgs: '2027-06-13T09:00', tyt: '2027-06-19T10:15', ayt: '2027-06-20T10:15', ydt: '2027-06-20T15:45' },
     timetable: [],
     dailyMenu: [], robotFacts: [],
+    achievements: {
+      studentOfTheWeek: 'Henüz Seçilmedi',
+      roboticProject: 'Henüz Seçilmedi',
+      coderOfTheWeek: 'Henüz Seçilmedi',
+      problemSolver: 'Henüz Seçilmedi',
+      mostImproved: 'Henüz Seçilmedi'
+    },
+    
     quoteOfTheDay: ''
   })
 

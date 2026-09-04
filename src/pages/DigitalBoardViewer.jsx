@@ -8,6 +8,7 @@ export default function DigitalBoardViewer() {
   const [weather, setWeather] = useState(null)
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
   const [robotState, setRobotState] = useState({ visible: false, message: '' })
+  const [showAchievements, setShowAchievements] = useState(false)
 
   // Config: 'OHEP' is the default school code
   const schoolCode = 'OHEP'
@@ -123,6 +124,23 @@ export default function DigitalBoardViewer() {
     )
   }
 
+  
+  // Achievement Wall Logic
+  useEffect(() => {
+    const showWall = () => {
+      setShowAchievements(true)
+      setTimeout(() => setShowAchievements(false), 20000) // Show for 20 seconds
+    }
+    
+    const initialWallTimer = setTimeout(showWall, 60000) // First show after 1 min
+    const intervalWallTimer = setInterval(showWall, 300000) // Then every 5 minutes
+    
+    return () => {
+      clearTimeout(initialWallTimer)
+      clearInterval(intervalWallTimer)
+    }
+  }, [])
+
   // Check current timetable
   const currentMinutes = time.getHours() * 60 + time.getMinutes()
 
@@ -154,6 +172,62 @@ export default function DigitalBoardViewer() {
     >
       {/* Overlay for readability */}
       <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm z-0"></div>
+
+      
+      {/* BAŞARI DUVARI OVERLAY */}
+      {showAchievements && settings?.achievements && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-slate-900/90 backdrop-blur-xl animate-[fadeIn_0.5s_ease-out]">
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-50 animate-blob"></div>
+            <div className="absolute top-0 right-1/4 w-96 h-96 bg-yellow-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-50 animate-blob animation-delay-2000"></div>
+            <div className="absolute -bottom-32 left-1/2 w-96 h-96 bg-pink-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-50 animate-blob animation-delay-4000"></div>
+          </div>
+          
+          <div className="relative z-10 w-full max-w-6xl p-8 text-center animate-[slideUp_0.8s_ease-out]">
+            <h2 className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 drop-shadow-2xl mb-4 tracking-tight">
+              🏆 HAFTANIN YILDIZLARI 🏆
+            </h2>
+            <p className="text-2xl text-slate-300 mb-16 tracking-widest uppercase font-light">ÖHEP AI Studio Gurur Tablosu</p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-3xl shadow-2xl transform hover:scale-105 transition-all">
+                <div className="text-6xl mb-4">💻</div>
+                <h3 className="text-xl font-bold text-indigo-300 uppercase tracking-wider mb-2">Haftanın Kodlayıcısı</h3>
+                <p className="text-3xl font-black text-white">{settings.achievements.coderOfTheWeek}</p>
+              </div>
+              
+              <div className="bg-gradient-to-b from-amber-500/20 to-yellow-500/10 backdrop-blur-md border border-yellow-500/30 p-10 rounded-3xl shadow-[0_0_50px_rgba(245,158,11,0.2)] transform scale-110 z-10">
+                <div className="text-7xl mb-4 animate-bounce">🌟</div>
+                <h3 className="text-2xl font-bold text-yellow-300 uppercase tracking-wider mb-2">Haftanın Öğrencisi</h3>
+                <p className="text-4xl font-black text-white">{settings.achievements.studentOfTheWeek}</p>
+              </div>
+              
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-3xl shadow-2xl transform hover:scale-105 transition-all">
+                <div className="text-6xl mb-4">🤖</div>
+                <h3 className="text-xl font-bold text-emerald-300 uppercase tracking-wider mb-2">Haftanın Robotik Projesi</h3>
+                <p className="text-3xl font-black text-white">{settings.achievements.roboticProject}</p>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-6 rounded-2xl flex items-center justify-center gap-6">
+                <div className="text-5xl">🧠</div>
+                <div className="text-left">
+                  <h3 className="text-sm font-bold text-purple-300 uppercase tracking-wider mb-1">Problem Çözücü</h3>
+                  <p className="text-2xl font-black text-white">{settings.achievements.problemSolver}</p>
+                </div>
+              </div>
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-6 rounded-2xl flex items-center justify-center gap-6">
+                <div className="text-5xl">📈</div>
+                <div className="text-left">
+                  <h3 className="text-sm font-bold text-blue-300 uppercase tracking-wider mb-1">En Çok Gelişim Gösteren</h3>
+                  <p className="text-2xl font-black text-white">{settings.achievements.mostImproved}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Main Content Area */}
       <div className="relative z-10 h-full flex flex-col p-4 md:p-6 pb-16 md:pb-20 box-border">
