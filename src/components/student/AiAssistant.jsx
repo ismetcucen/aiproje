@@ -55,7 +55,9 @@ export default function AiAssistant() {
       gainNode.connect(ctx.destination);
       osc.start();
       osc.stop(ctx.currentTime + 0.2);
-    } catch(e) { console.log("Audio not supported"); }
+    } catch(e) { 
+      console.log("AudioContext blocked, using fallback");
+    }
   };
 
   // Text to Speech
@@ -109,6 +111,13 @@ export default function AiAssistant() {
   async function handleSend(e) {
     e.preventDefault();
     if ((!input.trim() && !imageFile) || !apiKey) return;
+    
+    // Unlock Speech Synthesis immediately on click
+    if ('speechSynthesis' in window) {
+       const unlock = new SpeechSynthesisUtterance('');
+       unlock.volume = 0;
+       window.speechSynthesis.speak(unlock);
+    }
     
     const userMsg = input.trim();
     setInput('');
