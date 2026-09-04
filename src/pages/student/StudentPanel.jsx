@@ -10,6 +10,7 @@ import AssignmentList from '../../components/student/AssignmentList'
 import Studio from '../../components/student/Studio'
 import Portfolio from '../../components/student/Portfolio'
 import StudentHome from '../../components/student/StudentHome'
+import MyPortfolio from '../../components/student/MyPortfolio'
 import CodingGames from '../../components/student/CodingGames'
 import LessonTools from '../../components/student/LessonTools'
 import Leaderboard from '../../components/student/Leaderboard'
@@ -22,6 +23,7 @@ import InstagramWidget from '../../components/InstagramWidget'
 import { getSchoolSettings } from '../../firebase/schema'
 
 const MENU = [
+  { id: 'portfolio', label: 'Benim Portfolyom', icon: '🏆' },
   { id: 'home',        label: 'Ana Sayfa', icon: '🏠' },
   { id: 'assignments', label: 'Görevler',  icon: '📋' },
   { id: 'studio',      label: 'Üret',      icon: '✏️' },
@@ -179,6 +181,7 @@ export default function StudentPanel() {
           {active === 'assignments' && <AssignmentList onStart={goToStudio} />}
           {active === 'studio'      && <Studio assignment={selectedAssignment} onBack={() => setActive('assignments')} />}
           {active === 'portfolio'   && <Portfolio />}
+          {active === 'portfolio'   && <MyPortfolio />}
           {active === 'games'       && <CodingGames />}
           {active === 'tools'       && <LessonTools />}
           {active === 'leaderboard' && <Leaderboard />}
