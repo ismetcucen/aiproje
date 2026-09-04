@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import NotificationBell from '../../components/NotificationBell'
 import RobotAnnouncer from '../../components/teacher/RobotAnnouncer'
@@ -46,31 +46,41 @@ const MENU = [
 
 export default function AdminPanel() {
   const { profile, logout } = useAuth()
+  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth >= 768)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  useEffect(() => {
+    const handleResize = () => { if (window.innerWidth >= 768) setIsMobileMenuOpen(false); else setSidebarOpen(false); }
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
   const [active, setActive] = useState('stats')
 
   return (
-    <div className="min-h-screen bg-[#f4f7fc] flex">
-      <aside className="w-64 bg-gradient-to-b from-indigo-600 via-purple-600 to-fuchsia-600 border-r border-fuchsia-500/30 flex flex-col transition-all duration-300 shadow-2xl relative z-20 overflow-hidden">
+    <div className="h-screen bg-[#f4f7fc] flex overflow-hidden relative w-full">
+      <aside className={`bg-gradient-to-b from-indigo-600 via-purple-600 to-fuchsia-600 border-r border-fuchsia-500/30 flex flex-col transition-all duration-300 shadow-2xl relative z-20 overflow-hidden z-50 flex-shrink-0 transition-all duration-300 ${sidebarOpen ? "w-64" : "w-20"} ${isMobileMenuOpen ? "absolute h-full left-0 shadow-2xl" : "hidden md:flex relative h-full"}`}>
         <div className="p-5 border-b border-white/10 flex items-center gap-3 relative z-10">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-orange-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-red-500/20 border border-red-400/20">
             <img src="/ohep.jpeg" alt="Logo" className="w-6 h-6 object-contain rounded-md" />
           </div>
-          <div className="overflow-hidden">
-            <p className="text-slate-100 text-sm font-bold tracking-wide leading-tight whitespace-nowrap">ÖHEP AI Studio</p>
-            <p className="text-red-400 text-xs font-medium mt-0.5 whitespace-nowrap">Sistem Yöneticisi</p>
-          </div>
+          {sidebarOpen && (
+            <div className="overflow-hidden">
+              <p className="text-slate-100 text-sm font-bold tracking-wide leading-tight whitespace-nowrap">ÖHEP AI Studio</p>
+              <p className="text-red-400 text-xs font-medium mt-0.5 whitespace-nowrap">Sistem Yöneticisi</p>
+            </div>
+          )}
         </div>
 
         <nav className="flex-1 p-4 space-y-1.5 overflow-y-auto custom-scrollbar">
           {MENU.map(item => (
-            <button key={item.id} onClick={() => setActive(item.id)}
+            <button key={item.id} onClick={() => { setActive(item.id); if(window.innerWidth < 768) setIsMobileMenuOpen(false); }}
+              title={!sidebarOpen ? item.label : ""}
               className={`w-full flex items-center justify-start px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 group ${
                 active === item.id
                   ? 'bg-red-600/15 text-red-400 border border-red-500/20 shadow-inner'
                   : 'text-indigo-100 hover:text-white hover:bg-white/10 border border-transparent'
               }`}>
               <span className={`text-lg flex-shrink-0 transition-transform duration-200 ${active === item.id ? 'scale-110' : 'group-hover:scale-110'}`}>{item.icon}</span>
-              <span className="ml-3 truncate">{item.label}</span>
+              {sidebarOpen && <span className="ml-3 truncate">{item.label}</span>}
             </button>
           ))}
         </nav>
@@ -84,23 +94,30 @@ export default function AdminPanel() {
             </div>
           </div>
           <button onClick={logout}
-            className="w-full flex items-center justify-start px-3 py-2.5 rounded-xl text-pink-200 hover:text-white hover:bg-pink-500/20 text-sm font-medium transition-all group border border-transparent hover:border-pink-400/30">
+            title={!sidebarOpen ? "Çıkış Yap" : ""}
+            className={`w-full flex items-center ${sidebarOpen ? "justify-start px-3" : "justify-center px-0"} px-3 py-2.5 rounded-xl text-pink-200 hover:text-white hover:bg-pink-500/20 text-sm font-medium transition-all group border border-transparent hover:border-pink-400/30`}>
             <span className="text-lg flex-shrink-0 group-hover:scale-110 transition-transform">🚪</span>
-            <span className="ml-3">Çıkış Yap</span>
+            {sidebarOpen && <span className="ml-3">Çıkış Yap</span>}
           </button>
         </div>
       </aside>
 
-      <main className="flex-1 flex flex-col overflow-hidden">
-        <header className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm">
-          <h1 className="text-slate-800 font-semibold">{MENU.find(m => m.id === active)?.label}</h1>
+      {isMobileMenuOpen && <div className="md:hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40" onClick={() => setIsMobileMenuOpen(false)}></div>}
+      <main className="flex-1 flex flex-col overflow-hidden w-full h-full">
+        <header className="bg-white border-b border-slate-200 px-4 md:px-6 py-4 flex items-center justify-between shadow-sm shrink-0">
+          <div className="flex items-center gap-3">
+            <button onClick={() => { if(window.innerWidth < 768) setIsMobileMenuOpen(!isMobileMenuOpen); else setSidebarOpen(!sidebarOpen); }} className="p-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-600 transition-colors">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+            </button>
+          <h1 className="text-slate-800 font-semibold text-base md:text-lg truncate">{MENU.find(m => m.id === active)?.label}</h1>
+          </div>
           <div className="flex items-center gap-4">
             <span className="text-xs bg-red-50 text-red-500 border border-red-200 px-2 py-1 rounded-full">Admin Erişimi</span>
             <RobotAnnouncer />
             <NotificationBell />
           </div>
         </header>
-        <div className="flex-1 overflow-auto p-6">
+        <div className="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar">
           {active === 'stats'      && <Stats />}
           {active === 'classes'    && <ClassManager schoolCode={profile?.schoolCode} />}
           {active === 'curriculum' && <CurriculumEditor />}

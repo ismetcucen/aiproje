@@ -70,18 +70,20 @@ export default function StudentPanel() {
       <LiveSessionLocker />
       <StudentStatusWidget />
       <DojoNotificationListener />
-    <div className="min-h-screen bg-[#f4f7fc] flex">
+    <div className="h-screen bg-[#f4f7fc] flex overflow-hidden relative w-full">
 
       {/* Sol Menü */}
-      <aside className="w-64 bg-gradient-to-b from-indigo-600 via-purple-600 to-fuchsia-600 border-r border-fuchsia-500/30 flex flex-col transition-all duration-300 shadow-2xl relative z-20 overflow-hidden">
+      <aside className={`bg-gradient-to-b from-indigo-600 via-purple-600 to-fuchsia-600 border-r border-fuchsia-500/30 flex flex-col transition-all duration-300 shadow-2xl relative z-20 overflow-hidden z-50 flex-shrink-0 transition-all duration-300 ${sidebarOpen ? "w-64" : "w-20"} ${isMobileMenuOpen ? "absolute h-full left-0 shadow-2xl" : "hidden md:flex relative h-full"}`}>
         <div className="p-5 border-b border-white/10 flex items-center gap-3 relative z-10">
           <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center flex-shrink-0 shadow-lg shadow-indigo-500/20 border border-white/30">
             <img src="/ohep.jpeg" alt="Logo" className="w-6 h-6 object-contain rounded-md" />
           </div>
-          <div className="overflow-hidden">
-            <p className="text-slate-100 text-sm font-bold tracking-wide leading-tight whitespace-nowrap">ÖHEP AI Studio</p>
-            <p className="text-indigo-200 text-xs font-medium mt-0.5 whitespace-nowrap">Öğrenci Paneli</p>
-          </div>
+          {sidebarOpen && (
+            <div className="overflow-hidden">
+              <p className="text-slate-100 text-sm font-bold tracking-wide leading-tight whitespace-nowrap">ÖHEP AI Studio</p>
+              <p className="text-indigo-200 text-xs font-medium mt-0.5 whitespace-nowrap">Öğrenci Paneli</p>
+            </div>
+          )}
         </div>
 
         <nav className="flex-1 p-4 space-y-1.5 overflow-y-auto custom-scrollbar">
@@ -95,14 +97,15 @@ export default function StudentPanel() {
               ...(settings.aiAssistantEnabled ? [{ id: 'ai', label: 'OHEP AI', icon: '🤖' }] : [])
             ] : [])
           ].map(item => (
-            <button key={item.id} onClick={() => setActive(item.id)}
+            <button key={item.id} onClick={() => { setActive(item.id); if(window.innerWidth < 768) setIsMobileMenuOpen(false); }}
+              title={!sidebarOpen ? item.label : ""}
               className={`w-full flex items-center justify-start px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 group ${
                 active === item.id
                   ? 'bg-white/20 text-white border border-white/20 shadow-xl backdrop-blur-sm'
                   : 'text-indigo-100 hover:text-white hover:bg-white/10 border border-transparent'
               }`}>
               <span className={`text-lg flex-shrink-0 transition-transform duration-200 ${active === item.id ? 'scale-110' : 'group-hover:scale-110'}`}>{item.icon}</span>
-              <span className="ml-3 truncate">{item.label}</span>
+              {sidebarOpen && <span className="ml-3 truncate">{item.label}</span>}
             </button>
           ))}
         </nav>
@@ -139,15 +142,17 @@ export default function StudentPanel() {
             </div>
           </div>
           <button onClick={logout}
-            className="w-full flex items-center justify-start px-3 py-2.5 rounded-xl text-pink-200 hover:text-white hover:bg-pink-500/20 text-sm font-medium transition-all group border border-transparent hover:border-pink-400/30">
+            title={!sidebarOpen ? "Çıkış Yap" : ""}
+            className={`w-full flex items-center ${sidebarOpen ? "justify-start px-3" : "justify-center px-0"} px-3 py-2.5 rounded-xl text-pink-200 hover:text-white hover:bg-pink-500/20 text-sm font-medium transition-all group border border-transparent hover:border-pink-400/30`}>
             <span className="text-lg flex-shrink-0 group-hover:scale-110 transition-transform">🚪</span>
-            <span className="ml-3">Çıkış Yap</span>
+            {sidebarOpen && <span className="ml-3">Çıkış Yap</span>}
           </button>
         </div>
       </aside>
 
       {/* Ana İçerik */}
-      <main className="flex-1 flex flex-col overflow-hidden">
+      {isMobileMenuOpen && <div className="md:hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40" onClick={() => setIsMobileMenuOpen(false)}></div>}
+      <main className="flex-1 flex flex-col overflow-hidden w-full h-full">
         <header className="bg-white/70 backdrop-blur-xl border-b border-indigo-100/50 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
           <div className="flex items-center gap-4">
             <div>
@@ -169,7 +174,7 @@ export default function StudentPanel() {
         
         <LiveMarquee />
 
-        <div className="flex-1 overflow-auto p-6">
+        <div className="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar">
           {active === 'home'        && <StudentHome onNavigate={setActive} />}
           {active === 'assignments' && <AssignmentList onStart={goToStudio} />}
           {active === 'studio'      && <Studio assignment={selectedAssignment} onBack={() => setActive('assignments')} />}
