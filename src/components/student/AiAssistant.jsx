@@ -18,9 +18,11 @@ export default function AiAssistant() {
 
   // Robot Send Sound (Web Audio API)
   const playSendSound = () => {
+    if (isMuted) return;
     try {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       const ctx = new AudioContext();
+      if (ctx.state === 'suspended') ctx.resume();
       const osc = ctx.createOscillator();
       const gainNode = ctx.createGain();
       osc.type = 'sine';
@@ -37,9 +39,11 @@ export default function AiAssistant() {
 
   // Robot Receive Sound
   const playReceiveSound = () => {
+    if (isMuted) return;
     try {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       const ctx = new AudioContext();
+      if (ctx.state === 'suspended') ctx.resume();
       const osc = ctx.createOscillator();
       const gainNode = ctx.createGain();
       osc.type = 'square';
@@ -59,15 +63,28 @@ export default function AiAssistant() {
   const speakText = (text) => {
     if (isMuted) return;
     if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel(); // Stop current speaking
-      const cleanText = text.replace(/[*#_`]/g, '');
+      window.speechSynthesis.cancel();
+      // Remove basic markdown
+      let cleanText = text.replace(/[*#_`]/g, '');
       const utterance = new SpeechSynthesisUtterance(cleanText);
       utterance.lang = 'tr-TR';
       utterance.rate = 1.05;
-      utterance.pitch = 1.3; // Cute robot pitch
+      utterance.pitch = 1.3;
+      
+      const voices = window.speechSynthesis.getVoices();
+      const trVoice = voices.find(v => v.lang.includes('tr') || v.lang.includes('TR'));
+      if (trVoice) utterance.voice = trVoice;
+      
       window.speechSynthesis.speak(utterance);
     }
   };
+
+  useEffect(() => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.getVoices();
+    }
+  }, []);
+
 
   
   // VITE_GEMINI_API_KEY ortam değişkeninden anahtarı alıyoruz
