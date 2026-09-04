@@ -764,3 +764,45 @@ export async function updateDigitalBoardSettings(schoolCode, data) {
   const docRef = doc(db, 'school_settings', `digital_board_${schoolCode}`)
   await setDoc(docRef, data, { merge: true })
 }
+
+// --- AI LOGS & LIMITS ---
+export const checkAndIncrementAILimit = async (studentId) => {
+  const userRef = doc(db, 'users', studentId);
+  const snap = await getDoc(userRef);
+  if (!snap.exists()) return false;
+  
+  const data = snap.data();
+  const today = new Date().toISOString().split('T')[0];
+  
+  const aiUsage = data.aiUsage || {};
+  const todayUsage = (aiUsage.date === today) ? (aiUsage.count || 0) : 0;
+  
+  if (todayUsage >= 20) {
+    return false; // Limit reached
+  }
+  
+  // Increment
+  await updateDoc(userRef, {
+    aiUsage: {
+      date: today,
+      count: todayUsage + 1
+    }
+  });
+  
+  return true; // OK to proceed
+}
+
+export const logAIPrompt = async (schoolCode, userProfile, promptText, modelResponse) => {
+  try {
+    await addDoc(collection(db, 'ai_logs'), {
+      schoolCode,
+      userId: userProfile?.uid || 'system',
+      userName: userProfile?.fullName || 'Sistem',
+      prompt: promptText,
+      response: modelResponse,
+      timestamp: new Date().toISOString()
+    })
+  } catch (err) {
+    console.error("AI log kaydedilemedi:", err)
+  }
+}
