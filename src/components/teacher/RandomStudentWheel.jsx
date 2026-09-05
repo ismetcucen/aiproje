@@ -33,7 +33,7 @@ export default function RandomStudentWheel() {
     }
   }, [selectedClass])
 
-  const fetchStudents = async (classId) => {
+  async function fetchStudents(classId) {
     try {
       const list = await getStudentsByClass(classId)
       const formattedList = list.map(s => ({
