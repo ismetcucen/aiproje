@@ -6,28 +6,32 @@ const TOOLS = [
     title: 'Micro:bit (MakeCode)',
     desc: 'Sanal Micro:bit kartını bloklarla kodla ve simülasyonda çalıştır.',
     url: 'https://makecode.microbit.org/',
-    icon: '📟'
+    icon: '📟',
+    iconUrl: 'https://logo.clearbit.com/microbit.org',
   },
   {
     id: 'scratch',
     title: 'mBlock (Scratch AI)',
     desc: 'Kuklalar ve arka planlarla kendi oyununu, animasyonunu tasarla.',
     url: 'https://ide.mblock.cc/',
-    icon: '🐱'
+    icon: '🐱',
+    iconUrl: 'https://logo.clearbit.com/mblock.cc',
   },
   {
     id: 'draw',
     title: 'Tasarım Tahtası',
     desc: 'Zihin haritaları, algoritmalar ve serbest çizimler yap.',
     url: 'https://excalidraw.com/',
-    icon: '🎨'
+    icon: '🎨',
+    iconUrl: 'https://logo.clearbit.com/excalidraw.com',
   },
   {
     id: 'autodraw',
     title: 'Akıllı Çizim (AutoDraw)',
     desc: 'Sen basitçe çiz, yapay zeka onu harika bir görsele dönüştürsün!',
     url: 'https://www.autodraw.com/',
-    icon: '🪄'
+    icon: '🪄',
+    iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png',
   }
   ,
   {
@@ -35,14 +39,15 @@ const TOOLS = [
     title: 'Klavye Savaşları',
     desc: 'Yukarıdan düşen kelimeleri klavyede hızlıca yazarak uzay gemini koru!',
     url: 'https://zty.pe/',
-    icon: '🚀'
+    icon: '🚀',
+    iconUrl: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://zty.pe&size=128',
   },
   {
     id: 'typing',
     title: '10 Parmak Klavye',
     desc: 'Klavyeye bakmadan hızlı ve doğru yazma alıştırmaları yap.',
     url: 'https://agilefingers.com/tr',
-    icon: '⌨️'
+    icon: '⌨️',
   }
   ,
   {

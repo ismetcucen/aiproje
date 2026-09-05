@@ -9,6 +9,7 @@ const GAMES = [
     desc: 'Fiziksel bir robota ihtiyacın yok! Sanal robotunu 3 boyutlu simülatörde kodlayarak görevleri tamamla. (Yeni sekmede açılır)',
     url: 'https://vr.vex.com/',
     icon: '🏎️',
+    iconUrl: 'https://logo.clearbit.com/vex.com',
     external: true
   },
   {
@@ -17,6 +18,7 @@ const GAMES = [
     desc: 'Blokları unut, gerçek kod yazma vakti! Python veya JavaScript yazarak şövalyeni zindanlardan kurtar.',
     url: 'https://codecombat.com/play',
     icon: '⚔️',
+    iconUrl: 'https://logo.clearbit.com/codecombat.com',
     external: true
   },
 
@@ -26,6 +28,7 @@ const GAMES = [
     desc: 'OHEP Karargahı seni çağırıyor! X ve Y eksenlerini kullanarak hedefi bul, kod yazarak füzeyi ateşle ve düşman gemilerini yok et!',
     component: <OhepBattleship />,
     icon: '🚀',
+    iconUrl: '/ohep.jpeg',
     external: false
   },
 
@@ -35,6 +38,7 @@ const GAMES = [
     desc: 'Tarayıcıda tam envanter, yaratıcı mod ve devasa bir dünya. Hayalindeki yapıyı inşa et!',
     url: 'https://eaglercraftgame.io/',
     icon: '⛏️',
+    iconUrl: 'https://logo.clearbit.com/minecraft.net',
     external: false
   },
 
@@ -43,21 +47,21 @@ const GAMES = [
     title: 'Labirent (Blockly)',
     desc: 'Kod bloklarını sürükleyip birleştirerek karakteri hedefe ulaştır!',
     url: 'https://blockly.games/maze?lang=tr',
-    icon: '🗺️'
+    icon: '🗺️',
   },
   {
     id: 'turtle',
     title: 'Kaplumbağa (Çizim)',
     desc: 'Kod yazarak kaplumbağaya harika şekiller çizdir.',
     url: 'https://blockly.games/turtle?lang=tr',
-    icon: '🐢'
+    icon: '🐢',
   },
   {
     id: 'bird',
     title: 'Kuş (Koordinat)',
     desc: 'Kuşun solucanı yakalaması ve yuvaya dönmesi için doğru açıları bul!',
     url: 'https://blockly.games/bird?lang=tr',
-    icon: '🦅'
+    icon: '🦅',
   }
   ,
   {
@@ -65,7 +69,7 @@ const GAMES = [
     title: 'Compute it',
     desc: 'Kodları okuyarak bilgisayarın kendisi sen ol! Yön tuşlarıyla algoritmaları çöz.',
     url: 'https://compute-it.toxicode.fr/',
-    icon: '💻'
+    icon: '💻',
   }
   ,
   {
@@ -82,7 +86,7 @@ const GAMES = [
     title: 'Rodocodo (Kodlama)',
     desc: 'Kod bloklarını kullanarak sevimli robota yol göster ve bulmacaları çöz!',
     url: 'https://game.rodocodo.com/hour-of-code/',
-    icon: '🤖'
+    icon: '🤖',
   }
   ,
   {
