@@ -147,6 +147,8 @@ export default function AdminPanel() {
           {active === 'settings'   && <ClassSettings />}
           {active === 'live'       && <LiveClassControl />}
           {active === 'dojo'       && <ClassDojoBoard />}
+          {active === 'wheel'       && <RandomStudentWheel />}
+          {active === 'timer'       && <CountdownTimer />}
         </div>
       </main>
     </div>

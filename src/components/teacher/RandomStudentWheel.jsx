@@ -27,13 +27,7 @@ export default function RandomStudentWheel() {
     }
   }, [profile])
 
-  useEffect(() => {
-    if (selectedClass) {
-      fetchStudents(selectedClass)
-    }
-  }, [selectedClass])
-
-  async function fetchStudents(classId) {
+  const fetchStudents = async (classId) => {
     try {
       const list = await getStudentsByClass(classId)
       const formattedList = list.map(s => ({
@@ -47,6 +41,12 @@ export default function RandomStudentWheel() {
       console.error(err)
     }
   }
+
+  useEffect(() => {
+    if (selectedClass) {
+      fetchStudents(selectedClass)
+    }
+  }, [selectedClass])
 
   const drawWheel = () => {
     const canvas = canvasRef.current
@@ -127,7 +127,7 @@ export default function RandomStudentWheel() {
       gainNode.connect(ctx.destination)
       osc.start()
       osc.stop(ctx.currentTime + 0.05)
-    } catch(e) {}
+    } catch(err) { console.error(err) }
   }
 
   const playWinnerSound = () => {
@@ -153,7 +153,7 @@ export default function RandomStudentWheel() {
       playNote(523.25, now, 0.2) // C5
       playNote(659.25, now + 0.2, 0.2) // E5
       playNote(783.99, now + 0.4, 0.4) // G5
-    } catch(e) {}
+    } catch(err) { console.error(err) }
   }
 
   const spin = () => {
