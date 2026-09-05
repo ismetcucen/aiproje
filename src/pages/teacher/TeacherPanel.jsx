@@ -15,6 +15,7 @@ import ClassDojoBoard from '../../components/teacher/ClassDojoBoard'
 import LiveClassControl from '../../components/teacher/LiveClassControl'
 import RandomStudentWheel from '../../components/teacher/RandomStudentWheel'
 import CountdownTimer from '../../components/teacher/CountdownTimer'
+import FocusTracker from '../../components/student/FocusTracker'
 
 const MENU = [
   { id: 'curriculum',  label: 'Müfredat',   icon: '📚' },
@@ -74,6 +75,10 @@ export default function TeacherPanel() {
             </button>
           ))}
         </nav>
+
+        <div className="px-3 pb-4">
+          <FocusTracker />
+        </div>
 
         <div className="p-4 border-t border-amber-900/10 bg-amber-900/5 relative z-10">
           {sidebarOpen && (

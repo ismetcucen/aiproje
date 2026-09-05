@@ -23,6 +23,7 @@ import Attendance from '../../components/teacher/Attendance'
 import DigitalBoardSettings from '../../components/admin/DigitalBoardSettings'
 import AuditLogs from '../../components/admin/AuditLogs'
 import AILogs from '../../components/admin/AILogs'
+import FocusTracker from '../../components/student/FocusTracker'
 import RandomStudentWheel from '../../components/teacher/RandomStudentWheel'
 import CountdownTimer from '../../components/teacher/CountdownTimer'
 
@@ -92,6 +93,10 @@ export default function AdminPanel() {
             </button>
           ))}
         </nav>
+
+        <div className="px-3 pb-4">
+          <FocusTracker />
+        </div>
 
         <div className="p-4 border-t border-amber-900/10 bg-amber-900/5 relative z-10">
           <div className="px-2 mb-3">
