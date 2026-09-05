@@ -1,0 +1,21 @@
+{
+  "name": "ÖHEP AI Studio",
+  "short_name": "ÖHEP Studio",
+  "description": "ÖHEP Bilişim Dijital Öğrenme Platformu",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f7fc",
+  "theme_color": "#4f46e5",
+  "icons": [
+    {
+      "src": "/ohep.jpeg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/ohep.jpeg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}
