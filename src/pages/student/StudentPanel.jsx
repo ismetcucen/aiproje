@@ -38,6 +38,8 @@ const MENU = [
 export default function StudentPanel() {
   const { user, profile, logout } = useAuth()
   const [active, setActive]                     = useState('home')
+  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [showAvatarModal, setShowAvatarModal] = useState(false)
   const [showRules, setShowRules] = useState(!localStorage.getItem('aiLabRulesAccepted_v3'))
 
