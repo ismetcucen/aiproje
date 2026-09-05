@@ -1,12 +1,24 @@
 import React, { useEffect, useRef, useState } from 'react'
 import * as faceapi from '@vladmandic/face-api'
 
+const emotionMap = {
+  neutral: { label: 'Normal / Odaklanmış', emoji: '😐', color: 'bg-slate-100 text-slate-700' },
+  happy: { label: 'Mutlu', emoji: '😃', color: 'bg-emerald-100 text-emerald-700' },
+  sad: { label: 'Üzgün / Yorgun', emoji: '😢', color: 'bg-blue-100 text-blue-700' },
+  angry: { label: 'Kızgın', emoji: '😡', color: 'bg-red-100 text-red-700' },
+  fearful: { label: 'Korkmuş', emoji: '😨', color: 'bg-purple-100 text-purple-700' },
+  disgusted: { label: 'İğrenmiş', emoji: '🤢', color: 'bg-green-100 text-green-700' },
+  surprised: { label: 'Şaşkın', emoji: '😲', color: 'bg-yellow-100 text-yellow-700' },
+  noface: { label: 'İlgisiz / Ekranda Yok', emoji: '😴', color: 'bg-slate-800 text-slate-200' }
+}
+
 export default function FocusTracker() {
   const videoRef = useRef(null)
   const [isActive, setIsActive] = useState(false)
   const [isModelsLoaded, setIsModelsLoaded] = useState(false)
   const [status, setStatus] = useState('Hazırlanıyor...')
   const [f1Message, setF1Message] = useState(null)
+  const [currentEmotion, setCurrentEmotion] = useState(null)
   
   // Tracking states
   const trackingData = useRef({
@@ -42,6 +54,7 @@ export default function FocusTracker() {
           videoRef.current.srcObject = stream
           setIsActive(true)
           setStatus('Analiz devrede 👀')
+          setCurrentEmotion('neutral')
         }
       })
       .catch((err) => {
@@ -58,6 +71,7 @@ export default function FocusTracker() {
     setIsActive(false)
     setStatus('Analiz duraklatıldı.')
     setF1Message(null)
+    setCurrentEmotion(null)
   }
 
   const handleVideoPlay = () => {
@@ -78,8 +92,9 @@ export default function FocusTracker() {
         // No face detected
         trackingData.current.noFaceCount++
         trackingData.current.sadCount = 0
+        setCurrentEmotion('noface')
         
-        if (trackingData.current.noFaceCount > 15 && timeSinceLastAlert > 20000) { // ~3-4 secs
+        if (trackingData.current.noFaceCount > 15 && timeSinceLastAlert > 20000) {
           triggerF1Alert("Hey, ekranda değilsin! Dikkatin mi dağıldı? Odaklanmaya çalış! 🤖")
           trackingData.current.noFaceCount = 0
         }
@@ -88,8 +103,7 @@ export default function FocusTracker() {
         trackingData.current.noFaceCount = 0
         
         const expressions = detections.expressions
-        // Find dominant emotion
-        let dominantEmotion = ''
+        let dominantEmotion = 'neutral'
         let maxScore = 0
         for (const [emotion, score] of Object.entries(expressions)) {
           if (score > maxScore) {
@@ -97,6 +111,8 @@ export default function FocusTracker() {
             dominantEmotion = emotion
           }
         }
+        
+        setCurrentEmotion(dominantEmotion)
 
         if (dominantEmotion === 'sad') {
           trackingData.current.sadCount++
@@ -113,21 +129,15 @@ export default function FocusTracker() {
         } else {
           trackingData.current.sadCount = 0
           trackingData.current.angryCount = 0
-          
-          if (dominantEmotion === 'happy' && timeSinceLastAlert > 60000) {
-            // triggerF1Alert("Gülümsemeni görmek ne güzel! Harika gidiyorsun! 🌟")
-            // Optional positive reinforcement
-          }
         }
       }
-    }, 250) // check every 250ms
+    }, 500) // check every 500ms for better performance
   }
   
   const triggerF1Alert = (msg) => {
     trackingData.current.lastAlertTime = Date.now()
     setF1Message(msg)
     
-    // Play a gentle beep
     try {
       const AudioContext = window.AudioContext || window.webkitAudioContext
       const ctx = new AudioContext()
@@ -145,11 +155,12 @@ export default function FocusTracker() {
       osc.stop(ctx.currentTime + 0.3)
     } catch(e) {}
 
-    // Auto hide after 8 seconds
     setTimeout(() => {
       setF1Message(null)
     }, 8000)
   }
+
+  const emotionObj = currentEmotion ? emotionMap[currentEmotion] : null
 
   return (
     <div className="fixed bottom-6 right-6 w-80 z-[100] bg-white/80 backdrop-blur-xl rounded-3xl p-5 border border-slate-200 shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-indigo-500/20">
@@ -159,20 +170,31 @@ export default function FocusTracker() {
             🤖
           </div>
           <div>
-            <h3 className="font-bold text-slate-800 leading-tight text-sm">Yapay Zeka Destekli Öğrenci Analizi</h3>
-            <p className="text-xs font-medium text-slate-500">{status}</p>
+            <h3 className="font-bold text-slate-800 leading-tight text-sm">Yapay Zeka Destekli<br/>Öğrenci Analizi</h3>
           </div>
         </div>
         <button
           onClick={isActive ? stopVideo : startVideo}
           disabled={!isModelsLoaded}
-          className={`px-4 py-2 rounded-xl text-sm font-bold shadow-md transition-transform active:scale-95 ${
+          className={`px-3 py-1.5 rounded-xl text-xs font-bold shadow-md transition-transform active:scale-95 ${
             !isModelsLoaded ? 'bg-slate-100 text-slate-400 cursor-not-allowed' :
             isActive ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-emerald-500 hover:bg-emerald-600 text-white'
           }`}
         >
           {isActive ? 'Kapat' : 'Aç'}
         </button>
+      </div>
+      
+      {/* Live Emotion Badge */}
+      <div className="mb-3 h-8 flex items-center justify-center">
+        {emotionObj ? (
+          <div className={`px-4 py-1.5 rounded-full text-sm font-bold flex items-center gap-2 transition-colors duration-300 shadow-sm ${emotionObj.color}`}>
+            <span className="text-lg">{emotionObj.emoji}</span>
+            {emotionObj.label}
+          </div>
+        ) : (
+          <p className="text-xs font-medium text-slate-500">{status}</p>
+        )}
       </div>
 
       <div className="relative rounded-2xl overflow-hidden bg-slate-900 border-4 border-slate-800 shadow-inner w-full flex items-center justify-center h-40">
@@ -192,9 +214,9 @@ export default function FocusTracker() {
         
         {/* F1 Robot Popup Overlay */}
         {f1Message && (
-          <div className="absolute inset-x-2 bottom-2 bg-indigo-600 text-white p-3 rounded-xl shadow-2xl text-xs font-medium animate-[bounce_0.5s_ease-out]">
+          <div className="absolute inset-x-2 bottom-2 bg-indigo-600 text-white p-3 rounded-xl shadow-2xl text-xs font-medium animate-[bounce_0.5s_ease-out] z-10 border border-indigo-400">
             <div className="flex gap-2 items-start">
-              <span className="text-xl">🦾</span>
+              <span className="text-xl drop-shadow-md">🦾</span>
               <p>{f1Message}</p>
             </div>
           </div>
