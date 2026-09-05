@@ -90,9 +90,7 @@ export default function DigitalBoardViewer() {
     }
   }, [])
 
-  if (!settings) {
-    return <div className="h-screen bg-slate-900 flex items-center justify-center text-white">Yükleniyor...</div>
-  }
+
 
   // Calculate Full Countdowns
   const getCountdown = (targetDate) => {
@@ -140,6 +138,10 @@ export default function DigitalBoardViewer() {
       clearInterval(intervalWallTimer)
     }
   }, [])
+
+  if (!settings) {
+    return <div className="h-screen bg-slate-900 flex items-center justify-center text-white">Yükleniyor...</div>
+  }
 
   // Check current timetable
   const currentMinutes = time.getHours() * 60 + time.getMinutes()
