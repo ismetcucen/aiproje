@@ -27,7 +27,7 @@ export default function RobotAnnouncer() {
       <button 
         onClick={() => setOpen(!open)} 
         className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-300 shadow-sm ${open ? 'bg-emerald-100 border-emerald-300 shadow-inner' : 'bg-slate-100 hover:bg-slate-200 border-slate-200'}`} 
-        title="F1 Robot Anonsu"
+        title="CEVBOT Anonsu"
       >
         <span className="text-xl">🤖</span>
       </button>
@@ -38,7 +38,7 @@ export default function RobotAnnouncer() {
             <span className="text-3xl">📢</span>
             <div>
               <h3 className="font-bold text-slate-800 text-sm uppercase tracking-wider">Canlı Anons</h3>
-              <p className="text-xs text-slate-500 font-medium mt-0.5">F1 Robot ile tüm sınıfa seslen</p>
+              <p className="text-xs text-slate-500 font-medium mt-0.5">CEVBOT ile tüm sınıfa seslen</p>
             </div>
           </div>
           <form onSubmit={handleSend}>

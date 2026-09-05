@@ -153,10 +153,10 @@ export default function DigitalBoardSettings() {
       </div>
 
       <div className="grid grid-cols-1 gap-6">
-        {/* F1 Robot Bilgileri */}
+        {/* CEVBOT Bilgileri */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
           <div className="flex justify-between items-center mb-4 border-b pb-2">
-            <h3 className="font-bold text-slate-700">🤖 F1 Robotun Söyleyeceği Bilgiler</h3>
+            <h3 className="font-bold text-slate-700">🤖 CEVBOTun Söyleyeceği Bilgiler</h3>
             <button onClick={() => setSettings({...settings, robotFacts: [...(settings.robotFacts||[]), '']})} 
                     className="text-xs bg-indigo-50 text-indigo-600 px-2 py-1 rounded font-bold">+ Yeni Bilgi Ekle</button>
           </div>

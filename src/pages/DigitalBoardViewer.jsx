@@ -50,7 +50,7 @@ export default function DigitalBoardViewer() {
 
 
 
-  // F1 Robot Facts (Kullanıcı girdiyse onu, girmediyse varsayılanı kullanır)
+  // CEVBOT Facts (Kullanıcı girdiyse onu, girmediyse varsayılanı kullanır)
   const defaultFacts = [
     "Biliyor muydunuz? Mars'ta gün batımı mavi renktir.",
     "İnsan beyni, çalışırken yaklaşık 20 watt elektrik üretir.",
@@ -71,7 +71,7 @@ export default function DigitalBoardViewer() {
     return () => clearInterval(slideTimer)
   }, [settings?.backgroundImages])
 
-  // F1 Robot Popup Logic
+  // CEVBOT Popup Logic
   useEffect(() => {
     const showRobot = () => {
       // Use the latest settings or fallback
@@ -426,7 +426,7 @@ export default function DigitalBoardViewer() {
         </div>
       </div>
 
-            {/* F1 Robot Asistan Popup */}
+            {/* CEVBOT Asistan Popup */}
       <div className={`absolute bottom-24 right-8 z-40 flex items-end gap-4 transition-all duration-700 transform ${robotState.visible ? 'translate-y-0 opacity-100' : 'translate-y-32 opacity-0 pointer-events-none'}`}>
         <div className="bg-white text-slate-800 p-5 rounded-3xl rounded-br-none shadow-2xl max-w-sm border-2 border-indigo-500 relative animate-bounce-slight">
           <div className="absolute w-4 h-4 bg-white border-r-2 border-b-2 border-indigo-500 transform rotate-45 -bottom-2 right-4"></div>

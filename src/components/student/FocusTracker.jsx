@@ -95,7 +95,7 @@ export default function FocusTracker() {
         setCurrentEmotion('noface')
         
         if (trackingData.current.noFaceCount > 15 && timeSinceLastAlert > 20000) {
-          triggerF1Alert("Hey, ekranda değilsin! Dikkatin mi dağıldı? Odaklanmaya çalış! 🤖")
+          triggerF1Alert("Hey, ekranda değilsin! Dikkatin mi dağıldı? Odaklanmaya çalış! 👽")
           trackingData.current.noFaceCount = 0
         }
       } else {
@@ -123,7 +123,7 @@ export default function FocusTracker() {
         } else if (dominantEmotion === 'angry') {
           trackingData.current.angryCount++
           if (trackingData.current.angryCount > 10 && timeSinceLastAlert > 30000) {
-            triggerF1Alert("Sakin ol, biraz sinirlenmiş gibisin. İstersen kısa bir mola ver. Ben buradayım! 🦾")
+            triggerF1Alert("Sakin ol, biraz sinirlenmiş gibisin. İstersen kısa bir mola ver. Ben buradayım! 🚀")
             trackingData.current.angryCount = 0
           }
         } else {
@@ -166,8 +166,12 @@ export default function FocusTracker() {
     <div className="fixed bottom-6 right-6 w-80 z-[100] bg-white/80 backdrop-blur-xl rounded-3xl p-5 border border-slate-200 shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-indigo-500/20">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center text-xl shadow-inner border border-indigo-200">
-            🤖
+          <div className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center shadow-lg border-2 border-indigo-300 flex-shrink-0 bg-white">
+            <img 
+              src="/cevbot.jpg" 
+              alt="CEVBOT" 
+              className={`w-full h-full object-cover transition-all duration-300 ${currentEmotion === 'happy' ? 'animate-spin-happy' : 'animate-float'}`} 
+            />
           </div>
           <div>
             <h3 className="font-bold text-slate-800 leading-tight text-sm">Yapay Zeka Destekli<br/>Öğrenci Analizi</h3>
@@ -212,11 +216,11 @@ export default function FocusTracker() {
           className={`w-full h-full object-cover transform -scale-x-100 ${isActive ? 'opacity-100' : 'opacity-0'}`}
         />
         
-        {/* F1 Robot Popup Overlay */}
+        {/* CEVBOT Popup Overlay */}
         {f1Message && (
           <div className="absolute inset-x-2 bottom-2 bg-indigo-600 text-white p-3 rounded-xl shadow-2xl text-xs font-medium animate-[bounce_0.5s_ease-out] z-10 border border-indigo-400">
             <div className="flex gap-2 items-start">
-              <span className="text-xl drop-shadow-md">🦾</span>
+              <span className="text-xl drop-shadow-md">🚀</span>
               <p>{f1Message}</p>
             </div>
           </div>
