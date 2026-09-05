@@ -6,6 +6,25 @@ export default function CountdownTimer() {
   const [timeLeft, setTimeLeft] = useState(0) // in seconds
   const [isRunning, setIsRunning] = useState(false)
   
+  const containerRef = useRef(null)
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement)
+    }
+    document.addEventListener('fullscreenchange', handleFullscreenChange)
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange)
+  }, [])
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      containerRef.current?.requestFullscreen().catch(err => console.error(err))
+    } else {
+      document.exitFullscreen()
+    }
+  }
+
   const timerRef = useRef(null)
   const audioCtxRef = useRef(null)
   const oscRef = useRef(null)
@@ -192,7 +211,10 @@ export default function CountdownTimer() {
   }
 
   return (
-    <div className="p-4 md:p-8 max-w-4xl mx-auto flex flex-col items-center justify-center min-h-[80vh]">
+    <div ref={containerRef} className={`p-4 md:p-8 mx-auto flex flex-col items-center justify-center bg-slate-50 w-full transition-all ${isFullscreen ? "h-screen" : "min-h-[80vh]"}`}>
+      <button onClick={toggleFullscreen} className="absolute top-4 right-4 z-50 p-3 bg-white/50 hover:bg-white backdrop-blur-md rounded-xl text-slate-800 shadow-sm transition" title="Tam Ekran">
+        {isFullscreen ? '↙️ Küçült' : '⛶ Tam Ekran'}
+      </button>
       {!isRunning && timeLeft === 0 ? (
         <div className="w-full bg-white rounded-3xl p-8 shadow-xl border border-slate-200 text-center">
           <div className="text-6xl mb-6">⏱️</div>

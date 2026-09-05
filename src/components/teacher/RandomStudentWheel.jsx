@@ -17,6 +17,24 @@ export default function RandomStudentWheel() {
   const [rotation, setRotation] = useState(0)
   
   const canvasRef = useRef(null)
+  const containerRef = useRef(null)
+  const [isFullscreen, setIsFullscreen] = useState(false)
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement)
+    }
+    document.addEventListener('fullscreenchange', handleFullscreenChange)
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange)
+  }, [])
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      containerRef.current?.requestFullscreen().catch(err => console.error(err))
+    } else {
+      document.exitFullscreen()
+    }
+  }
 
   useEffect(() => {
     if (profile?.schoolCode) {
@@ -207,11 +225,16 @@ export default function RandomStudentWheel() {
   }
 
   return (
-    <div className="p-4 md:p-8 max-w-5xl mx-auto flex flex-col items-center">
+    <div ref={containerRef} className="p-4 md:p-8 w-full mx-auto flex flex-col items-center bg-slate-50 overflow-y-auto" style={{ minHeight: isFullscreen ? "100vh" : "auto" }}>
       <div className="w-full bg-white rounded-3xl p-6 shadow-sm border border-slate-200 mb-8 flex flex-wrap gap-4 items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-black text-slate-800">🎡 Rastgele Öğrenci Çarkı</h2>
-          <p className="text-sm text-slate-500">Soru sormak veya tahtaya kaldırmak için çarkı çevirin.</p>
+        <div className="flex items-center gap-4">
+          <div>
+            <h2 className="text-2xl font-black text-slate-800">🎡 Rastgele Öğrenci Çarkı</h2>
+            <p className="text-sm text-slate-500">Soru sormak veya tahtaya kaldırmak için çarkı çevirin.</p>
+          </div>
+          <button onClick={toggleFullscreen} className="p-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-600 transition" title="Tam Ekran">
+            {isFullscreen ? '↙️' : '⛶'}
+          </button>
         </div>
         
         <div className="flex gap-2 items-center">
