@@ -437,7 +437,7 @@ export default function DigitalBoardViewer() {
            <div className="relative w-full h-full bg-slate-900 border-4 border-indigo-400 rounded-full overflow-hidden shadow-[0_0_30px_rgba(99,102,241,0.6)] flex items-center justify-center text-6xl">
              🤖
            </div>
-           <div className="absolute -bottom-2 bg-indigo-600 text-white text-xs font-black px-4 py-1 rounded-full left-1/2 transform -translate-x-1/2 whitespace-nowrap shadow-lg">F1 ASİSTAN</div>
+           <div className="absolute -bottom-2 bg-indigo-600 text-white text-xs font-black px-4 py-1 rounded-full left-1/2 transform -translate-x-1/2 whitespace-nowrap shadow-lg">CEVBOT</div>
         </div>
       </div>
 
