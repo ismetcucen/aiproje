@@ -16,6 +16,7 @@ import LessonTools from '../../components/student/LessonTools'
 import Leaderboard from '../../components/student/Leaderboard'
 import ShowcaseGallery from '../../components/ShowcaseGallery'
 import StudentLiveChat from '../../components/student/StudentLiveChat'
+import FocusTracker from '../../components/student/FocusTracker'
 import AiAssistant from '../../components/student/AiAssistant'
 import LiveMarquee from '../../components/LiveMarquee'
 import HighSchoolAILab from '../../components/student/HighSchoolAILab'
@@ -114,6 +115,10 @@ export default function StudentPanel() {
 
         <div className="px-3 pb-4">
           <InstagramWidget />
+        </div>
+
+        <div className="px-3 pb-4">
+          <FocusTracker />
         </div>
 
         <div className="p-4 border-t border-amber-900/10 bg-amber-900/5 relative z-10">
