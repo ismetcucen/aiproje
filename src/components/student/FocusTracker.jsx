@@ -152,14 +152,14 @@ export default function FocusTracker() {
   }
 
   return (
-    <div className="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm relative overflow-hidden">
+    <div className="fixed bottom-6 right-6 w-80 z-[100] bg-white/80 backdrop-blur-xl rounded-3xl p-5 border border-slate-200 shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-indigo-500/20">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center text-xl shadow-inner border border-indigo-200">
             🤖
           </div>
           <div>
-            <h3 className="font-bold text-slate-800 leading-tight">Yapay Zeka Destekli Öğrenci Analizi</h3>
+            <h3 className="font-bold text-slate-800 leading-tight text-sm">Yapay Zeka Destekli Öğrenci Analizi</h3>
             <p className="text-xs font-medium text-slate-500">{status}</p>
           </div>
         </div>

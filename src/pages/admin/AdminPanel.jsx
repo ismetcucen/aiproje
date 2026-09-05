@@ -94,9 +94,7 @@ export default function AdminPanel() {
           ))}
         </nav>
 
-        <div className="px-3 pb-4">
-          <FocusTracker />
-        </div>
+
 
         <div className="p-4 border-t border-amber-900/10 bg-amber-900/5 relative z-10">
           <div className="px-2 mb-3">
@@ -117,6 +115,7 @@ export default function AdminPanel() {
 
       {isMobileMenuOpen && <div className="md:hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40" onClick={() => setIsMobileMenuOpen(false)}></div>}
       <main className="flex-1 flex flex-col overflow-hidden w-full h-full">
+        <FocusTracker />
         <header className="bg-white border-b border-slate-200 px-4 md:px-6 py-4 flex items-center justify-between shadow-sm shrink-0">
           <div className="flex items-center gap-3">
             <button onClick={() => { if(window.innerWidth < 768) setIsMobileMenuOpen(!isMobileMenuOpen); else setSidebarOpen(!sidebarOpen); }} className="p-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-600 transition-colors">

@@ -119,9 +119,7 @@ export default function StudentPanel() {
           <InstagramWidget />
         </div>
 
-        <div className="px-3 pb-4">
-          <FocusTracker />
-        </div>
+
 
         <div className="p-4 border-t border-amber-900/10 bg-amber-900/5 relative z-10">
           <div className="px-2 mb-3 flex items-center gap-3">
@@ -162,6 +160,7 @@ export default function StudentPanel() {
       {/* Ana İçerik */}
       {isMobileMenuOpen && <div className="md:hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40" onClick={() => setIsMobileMenuOpen(false)}></div>}
       <main className="flex-1 flex flex-col overflow-hidden w-full h-full">
+        <FocusTracker />
         <header className="bg-white/70 backdrop-blur-xl border-b border-indigo-100/50 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
           <div className="flex items-center gap-4">
             <div>
