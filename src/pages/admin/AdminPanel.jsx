@@ -23,10 +23,14 @@ import Attendance from '../../components/teacher/Attendance'
 import DigitalBoardSettings from '../../components/admin/DigitalBoardSettings'
 import AuditLogs from '../../components/admin/AuditLogs'
 import AILogs from '../../components/admin/AILogs'
+import RandomStudentWheel from '../../components/teacher/RandomStudentWheel'
+import CountdownTimer from '../../components/teacher/CountdownTimer'
 
 const MENU = [
   { id: 'calendar',   label: 'Ajanda', icon: '📅' },
   { id: 'tools', label: 'Araçlar', icon: '🛠️' },
+  { id: 'wheel', label: 'Seçici Çark', icon: '🎡' },
+  { id: 'timer', label: 'Geri Sayım', icon: '⏱️' },
   { id: 'settings',   label: 'Ayarlar',      icon: '⚙️' },
   { id: 'live',       label: 'Canlı Sınıf',  icon: '📡' },
   { id: 'announcements', label: 'Duyurular', icon: '📢' },
