@@ -18,25 +18,27 @@ export default function OhepAssistant() {
   const [message, setMessage] = useState('');
   const [isAnimating, setIsAnimating] = useState(false);
 
+  // Dragging State
+  const [pos, setPos] = useState({ left: 24, bottom: 24 });
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStart = useRef({ x: 0, y: 0, left: 0, bottom: 0, moved: false });
+
   useEffect(() => {
     if (!user) return;
 
     let unsub = null;
 
-    // Show CEVBOT after a brief delay
     setTimeout(() => {
       setIsVisible(true);
       const name = user.fullName ? user.fullName.split(' ')[0] : 'Öğrenci';
       speak(`Merhaba ${name}! Ben CEVBOT, senin OHEP asistanınım.`);
     }, 1500);
 
-    // Random funny phrases every 3 mins
     const interval = setInterval(() => {
       const phrase = FUNNY_PHRASES[Math.floor(Math.random() * FUNNY_PHRASES.length)];
       speak(phrase);
     }, 3 * 60 * 1000); 
 
-    // Listen for live announcements
     let isFirstSnapshot = true;
     unsub = listenToRobotAnnouncement((data) => {
       if (isFirstSnapshot) {
@@ -45,7 +47,7 @@ export default function OhepAssistant() {
       }
       
       if (data && data.message) {
-         speak(data.message, true); // True means highlight/urgent
+         speak(data.message, true); 
       }
     });
 
@@ -55,12 +57,68 @@ export default function OhepAssistant() {
     };
   }, [user]);
 
+  // Drag event listeners
+  useEffect(() => {
+    const onMouseMove = (e) => {
+      if (!isDragging) return;
+      const dx = e.clientX - dragStart.current.x;
+      const dy = e.clientY - dragStart.current.y;
+      
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+        dragStart.current.moved = true;
+      }
+
+      setPos({
+        left: dragStart.current.left + dx,
+        bottom: dragStart.current.bottom - dy
+      });
+    };
+    
+    const onMouseUp = () => {
+      setIsDragging(false);
+    };
+
+    if (isDragging) {
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('mouseup', onMouseUp);
+      // For mobile
+      window.addEventListener('touchmove', onMouseMove);
+      window.addEventListener('touchend', onMouseUp);
+    }
+    
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+      window.removeEventListener('touchmove', onMouseMove);
+      window.removeEventListener('touchend', onMouseUp);
+    };
+  }, [isDragging]);
+
+  const onMouseDown = (e) => {
+    // Support touch
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+    setIsDragging(true);
+    dragStart.current = {
+      x: clientX,
+      y: clientY,
+      left: pos.left,
+      bottom: pos.bottom,
+      moved: false
+    };
+  };
+
+  const handleAvatarClick = () => {
+    if (dragStart.current.moved) return; // Ignore click if they dragged
+    speak(FUNNY_PHRASES[Math.floor(Math.random() * FUNNY_PHRASES.length)]);
+  };
+
   const speak = (msg, urgent = false) => {
     setIsVisible(true);
     setMessage(msg);
     setIsAnimating(true);
     
-    // Play sound
     try {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       const ctx = new AudioContext();
@@ -78,7 +136,6 @@ export default function OhepAssistant() {
       osc.stop(ctx.currentTime + 0.3);
     } catch(e) {}
 
-    // Auto-hide message after 8 seconds, stop animating
     setTimeout(() => {
       setMessage('');
       setIsAnimating(false);
@@ -88,7 +145,10 @@ export default function OhepAssistant() {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-6 left-6 z-[100] flex items-end gap-3 pointer-events-none">
+    <div 
+      className={`fixed z-[100] flex items-end gap-3 pointer-events-none transition-none`}
+      style={{ left: `${pos.left}px`, bottom: `${pos.bottom}px` }}
+    >
       {/* Speech Bubble */}
       {message && (
         <div className="bg-white/95 backdrop-blur-md text-slate-800 p-4 rounded-2xl rounded-bl-none shadow-2xl border border-indigo-100 max-w-xs animate-[bounce_0.3s_ease-out] pointer-events-auto relative">
@@ -99,13 +159,15 @@ export default function OhepAssistant() {
       
       {/* CEVBOT Mascot Avatar */}
       <div 
-        className={`w-16 h-16 rounded-full overflow-hidden flex items-center justify-center shadow-[0_10px_25px_rgba(79,70,229,0.4)] border-[3px] border-white flex-shrink-0 bg-indigo-50 pointer-events-auto cursor-pointer transition-transform duration-300 ${isAnimating ? 'animate-spin-happy scale-110' : 'animate-float hover:scale-105'}`}
-        onClick={() => speak(FUNNY_PHRASES[Math.floor(Math.random() * FUNNY_PHRASES.length)])}
+        className={`w-16 h-16 rounded-full overflow-hidden flex items-center justify-center shadow-[0_10px_25px_rgba(79,70,229,0.4)] border-[3px] border-white flex-shrink-0 bg-indigo-50 pointer-events-auto transition-transform duration-300 select-none ${isDragging ? 'cursor-grabbing scale-110' : 'cursor-grab'} ${isAnimating && !isDragging ? 'animate-spin-happy scale-110' : ''} ${!isDragging && !isAnimating ? 'animate-float hover:scale-105' : ''}`}
+        onMouseDown={onMouseDown}
+        onTouchStart={onMouseDown}
+        onClick={handleAvatarClick}
       >
         <img 
           src="/cevbot.jpg" 
           alt="CEVBOT" 
-          className="w-full h-full object-cover" 
+          className="w-full h-full object-cover pointer-events-none" 
         />
       </div>
     </div>
