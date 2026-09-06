@@ -113,11 +113,11 @@ export default function DigitalBoardViewer() {
     
     return (
       <div className="flex items-baseline gap-2">
-        <div className="flex flex-col items-center"><span className="text-3xl font-black text-white">{cd.d}</span><span className="text-[10px] text-slate-400">GÜN</span></div>
+        <div className="flex flex-col items-center justify-center min-w-[3rem]"><span className="text-3xl font-black text-white">{cd.d}</span><span className="text-[10px] text-slate-400">GÜN</span></div>
         <span className="text-xl text-slate-600">:</span>
-        <div className="flex flex-col items-center"><span className="text-3xl font-black text-white">{cd.h}</span><span className="text-[10px] text-slate-400">SAAT</span></div>
+        <div className="flex flex-col items-center justify-center min-w-[3rem]"><span className="text-3xl font-black text-white">{cd.h}</span><span className="text-[10px] text-slate-400">SAAT</span></div>
         <span className="text-xl text-slate-600">:</span>
-        <div className="flex flex-col items-center"><span className="text-3xl font-black text-white">{cd.m}</span><span className="text-[10px] text-slate-400">DK</span></div>
+        <div className="flex flex-col items-center justify-center min-w-[3rem]"><span className="text-3xl font-black text-white">{cd.m}</span><span className="text-[10px] text-slate-400">DK</span></div>
       </div>
     )
   }
@@ -189,24 +189,24 @@ export default function DigitalBoardViewer() {
             <h2 className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 drop-shadow-2xl mb-4 tracking-tight">
               🏆 HAFTANIN YILDIZLARI 🏆
             </h2>
-            <p className="text-2xl text-slate-300 mb-16 tracking-widest uppercase font-light">ÖHEP AI Studio Gurur Tablosu</p>
+            <p className="text-2xl text-slate-300 mb-16 tracking-widest  font-light">ÖHEP AI STUDİO GURUR TABLOSU</p>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
               <div className="bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-3xl shadow-2xl transform hover:scale-105 transition-all">
                 <div className="text-6xl mb-4">💻</div>
-                <h3 className="text-xl font-bold text-indigo-300 uppercase tracking-wider mb-2">Haftanın Kodlayıcısı</h3>
+                <h3 className="text-xl font-bold text-indigo-300  tracking-wider mb-2">HAFTANIN KODLAYICISI</h3>
                 <p className="text-3xl font-black text-white">{settings.achievements.coderOfTheWeek}</p>
               </div>
               
               <div className="bg-gradient-to-b from-amber-500/20 to-yellow-500/10 backdrop-blur-md border border-yellow-500/30 p-10 rounded-3xl shadow-[0_0_50px_rgba(245,158,11,0.2)] transform scale-110 z-10">
                 <div className="text-7xl mb-4 animate-bounce">🌟</div>
-                <h3 className="text-2xl font-bold text-yellow-300 uppercase tracking-wider mb-2">Haftanın Öğrencisi</h3>
+                <h3 className="text-2xl font-bold text-yellow-300  tracking-wider mb-2">HAFTANIN ÖĞRENCİSİ</h3>
                 <p className="text-4xl font-black text-white">{settings.achievements.studentOfTheWeek}</p>
               </div>
               
               <div className="bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-3xl shadow-2xl transform hover:scale-105 transition-all">
                 <div className="text-6xl mb-4">🤖</div>
-                <h3 className="text-xl font-bold text-emerald-300 uppercase tracking-wider mb-2">Haftanın Robotik Projesi</h3>
+                <h3 className="text-xl font-bold text-emerald-300  tracking-wider mb-2">HAFTANIN ROBOTİK PROJESİ</h3>
                 <p className="text-3xl font-black text-white">{settings.achievements.roboticProject}</p>
               </div>
             </div>
@@ -215,14 +215,14 @@ export default function DigitalBoardViewer() {
               <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-6 rounded-2xl flex items-center justify-center gap-6">
                 <div className="text-5xl">🧠</div>
                 <div className="text-left">
-                  <h3 className="text-sm font-bold text-purple-300 uppercase tracking-wider mb-1">Problem Çözücü</h3>
+                  <h3 className="text-sm font-bold text-purple-300  tracking-wider mb-1">PROBLEM ÇÖZÜCÜ</h3>
                   <p className="text-2xl font-black text-white">{settings.achievements.problemSolver}</p>
                 </div>
               </div>
               <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-6 rounded-2xl flex items-center justify-center gap-6">
                 <div className="text-5xl">📈</div>
                 <div className="text-left">
-                  <h3 className="text-sm font-bold text-blue-300 uppercase tracking-wider mb-1">En Çok Gelişim Gösteren</h3>
+                  <h3 className="text-sm font-bold text-blue-300  tracking-wider mb-1">EN ÇOK GELİŞİM GÖSTEREN</h3>
                   <p className="text-2xl font-black text-white">{settings.achievements.mostImproved}</p>
                 </div>
               </div>
@@ -244,7 +244,7 @@ export default function DigitalBoardViewer() {
               <h1 className="text-5xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-300 drop-shadow-md">
                 CEV ÖHEP OKULLARI
               </h1>
-              <p className="text-xl font-light text-slate-300 uppercase tracking-[0.3em] mt-1">Dijital Bilgi Ekranı</p>
+              <p className="text-xl font-light text-slate-300  tracking-[0.3em] mt-1">DİJİTAL BİLGİ EKRANI</p>
             </div>
           </div>
           
@@ -255,7 +255,7 @@ export default function DigitalBoardViewer() {
               {time.getMinutes().toString().padStart(2, '0')}
               <span className="text-3xl text-slate-400 ml-2">{time.getSeconds().toString().padStart(2, '0')}</span>
             </div>
-            <div className="text-2xl font-medium text-slate-300 uppercase tracking-widest mt-1">
+            <div className="text-2xl font-medium text-slate-300  tracking-widest mt-1">
               {time.toLocaleDateString('tr-TR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
             </div>
           </div>
@@ -268,7 +268,7 @@ export default function DigitalBoardViewer() {
           <div className="col-span-4 flex flex-col gap-4 md:gap-6 min-h-0">
             {/* Zaman Çizelgesi */}
             <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-4 md:p-6 border border-white/10 shadow-2xl flex-1 flex flex-col min-h-0">
-              <h2 className="text-2xl font-bold uppercase tracking-widest text-indigo-300 mb-6 flex items-center gap-3">
+              <h2 className="text-2xl font-bold  tracking-widest text-indigo-300 mb-6 flex items-center gap-3">
                 <span>⏱️</span> Zaman Çizelgesi
               </h2>
               <div className="space-y-2 md:space-y-3 flex-1 overflow-y-auto pr-2 custom-scrollbar">
@@ -305,7 +305,7 @@ export default function DigitalBoardViewer() {
             {/* Günün Menüsü */}
             <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-4 md:p-6 border border-white/10 shadow-2xl relative overflow-hidden shrink-0">
               <div className="absolute -right-10 -bottom-10 text-9xl opacity-10">🍲</div>
-              <h2 className="text-2xl font-bold uppercase tracking-widest text-orange-300 mb-5 flex items-center gap-3 relative z-10">
+              <h2 className="text-2xl font-bold  tracking-widest text-orange-300 mb-5 flex items-center gap-3 relative z-10">
                 <span>🍽️</span> Günün Menüsü
               </h2>
               <ul className="space-y-4 relative z-10">
@@ -328,7 +328,7 @@ export default function DigitalBoardViewer() {
             {/* Hava Durumu */}
             <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-4 md:p-6 border border-white/10 shadow-2xl flex items-center justify-between shrink-0">
               <div>
-                <h2 className="text-xl font-bold uppercase tracking-widest text-sky-300 mb-1 flex items-center gap-2">
+                <h2 className="text-xl font-bold  tracking-widest text-sky-300 mb-1 flex items-center gap-2">
                   <span>📍</span> Alanya
                 </h2>
                 <p className="text-slate-400 text-sm">Anlık Hava Durumu</p>
@@ -338,7 +338,7 @@ export default function DigitalBoardViewer() {
                   <span className="text-6xl drop-shadow-lg">{getWeatherIcon(weather.weathercode)}</span>
                   <div className="flex flex-col">
                     <span className="text-4xl font-black text-white">{Math.round(weather.temperature)}°</span>
-                    <span className="text-sky-200 text-xs font-bold uppercase">{weather.windspeed} km/s</span>
+                    <span className="text-sky-200 text-xs font-bold ">{weather.windspeed} km/s</span>
                   </div>
                 </div>
               ) : (
@@ -348,12 +348,12 @@ export default function DigitalBoardViewer() {
 
             {/* Sınavlara Kalan Zaman (Küçültüldü) */}
             <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-4 md:p-6 border border-white/10 shadow-2xl flex-1 flex flex-col min-h-0">
-               <h2 className="text-xl font-bold uppercase tracking-widest text-fuchsia-300 mb-6 flex items-center gap-3">
+               <h2 className="text-xl font-bold  tracking-widest text-fuchsia-300 mb-6 flex items-center gap-3">
                  <span>🎯</span> Sınavlara Kalan Zaman
                </h2>
                <div className="flex flex-col gap-3 flex-1 justify-center">
                  {/* LGS */}
-                 <div className="bg-white/5 rounded-2xl p-3 flex items-center justify-between border border-white/10 shadow-inner">
+                 <div className="bg-white/5 rounded-3xl p-4 md:p-5 flex items-center justify-between border border-white/10 shadow-lg hover:bg-white/10 transition-colors">
                    <div className="flex items-center gap-3">
                      <div className="w-2 h-10 bg-gradient-to-b from-fuchsia-500 to-purple-500 rounded-full"></div>
                      <span className="text-xl font-black text-white tracking-widest">LGS</span>
@@ -361,7 +361,7 @@ export default function DigitalBoardViewer() {
                    {renderCountdown(settings.examDates?.lgs || '2027-06-13T09:00')}
                  </div>
                  {/* TYT */}
-                 <div className="bg-white/5 rounded-2xl p-3 flex items-center justify-between border border-white/10 shadow-inner">
+                 <div className="bg-white/5 rounded-3xl p-4 md:p-5 flex items-center justify-between border border-white/10 shadow-lg hover:bg-white/10 transition-colors">
                    <div className="flex items-center gap-3">
                      <div className="w-2 h-10 bg-gradient-to-b from-emerald-500 to-teal-500 rounded-full"></div>
                      <span className="text-xl font-black text-white tracking-widest">TYT</span>
@@ -369,7 +369,7 @@ export default function DigitalBoardViewer() {
                    {renderCountdown(settings.examDates?.tyt || '2027-06-19T10:15')}
                  </div>
                  {/* AYT */}
-                 <div className="bg-white/5 rounded-2xl p-3 flex items-center justify-between border border-white/10 shadow-inner">
+                 <div className="bg-white/5 rounded-3xl p-4 md:p-5 flex items-center justify-between border border-white/10 shadow-lg hover:bg-white/10 transition-colors">
                    <div className="flex items-center gap-3">
                      <div className="w-2 h-10 bg-gradient-to-b from-blue-500 to-cyan-500 rounded-full"></div>
                      <span className="text-xl font-black text-white tracking-widest">AYT</span>
@@ -377,7 +377,7 @@ export default function DigitalBoardViewer() {
                    {renderCountdown(settings.examDates?.ayt || '2027-06-20T10:15')}
                  </div>
                  {/* YDT */}
-                 <div className="bg-white/5 rounded-2xl p-3 flex items-center justify-between border border-white/10 shadow-inner">
+                 <div className="bg-white/5 rounded-3xl p-4 md:p-5 flex items-center justify-between border border-white/10 shadow-lg hover:bg-white/10 transition-colors">
                    <div className="flex items-center gap-3">
                      <div className="w-2 h-10 bg-gradient-to-b from-amber-500 to-orange-500 rounded-full"></div>
                      <span className="text-xl font-black text-white tracking-widest">YDT</span>
@@ -392,20 +392,20 @@ export default function DigitalBoardViewer() {
           <div className="col-span-4 flex flex-col gap-4 md:gap-6 min-h-0">
             {/* Nöbetçi Öğretmenler */}
             <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-4 md:p-6 border border-white/10 shadow-2xl flex-1 flex flex-col min-h-0">
-              <h2 className="text-2xl font-bold uppercase tracking-widest text-emerald-300 mb-6 flex items-center gap-3">
+              <h2 className="text-2xl font-bold  tracking-widest text-emerald-300 mb-6 flex items-center gap-3">
                 <span>🛡️</span> Nöbetçi Öğretmenler
               </h2>
               <div className="space-y-3 flex-1 overflow-y-auto pr-2 custom-scrollbar">
                 <div className="bg-white/5 rounded-2xl p-5 border border-white/10 flex flex-col">
-                  <span className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">İLKOKUL</span>
+                  <span className="text-sm font-bold text-slate-400  tracking-widest mb-1">İLKOKUL</span>
                   <span className="text-2xl font-black text-white">{settings.dutyTeachers?.primary || '-'}</span>
                 </div>
                 <div className="bg-white/5 rounded-2xl p-5 border border-white/10 flex flex-col">
-                  <span className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">ORTAOKUL</span>
+                  <span className="text-sm font-bold text-slate-400  tracking-widest mb-1">ORTAOKUL</span>
                   <span className="text-2xl font-black text-white">{settings.dutyTeachers?.middle || '-'}</span>
                 </div>
                 <div className="bg-white/5 rounded-2xl p-5 border border-white/10 flex flex-col">
-                  <span className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">LİSE</span>
+                  <span className="text-sm font-bold text-slate-400  tracking-widest mb-1">LİSE</span>
                   <span className="text-2xl font-black text-white">{settings.dutyTeachers?.high || '-'}</span>
                 </div>
               </div>

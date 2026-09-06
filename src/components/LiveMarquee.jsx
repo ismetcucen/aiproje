@@ -35,7 +35,7 @@ export default function LiveMarquee() {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
             <span className="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
           </span>
-          <span className="font-black text-white text-xs md:text-sm uppercase tracking-widest">
+          <span className="font-black text-white text-xs md:text-sm  tracking-widest">
             ÖHEP BİLİŞİM DUYURU
           </span>
         </div>
