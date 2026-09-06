@@ -113,11 +113,11 @@ export default function DigitalBoardViewer() {
     
     return (
       <div className="flex items-baseline gap-2">
-        <div className="flex flex-col items-center justify-center min-w-[3rem]"><span className="text-3xl font-black text-white">{cd.d}</span><span className="text-[10px] text-slate-400">GÜN</span></div>
+        <div className="flex flex-col items-center justify-center min-w-[2.5rem]"><span className="text-2xl font-black text-white">{cd.d}</span><span className="text-[10px] text-slate-400">GÜN</span></div>
         <span className="text-xl text-slate-600">:</span>
-        <div className="flex flex-col items-center justify-center min-w-[3rem]"><span className="text-3xl font-black text-white">{cd.h}</span><span className="text-[10px] text-slate-400">SAAT</span></div>
+        <div className="flex flex-col items-center justify-center min-w-[2.5rem]"><span className="text-2xl font-black text-white">{cd.h}</span><span className="text-[10px] text-slate-400">SAAT</span></div>
         <span className="text-xl text-slate-600">:</span>
-        <div className="flex flex-col items-center justify-center min-w-[3rem]"><span className="text-3xl font-black text-white">{cd.m}</span><span className="text-[10px] text-slate-400">DK</span></div>
+        <div className="flex flex-col items-center justify-center min-w-[2.5rem]"><span className="text-2xl font-black text-white">{cd.m}</span><span className="text-[10px] text-slate-400">DK</span></div>
       </div>
     )
   }
@@ -348,39 +348,39 @@ export default function DigitalBoardViewer() {
 
             {/* Sınavlara Kalan Zaman (Küçültüldü) */}
             <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-4 md:p-6 border border-white/10 shadow-2xl flex-1 flex flex-col min-h-0">
-               <h2 className="text-xl font-bold  tracking-widest text-fuchsia-300 mb-6 flex items-center gap-3">
+               <h2 className="text-xl font-bold  tracking-widest text-fuchsia-300 mb-2 flex items-center gap-3">
                  <span>🎯</span> Sınavlara Kalan Zaman
                </h2>
-               <div className="flex flex-col gap-3 flex-1 justify-center">
+               <div className="flex flex-col gap-2 flex-1 justify-center">
                  {/* LGS */}
-                 <div className="bg-white/5 rounded-3xl p-4 md:p-5 flex items-center justify-between border border-white/10 shadow-lg hover:bg-white/10 transition-colors">
+                 <div className="bg-white/5 rounded-2xl p-2 md:p-3 px-4 flex items-center justify-between border border-white/10 shadow-sm">
                    <div className="flex items-center gap-3">
-                     <div className="w-2 h-10 bg-gradient-to-b from-fuchsia-500 to-purple-500 rounded-full"></div>
-                     <span className="text-xl font-black text-white tracking-widest">LGS</span>
+                     <div className="w-1.5 h-8 bg-gradient-to-b from-fuchsia-500 to-purple-500 rounded-full"></div>
+                     <span className="text-lg font-black text-white tracking-widest">LGS</span>
                    </div>
                    {renderCountdown(settings.examDates?.lgs || '2027-06-13T09:00')}
                  </div>
                  {/* TYT */}
-                 <div className="bg-white/5 rounded-3xl p-4 md:p-5 flex items-center justify-between border border-white/10 shadow-lg hover:bg-white/10 transition-colors">
+                 <div className="bg-white/5 rounded-2xl p-2 md:p-3 px-4 flex items-center justify-between border border-white/10 shadow-sm">
                    <div className="flex items-center gap-3">
-                     <div className="w-2 h-10 bg-gradient-to-b from-emerald-500 to-teal-500 rounded-full"></div>
-                     <span className="text-xl font-black text-white tracking-widest">TYT</span>
+                     <div className="w-1.5 h-8 bg-gradient-to-b from-emerald-500 to-teal-500 rounded-full"></div>
+                     <span className="text-lg font-black text-white tracking-widest">TYT</span>
                    </div>
                    {renderCountdown(settings.examDates?.tyt || '2027-06-19T10:15')}
                  </div>
                  {/* AYT */}
-                 <div className="bg-white/5 rounded-3xl p-4 md:p-5 flex items-center justify-between border border-white/10 shadow-lg hover:bg-white/10 transition-colors">
+                 <div className="bg-white/5 rounded-2xl p-2 md:p-3 px-4 flex items-center justify-between border border-white/10 shadow-sm">
                    <div className="flex items-center gap-3">
-                     <div className="w-2 h-10 bg-gradient-to-b from-blue-500 to-cyan-500 rounded-full"></div>
-                     <span className="text-xl font-black text-white tracking-widest">AYT</span>
+                     <div className="w-1.5 h-8 bg-gradient-to-b from-blue-500 to-cyan-500 rounded-full"></div>
+                     <span className="text-lg font-black text-white tracking-widest">AYT</span>
                    </div>
                    {renderCountdown(settings.examDates?.ayt || '2027-06-20T10:15')}
                  </div>
                  {/* YDT */}
-                 <div className="bg-white/5 rounded-3xl p-4 md:p-5 flex items-center justify-between border border-white/10 shadow-lg hover:bg-white/10 transition-colors">
+                 <div className="bg-white/5 rounded-2xl p-2 md:p-3 px-4 flex items-center justify-between border border-white/10 shadow-sm">
                    <div className="flex items-center gap-3">
-                     <div className="w-2 h-10 bg-gradient-to-b from-amber-500 to-orange-500 rounded-full"></div>
-                     <span className="text-xl font-black text-white tracking-widest">YDT</span>
+                     <div className="w-1.5 h-8 bg-gradient-to-b from-amber-500 to-orange-500 rounded-full"></div>
+                     <span className="text-lg font-black text-white tracking-widest">YDT</span>
                    </div>
                    {renderCountdown(settings.examDates?.ydt || '2027-06-20T15:45')}
                  </div>
