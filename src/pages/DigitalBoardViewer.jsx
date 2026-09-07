@@ -232,7 +232,7 @@ export default function DigitalBoardViewer() {
       )}
 
       {/* Main Content Area */}
-      <div className="relative z-10 h-full flex flex-col p-4 md:p-6 pb-16 md:pb-20 box-border">
+      <div className="relative z-10 flex-1 min-h-0 flex flex-col p-4 md:p-6 pb-4 box-border">
         
         {/* Header: Logo / School Name & Clock */}
         <header className="flex justify-between items-center mb-4 md:mb-6 shrink-0">
@@ -387,7 +387,7 @@ export default function DigitalBoardViewer() {
       </div>
 
       {/* UNIFIED FOOTER: Timetable + Marquee */}
-      <div className="absolute bottom-0 left-0 w-full bg-slate-900/95 backdrop-blur-2xl border-t border-white/10 z-50 flex flex-col shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
+      <div className="w-full shrink-0 bg-slate-900/95 backdrop-blur-2xl border-t border-white/10 z-50 flex flex-col shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
         <div className="w-full px-6 py-3 flex items-center gap-6">
           <h2 className="text-lg font-black tracking-widest text-indigo-300 flex flex-col items-center gap-1 shrink-0 whitespace-nowrap">
             <span className="text-2xl">⏱️</span>
