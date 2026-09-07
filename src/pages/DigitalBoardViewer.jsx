@@ -359,11 +359,9 @@ export default function DigitalBoardViewer() {
               <h2 className="text-2xl font-bold  tracking-widest text-indigo-300 mb-6 flex items-center gap-3">
                 <span>⏱️</span> Zaman Çizelgesi
               </h2>
-              <div className="flex-1 overflow-hidden relative">
-                <div className="absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-slate-900/40 to-transparent z-10 pointer-events-none"></div>
-                <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-slate-900/40 to-transparent z-10 pointer-events-none"></div>
-                <div className="flex flex-col gap-3 animate-scroll-vertical hover:pause">
-                  {[...(settings.timetable || []), ...(settings.timetable || [])].map((t, idx) => {
+              <div className="flex-1 flex flex-col justify-center">
+                <div className="w-full grid grid-cols-2 gap-3 pb-2">
+                  {(settings.timetable || []).map((t, idx) => {
                   let isCurrent = false;
                   // Basic time parsing logic for active row highlight (e.g., "08:30 - 09:10")
                   if (t.time && t.time.includes('-')) {
@@ -380,13 +378,13 @@ export default function DigitalBoardViewer() {
                   }
                   
                   return (
-                    <div key={idx} className={`flex justify-between items-center p-3 rounded-2xl transition-all duration-500 ${
+                    <div key={idx} className={`flex flex-col items-center justify-center p-3 rounded-2xl transition-all duration-500 ${
                       isCurrent 
                         ? 'bg-slate-900/80 border-2 border-fuchsia-400 shadow-[0_0_15px_#e879f9,inset_0_0_15px_#e879f9] scale-110 transform z-20 relative animate-pulse' 
                         : 'bg-white/5 border border-white/5'
                     }`}>
-                      <span className={`font-bold text-lg ${isCurrent ? 'text-white' : 'text-slate-300'}`}>{t.label}</span>
-                      <span className={`font-black tracking-widest ${isCurrent ? 'text-white' : 'text-indigo-400'}`}>{t.time}</span>
+                      <span className={`font-bold text-sm md:text-base ${isCurrent ? 'text-white' : 'text-slate-300'}`}>{t.label}</span>
+                      <span className={`font-black text-sm tracking-wide ${isCurrent ? 'text-fuchsia-300' : 'text-indigo-400'}`}>{t.time}</span>
                     </div>
                   )
                 })}
