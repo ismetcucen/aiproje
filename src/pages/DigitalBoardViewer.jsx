@@ -235,29 +235,15 @@ export default function DigitalBoardViewer() {
       <div className="relative z-10 flex-1 min-h-0 flex flex-col p-4 md:p-6 pb-4 box-border">
         
         {/* Header: Logo / School Name & Clock */}
-        <header className="flex justify-between items-center mb-4 md:mb-6 shrink-0">
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center p-2 shadow-[0_0_30px_rgba(255,255,255,0.3)]">
-              <img src="/ohep.jpeg" alt="Logo" className="w-full h-full object-contain rounded-xl" />
-            </div>
-            <div>
-              <h1 className="text-5xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-300 drop-shadow-md">
-                CEV ÖHEP OKULLARI
-              </h1>
-              <p className="text-xl font-light text-slate-300  tracking-[0.3em] mt-1">DİJİTAL BİLGİ EKRANI</p>
-            </div>
+        <header className="flex flex-col justify-center items-center mb-8 md:mb-12 shrink-0 w-full relative gap-4">
+          <div className="w-24 h-24 md:w-28 md:h-28 bg-white rounded-[2rem] flex items-center justify-center p-3 shadow-[0_0_50px_rgba(255,255,255,0.5)] transform hover:scale-105 transition-all">
+            <img src="/ohep.jpeg" alt="Logo" className="w-full h-full object-contain rounded-xl" />
           </div>
-          
-          <div className="text-right">
-            <div className="text-7xl font-black tabular-nums tracking-tighter drop-shadow-2xl flex items-baseline gap-2 justify-end">
-              {time.getHours().toString().padStart(2, '0')}
-              <span className="text-indigo-400 animate-pulse">:</span>
-              {time.getMinutes().toString().padStart(2, '0')}
-              <span className="text-3xl text-slate-400 ml-2">{time.getSeconds().toString().padStart(2, '0')}</span>
-            </div>
-            <div className="text-2xl font-medium text-slate-300  tracking-widest mt-1">
-              {time.toLocaleDateString('tr-TR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
-            </div>
+          <div className="flex flex-col items-center text-center">
+            <h1 className="text-5xl md:text-7xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-slate-400 drop-shadow-2xl mb-2">
+              CEV ÖHEP OKULLARI
+            </h1>
+            <p className="text-xl md:text-3xl font-light text-slate-300 tracking-[0.5em]">DİJİTAL BİLGİ EKRANI</p>
           </div>
         </header>
 
@@ -308,6 +294,20 @@ export default function DigitalBoardViewer() {
                 <span className="text-slate-400 text-sm">Yükleniyor...</span>
               )}
             </div>
+            
+            {/* Saat ve Tarih (Büyük) */}
+            <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-6 md:p-8 border border-white/10 shadow-2xl flex flex-col items-center justify-center shrink-0 transform hover:scale-105 transition-all">
+              <div className="text-7xl md:text-8xl xl:text-9xl font-black tabular-nums tracking-tighter drop-shadow-2xl flex items-baseline gap-2">
+                {time.getHours().toString().padStart(2, '0')}
+                <span className="text-indigo-400 animate-pulse">:</span>
+                {time.getMinutes().toString().padStart(2, '0')}
+                <span className="text-3xl md:text-4xl xl:text-5xl text-slate-400 ml-2">{time.getSeconds().toString().padStart(2, '0')}</span>
+              </div>
+              <div className="text-xl md:text-2xl xl:text-3xl font-medium text-slate-300 tracking-widest mt-4 uppercase text-center">
+                {time.toLocaleDateString('tr-TR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+              </div>
+            </div>
+
             {/* Günün Sözü */}
             {settings.quoteOfTheDay && (
               <div className="bg-gradient-to-br from-indigo-900/80 to-purple-900/80 backdrop-blur-xl rounded-3xl p-4 md:p-6 border border-indigo-500/30 shadow-2xl text-center relative overflow-hidden shrink-0">
