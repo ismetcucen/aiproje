@@ -160,7 +160,7 @@ export default function DigitalBoardViewer() {
   
   return (
     <div 
-      className="h-screen w-full relative overflow-hidden text-white font-sans selection:bg-none"
+      className="h-[100dvh] w-full relative overflow-hidden text-white font-sans selection:bg-none"
       style={{
         backgroundImage: `url('${
           settings.backgroundImages?.length > 0 
@@ -235,10 +235,7 @@ export default function DigitalBoardViewer() {
       <div className="relative z-10 flex-1 min-h-0 flex flex-col p-4 md:p-6 pb-4 box-border">
         
         {/* Header: Logo / School Name & Clock */}
-        <header className="flex flex-col justify-center items-center mb-8 md:mb-12 shrink-0 w-full relative gap-4">
-          <div className="w-24 h-24 md:w-28 md:h-28 bg-white rounded-[2rem] flex items-center justify-center p-3 shadow-[0_0_50px_rgba(255,255,255,0.5)] transform hover:scale-105 transition-all">
-            <img src="/ohep.jpeg" alt="Logo" className="w-full h-full object-contain rounded-xl" />
-          </div>
+        <header className="flex flex-col justify-center items-center mb-2 md:mb-4 shrink-0 w-full relative gap-1">
           <div className="flex flex-col items-center text-center">
             <h1 className="text-5xl md:text-7xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-slate-400 drop-shadow-2xl mb-2">
               CEV ÖHEP OKULLARI
