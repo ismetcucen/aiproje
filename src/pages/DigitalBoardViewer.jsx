@@ -253,7 +253,7 @@ export default function DigitalBoardViewer() {
             <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-4 md:p-6 border border-white/10 shadow-2xl relative overflow-hidden shrink-0">
               <div className="absolute -right-10 -bottom-10 text-9xl opacity-10">🍲</div>
               <h2 className="text-2xl font-bold  tracking-widest text-orange-300 mb-5 flex items-center gap-3 relative z-10">
-                <span>🍽️</span> GÜNÜN MENÜSÜ - ÖĞLE YEMEĞİ
+                <span>🍽️</span> GÜNÜN ÖĞLE YEMEĞİ
               </h2>
               <ul className="space-y-4 relative z-10">
                 {(settings.dailyMenu || []).map((item, idx) => (
@@ -391,9 +391,11 @@ export default function DigitalBoardViewer() {
             <span className="text-[10px] text-slate-400">ZAMAN ÇİZELGESİ</span>
           </h2>
           
-          <div className="flex flex-col gap-2 w-full overflow-hidden">
+          <div className="flex w-full overflow-x-auto hide-scrollbar">
+            <div className="flex flex-col gap-2 w-max pr-6">
+              
             {/* Lessons Row */}
-            <div className="flex flex-row justify-start items-center gap-2 w-full overflow-x-auto hide-scrollbar">
+            <div className="flex flex-row justify-start items-center gap-2">
               {(settings.timetable || []).filter(t => t.label && t.label.toLowerCase().includes('ders')).map((t, idx) => {
                 let isCurrent = false;
                 if (t.time && t.time.includes('-')) {
@@ -409,7 +411,7 @@ export default function DigitalBoardViewer() {
                   }
                 }
                 return (
-                  <div key={idx} className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-500 min-w-[110px] ${
+                  <div key={idx} className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-500 w-[120px] flex-shrink-0 ${
                     isCurrent 
                       ? 'bg-indigo-600 border-2 border-fuchsia-400 shadow-[0_0_15px_#e879f9] scale-105 transform z-20 relative animate-pulse' 
                       : 'bg-indigo-900/30 border border-indigo-500/20'
@@ -421,7 +423,7 @@ export default function DigitalBoardViewer() {
               })}
             </div>
             {/* Breaks Row */}
-            <div className="flex flex-row justify-start items-center gap-2 w-full overflow-x-auto hide-scrollbar">
+            <div className="flex flex-row justify-start items-center gap-2">
               {(settings.timetable || []).filter(t => !t.label || !t.label.toLowerCase().includes('ders')).map((t, idx) => {
                 let isCurrent = false;
                 if (t.time && t.time.includes('-')) {
@@ -437,7 +439,7 @@ export default function DigitalBoardViewer() {
                   }
                 }
                 return (
-                  <div key={idx} className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-500 min-w-[110px] ${
+                  <div key={idx} className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-500 w-[120px] flex-shrink-0 ${
                     isCurrent 
                       ? 'bg-emerald-600 border-2 border-fuchsia-400 shadow-[0_0_15px_#e879f9] scale-105 transform z-20 relative animate-pulse' 
                       : 'bg-emerald-900/20 border border-emerald-500/20'
@@ -448,9 +450,10 @@ export default function DigitalBoardViewer() {
                 )
               })}
             </div>
+          
+            </div>
           </div>
         </div>
-        
         {/* Marquee Banner */}
         <div className="w-full border-t border-white/5 relative z-20">
           <LiveMarquee />
