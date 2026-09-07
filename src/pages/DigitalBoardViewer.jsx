@@ -398,6 +398,7 @@ export default function DigitalBoardViewer() {
             <div className="flex flex-row justify-start items-center gap-2">
               {(settings.timetable || []).filter(t => t.label && t.label.toLowerCase().includes('ders')).map((t, idx) => {
                 let isCurrent = false;
+                const isLunch = t.label && (t.label.toLowerCase().includes('yemek') || t.label.toLowerCase().includes('öğle'));
                 if (t.time && t.time.includes('-')) {
                   const [startStr, endStr] = t.time.split('-').map(s => s.trim())
                   const [sh, sm] = startStr.split(':').map(Number)
@@ -413,11 +414,11 @@ export default function DigitalBoardViewer() {
                 return (
                   <div key={idx} className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-500 w-[120px] flex-shrink-0 ${
                     isCurrent 
-                      ? 'bg-indigo-600 border-2 border-fuchsia-400 shadow-[0_0_15px_#e879f9] scale-105 transform z-20 relative animate-pulse' 
-                      : 'bg-indigo-900/30 border border-indigo-500/20'
+                      ? (isLunch ? 'bg-orange-600 border-2 border-fuchsia-400 shadow-[0_0_15px_#e879f9] scale-105 transform z-20 relative animate-pulse' : 'bg-emerald-600 border-2 border-fuchsia-400 shadow-[0_0_15px_#e879f9] scale-105 transform z-20 relative animate-pulse')
+                      : (isLunch ? 'bg-orange-900/30 border border-orange-500/40 shadow-[0_0_10px_rgba(249,115,22,0.1)]' : 'bg-emerald-900/20 border border-emerald-500/20')
                   }`}>
-                    <span className={`font-bold text-[11px] whitespace-nowrap ${isCurrent ? 'text-white' : 'text-indigo-200'}`}>{t.label}</span>
-                    <span className={`font-black text-[13px] tracking-tighter whitespace-nowrap ${isCurrent ? 'text-fuchsia-200' : 'text-indigo-300'}`}>{t.time}</span>
+                    <span className={`font-bold text-[11px] whitespace-nowrap ${isCurrent ? 'text-white' : (isLunch ? 'text-orange-300' : 'text-emerald-300')}`}>{t.label}</span>
+                    <span className={`font-black text-[13px] tracking-tighter whitespace-nowrap ${isCurrent ? 'text-fuchsia-200' : (isLunch ? 'text-orange-400/90' : 'text-emerald-400/80')}`}>{t.time}</span>
                   </div>
                 )
               })}
@@ -426,6 +427,7 @@ export default function DigitalBoardViewer() {
             <div className="flex flex-row justify-start items-center gap-2">
               {(settings.timetable || []).filter(t => !t.label || !t.label.toLowerCase().includes('ders')).map((t, idx) => {
                 let isCurrent = false;
+                const isLunch = t.label && (t.label.toLowerCase().includes('yemek') || t.label.toLowerCase().includes('öğle'));
                 if (t.time && t.time.includes('-')) {
                   const [startStr, endStr] = t.time.split('-').map(s => s.trim())
                   const [sh, sm] = startStr.split(':').map(Number)
