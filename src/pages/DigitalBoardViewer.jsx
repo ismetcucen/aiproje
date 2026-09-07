@@ -365,77 +365,14 @@ export default function DigitalBoardViewer() {
           
         </div>
         
-{/* Zaman Çizelgesi (Yatay Tam Genişlik) */}
-      <div className="w-full bg-slate-900/40 backdrop-blur-md rounded-3xl p-4 md:p-6 border border-white/10 shadow-2xl shrink-0 mt-4 z-30 relative mb-20">
-        <h2 className="text-xl font-bold tracking-widest text-indigo-300 mb-4 flex items-center gap-3">
-          <span>⏱️</span> Zaman Çizelgesi
-        </h2>
-        <div className="flex flex-col gap-4 w-full">
-          {/* Lessons Row */}
-          <div className="flex flex-row justify-between items-center gap-2 w-full">
-            {(settings.timetable || []).filter(t => t.label && t.label.toLowerCase().includes('ders')).map((t, idx) => {
-              let isCurrent = false;
-              if (t.time && t.time.includes('-')) {
-                const [startStr, endStr] = t.time.split('-').map(s => s.trim())
-                const [sh, sm] = startStr.split(':').map(Number)
-                const [eh, em] = endStr.split(':').map(Number)
-                if (!isNaN(sh) && !isNaN(eh)) {
-                  const startMin = sh * 60 + sm
-                  const endMin = eh * 60 + em
-                  if (currentMinutes >= startMin && currentMinutes <= endMin) {
-                    isCurrent = true;
-                  }
-                }
-              }
-              return (
-                <div key={idx} className={`flex flex-col items-center justify-center py-2 px-1 rounded-2xl transition-all duration-500 flex-1 ${
-                  isCurrent 
-                    ? 'bg-slate-900/80 border-2 border-fuchsia-400 shadow-[0_0_15px_#e879f9,inset_0_0_15px_#e879f9] scale-110 transform z-20 relative animate-pulse' 
-                    : 'bg-indigo-900/20 border border-indigo-500/30 hover:bg-indigo-800/40'
-                }`}>
-                  <span className={`font-bold text-xs md:text-sm whitespace-nowrap ${isCurrent ? 'text-white' : 'text-indigo-200'}`}>{t.label}</span>
-                  <span className={`font-black text-xs md:text-sm tracking-tighter whitespace-nowrap ${isCurrent ? 'text-fuchsia-300' : 'text-indigo-300'}`}>{t.time}</span>
-                </div>
-              )
-            })}
-          </div>
-          {/* Breaks Row */}
-          <div className="flex flex-row justify-between items-center gap-2 w-full">
-            {(settings.timetable || []).filter(t => !t.label || !t.label.toLowerCase().includes('ders')).map((t, idx) => {
-              let isCurrent = false;
-              if (t.time && t.time.includes('-')) {
-                const [startStr, endStr] = t.time.split('-').map(s => s.trim())
-                const [sh, sm] = startStr.split(':').map(Number)
-                const [eh, em] = endStr.split(':').map(Number)
-                if (!isNaN(sh) && !isNaN(eh)) {
-                  const startMin = sh * 60 + sm
-                  const endMin = eh * 60 + em
-                  if (currentMinutes >= startMin && currentMinutes <= endMin) {
-                    isCurrent = true;
-                  }
-                }
-              }
-              return (
-                <div key={idx} className={`flex flex-col items-center justify-center py-2 px-1 rounded-2xl transition-all duration-500 flex-1 ${
-                  isCurrent 
-                    ? 'bg-slate-900/80 border-2 border-fuchsia-400 shadow-[0_0_15px_#e879f9,inset_0_0_15px_#e879f9] scale-110 transform z-20 relative animate-pulse' 
-                    : 'bg-emerald-900/10 border border-emerald-500/20 hover:bg-emerald-800/30'
-                }`}>
-                  <span className={`font-bold text-xs md:text-sm whitespace-nowrap ${isCurrent ? 'text-white' : 'text-emerald-300'}`}>{t.label}</span>
-                  <span className={`font-black text-xs md:text-sm tracking-tighter whitespace-nowrap ${isCurrent ? 'text-fuchsia-300' : 'text-emerald-400/80'}`}>{t.time}</span>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </div>
+
 
       {/* CEVBOT Asistan Popup */}
 
 
       </div>
 
-                  <div className={`absolute bottom-24 left-8 z-40 flex items-end gap-4 transition-all duration-700 transform ${robotState.visible ? 'translate-y-0 opacity-100' : 'translate-y-32 opacity-0 pointer-events-none'}`}>
+                  <div className={`absolute bottom-40 left-8 z-40 flex items-end gap-4 transition-all duration-700 transform ${robotState.visible ? 'translate-y-0 opacity-100' : 'translate-y-32 opacity-0 pointer-events-none'}`}>
         <div className="w-32 h-32 relative group shrink-0">
            <div className="absolute inset-0 bg-indigo-500 rounded-full blur-xl opacity-50 animate-pulse"></div>
            <div className="relative w-full h-full bg-indigo-50 border-4 border-indigo-400 rounded-full overflow-hidden shadow-[0_0_30px_rgba(99,102,241,0.6)] flex items-center justify-center">
@@ -449,9 +386,78 @@ export default function DigitalBoardViewer() {
         </div>
       </div>
 
-      {/* Marquee Banner (Absolute Bottom) */}
-      <div className="absolute bottom-0 left-0 w-full z-20">
-        <LiveMarquee />
+      {/* UNIFIED FOOTER: Timetable + Marquee */}
+      <div className="w-full bg-slate-900/95 backdrop-blur-2xl border-t border-white/10 z-50 flex flex-col shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
+        <div className="w-full px-6 py-3 flex items-center gap-6">
+          <h2 className="text-lg font-black tracking-widest text-indigo-300 flex flex-col items-center gap-1 shrink-0 whitespace-nowrap">
+            <span className="text-2xl">⏱️</span>
+            <span className="text-[10px] text-slate-400">ZAMAN ÇİZELGESİ</span>
+          </h2>
+          
+          <div className="flex flex-col gap-2 w-full overflow-hidden">
+            {/* Lessons Row */}
+            <div className="flex flex-row justify-start items-center gap-2 w-full overflow-x-auto hide-scrollbar">
+              {(settings.timetable || []).filter(t => t.label && t.label.toLowerCase().includes('ders')).map((t, idx) => {
+                let isCurrent = false;
+                if (t.time && t.time.includes('-')) {
+                  const [startStr, endStr] = t.time.split('-').map(s => s.trim())
+                  const [sh, sm] = startStr.split(':').map(Number)
+                  const [eh, em] = endStr.split(':').map(Number)
+                  if (!isNaN(sh) && !isNaN(eh)) {
+                    const startMin = sh * 60 + sm
+                    const endMin = eh * 60 + em
+                    if (currentMinutes >= startMin && currentMinutes <= endMin) {
+                      isCurrent = true;
+                    }
+                  }
+                }
+                return (
+                  <div key={idx} className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-500 min-w-[110px] ${
+                    isCurrent 
+                      ? 'bg-indigo-600 border-2 border-fuchsia-400 shadow-[0_0_15px_#e879f9] scale-105 transform z-20 relative animate-pulse' 
+                      : 'bg-indigo-900/30 border border-indigo-500/20'
+                  }`}>
+                    <span className={`font-bold text-[11px] whitespace-nowrap ${isCurrent ? 'text-white' : 'text-indigo-200'}`}>{t.label}</span>
+                    <span className={`font-black text-[13px] tracking-tighter whitespace-nowrap ${isCurrent ? 'text-fuchsia-200' : 'text-indigo-300'}`}>{t.time}</span>
+                  </div>
+                )
+              })}
+            </div>
+            {/* Breaks Row */}
+            <div className="flex flex-row justify-start items-center gap-2 w-full overflow-x-auto hide-scrollbar">
+              {(settings.timetable || []).filter(t => !t.label || !t.label.toLowerCase().includes('ders')).map((t, idx) => {
+                let isCurrent = false;
+                if (t.time && t.time.includes('-')) {
+                  const [startStr, endStr] = t.time.split('-').map(s => s.trim())
+                  const [sh, sm] = startStr.split(':').map(Number)
+                  const [eh, em] = endStr.split(':').map(Number)
+                  if (!isNaN(sh) && !isNaN(eh)) {
+                    const startMin = sh * 60 + sm
+                    const endMin = eh * 60 + em
+                    if (currentMinutes >= startMin && currentMinutes <= endMin) {
+                      isCurrent = true;
+                    }
+                  }
+                }
+                return (
+                  <div key={idx} className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-500 min-w-[110px] ${
+                    isCurrent 
+                      ? 'bg-emerald-600 border-2 border-fuchsia-400 shadow-[0_0_15px_#e879f9] scale-105 transform z-20 relative animate-pulse' 
+                      : 'bg-emerald-900/20 border border-emerald-500/20'
+                  }`}>
+                    <span className={`font-bold text-[11px] whitespace-nowrap ${isCurrent ? 'text-white' : 'text-emerald-300'}`}>{t.label}</span>
+                    <span className={`font-black text-[13px] tracking-tighter whitespace-nowrap ${isCurrent ? 'text-fuchsia-200' : 'text-emerald-400/80'}`}>{t.time}</span>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+        
+        {/* Marquee Banner */}
+        <div className="w-full border-t border-white/5 relative z-20">
+          <LiveMarquee />
+        </div>
       </div>
 
     </div>
