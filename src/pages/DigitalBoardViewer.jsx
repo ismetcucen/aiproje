@@ -286,9 +286,8 @@ export default function DigitalBoardViewer() {
             </div>
           </div>
 
-          {/* MIDDLE: Weather & Exams Countdowns */}
+          {/* MIDDLE: Weather & Quote */}
           <div className="col-span-4 flex flex-col gap-4 md:gap-6 min-h-0">
-            
             {/* Hava Durumu */}
             <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-4 md:p-6 border border-white/10 shadow-2xl flex items-center justify-between shrink-0">
               <div>
@@ -309,7 +308,19 @@ export default function DigitalBoardViewer() {
                 <span className="text-slate-400 text-sm">Yükleniyor...</span>
               )}
             </div>
-
+            {/* Günün Sözü */}
+            {settings.quoteOfTheDay && (
+              <div className="bg-gradient-to-br from-indigo-900/80 to-purple-900/80 backdrop-blur-xl rounded-3xl p-4 md:p-6 border border-indigo-500/30 shadow-2xl text-center relative overflow-hidden shrink-0">
+                 <div className="text-6xl text-indigo-400/20 absolute -top-4 -left-2 font-serif">"</div>
+                 <p className="text-xl font-medium text-white italic leading-relaxed relative z-10">
+                   "{settings.quoteOfTheDay}"
+                 </p>
+                 <div className="text-6xl text-indigo-400/20 absolute -bottom-10 -right-2 font-serif">"</div>
+              </div>
+            )}
+          </div>
+          {/* RIGHT: Exams */}
+          <div className="col-span-4 flex flex-col gap-4 md:gap-6 min-h-0">
             {/* Sınavlara Kalan Zaman (Küçültüldü) */}
             <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-4 md:p-6 border border-white/10 shadow-2xl flex-1 flex flex-col min-h-0">
                <h2 className="text-xl font-bold  tracking-widest text-fuchsia-300 mb-2 flex items-center gap-3">
@@ -348,23 +359,9 @@ export default function DigitalBoardViewer() {
                    </div>
                    {renderCountdown(settings.examDates?.ydt || '2027-06-20T15:45')}
                  </div>
-               </div>
-            </div>
           </div>
-
-          {/* RIGHT: Duty Teachers & Quote */}
-          <div className="col-span-4 flex flex-col gap-4 md:gap-6 min-h-0">
-            {/* Günün Sözü */}
-            {settings.quoteOfTheDay && (
-              <div className="bg-gradient-to-br from-indigo-900/80 to-purple-900/80 backdrop-blur-xl rounded-3xl p-4 md:p-6 border border-indigo-500/30 shadow-2xl text-center relative overflow-hidden shrink-0">
-                 <div className="text-6xl text-indigo-400/20 absolute -top-4 -left-2 font-serif">"</div>
-                 <p className="text-xl font-medium text-white italic leading-relaxed relative z-10">
-                   "{settings.quoteOfTheDay}"
-                 </p>
-                 <div className="text-6xl text-indigo-400/20 absolute -bottom-10 -right-2 font-serif">"</div>
-              </div>
-            )}
-          </div>
+        </div>
+        </div>
           
         </div>
         
