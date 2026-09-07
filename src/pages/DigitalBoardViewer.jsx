@@ -387,7 +387,7 @@ export default function DigitalBoardViewer() {
       </div>
 
       {/* UNIFIED FOOTER: Timetable + Marquee */}
-      <div className="w-full bg-slate-900/95 backdrop-blur-2xl border-t border-white/10 z-50 flex flex-col shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
+      <div className="absolute bottom-0 left-0 w-full bg-slate-900/95 backdrop-blur-2xl border-t border-white/10 z-50 flex flex-col shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
         <div className="w-full px-6 py-3 flex items-center gap-6">
           <h2 className="text-lg font-black tracking-widest text-indigo-300 flex flex-col items-center gap-1 shrink-0 whitespace-nowrap">
             <span className="text-2xl">⏱️</span>
