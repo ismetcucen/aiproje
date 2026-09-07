@@ -266,47 +266,11 @@ export default function DigitalBoardViewer() {
           
           {/* LEFT: Timetable & Menu */}
           <div className="col-span-4 flex flex-col gap-4 md:gap-6 min-h-0">
-            {/* Zaman Çizelgesi */}
-            <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-4 md:p-6 border border-white/10 shadow-2xl flex-1 flex flex-col min-h-0">
-              <h2 className="text-2xl font-bold  tracking-widest text-indigo-300 mb-6 flex items-center gap-3">
-                <span>⏱️</span> Zaman Çizelgesi
-              </h2>
-              <div className="space-y-2 md:space-y-3 flex-1 overflow-y-auto pr-2 custom-scrollbar">
-                {(settings.timetable || []).map((t, idx) => {
-                  let isCurrent = false;
-                  // Basic time parsing logic for active row highlight (e.g., "08:30 - 09:10")
-                  if (t.time && t.time.includes('-')) {
-                    const [startStr, endStr] = t.time.split('-').map(s => s.trim())
-                    const [sh, sm] = startStr.split(':').map(Number)
-                    const [eh, em] = endStr.split(':').map(Number)
-                    if (!isNaN(sh) && !isNaN(eh)) {
-                      const startMin = sh * 60 + sm
-                      const endMin = eh * 60 + em
-                      if (currentMinutes >= startMin && currentMinutes <= endMin) {
-                        isCurrent = true;
-                      }
-                    }
-                  }
-                  
-                  return (
-                    <div key={idx} className={`flex justify-between items-center p-3 rounded-2xl transition-all duration-500 ${
-                      isCurrent 
-                        ? 'bg-indigo-600 border border-indigo-400 shadow-[0_0_20px_rgba(79,70,229,0.5)] scale-105 transform' 
-                        : 'bg-white/5 border border-white/5'
-                    }`}>
-                      <span className={`font-bold text-lg ${isCurrent ? 'text-white' : 'text-slate-300'}`}>{t.label}</span>
-                      <span className={`font-black tracking-widest ${isCurrent ? 'text-white' : 'text-indigo-400'}`}>{t.time}</span>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-
             {/* Günün Menüsü */}
             <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-4 md:p-6 border border-white/10 shadow-2xl relative overflow-hidden shrink-0">
               <div className="absolute -right-10 -bottom-10 text-9xl opacity-10">🍲</div>
               <h2 className="text-2xl font-bold  tracking-widest text-orange-300 mb-5 flex items-center gap-3 relative z-10">
-                <span>🍽️</span> Günün Menüsü
+                <span>🍽️</span> GÜNÜN MENÜSÜ - ÖĞLE YEMEĞİ
               </h2>
               <ul className="space-y-4 relative z-10">
                 {(settings.dailyMenu || []).map((item, idx) => (
@@ -390,28 +354,43 @@ export default function DigitalBoardViewer() {
 
           {/* RIGHT: Duty Teachers & Quote */}
           <div className="col-span-4 flex flex-col gap-4 md:gap-6 min-h-0">
-            {/* Nöbetçi Öğretmenler */}
+            {/* Zaman Çizelgesi */}
             <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-4 md:p-6 border border-white/10 shadow-2xl flex-1 flex flex-col min-h-0">
-              <h2 className="text-2xl font-bold  tracking-widest text-emerald-300 mb-6 flex items-center gap-3">
-                <span>🛡️</span> Nöbetçi Öğretmenler
+              <h2 className="text-2xl font-bold  tracking-widest text-indigo-300 mb-6 flex items-center gap-3">
+                <span>⏱️</span> Zaman Çizelgesi
               </h2>
-              <div className="space-y-3 flex-1 overflow-y-auto pr-2 custom-scrollbar">
-                <div className="bg-white/5 rounded-2xl p-5 border border-white/10 flex flex-col">
-                  <span className="text-sm font-bold text-slate-400  tracking-widest mb-1">İLKOKUL</span>
-                  <span className="text-2xl font-black text-white">{settings.dutyTeachers?.primary || '-'}</span>
-                </div>
-                <div className="bg-white/5 rounded-2xl p-5 border border-white/10 flex flex-col">
-                  <span className="text-sm font-bold text-slate-400  tracking-widest mb-1">ORTAOKUL</span>
-                  <span className="text-2xl font-black text-white">{settings.dutyTeachers?.middle || '-'}</span>
-                </div>
-                <div className="bg-white/5 rounded-2xl p-5 border border-white/10 flex flex-col">
-                  <span className="text-sm font-bold text-slate-400  tracking-widest mb-1">LİSE</span>
-                  <span className="text-2xl font-black text-white">{settings.dutyTeachers?.high || '-'}</span>
-                </div>
+              <div className="space-y-2 md:space-y-3 flex-1 overflow-y-auto pr-2 custom-scrollbar">
+                {(settings.timetable || []).map((t, idx) => {
+                  let isCurrent = false;
+                  // Basic time parsing logic for active row highlight (e.g., "08:30 - 09:10")
+                  if (t.time && t.time.includes('-')) {
+                    const [startStr, endStr] = t.time.split('-').map(s => s.trim())
+                    const [sh, sm] = startStr.split(':').map(Number)
+                    const [eh, em] = endStr.split(':').map(Number)
+                    if (!isNaN(sh) && !isNaN(eh)) {
+                      const startMin = sh * 60 + sm
+                      const endMin = eh * 60 + em
+                      if (currentMinutes >= startMin && currentMinutes <= endMin) {
+                        isCurrent = true;
+                      }
+                    }
+                  }
+                  
+                  return (
+                    <div key={idx} className={`flex justify-between items-center p-3 rounded-2xl transition-all duration-500 ${
+                      isCurrent 
+                        ? 'bg-indigo-600 border border-indigo-400 shadow-[0_0_20px_rgba(79,70,229,0.5)] scale-105 transform' 
+                        : 'bg-white/5 border border-white/5'
+                    }`}>
+                      <span className={`font-bold text-lg ${isCurrent ? 'text-white' : 'text-slate-300'}`}>{t.label}</span>
+                      <span className={`font-black tracking-widest ${isCurrent ? 'text-white' : 'text-indigo-400'}`}>{t.time}</span>
+                    </div>
+                  )
+                })}
               </div>
             </div>
 
-            {/* Günün Sözü */}
+{/* Günün Sözü */}
             {settings.quoteOfTheDay && (
               <div className="bg-gradient-to-br from-indigo-900/80 to-purple-900/80 backdrop-blur-xl rounded-3xl p-4 md:p-6 border border-indigo-500/30 shadow-2xl text-center relative overflow-hidden shrink-0">
                  <div className="text-6xl text-indigo-400/20 absolute -top-4 -left-2 font-serif">"</div>
