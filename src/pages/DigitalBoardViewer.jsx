@@ -354,45 +354,7 @@ export default function DigitalBoardViewer() {
 
           {/* RIGHT: Duty Teachers & Quote */}
           <div className="col-span-4 flex flex-col gap-4 md:gap-6 min-h-0">
-            {/* Zaman Çizelgesi */}
-            <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-4 md:p-6 border border-white/10 shadow-2xl flex-1 flex flex-col min-h-0">
-              <h2 className="text-2xl font-bold  tracking-widest text-indigo-300 mb-6 flex items-center gap-3">
-                <span>⏱️</span> Zaman Çizelgesi
-              </h2>
-              <div className="flex-1 flex flex-col justify-center">
-                <div className="w-full grid grid-cols-2 gap-3 pb-2">
-                  {(settings.timetable || []).map((t, idx) => {
-                  let isCurrent = false;
-                  // Basic time parsing logic for active row highlight (e.g., "08:30 - 09:10")
-                  if (t.time && t.time.includes('-')) {
-                    const [startStr, endStr] = t.time.split('-').map(s => s.trim())
-                    const [sh, sm] = startStr.split(':').map(Number)
-                    const [eh, em] = endStr.split(':').map(Number)
-                    if (!isNaN(sh) && !isNaN(eh)) {
-                      const startMin = sh * 60 + sm
-                      const endMin = eh * 60 + em
-                      if (currentMinutes >= startMin && currentMinutes <= endMin) {
-                        isCurrent = true;
-                      }
-                    }
-                  }
-                  
-                  return (
-                    <div key={idx} className={`flex flex-col items-center justify-center p-3 rounded-2xl transition-all duration-500 ${
-                      isCurrent 
-                        ? 'bg-slate-900/80 border-2 border-fuchsia-400 shadow-[0_0_15px_#e879f9,inset_0_0_15px_#e879f9] scale-110 transform z-20 relative animate-pulse' 
-                        : 'bg-white/5 border border-white/5'
-                    }`}>
-                      <span className={`font-bold text-sm md:text-base ${isCurrent ? 'text-white' : 'text-slate-300'}`}>{t.label}</span>
-                      <span className={`font-black text-sm tracking-wide ${isCurrent ? 'text-fuchsia-300' : 'text-indigo-400'}`}>{t.time}</span>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-            </div>
-
-{/* Günün Sözü */}
+            {/* Günün Sözü */}
             {settings.quoteOfTheDay && (
               <div className="bg-gradient-to-br from-indigo-900/80 to-purple-900/80 backdrop-blur-xl rounded-3xl p-4 md:p-6 border border-indigo-500/30 shadow-2xl text-center relative overflow-hidden shrink-0">
                  <div className="text-6xl text-indigo-400/20 absolute -top-4 -left-2 font-serif">"</div>
@@ -407,7 +369,42 @@ export default function DigitalBoardViewer() {
         </div>
       </div>
 
-            {/* CEVBOT Asistan Popup */}
+            {/* Zaman Çizelgesi (Yatay Tam Genişlik) */}
+      <div className="w-full bg-slate-900/40 backdrop-blur-md rounded-3xl p-4 md:p-6 border border-white/10 shadow-2xl shrink-0 mt-4 z-30 relative mb-20">
+        <h2 className="text-xl font-bold tracking-widest text-indigo-300 mb-4 flex items-center gap-3">
+          <span>⏱️</span> Zaman Çizelgesi
+        </h2>
+        <div className="flex flex-row flex-nowrap items-center gap-3 overflow-x-auto custom-scrollbar pb-2">
+          {(settings.timetable || []).map((t, idx) => {
+            let isCurrent = false;
+            if (t.time && t.time.includes('-')) {
+              const [startStr, endStr] = t.time.split('-').map(s => s.trim())
+              const [sh, sm] = startStr.split(':').map(Number)
+              const [eh, em] = endStr.split(':').map(Number)
+              if (!isNaN(sh) && !isNaN(eh)) {
+                const startMin = sh * 60 + sm
+                const endMin = eh * 60 + em
+                if (currentMinutes >= startMin && currentMinutes <= endMin) {
+                  isCurrent = true;
+                }
+              }
+            }
+            
+            return (
+              <div key={idx} className={`flex flex-col items-center justify-center p-3 rounded-2xl transition-all duration-500 min-w-[140px] flex-shrink-0 ${
+                isCurrent 
+                  ? 'bg-slate-900/80 border-2 border-fuchsia-400 shadow-[0_0_15px_#e879f9,inset_0_0_15px_#e879f9] scale-105 transform z-20 relative animate-pulse' 
+                  : 'bg-white/5 border border-white/5 hover:bg-white/10'
+              }`}>
+                <span className={`font-bold text-sm md:text-base whitespace-nowrap ${isCurrent ? 'text-white' : 'text-slate-300'}`}>{t.label}</span>
+                <span className={`font-black text-sm tracking-wide whitespace-nowrap ${isCurrent ? 'text-fuchsia-300' : 'text-indigo-400'}`}>{t.time}</span>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* CEVBOT Asistan Popup */}
       <div className={`absolute bottom-24 left-8 z-40 flex items-end gap-4 transition-all duration-700 transform ${robotState.visible ? 'translate-y-0 opacity-100' : 'translate-y-32 opacity-0 pointer-events-none'}`}>
         <div className="w-32 h-32 relative group shrink-0">
            <div className="absolute inset-0 bg-indigo-500 rounded-full blur-xl opacity-50 animate-pulse"></div>
