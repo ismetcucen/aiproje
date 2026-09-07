@@ -367,9 +367,8 @@ export default function DigitalBoardViewer() {
           </div>
           
         </div>
-      </div>
-
-            {/* Zaman Çizelgesi (Yatay Tam Genişlik) */}
+        
+{/* Zaman Çizelgesi (Yatay Tam Genişlik) */}
       <div className="w-full bg-slate-900/40 backdrop-blur-md rounded-3xl p-4 md:p-6 border border-white/10 shadow-2xl shrink-0 mt-4 z-30 relative mb-20">
         <h2 className="text-xl font-bold tracking-widest text-indigo-300 mb-4 flex items-center gap-3">
           <span>⏱️</span> Zaman Çizelgesi
@@ -405,7 +404,11 @@ export default function DigitalBoardViewer() {
       </div>
 
       {/* CEVBOT Asistan Popup */}
-      <div className={`absolute bottom-24 left-8 z-40 flex items-end gap-4 transition-all duration-700 transform ${robotState.visible ? 'translate-y-0 opacity-100' : 'translate-y-32 opacity-0 pointer-events-none'}`}>
+
+
+      </div>
+
+                  <div className={`absolute bottom-24 left-8 z-40 flex items-end gap-4 transition-all duration-700 transform ${robotState.visible ? 'translate-y-0 opacity-100' : 'translate-y-32 opacity-0 pointer-events-none'}`}>
         <div className="w-32 h-32 relative group shrink-0">
            <div className="absolute inset-0 bg-indigo-500 rounded-full blur-xl opacity-50 animate-pulse"></div>
            <div className="relative w-full h-full bg-indigo-50 border-4 border-indigo-400 rounded-full overflow-hidden shadow-[0_0_30px_rgba(99,102,241,0.6)] flex items-center justify-center">
