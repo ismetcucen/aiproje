@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { getDigitalBoardSettings, getLatestAnnouncements } from '../firebase/schema'
+import { doc, onSnapshot } from 'firebase/firestore'
+import { db } from '../firebase/config'
 import LiveMarquee from '../components/LiveMarquee'
 import confetti from 'canvas-confetti'
 
@@ -15,15 +17,30 @@ export default function DigitalBoardViewer() {
   const schoolCode = 'OHEP'
 
   useEffect(() => {
-    // Initial fetch
-    getDigitalBoardSettings(schoolCode).then(data => setSettings(data))
+    const unsub = onSnapshot(doc(db, 'school_settings', schoolCode), (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setSettings(data);
+        
+        // Handle Live Events
+        if (data.liveEvent && (!window.lastLiveEventTimestamp || data.liveEvent.timestamp > window.lastLiveEventTimestamp)) {
+           window.lastLiveEventTimestamp = data.liveEvent.timestamp;
+           if (data.liveEvent.type === 'confetti') {
+             confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 }, zIndex: 999999 });
+           } else if (data.liveEvent.type === 'announcement') {
+             const u = new SpeechSynthesisUtterance(data.liveEvent.payload);
+             u.lang = 'tr-TR';
+             u.pitch = 1.2;
+             u.rate = 0.9;
+             window.speechSynthesis.speak(u);
+           } else if (data.liveEvent.type === 'reload') {
+             window.location.reload();
+           }
+        }
+      }
+    });
     
-    // Refresh settings every 10 minutes (600000ms) to catch updates without exhausting reads
-    const interval = setInterval(() => {
-      getDigitalBoardSettings(schoolCode).then(data => setSettings(data))
-    }, 600000)
-    
-    return () => clearInterval(interval)
+    return () => unsub();
   }, [])
 
   // Hava durumu çek (Alanya)
