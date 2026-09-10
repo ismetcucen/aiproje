@@ -73,11 +73,19 @@ export default function LoginPage() {
     }
     setError(''); setLoading(true)
     
-    const computedEmail = `std_${visualData.gradeNumber}_${normalizeStr(visualData.fullName)}@aistudio.com`
-    const computedPassword = `vp_${visualData.visualId}_2026!`
+    const legacyEmail = `std_${visualData.gradeNumber}_${normalizeStr(visualData.fullName)}@aistudio.com`
+    const legacyPassword = `vp_${visualData.visualId}_2026!`
     
+    const newEmail = `${normalizeStr(visualData.fullName).replace(/[^a-z0-9]/g, '')}_${visualData.visualId}@aistudio.com`
+    const newPassword = `${visualData.visualId}_123456`
+
     try {
-      await login(computedEmail, computedPassword)
+      try {
+        await login(newEmail, newPassword)
+      } catch (e1) {
+        // Fallback for students created before this fix
+        await login(legacyEmail, legacyPassword)
+      }
     } catch(err) {
       setError('Giriş başarısız. İsminizi yanlış yazmış veya yanlış görsel seçmiş olabilirsiniz.')
     } finally {

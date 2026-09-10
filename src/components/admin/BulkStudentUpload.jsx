@@ -60,7 +60,7 @@ export default function BulkStudentUpload({ classInfo, schoolCode, onSuccess }) 
             const randomVisual = VISUAL_PASSWORDS[Math.floor(Math.random() * VISUAL_PASSWORDS.length)]
             visualId = randomVisual.id
             const slug = fullName.trim().toLowerCase().replace(/[^a-z0-9]/g, '')
-            email = `${slug}_${visualId}@${schoolCode.toLowerCase()}.edu.tr`
+            email = `${slug}_${visualId}@aistudio.com`
             password = `${visualId}_123456`
           }
 

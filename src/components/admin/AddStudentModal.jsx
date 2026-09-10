@@ -74,8 +74,8 @@ export default function AddStudentModal({ classInfo, schoolCode, onClose, onSucc
     
     if (mode === 'visual') {
       if (!form.gradeNumber) return setError('Sınıf seviyesi gerekli.')
-      targetEmail = `std_${form.gradeNumber}_${normalizeStr(form.fullName)}@aistudio.com`
-      targetPassword = `vp_${form.visualId}_2026!`
+      targetEmail = `${normalizeStr(form.fullName).replace(/[^a-z0-9]/g, '')}_${form.visualId}@aistudio.com`
+      targetPassword = `${form.visualId}_123456`
     } else {
       if (!form.email.trim()) return setError('Email gerekli.')
       if (!form.password || form.password.length < 6) return setError('Şifre en az 6 karakter olmalı.')

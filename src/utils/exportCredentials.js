@@ -33,7 +33,7 @@ export function exportStudentCredentials(students, className = 'Sınıf') {
       <div class="grid">
         ${students.map(s => {
           const v = s.visualId ? VISUAL_PASSWORDS.find(x => x.id === s.visualId) : null;
-          const pass = v ? `${s.visualId}_123456` : '(Gizli Şifre)';
+          const pass = v ? (s.email.startsWith('std_') ? `vp_${s.visualId}_2026!` : `${s.visualId}_123456`) : '(Gizli Şifre)';
           
           return `
           <div class="card">
@@ -52,12 +52,10 @@ export function exportStudentCredentials(students, className = 'Sınıf') {
               <span class="value">${s.fullName}</span>
             </div>
             
-            ${!v ? `
             <div class="info-row">
               <span class="label">Kullanıcı:</span>
-              <span class="value" style="font-size:12px;">${s.email.includes('@' + (s.schoolCode || 'ohep').toLowerCase() + '.edu.tr') ? s.email.split('@')[0] : s.email}</span>
+              <span class="value" style="font-size:12px;">${s.email.split('@')[0]}</span>
             </div>
-            ` : ''}
             
             <div class="info-row">
               <span class="label">Şifre:</span>
