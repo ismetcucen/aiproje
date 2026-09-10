@@ -49,6 +49,13 @@ export default function BulkStudentUpload({ classInfo, schoolCode, onSuccess }) 
           let password = row['Sifre'] || row['password'] || `Okul${schoolCode}123`
           let visualId = null
 
+          const slug = fullName.trim().toLowerCase().replace(/[^a-z0-9]/g, '')
+          
+          if (!email && !useVisualPass && fullName) {
+             // Kullanıcı adı gibi davranmasını sağlamak için mail uyduruyoruz.
+             email = `${slug}@${schoolCode.toLowerCase()}.edu.tr`;
+          }
+
           if (useVisualPass) {
             const randomVisual = VISUAL_PASSWORDS[Math.floor(Math.random() * VISUAL_PASSWORDS.length)]
             visualId = randomVisual.id

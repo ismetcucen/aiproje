@@ -48,10 +48,17 @@ export default function LoginPage() {
 
   async function handleLogin(e) {
     e.preventDefault()
-    if (!loginData.email || !loginData.password) return setError('Email ve şifre gerekli.')
+    if (!loginData.email || !loginData.password) return setError('Kullanıcı adı ve şifre gerekli.')
     setError(''); setLoading(true)
     try {
-      await login(loginData.email.trim(), loginData.password)
+      let loginId = loginData.email.trim();
+      // If it's just a username (no @ symbol), append the default school domain
+      if (!loginId.includes('@')) {
+         // Assume ohep.edu.tr or similar. Since we don't know the exact school code, we can try multiple or just the default.
+         // Most users are created with @ohep.edu.tr if no email was provided.
+         loginId = `${loginId}@ohep.edu.tr`;
+      }
+      await login(loginId, loginData.password)
     } catch(err) {
       setError('Giriş başarısız. Lütfen bilgilerinizi kontrol edin.')
     } finally {

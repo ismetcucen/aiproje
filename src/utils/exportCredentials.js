@@ -54,8 +54,8 @@ export function exportStudentCredentials(students, className = 'Sınıf') {
             
             ${!v ? `
             <div class="info-row">
-              <span class="label">Email:</span>
-              <span class="value" style="font-size:12px;">${s.email}</span>
+              <span class="label">Kullanıcı:</span>
+              <span class="value" style="font-size:12px;">${s.email.includes('@' + (s.schoolCode || 'ohep').toLowerCase() + '.edu.tr') ? s.email.split('@')[0] : s.email}</span>
             </div>
             ` : ''}
             
