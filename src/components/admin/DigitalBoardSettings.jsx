@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import { getDigitalBoardSettings, updateDigitalBoardSettings } from '../../firebase/schema'
+import { db } from '../../firebase/config'
+import { doc, updateDoc } from 'firebase/firestore'
 
 export default function DigitalBoardSettings() {
   const { profile } = useAuth()
@@ -41,12 +43,55 @@ export default function DigitalBoardSettings() {
 
   if (loading) return <div>Yükleniyor...</div>
 
+
+  async function handleLiveEvent(type, payload = null) {
+    if (!profile?.schoolCode) return
+    try {
+      await updateDoc(doc(db, 'school_settings', profile.schoolCode), {
+        liveEvent: { type, payload, timestamp: Date.now() }
+      })
+      alert('Tetiklendi!')
+    } catch(e) {
+      alert('Hata: ' + e.message)
+    }
+  }
+
+  async function handleLiveAnnouncement() {
+    const msg = prompt("Panoda CEVBOT'a ne söyleteceksiniz?")
+    if (msg) {
+      handleLiveEvent('announcement', msg)
+    }
+  }
+
   return (
+
     <div className="max-w-4xl space-y-6 pb-10">
       <div>
         <h2 className="text-2xl font-black text-slate-800">🖥️ Dijital Pano Ayarları</h2>
         <p className="text-slate-500 text-sm">Okul koridorlarındaki dev ekranlarda görünecek bilgileri buradan güncelleyin.</p>
         <p className="mt-2 text-indigo-600 font-bold text-xs">Pano Linki: <a href="/pano" target="_blank" className="underline">SiteAdresi.com/pano</a></p>
+      </div>
+
+      {/* Canlı Pano Kumandası */}
+      <div className="bg-gradient-to-r from-emerald-50 to-teal-50 p-6 rounded-2xl shadow-sm border border-emerald-100 mb-6">
+        <div className="flex items-center gap-3 mb-4">
+          <span className="text-2xl animate-pulse">🔴</span>
+          <div>
+            <h3 className="text-lg font-black text-emerald-900">Canlı Pano Kumandası</h3>
+            <p className="text-emerald-700 text-xs">Aşağıdaki butonlara bastığınızda koridordaki panoda anında gerçekleşir.</p>
+          </div>
+        </div>
+        <div className="flex gap-4 flex-wrap">
+          <button onClick={() => handleLiveEvent('confetti')} className="bg-white border-2 border-emerald-500 text-emerald-700 hover:bg-emerald-500 hover:text-white px-5 py-2.5 rounded-xl font-bold shadow-sm transition-all flex items-center gap-2">
+            🎉 Konfeti Patlat
+          </button>
+          <button onClick={handleLiveAnnouncement} className="bg-white border-2 border-emerald-500 text-emerald-700 hover:bg-emerald-500 hover:text-white px-5 py-2.5 rounded-xl font-bold shadow-sm transition-all flex items-center gap-2">
+            🤖 CEVBOT Anons Yap
+          </button>
+          <button onClick={() => handleLiveEvent('reload')} className="bg-white border-2 border-red-500 text-red-700 hover:bg-red-500 hover:text-white px-5 py-2.5 rounded-xl font-bold shadow-sm transition-all flex items-center gap-2">
+            🔄 Panoyu Yenile
+          </button>
+        </div>
       </div>
 
       {/* Arka Plan Slayt & Söz */}

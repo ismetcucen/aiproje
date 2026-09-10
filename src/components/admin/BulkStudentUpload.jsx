@@ -43,12 +43,28 @@ export default function BulkStudentUpload({ classInfo, schoolCode, onSuccess }) 
         const ws   = wb.Sheets[wb.SheetNames[0]]
         const data = XLSX.utils.sheet_to_json(ws)
 
-        const parsed = data.map((row, i) => ({
-          fullName:    row['Ad Soyad']   || row['fullName'] || row['name']  || '',
-          email:       row['Email']      || row['email']    || row['mail']  || '',
-          gradeNumber: row['Sinif']      || row['grade']    || classInfo?.grade || '',
-          password:    row['Sifre']      || row['password'] || `Okul${schoolCode}123`,
-        })).filter(r => r.fullName && r.email)
+        const parsed = data.map((row, i) => {
+          let fullName = row['Ad Soyad'] || row['fullName'] || row['name'] || ''
+          let email = row['Email'] || row['email'] || row['mail'] || ''
+          let password = row['Sifre'] || row['password'] || `Okul${schoolCode}123`
+          let visualId = null
+
+          if (useVisualPass) {
+            const randomVisual = VISUAL_PASSWORDS[Math.floor(Math.random() * VISUAL_PASSWORDS.length)]
+            visualId = randomVisual.id
+            const slug = fullName.trim().toLowerCase().replace(/[^a-z0-9]/g, '')
+            email = `${slug}_${visualId}@${schoolCode.toLowerCase()}.edu.tr`
+            password = `${visualId}_123456`
+          }
+
+          return {
+            fullName,
+            email,
+            gradeNumber: row['Sinif'] || row['grade'] || classInfo?.grade || '',
+            password,
+            visualId
+          }
+        }).filter(r => r.fullName && r.email)
 
         if (parsed.length === 0) {
           setError('Excel de gecerli ogrenci bulunamadi. Sutunlar: Ad Soyad, Email, Sinif (opsiyonel)')
@@ -84,6 +100,7 @@ export default function BulkStudentUpload({ classInfo, schoolCode, onSuccess }) 
           classLevel:  classInfo ? classInfo.level : 'ortaokul',
           gradeNumber: classInfo ? classInfo.grade : null,
           schoolCode,
+          visualId:    s.visualId || null,
           files:       [],
           createdAt:   serverTimestamp(),
           isActive:    true,
@@ -169,7 +186,7 @@ export default function BulkStudentUpload({ classInfo, schoolCode, onSuccess }) 
                 </div>
                 <div className="text-right">
                   <p className="text-slate-500 text-xs">{s.gradeNumber ? `${s.gradeNumber}. sinif` : ''}</p>
-                  <p className="text-slate-600 text-xs">Sifre: {s.password}</p>
+                  <p className="text-slate-600 text-xs flex items-center gap-1">Şifre: {s.password} {s.visualId && <span title="Görsel Şifre">🖼️</span>}</p>
                 </div>
               </div>
             ))}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { getDigitalBoardSettings, getLatestAnnouncements } from '../firebase/schema'
 import LiveMarquee from '../components/LiveMarquee'
+import confetti from 'canvas-confetti'
 
 export default function DigitalBoardViewer() {
   const [settings, setSettings] = useState(null)

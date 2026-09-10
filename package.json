@@ -12,6 +12,7 @@
   "dependencies": {
     "@google/genai": "^2.19.0",
     "@vladmandic/face-api": "^1.7.15",
+    "canvas-confetti": "^1.9.4",
     "clippyjs": "^0.1.0",
     "firebase": "^12.13.0",
     "puppeteer": "^25.10.0",
