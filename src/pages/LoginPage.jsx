@@ -249,9 +249,9 @@ export default function LoginPage() {
               {tab === TABS.LOGIN && (
                 <form onSubmit={handleLogin} className="space-y-5">
                   <div>
-                    <label className="block text-slate-300 text-xs font-bold uppercase tracking-wider mb-2">E-posta</label>
-                    <input type="email" value={loginData.email} onChange={e => setLoginData(p => ({...p, email: e.target.value}))}
-                      placeholder="ad@okul.edu.tr" required
+                    <label className="block text-slate-300 text-xs font-bold uppercase tracking-wider mb-2">Kullanıcı Adı veya Email</label>
+                    <input type="text" value={loginData.email} onChange={e => setLoginData(p => ({...p, email: e.target.value}))}
+                      placeholder="Örn: ali.yilmaz" required
                       className="w-full bg-black/20 border border-white/10 text-white placeholder-white/40 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all" />
                   </div>
                   <div>
