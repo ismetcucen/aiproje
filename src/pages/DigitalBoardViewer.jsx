@@ -5,6 +5,8 @@ import { db } from '../firebase/config'
 import LiveMarquee from '../components/LiveMarquee'
 import confetti from 'canvas-confetti'
 
+const PAGE_LOAD_TIME = Date.now();
+
 export default function DigitalBoardViewer() {
   const [settings, setSettings] = useState(null)
   const [time, setTime] = useState(new Date())
@@ -23,18 +25,25 @@ export default function DigitalBoardViewer() {
         setSettings(data);
         
         // Handle Live Events
-        if (data.liveEvent && (!window.lastLiveEventTimestamp || data.liveEvent.timestamp > window.lastLiveEventTimestamp)) {
-           window.lastLiveEventTimestamp = data.liveEvent.timestamp;
-           if (data.liveEvent.type === 'confetti') {
-             confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 }, zIndex: 999999 });
-           } else if (data.liveEvent.type === 'announcement') {
-             const u = new SpeechSynthesisUtterance(data.liveEvent.payload);
-             u.lang = 'tr-TR';
-             u.pitch = 1.2;
-             u.rate = 0.9;
-             window.speechSynthesis.speak(u);
-           } else if (data.liveEvent.type === 'reload') {
-             window.location.reload();
+        if (data.liveEvent && data.liveEvent.timestamp > PAGE_LOAD_TIME) {
+           if (!window.lastLiveEventTimestamp || data.liveEvent.timestamp > window.lastLiveEventTimestamp) {
+             window.lastLiveEventTimestamp = data.liveEvent.timestamp;
+             
+             if (data.liveEvent.type === 'confetti') {
+               confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 }, zIndex: 999999 });
+             } else if (data.liveEvent.type === 'announcement') {
+               try {
+                 const u = new SpeechSynthesisUtterance(data.liveEvent.payload);
+                 u.lang = 'tr-TR';
+                 u.pitch = 1.2;
+                 u.rate = 0.9;
+                 window.speechSynthesis.speak(u);
+               } catch(err) {
+                 console.error("Speech error", err)
+               }
+             } else if (data.liveEvent.type === 'reload') {
+               window.location.reload();
+             }
            }
         }
       }
