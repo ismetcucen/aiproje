@@ -18,6 +18,63 @@ export default function FocusTracker() {
   const [isModelsLoaded, setIsModelsLoaded] = useState(false)
   const [status, setStatus] = useState('Hazırlanıyor...')
   const [f1Message, setF1Message] = useState(null)
+  
+  // Dragging State
+  const [pos, setPos] = useState({ right: 24, bottom: 24 })
+  const [isDragging, setIsDragging] = useState(false)
+  const dragStart = useRef({ x: 0, y: 0, right: 0, bottom: 0, moved: false })
+
+  useEffect(() => {
+    const onMouseMove = (e) => {
+      if (!isDragging) return
+      const dx = e.clientX - dragStart.current.x
+      const dy = e.clientY - dragStart.current.y
+      
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+        dragStart.current.moved = true
+      }
+
+      setPos({
+        right: dragStart.current.right - dx,
+        bottom: dragStart.current.bottom - dy
+      })
+    }
+    
+    const onMouseUp = () => {
+      setIsDragging(false)
+    }
+
+    if (isDragging) {
+      window.addEventListener('mousemove', onMouseMove)
+      window.addEventListener('mouseup', onMouseUp)
+      window.addEventListener('touchmove', onMouseMove)
+      window.addEventListener('touchend', onMouseUp)
+    }
+    
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove)
+      window.removeEventListener('mouseup', onMouseUp)
+      window.removeEventListener('touchmove', onMouseMove)
+      window.removeEventListener('touchend', onMouseUp)
+    }
+  }, [isDragging])
+
+  const onMouseDown = (e) => {
+    // Prevent dragging if they click on the start/stop button or the video area itself maybe?
+    // Actually, we'll attach onMouseDown to the header area to make it clean.
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY
+
+    setIsDragging(true)
+    dragStart.current = {
+      x: clientX,
+      y: clientY,
+      right: pos.right,
+      bottom: pos.bottom,
+      moved: false
+    }
+  }
+
   const [currentEmotion, setCurrentEmotion] = useState(null)
   
   // Tracking states
@@ -163,8 +220,15 @@ export default function FocusTracker() {
   const emotionObj = currentEmotion ? emotionMap[currentEmotion] : null
 
   return (
-    <div className="fixed bottom-6 right-6 w-80 z-[100] bg-white/80 backdrop-blur-xl rounded-3xl p-5 border border-slate-200 shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-indigo-500/20">
-      <div className="flex items-center justify-between mb-4">
+    <div 
+      className="fixed w-80 z-[100] bg-white/80 backdrop-blur-xl rounded-3xl p-5 border border-slate-200 shadow-2xl overflow-hidden transition-shadow duration-500 hover:shadow-indigo-500/20"
+      style={{ right: `${pos.right}px`, bottom: `${pos.bottom}px` }}
+    >
+      <div 
+        className="flex items-center justify-between mb-4 cursor-move"
+        onMouseDown={onMouseDown}
+        onTouchStart={onMouseDown}
+      >
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center shadow-lg border-2 border-indigo-300 flex-shrink-0 bg-white">
             <img 
