@@ -5,6 +5,8 @@ import { createClass, getClassesBySchool, addStudentToClass, getStudentsByClass 
 import { GRADES, SECTIONS } from '../../data/curriculum'
 import BulkStudentUpload from "./BulkStudentUpload"
 import AddStudentModal from './AddStudentModal'
+import { exportStudentCredentials } from '../../utils/exportCredentials'
+
 
 export default function ClassManager({ schoolCode }) {
   const [classes,    setClasses]    = useState([])
@@ -219,10 +221,16 @@ export default function ClassManager({ schoolCode }) {
                   <h3 className="text-slate-800 text-3xl font-black mb-1">{selected.name} Sınıfı</h3>
                   <p className="text-slate-500 text-base">{students.length} öğrenci kayıtlı</p>
                 </div>
-                <button onClick={() => setShowModal(true)}
-                  className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-xl text-sm font-bold transition-all shadow-lg shadow-indigo-600/30 flex items-center gap-2 whitespace-nowrap">
-                  <span>+</span> Yeni Öğrenci Ekle
-                </button>
+                <div className="flex items-center gap-3">
+                  <button onClick={() => exportStudentCredentials(students, selected ? selected.name : 'Sınıf')}
+                    className="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-3 rounded-xl text-sm font-bold transition-all shadow-lg shadow-emerald-600/30 flex items-center gap-2 whitespace-nowrap">
+                    <span>📄</span> Şifreleri İndir
+                  </button>
+                  <button onClick={() => setShowModal(true)}
+                    className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-xl text-sm font-bold transition-all shadow-lg shadow-indigo-600/30 flex items-center gap-2 whitespace-nowrap">
+                    <span>+</span> Yeni Öğrenci Ekle
+                  </button>
+                </div>
               </div>
 
               <div className="flex flex-wrap gap-3 mb-8 relative z-10 bg-white shadow-sm p-1.5 rounded-2xl border border-slate-200 w-fit">

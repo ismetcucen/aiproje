@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import { getStudentsBySchool, getSubmissionsBySchool } from '../../firebase/schema'
+import { exportStudentCredentials } from '../../utils/exportCredentials'
+
 
 const CLASS_LEVEL_LABELS = {
   ilkokul:  'İlkokul',
@@ -61,12 +63,20 @@ export default function StudentList() {
           <h2 className="text-slate-800 text-xl font-semibold">Öğrenciler</h2>
           <p className="text-slate-500 text-sm mt-0.5">{students.length} kayıtlı öğrenci</p>
         </div>
-        <button
-          onClick={loadData}
-          className="text-slate-500 hover:text-white text-sm transition-colors flex items-center gap-1.5"
-        >
-          🔄 Yenile
-        </button>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => exportStudentCredentials(filteredStudents, 'Öğrenciler')}
+            className="text-emerald-500 hover:text-emerald-600 font-semibold text-sm transition-colors flex items-center gap-1.5 bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-lg border border-emerald-200"
+          >
+            <span>📄</span> Şifreleri İndir
+          </button>
+          <button
+            onClick={loadData}
+            className="text-slate-500 hover:text-slate-800 font-semibold text-sm transition-colors flex items-center gap-1.5 bg-white shadow-sm border border-slate-200 px-3 py-1.5 rounded-lg hover:bg-slate-50"
+          >
+            🔄 Yenile
+          </button>
+        </div>
       </div>
 
       {/* Filtreler */}
