@@ -187,7 +187,7 @@ export default function DigitalBoardViewer() {
   
   return (
     <div 
-      className="h-[100dvh] w-full relative overflow-hidden text-white font-sans selection:bg-none"
+      className="fixed inset-0 w-full overflow-hidden text-white font-sans selection:bg-none flex flex-col"
       style={{
         backgroundImage: `url('${
           settings.backgroundImages?.length > 0 
@@ -259,7 +259,7 @@ export default function DigitalBoardViewer() {
       )}
 
       {/* Main Content Area */}
-      <div className="relative z-10 flex-1 min-h-0 flex flex-col p-4 md:p-6 pb-4 box-border overflow-y-auto custom-scrollbar">
+      <div className="relative z-10 flex-1 min-h-0 flex flex-col p-4 md:p-6 pb-4 box-border overflow-y-auto custom-scrollbar w-full">
         
         {/* Header: Logo / School Name & Clock */}
         <header className="flex flex-col justify-center items-center mb-2 md:mb-4 shrink-0 w-full relative gap-1">
