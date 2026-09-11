@@ -47,7 +47,7 @@ export default function DigitalBoardSettings() {
   async function handleLiveEvent(type, payload = null) {
     if (!profile?.schoolCode) return
     try {
-      await updateDoc(doc(db, 'school_settings', profile.schoolCode), {
+      await updateDoc(doc(db, 'school_settings', `digital_board_${profile.schoolCode}`), {
         liveEvent: { type, payload, timestamp: Date.now() }
       })
       alert('Tetiklendi!')

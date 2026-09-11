@@ -19,7 +19,7 @@ export default function DigitalBoardViewer() {
   const schoolCode = 'OHEP'
 
   useEffect(() => {
-    const unsub = onSnapshot(doc(db, 'school_settings', schoolCode), (docSnap) => {
+    const unsub = onSnapshot(doc(db, 'school_settings', `digital_board_${schoolCode}`), (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data();
         setSettings(data);
