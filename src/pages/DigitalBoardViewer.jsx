@@ -259,7 +259,7 @@ export default function DigitalBoardViewer() {
       )}
 
       {/* Main Content Area */}
-      <div className="relative z-10 flex-1 min-h-0 flex flex-col p-4 md:p-6 pb-4 box-border">
+      <div className="relative z-10 flex-1 min-h-0 flex flex-col p-4 md:p-6 pb-4 box-border overflow-y-auto custom-scrollbar">
         
         {/* Header: Logo / School Name & Clock */}
         <header className="flex flex-col justify-center items-center mb-2 md:mb-4 shrink-0 w-full relative gap-1">
@@ -419,65 +419,58 @@ export default function DigitalBoardViewer() {
           </h2>
           
           <div className="flex w-full overflow-x-auto hide-scrollbar">
-            <div className="flex flex-col gap-2 w-max pr-6">
-              {/* Lessons Row */}
-              <div className="flex flex-row justify-start items-center gap-2">
-                {(settings.timetable || []).filter(t => t.label && t.label.toLowerCase().includes('ders')).map((t, idx) => {
-                  let isCurrent = false;
-                  if (t.time && t.time.includes('-')) {
-                    const [startStr, endStr] = t.time.split('-').map(s => s.trim())
-                    const [sh, sm] = startStr.split(':').map(Number)
-                    const [eh, em] = endStr.split(':').map(Number)
-                    if (!isNaN(sh) && !isNaN(eh)) {
-                      const startMin = sh * 60 + sm
-                      const endMin = eh * 60 + em
-                      if (currentMinutes >= startMin && currentMinutes <= endMin) {
-                        isCurrent = true;
-                      }
+            <div className="flex flex-row gap-2 w-max pr-6 items-center">
+              {(settings.timetable || []).map((t, idx) => {
+                let isCurrent = false;
+                const isLunch = t.label && (t.label.toLowerCase().includes('yemek') || t.label.toLowerCase().includes('öğle'));
+                const isBreak = t.label && (t.label.toLowerCase().includes('teneffüs') || isLunch);
+                
+                if (t.time && t.time.includes('-')) {
+                  const [startStr, endStr] = t.time.split('-').map(s => s.trim())
+                  const [sh, sm] = startStr.split(':').map(Number)
+                  const [eh, em] = endStr.split(':').map(Number)
+                  if (!isNaN(sh) && !isNaN(eh)) {
+                    const startMin = sh * 60 + sm
+                    const endMin = eh * 60 + em
+                    if (currentMinutes >= startMin && currentMinutes <= endMin) {
+                      isCurrent = true;
                     }
                   }
-                  return (
-                    <div key={idx} className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-500 w-[120px] flex-shrink-0 ${
-                      isCurrent 
-                        ? 'bg-indigo-600 border-2 border-fuchsia-400 shadow-[0_0_15px_#e879f9] scale-105 transform z-20 relative animate-pulse' 
-                        : 'bg-indigo-900/30 border border-indigo-500/20'
-                    }`}>
-                      <span className={`font-bold text-[11px] whitespace-nowrap ${isCurrent ? 'text-white' : 'text-indigo-200'}`}>{t.label}</span>
-                      <span className={`font-black text-[13px] tracking-tighter whitespace-nowrap ${isCurrent ? 'text-fuchsia-200' : 'text-indigo-300'}`}>{t.time}</span>
-                    </div>
-                  )
-                })}
-              </div>
-              {/* Breaks Row */}
-              <div className="flex flex-row justify-start items-center gap-2">
-                {(settings.timetable || []).filter(t => !t.label || !t.label.toLowerCase().includes('ders')).map((t, idx) => {
-                  let isCurrent = false;
-                  const isLunch = t.label && (t.label.toLowerCase().includes('yemek') || t.label.toLowerCase().includes('öğle'));
-                  
-                  if (t.time && t.time.includes('-')) {
-                    const [startStr, endStr] = t.time.split('-').map(s => s.trim())
-                    const [sh, sm] = startStr.split(':').map(Number)
-                    const [eh, em] = endStr.split(':').map(Number)
-                    if (!isNaN(sh) && !isNaN(eh)) {
-                      const startMin = sh * 60 + sm
-                      const endMin = eh * 60 + em
-                      if (currentMinutes >= startMin && currentMinutes <= endMin) {
-                        isCurrent = true;
-                      }
-                    }
-                  }
-                  return (
-                    <div key={idx} className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-500 w-[120px] flex-shrink-0 ${
-                      isCurrent 
-                        ? (isLunch ? 'bg-orange-600 border-2 border-fuchsia-400 shadow-[0_0_15px_#e879f9] scale-105 transform z-20 relative animate-pulse' : 'bg-emerald-600 border-2 border-fuchsia-400 shadow-[0_0_15px_#e879f9] scale-105 transform z-20 relative animate-pulse')
-                        : (isLunch ? 'bg-orange-900/40 border border-orange-500/50 shadow-[0_0_10px_rgba(249,115,22,0.1)]' : 'bg-emerald-900/20 border border-emerald-500/20')
-                    }`}>
-                      <span className={`font-bold text-[11px] whitespace-nowrap ${isCurrent ? 'text-white' : (isLunch ? 'text-orange-300' : 'text-emerald-300')}`}>{t.label}</span>
-                      <span className={`font-black text-[13px] tracking-tighter whitespace-nowrap ${isCurrent ? 'text-fuchsia-200' : (isLunch ? 'text-orange-400/90' : 'text-emerald-400/80')}`}>{t.time}</span>
-                    </div>
-                  )
-                })}
-              </div>
+                }
+                
+                let boxClass = 'bg-indigo-900/30 border border-indigo-500/20';
+                let textClass = 'text-indigo-200';
+                let timeClass = 'text-indigo-300';
+                
+                if (isCurrent && isLunch) {
+                   boxClass = 'bg-orange-500 border-2 border-yellow-300 shadow-[0_0_15px_#fb923c] scale-105 transform z-20 relative animate-pulse';
+                   textClass = 'text-white';
+                   timeClass = 'text-yellow-100';
+                } else if (isCurrent && isBreak) {
+                   boxClass = 'bg-emerald-500 border-2 border-emerald-300 shadow-[0_0_15px_#10b981] scale-105 transform z-20 relative animate-pulse';
+                   textClass = 'text-white';
+                   timeClass = 'text-emerald-100';
+                } else if (isCurrent) {
+                   boxClass = 'bg-indigo-600 border-2 border-fuchsia-400 shadow-[0_0_15px_#e879f9] scale-105 transform z-20 relative animate-pulse';
+                   textClass = 'text-white';
+                   timeClass = 'text-fuchsia-200';
+                } else if (isLunch) {
+                   boxClass = 'bg-orange-900/40 border border-orange-500/30';
+                   textClass = 'text-orange-200';
+                   timeClass = 'text-orange-300';
+                } else if (isBreak) {
+                   boxClass = 'bg-emerald-900/30 border border-emerald-500/30';
+                   textClass = 'text-emerald-200';
+                   timeClass = 'text-emerald-300';
+                }
+
+                return (
+                  <div key={idx} className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-500 w-[120px] flex-shrink-0 ${boxClass}`}>
+                    <span className={`font-bold text-[11px] whitespace-nowrap ${textClass}`}>{t.label}</span>
+                    <span className={`font-black text-[13px] tracking-tighter whitespace-nowrap ${timeClass}`}>{t.time}</span>
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>
