@@ -130,6 +130,7 @@ export default function CurriculumManager() {
             title: w.title,
             description: w.description,
             activity: w.activity || w.description,
+            objectives: w.objectives || [],
             contentType: 'topic',
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp()
