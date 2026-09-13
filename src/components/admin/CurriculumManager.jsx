@@ -163,7 +163,7 @@ export default function CurriculumManager() {
         </div>
         <button 
           onClick={loadCurriculumData} 
-          className="bg-white shadow-sm border border-slate-200 text-slate-500 hover:text-white px-3.5 py-2 rounded-lg text-sm transition-colors flex items-center gap-1.5 self-start"
+          className="bg-white shadow-sm border border-slate-200 text-slate-500 hover:text-indigo-600 px-3.5 py-2 rounded-lg text-sm transition-colors flex items-center gap-1.5 self-start"
         >
           🔄 Yenile
         </button>
@@ -181,7 +181,7 @@ export default function CurriculumManager() {
             className={`px-4 py-2.5 rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${
               selectedGrade === grade
                 ? 'bg-red-600/10 border border-red-700/50 text-red-400'
-                : 'text-slate-500 hover:text-white hover:bg-white'
+                : 'text-slate-500 hover:text-indigo-600 hover:bg-white'
             }`}
           >
             {grade}. Sınıf
@@ -253,7 +253,7 @@ export default function CurriculumManager() {
                 <div className="flex items-center gap-2.5 w-full md:w-auto justify-end">
                   <button
                     onClick={() => { setEditingWeek(item); setAssigningWeek(null); }}
-                    className="flex-1 md:flex-none border border-slate-200 text-slate-700 hover:text-white hover:bg-slate-50 px-3.5 py-2 rounded-lg text-xs font-semibold transition-all"
+                    className="flex-1 md:flex-none border border-slate-200 text-slate-700 hover:text-indigo-600 hover:bg-slate-100 px-3.5 py-2 rounded-lg text-xs font-semibold transition-all"
                   >
                     📝 Düzenle
                   </button>
@@ -278,7 +278,7 @@ export default function CurriculumManager() {
               <h3 className="text-slate-800 font-bold text-lg">Haftalık Konuyu Düzenle</h3>
               <button 
                 onClick={() => setEditingWeek(null)}
-                className="text-slate-500 hover:text-white text-xl"
+                className="text-slate-500 hover:text-indigo-600 text-xl"
               >
                 ✕
               </button>
@@ -299,7 +299,7 @@ export default function CurriculumManager() {
                   type="text"
                   value={editingWeek.title}
                   onChange={e => setEditingWeek(p => ({ ...p, title: e.target.value }))}
-                  className="w-full bg-slate-50 border border-slate-200 text-white rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:border-red-500 transition-colors"
+                  className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:border-red-500 transition-colors"
                   required
                 />
               </div>
@@ -310,7 +310,7 @@ export default function CurriculumManager() {
                   value={editingWeek.description}
                   onChange={e => setEditingWeek(p => ({ ...p, description: e.target.value }))}
                   rows={4}
-                  className="w-full bg-slate-50 border border-slate-200 text-white rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:border-red-500 transition-colors resize-none"
+                  className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:border-red-500 transition-colors resize-none"
                   required
                 />
               </div>
@@ -320,7 +320,7 @@ export default function CurriculumManager() {
                 <select
                   value={editingWeek.contentType}
                   onChange={e => setEditingWeek(p => ({ ...p, contentType: e.target.value }))}
-                  className="w-full bg-slate-50 border border-slate-200 text-white rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:border-red-500 transition-colors"
+                  className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:border-red-500 transition-colors"
                 >
                   {Object.entries(CONTENT_TYPE_LABELS).map(([val, label]) => (
                     <option key={val} value={val}>{label}</option>
@@ -357,7 +357,7 @@ export default function CurriculumManager() {
               <h3 className="text-slate-800 font-bold text-lg">Müfredat Haftasını Ata</h3>
               <button 
                 onClick={() => setAssigningWeek(null)}
-                className="text-slate-500 hover:text-white text-xl"
+                className="text-slate-500 hover:text-indigo-600 text-xl"
               >
                 ✕
               </button>
@@ -374,7 +374,7 @@ export default function CurriculumManager() {
                 <select
                   value={selectedSchoolCode}
                   onChange={e => setSelectedSchoolCode(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 text-white rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:border-red-500 transition-colors"
+                  className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:border-red-500 transition-colors"
                   required
                 >
                   {schoolCodes.length === 0 ? (

@@ -144,13 +144,13 @@ export default function CurriculumEditor() {
                 <div>
                   <label className="block text-slate-700 text-sm font-bold mb-2">Ders Başlığı</label>
                   <input value={editForm.title} onChange={e => setEditForm(p => ({...p, title: e.target.value}))}
-                    className="w-full bg-white shadow-sm border border-slate-200 text-white rounded-xl px-4 py-3 text-base focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all" />
+                    className="w-full bg-white shadow-sm border border-slate-200 text-slate-800 rounded-xl px-4 py-3 text-base focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all" />
                 </div>
 
                 <div>
                   <label className="block text-slate-700 text-sm font-bold mb-2">Açıklama</label>
                   <textarea value={editForm.description} onChange={e => setEditForm(p => ({...p, description: e.target.value}))}
-                    rows={2} className="w-full bg-white shadow-sm border border-slate-200 text-white rounded-xl px-4 py-3 text-base focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 resize-none transition-all" />
+                    rows={2} className="w-full bg-white shadow-sm border border-slate-200 text-slate-800 rounded-xl px-4 py-3 text-base focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 resize-none transition-all" />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -158,14 +158,14 @@ export default function CurriculumEditor() {
                     <label className="block text-slate-700 text-sm font-bold mb-2">Kazanımlar <span className="text-slate-500 font-normal text-xs">(Her satıra 1 tane)</span></label>
                     <textarea value={editForm.objectives} onChange={e => setEditForm(p => ({...p, objectives: e.target.value}))}
                       rows={4} placeholder="Kazanım 1&#10;Kazanım 2"
-                      className="w-full bg-white shadow-sm border border-slate-200 text-white rounded-xl px-4 py-3 text-sm placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 resize-none custom-scrollbar transition-all" />
+                      className="w-full bg-white shadow-sm border border-slate-200 text-slate-800 rounded-xl px-4 py-3 text-sm placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 resize-none custom-scrollbar transition-all" />
                   </div>
 
                   <div>
                     <label className="block text-slate-700 text-sm font-bold mb-2">AI Araçları <span className="text-slate-500 font-normal text-xs">(Her satıra 1 tane)</span></label>
                     <textarea value={editForm.aiTools} onChange={e => setEditForm(p => ({...p, aiTools: e.target.value}))}
                       rows={4} placeholder="ChatGPT&#10;Suno AI"
-                      className="w-full bg-white shadow-sm border border-slate-200 text-white rounded-xl px-4 py-3 text-sm placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 resize-none custom-scrollbar transition-all" />
+                      className="w-full bg-white shadow-sm border border-slate-200 text-slate-800 rounded-xl px-4 py-3 text-sm placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 resize-none custom-scrollbar transition-all" />
                   </div>
                 </div>
 
@@ -173,19 +173,19 @@ export default function CurriculumEditor() {
                   <div>
                     <label className="block text-slate-700 text-sm font-bold mb-2">Ders Süresi <span className="text-slate-500 font-normal text-xs">(Dakika)</span></label>
                     <input type="number" value={editForm.duration} onChange={e => setEditForm(p => ({...p, duration: e.target.value}))}
-                      className="w-full bg-white shadow-sm border border-slate-200 text-white rounded-xl px-4 py-3 text-base focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all" />
+                      className="w-full bg-white shadow-sm border border-slate-200 text-slate-800 rounded-xl px-4 py-3 text-base focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all" />
                   </div>
                   <div>
                     <label className="block text-slate-700 text-sm font-bold mb-2">Çıktı / Ürün Formatı</label>
                     <input value={editForm.output} onChange={e => setEditForm(p => ({...p, output: e.target.value}))}
-                      className="w-full bg-white shadow-sm border border-slate-200 text-white rounded-xl px-4 py-3 text-base focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all" />
+                      className="w-full bg-white shadow-sm border border-slate-200 text-slate-800 rounded-xl px-4 py-3 text-base focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all" />
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-slate-700 text-sm font-bold mb-2">Aktivite Detayları</label>
                   <textarea value={editForm.activity} onChange={e => setEditForm(p => ({...p, activity: e.target.value}))}
-                    rows={4} className="w-full bg-white shadow-sm border border-slate-200 text-white rounded-xl px-4 py-3 text-base focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 resize-none custom-scrollbar transition-all" />
+                    rows={4} className="w-full bg-white shadow-sm border border-slate-200 text-slate-800 rounded-xl px-4 py-3 text-base focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 resize-none custom-scrollbar transition-all" />
                 </div>
 
                 <div className="flex flex-wrap gap-4 pt-6 border-t border-slate-200/50 mt-8">
