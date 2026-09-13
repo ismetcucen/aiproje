@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import { getCurriculum, updateCurriculumWeek, assignCurriculumWeek } from '../../firebase/schema'
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
+import { db } from '../../firebase/config'
 import { MODULES } from '../../data/defaultCurriculum'
 
 const GRADES = [3, 4, 5, 6, 7, 8, 9, 10]
@@ -106,6 +108,47 @@ export default function CurriculumManager() {
   const filteredCurriculum = curriculum.filter(item => 
     selectedModule === 'all' || item.moduleId === Number(selectedModule)
   )
+
+
+  async function handleSeedCurriculum() {
+    if (!window.confirm(`${selectedGrade}. Sınıf müfredatını varsayılan (Maarif Modeli) ile sıfırlamak istediğinize emin misiniz?`)) return
+    setActionLoading(true)
+    setError('')
+    setSuccess('')
+    try {
+      const { CURRICULUM } = await import('../../data/curriculum')
+      const defaultData = CURRICULUM[selectedGrade] || []
+      
+      const batch = []
+      // We will just overwrite them one by one since it's only 36 items
+      for (const w of defaultData) {
+        const docRef = doc(db, 'curriculum', `grade_${selectedGrade}_week_${w.week}`)
+        batch.push(
+          setDoc(docRef, {
+            gradeNumber: Number(selectedGrade),
+            week: w.week,
+            title: w.title,
+            description: w.description,
+            activity: w.activity || w.description,
+            contentType: 'topic',
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
+          }, { merge: true })
+        )
+      }
+      await Promise.all(batch)
+      
+      setSuccess(`${selectedGrade}. Sınıf müfredatı başarıyla varsayılan değerlere sıfırlandı!`)
+      // refresh
+      const data = await getCurriculum(selectedGrade)
+      setCurriculum(data)
+    } catch (err) {
+      console.error(err)
+      setError('Müfredat yüklenirken hata oluştu: ' + err.message)
+    } finally {
+      setActionLoading(false)
+    }
+  }
 
   return (
     <div className="max-w-6xl">
