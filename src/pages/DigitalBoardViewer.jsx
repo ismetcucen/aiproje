@@ -34,10 +34,22 @@ export default function DigitalBoardViewer() {
   const schoolCode = 'OHEP'
 
   useEffect(() => {
-    const handleFs = () => setIsFullscreen(!!document.fullscreenElement)
+    const handleFs = () => {
+      const isFs = !!document.fullscreenElement
+      setIsFullscreen(isFs)
+      if (isFs && isKioskLocked) {
+        if (navigator.keyboard?.lock) {
+          navigator.keyboard.lock(['Escape']).catch(() => {})
+        }
+      } else if (!isFs) {
+        if (navigator.keyboard?.unlock) {
+          navigator.keyboard.unlock()
+        }
+      }
+    }
     document.addEventListener('fullscreenchange', handleFs)
     return () => document.removeEventListener('fullscreenchange', handleFs)
-  }, [])
+  }, [isKioskLocked])
 
   const toggleFullscreen = () => {
     if (isKioskLocked) {
@@ -59,6 +71,9 @@ export default function DigitalBoardViewer() {
       setShowPinModal(false)
       setPinInput('')
       setPinError('')
+      if (navigator.keyboard?.unlock) {
+        navigator.keyboard.unlock()
+      }
     } else {
       setPinError('Hatalı PIN! Lütfen tekrar deneyin.')
       setPinInput('')
@@ -69,7 +84,15 @@ export default function DigitalBoardViewer() {
     setIsKioskLocked(true)
     localStorage.setItem('ohep_kiosk_locked', 'true')
     if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(() => {})
+      document.documentElement.requestFullscreen().then(() => {
+        if (navigator.keyboard?.lock) {
+          navigator.keyboard.lock(['Escape']).catch(() => {})
+        }
+      }).catch(() => {})
+    } else {
+      if (navigator.keyboard?.lock) {
+        navigator.keyboard.lock(['Escape']).catch(() => {})
+      }
     }
   }
 
@@ -103,6 +126,13 @@ export default function DigitalBoardViewer() {
       const key = e.key
       const ctrlOrCmd = e.ctrlKey || e.metaKey
 
+      // ESC Tuşunu Engelle (Tam ekrandan çıkış yapılmasını engeller)
+      if (key === 'Escape' && !showPinModal) {
+        e.preventDefault()
+        e.stopPropagation()
+        return false
+      }
+
       // F12 ve Tarayıcı İnceleme Araçları (Ctrl+Shift+I, J, C vb.)
       if (
         key === 'F12' ||
@@ -120,8 +150,16 @@ export default function DigitalBoardViewer() {
         return false
       }
 
-      // Sekme / Pencere Kapatma Engeli (Ctrl+W, Cmd+W, Ctrl+Q, Cmd+Q)
-      if (ctrlOrCmd && ['w', 'W', 'q', 'Q'].includes(key)) {
+      // Mac ve Windows: Sekme/Pencere Kapatma, Çıkış, Küçültme, Gizleme
+      // Cmd+W (Kapat), Cmd+Q (Çık), Cmd+M (Küçült), Cmd+H (Gizle), Cmd+T (Yeni Sekme), Cmd+N (Yeni Pencere)
+      if (ctrlOrCmd && ['w', 'W', 'q', 'Q', 'm', 'M', 'h', 'H', 't', 'T', 'n', 'N'].includes(key)) {
+        e.preventDefault()
+        e.stopPropagation()
+        return false
+      }
+
+      // Mac Tam Ekran Kısayolu (Cmd+Ctrl+F)
+      if (ctrlOrCmd && e.ctrlKey && (key === 'f' || key === 'F')) {
         e.preventDefault()
         e.stopPropagation()
         return false
@@ -430,18 +468,42 @@ export default function DigitalBoardViewer() {
         </div>
       )}
 
-      {/* Kiosk Mode: Re-fullscreen prompt if student exited fullscreen */}
+      {/* Kiosk Mode: Fullscreen Barrier Shield if student exited fullscreen */}
       {isKioskLocked && !isFullscreen && !showPinModal && (
-        <button
+        <div 
           onClick={(e) => {
             e.stopPropagation()
-            document.documentElement.requestFullscreen().catch(() => {})
+            document.documentElement.requestFullscreen().then(() => {
+              if (navigator.keyboard?.lock) {
+                navigator.keyboard.lock(['Escape']).catch(() => {})
+              }
+            }).catch(() => {})
           }}
-          className="absolute top-2.5 left-1/2 -translate-x-1/2 z-50 bg-red-600/90 hover:bg-red-500 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-2xl backdrop-blur-md flex items-center gap-2 animate-bounce cursor-pointer border border-red-300/40"
+          className="fixed inset-0 z-[80] bg-slate-950/90 backdrop-blur-md flex flex-col items-center justify-center cursor-pointer p-6 text-center select-none"
         >
-          <span>⚠️</span>
-          <span>Tam Ekrandan Çıkıldı! Geri Dönmek İçin Tıklayın</span>
-        </button>
+          <div className="w-20 h-20 bg-red-600/20 text-red-500 border-2 border-red-500/40 rounded-3xl flex items-center justify-center text-4xl mb-4 animate-bounce">
+            🔒
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-black text-white mb-2 tracking-wide">
+            KİOSK KİLİTLİ
+          </h2>
+          <p className="text-sm sm:text-base text-slate-300 max-w-md mb-6 leading-relaxed">
+            Pano tam ekran modunda kilitlidir. Yayına devam etmek için lütfen ekranda herhangi bir yere dokunun veya tıklayın.
+          </p>
+          <div className="bg-red-600 hover:bg-red-500 text-white font-bold px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-2 text-sm sm:text-base transition-all active:scale-95">
+            <span>⛶</span>
+            <span>Tam Ekrana Geri Dön</span>
+          </div>
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              setShowPinModal(true)
+            }}
+            className="mt-6 text-xs text-slate-400 hover:text-white underline underline-offset-4"
+          >
+            Yönetici Girişi (PIN ile Kilidi Aç)
+          </button>
+        </div>
       )}
 
       {/* Top Right Control Bar: Kiosk & Fullscreen */}
