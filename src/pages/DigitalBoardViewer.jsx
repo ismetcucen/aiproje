@@ -13,7 +13,6 @@ export default function DigitalBoardViewer() {
   const [time, setTime] = useState(new Date())
   const [weather, setWeather] = useState(null)
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
-  const [robotState, setRobotState] = useState({ visible: false, message: '' })
   const [showAchievements, setShowAchievements] = useState(false)
   const [isFullscreen, setIsFullscreen] = useState(false)
 
@@ -94,18 +93,6 @@ export default function DigitalBoardViewer() {
 
 
 
-  // CEVBOT Facts (Kullanıcı girdiyse onu, girmediyse varsayılanı kullanır)
-  const defaultFacts = [
-    "Biliyor muydunuz? Mars'ta gün batımı mavi renktir.",
-    "İnsan beyni, çalışırken yaklaşık 20 watt elektrik üretir.",
-    "Venüs'te bir gün, Dünya'daki bir yıldan daha uzundur.",
-    "Ahtapotların 3 kalbi ve mavi renkte kanları vardır.",
-    "Everest Dağı her yıl yaklaşık 4 milimetre yükselmektedir.",
-    "Bal bozulmayan tek yiyecektir. 3000 yıllık bal bile yenebilir.",
-    "DNA'mızın %50'si muzlarınkiyle aynıdır."
-  ]
-  const FACTS = (settings?.robotFacts && settings.robotFacts.length > 0) ? settings.robotFacts : defaultFacts;
-
   // Slayt Gösterisi (Background Rotation)
   useEffect(() => {
     if (!settings?.backgroundImages || settings.backgroundImages.length <= 1) return;
@@ -114,25 +101,6 @@ export default function DigitalBoardViewer() {
     }, 15000) // Change every 15 seconds
     return () => clearInterval(slideTimer)
   }, [settings?.backgroundImages])
-
-  // CEVBOT Popup Logic
-  useEffect(() => {
-    const showRobot = () => {
-      // Use the latest settings or fallback
-      const activeFacts = (settings?.robotFacts && settings.robotFacts.length > 0) ? settings.robotFacts : defaultFacts;
-      const randomFact = activeFacts[Math.floor(Math.random() * activeFacts.length)]
-      setRobotState({ visible: true, message: randomFact })
-      setTimeout(() => setRobotState({ visible: false, message: '' }), 20000)
-    }
-    
-    const initialTimer = setTimeout(showRobot, 15000) // Show first fact after 15 seconds!
-    const intervalTimer = setInterval(showRobot, 180000) // Then every 3 minutes
-    
-    return () => {
-      clearTimeout(initialTimer)
-      clearInterval(intervalTimer)
-    }
-  }, [])
 
 
 
@@ -436,20 +404,6 @@ export default function DigitalBoardViewer() {
         </div>
       </div>
 
-
-                  <div className={`absolute bottom-40 left-8 z-40 flex items-end gap-4 transition-all duration-700 transform ${robotState.visible ? 'translate-y-0 opacity-100' : 'translate-y-32 opacity-0 pointer-events-none'}`}>
-        <div className="w-32 h-32 relative group shrink-0">
-           <div className="absolute inset-0 bg-indigo-500 rounded-full blur-xl opacity-50 animate-pulse"></div>
-           <div className="relative w-full h-full bg-indigo-50 border-4 border-indigo-400 rounded-full overflow-hidden shadow-[0_0_30px_rgba(99,102,241,0.6)] flex items-center justify-center">
-             <img src="/cevbot.jpg" alt="CEVBOT" className="w-full h-full object-cover" />
-           </div>
-           <div className="absolute -bottom-2 bg-indigo-600 text-white text-xs font-black px-4 py-1 rounded-full left-1/2 transform -translate-x-1/2 whitespace-nowrap shadow-lg">CEVBOT</div>
-        </div>
-        <div className="bg-white text-slate-800 p-5 rounded-3xl rounded-bl-none shadow-2xl max-w-sm border-2 border-indigo-500 relative animate-bounce-slight">
-          <div className="absolute w-4 h-4 bg-white border-l-2 border-b-2 border-indigo-500 transform rotate-45 -bottom-2 left-4"></div>
-          <p className="font-bold text-lg leading-relaxed">{robotState.message}</p>
-        </div>
-      </div>
 
       {/* UNIFIED FOOTER: Timetable + Marquee */}
       <div className="w-full shrink-0 bg-slate-900/95 backdrop-blur-2xl border-t border-white/10 z-50 flex flex-col shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
