@@ -4,6 +4,7 @@ import { doc, onSnapshot } from 'firebase/firestore'
 import { db } from '../firebase/config'
 import LiveMarquee from '../components/LiveMarquee'
 import confetti from 'canvas-confetti'
+import { getTodaysLunchMenu } from '../data/weeklyMenu'
 
 const PAGE_LOAD_TIME = Date.now();
 
@@ -14,9 +15,25 @@ export default function DigitalBoardViewer() {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
   const [robotState, setRobotState] = useState({ visible: false, message: '' })
   const [showAchievements, setShowAchievements] = useState(false)
+  const [isFullscreen, setIsFullscreen] = useState(false)
 
   // Config: 'OHEP' is the default school code
   const schoolCode = 'OHEP'
+
+  useEffect(() => {
+    const handleFs = () => setIsFullscreen(!!document.fullscreenElement)
+    document.addEventListener('fullscreenchange', handleFs)
+    return () => document.removeEventListener('fullscreenchange', handleFs)
+  }, [])
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {})
+    } else if (document.exitFullscreen) {
+      document.exitFullscreen().catch(() => {})
+    }
+  }
+
 
   useEffect(() => {
     const unsub = onSnapshot(doc(db, 'school_settings', `digital_board_${schoolCode}`), (docSnap) => {
@@ -135,21 +152,20 @@ export default function DigitalBoardViewer() {
   
   const renderCountdown = (targetDate) => {
     const cd = getCountdown(targetDate)
-    if (!cd) return <span className="text-xl text-slate-500">-</span>
-    if (cd.expired) return <span className="text-2xl font-black text-green-400 animate-pulse">GELDİ!</span>
+    if (!cd) return <span className="text-sm lg:text-base text-slate-500">-</span>
+    if (cd.expired) return <span className="text-base lg:text-xl font-black text-green-400 animate-pulse">GELDİ!</span>
     
     return (
-      <div className="flex items-baseline gap-2">
-        <div className="flex flex-col items-center justify-center min-w-[2.5rem]"><span className="text-2xl font-black text-white">{cd.d}</span><span className="text-[10px] text-slate-400">GÜN</span></div>
-        <span className="text-xl text-slate-600">:</span>
-        <div className="flex flex-col items-center justify-center min-w-[2.5rem]"><span className="text-2xl font-black text-white">{cd.h}</span><span className="text-[10px] text-slate-400">SAAT</span></div>
-        <span className="text-xl text-slate-600">:</span>
-        <div className="flex flex-col items-center justify-center min-w-[2.5rem]"><span className="text-2xl font-black text-white">{cd.m}</span><span className="text-[10px] text-slate-400">DK</span></div>
+      <div className="flex items-baseline gap-1 lg:gap-1.5">
+        <div className="flex flex-col items-center justify-center min-w-[2rem]"><span className="text-base sm:text-lg lg:text-xl font-black text-white">{cd.d}</span><span className="text-[9px] text-slate-400">GÜN</span></div>
+        <span className="text-sm lg:text-base text-slate-600">:</span>
+        <div className="flex flex-col items-center justify-center min-w-[2rem]"><span className="text-base sm:text-lg lg:text-xl font-black text-white">{cd.h}</span><span className="text-[9px] text-slate-400">SAAT</span></div>
+        <span className="text-sm lg:text-base text-slate-600">:</span>
+        <div className="flex flex-col items-center justify-center min-w-[2rem]"><span className="text-base sm:text-lg lg:text-xl font-black text-white">{cd.m}</span><span className="text-[9px] text-slate-400">DK</span></div>
       </div>
     )
   }
 
-  
   // Achievement Wall Logic
   useEffect(() => {
     const showWall = () => {
@@ -172,6 +188,9 @@ export default function DigitalBoardViewer() {
 
   // Check current timetable
   const currentMinutes = time.getHours() * 60 + time.getMinutes()
+
+  // Get active lunch menu (from settings if customized, otherwise official weekly schedule)
+  const todaysLunch = getTodaysLunchMenu(settings?.dailyMenu, settings?.dailyMenuCalorie, time)
 
   const getWeatherIcon = (code) => {
     if (code === 0) return '☀️' // clear
@@ -258,143 +277,165 @@ export default function DigitalBoardViewer() {
         </div>
       )}
 
+      {/* Fullscreen Button */}
+      <button 
+        onClick={toggleFullscreen}
+        title={isFullscreen ? "Tam Ekrandan Çık" : "Tam Ekran Yap (F11)"}
+        className="absolute top-2.5 right-3 z-50 bg-black/40 hover:bg-black/65 active:scale-95 text-white/90 hover:text-white px-2.5 py-1.5 rounded-xl border border-white/20 backdrop-blur-md transition-all flex items-center gap-1.5 text-xs font-bold shadow-lg"
+      >
+        <span className="text-sm">{isFullscreen ? '✕' : '⛶'}</span>
+        <span className="hidden sm:inline">{isFullscreen ? 'Pencere Modu' : 'Tam Ekran'}</span>
+      </button>
+
       {/* Main Content Area */}
-      <div className="relative z-10 flex-1 min-h-0 flex flex-col p-4 md:p-6 pb-4 box-border overflow-y-auto custom-scrollbar w-full">
+      <div className="relative z-10 flex-1 min-h-0 flex flex-col px-3 sm:px-6 py-2 sm:py-3 box-border overflow-hidden w-full justify-between">
         
-        {/* Header: Logo / School Name & Clock */}
-        <header className="flex flex-col justify-center items-center mb-2 md:mb-4 shrink-0 w-full relative gap-1">
+        {/* Header: Logo / School Name & Title */}
+        <header className="flex flex-col justify-center items-center mb-1 lg:mb-2 shrink-0 w-full relative">
           <div className="flex flex-col items-center text-center">
-            <h1 className="text-5xl md:text-7xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-slate-400 drop-shadow-2xl mb-2">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-slate-400 drop-shadow-2xl">
               CEV ÖHEP OKULLARI
             </h1>
-            <p className="text-xl md:text-3xl font-light text-slate-300 tracking-[0.5em]">DİJİTAL BİLGİ EKRANI</p>
+            <p className="text-xs sm:text-sm md:text-base lg:text-lg font-light text-slate-300 tracking-[0.35em] mt-0.5">DİJİTAL BİLGİ EKRANI</p>
           </div>
         </header>
 
         {/* 3-Column Layout */}
-        <div className="flex-1 grid grid-cols-12 gap-4 md:gap-6 min-h-0">
+        <div className="flex-1 grid grid-cols-12 gap-3 sm:gap-4 lg:gap-6 min-h-0 items-stretch">
           
           {/* LEFT: Timetable & Menu */}
-          <div className="col-span-4 flex flex-col gap-4 md:gap-6 min-h-0">
+          <div className="col-span-12 md:col-span-4 flex flex-col min-h-0">
             {/* Günün Menüsü */}
-            <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-4 md:p-6 border border-white/10 shadow-2xl relative overflow-hidden shrink-0">
-              <div className="absolute -right-10 -bottom-10 text-9xl opacity-10">🍲</div>
-              <h2 className="text-2xl font-bold  tracking-widest text-orange-300 mb-5 flex items-center gap-3 relative z-10">
-                <span>🍽️</span> GÜNÜN ÖĞLE YEMEĞİ
-              </h2>
-              <ul className="space-y-4 relative z-10">
-                {(settings.dailyMenu || []).map((item, idx) => (
-                  <li key={idx} className="flex items-center gap-4 text-xl font-medium text-slate-200 bg-white/5 p-3 rounded-xl border border-white/5">
-                    <span className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-tr from-orange-400 to-yellow-400 flex items-center justify-center text-white font-bold shadow-lg">✓</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-                {(!settings.dailyMenu || settings.dailyMenu.length === 0) && (
-                  <p className="text-slate-400 italic bg-white/5 p-4 rounded-xl text-center">Günün menüsü henüz girilmedi.</p>
-                )}
-              </ul>
+            <div className="bg-slate-900/40 backdrop-blur-md rounded-2xl lg:rounded-3xl p-3 sm:p-4 lg:p-5 border border-white/10 shadow-2xl relative overflow-hidden flex-1 flex flex-col justify-between">
+              <div className="absolute -right-8 -bottom-8 text-8xl opacity-10 pointer-events-none">🍲</div>
+              <div>
+                <div className="flex items-center justify-between gap-2 mb-2.5 lg:mb-3 relative z-10">
+                  <h2 className="text-base sm:text-lg lg:text-xl font-bold tracking-wider text-orange-300 flex items-center gap-2">
+                    <span>🍽️</span> GÜNÜN ÖĞLE YEMEĞİ
+                  </h2>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <span className="text-[10px] lg:text-xs font-bold px-2 py-0.5 rounded-full bg-orange-400/20 text-orange-200 border border-orange-400/30">
+                      {todaysLunch.dayName}
+                    </span>
+                    {todaysLunch.calorie && (
+                      <span className="text-[10px] lg:text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                        {todaysLunch.calorie}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <ul className="space-y-1.5 sm:space-y-2 lg:space-y-2.5 relative z-10">
+                  {todaysLunch.items.map((item, idx) => (
+                    <li key={idx} className="flex items-center gap-2.5 text-xs sm:text-sm lg:text-base font-medium text-slate-100 bg-white/5 hover:bg-white/10 transition-colors p-2 px-3 rounded-xl border border-white/5">
+                      <span className="flex-shrink-0 w-5 h-5 lg:w-6 lg:h-6 rounded-full bg-gradient-to-tr from-orange-400 to-amber-500 flex items-center justify-center text-white text-[10px] lg:text-xs font-bold shadow-md">✓</span>
+                      <span className="truncate">{item}</span>
+                    </li>
+                  ))}
+                  {todaysLunch.items.length === 0 && (
+                    <p className="text-slate-400 italic bg-white/5 p-3 rounded-xl text-center text-xs">Günün menüsü henüz girilmedi.</p>
+                  )}
+                </ul>
+              </div>
+              <p className="text-[9px] lg:text-[10px] text-slate-400/70 tracking-wide mt-2 text-right">Hamdullah Emin Paşa Koleji Beslenme Programı</p>
             </div>
           </div>
 
           {/* MIDDLE: Weather & Quote */}
-          <div className="col-span-4 flex flex-col gap-4 md:gap-6 min-h-0">
+          <div className="col-span-12 md:col-span-4 flex flex-col gap-2.5 sm:gap-3 lg:gap-4 min-h-0 justify-between">
             {/* Hava Durumu */}
-            <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-4 md:p-6 border border-white/10 shadow-2xl flex items-center justify-between shrink-0">
+            <div className="bg-slate-900/40 backdrop-blur-md rounded-2xl lg:rounded-3xl p-2.5 sm:p-3 lg:p-4 border border-white/10 shadow-2xl flex items-center justify-between shrink-0">
               <div>
-                <h2 className="text-xl font-bold  tracking-widest text-sky-300 mb-1 flex items-center gap-2">
+                <h2 className="text-sm lg:text-base font-bold tracking-widest text-sky-300 mb-0.5 flex items-center gap-1.5">
                   <span>📍</span> Alanya
                 </h2>
-                <p className="text-slate-400 text-sm">Anlık Hava Durumu</p>
+                <p className="text-slate-400 text-[11px] lg:text-xs">Anlık Hava Durumu</p>
               </div>
               {weather ? (
-                <div className="flex items-center gap-4">
-                  <span className="text-6xl drop-shadow-lg">{getWeatherIcon(weather.weathercode)}</span>
+                <div className="flex items-center gap-2.5 lg:gap-3">
+                  <span className="text-3xl lg:text-4xl drop-shadow-lg">{getWeatherIcon(weather.weathercode)}</span>
                   <div className="flex flex-col">
-                    <span className="text-4xl font-black text-white">{Math.round(weather.temperature)}°</span>
-                    <span className="text-sky-200 text-xs font-bold ">{weather.windspeed} km/s</span>
+                    <span className="text-2xl lg:text-3xl font-black text-white leading-none">{Math.round(weather.temperature)}°</span>
+                    <span className="text-sky-200 text-[10px] font-bold mt-0.5">{weather.windspeed} km/s</span>
                   </div>
                 </div>
               ) : (
-                <span className="text-slate-400 text-sm">Yükleniyor...</span>
+                <span className="text-slate-400 text-xs">Yükleniyor...</span>
               )}
             </div>
             
-            {/* Saat ve Tarih (Büyük) */}
-            <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-6 md:p-8 border border-white/10 shadow-2xl flex flex-col items-center justify-center shrink-0 transform hover:scale-105 transition-all">
-              <div className="text-7xl md:text-8xl xl:text-9xl font-black tabular-nums tracking-tighter drop-shadow-2xl flex items-baseline gap-2">
+            {/* Saat ve Tarih (Kompakt ve Dengeli) */}
+            <div className="bg-slate-900/40 backdrop-blur-md rounded-2xl lg:rounded-3xl p-3 sm:p-4 lg:p-6 border border-white/10 shadow-2xl flex-1 flex flex-col items-center justify-center transform hover:scale-[1.02] transition-all">
+              <div className="text-5xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-8xl font-black tabular-nums tracking-tighter drop-shadow-2xl flex items-baseline gap-1 lg:gap-2">
                 {time.getHours().toString().padStart(2, '0')}
                 <span className="text-indigo-400 animate-pulse">:</span>
                 {time.getMinutes().toString().padStart(2, '0')}
-                <span className="text-3xl md:text-4xl xl:text-5xl text-slate-400 ml-2">{time.getSeconds().toString().padStart(2, '0')}</span>
+                <span className="text-xl sm:text-2xl lg:text-3xl text-slate-400 ml-1.5">{time.getSeconds().toString().padStart(2, '0')}</span>
               </div>
-              <div className="text-xl md:text-2xl xl:text-3xl font-medium text-slate-300 tracking-widest mt-4 uppercase text-center">
+              <div className="text-xs sm:text-sm lg:text-base xl:text-lg font-medium text-slate-300 tracking-widest mt-2 uppercase text-center">
                 {time.toLocaleDateString('tr-TR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
               </div>
             </div>
 
             {/* Günün Sözü */}
             {settings.quoteOfTheDay && (
-              <div className="bg-gradient-to-br from-indigo-900/80 to-purple-900/80 backdrop-blur-xl rounded-3xl p-4 md:p-6 border border-indigo-500/30 shadow-2xl text-center relative overflow-hidden shrink-0">
-                 <div className="text-6xl text-indigo-400/20 absolute -top-4 -left-2 font-serif">"</div>
-                 <p className="text-xl font-medium text-white italic leading-relaxed relative z-10">
+              <div className="bg-gradient-to-br from-indigo-900/80 to-purple-900/80 backdrop-blur-xl rounded-2xl lg:rounded-3xl p-2.5 sm:p-3 lg:p-4 border border-indigo-500/30 shadow-2xl text-center relative overflow-hidden shrink-0">
+                 <div className="text-4xl text-indigo-400/20 absolute -top-2 -left-1 font-serif">"</div>
+                 <p className="text-xs sm:text-sm lg:text-base font-medium text-white italic leading-relaxed relative z-10 px-3">
                    "{settings.quoteOfTheDay}"
                  </p>
-                 <div className="text-6xl text-indigo-400/20 absolute -bottom-10 -right-2 font-serif">"</div>
+                 <div className="text-4xl text-indigo-400/20 absolute -bottom-4 -right-1 font-serif">"</div>
               </div>
             )}
           </div>
+
           {/* RIGHT: Exams */}
-          <div className="col-span-4 flex flex-col gap-4 md:gap-6 min-h-0">
-            {/* Sınavlara Kalan Zaman (Küçültüldü) */}
-            <div className="bg-slate-900/40 backdrop-blur-md rounded-3xl p-4 md:p-6 border border-white/10 shadow-2xl flex-1 flex flex-col min-h-0">
-               <h2 className="text-xl font-bold  tracking-widest text-fuchsia-300 mb-2 flex items-center gap-3">
+          <div className="col-span-12 md:col-span-4 flex flex-col min-h-0">
+            {/* Sınavlara Kalan Zaman */}
+            <div className="bg-slate-900/40 backdrop-blur-md rounded-2xl lg:rounded-3xl p-3 sm:p-4 lg:p-5 border border-white/10 shadow-2xl flex-1 flex flex-col justify-between">
+               <h2 className="text-base sm:text-lg lg:text-xl font-bold tracking-wider text-fuchsia-300 mb-2 flex items-center gap-2">
                  <span>🎯</span> Sınavlara Kalan Zaman
                </h2>
-               <div className="flex flex-col gap-2 flex-1 justify-center">
+               <div className="flex flex-col gap-1.5 sm:gap-2 flex-1 justify-center">
                  {/* LGS */}
-                 <div className="bg-white/5 rounded-2xl p-2 md:p-3 px-4 flex items-center justify-between border border-white/10 shadow-sm">
-                   <div className="flex items-center gap-3">
-                     <div className="w-1.5 h-8 bg-gradient-to-b from-fuchsia-500 to-purple-500 rounded-full"></div>
-                     <span className="text-lg font-black text-white tracking-widest">LGS</span>
+                 <div className="bg-white/5 rounded-xl lg:rounded-2xl p-1.5 sm:p-2 px-3 flex items-center justify-between border border-white/10 shadow-sm">
+                   <div className="flex items-center gap-2.5">
+                     <div className="w-1.5 h-6 lg:h-7 bg-gradient-to-b from-fuchsia-500 to-purple-500 rounded-full"></div>
+                     <span className="text-sm sm:text-base lg:text-lg font-black text-white tracking-wider">LGS</span>
                    </div>
                    {renderCountdown(settings.examDates?.lgs || '2027-06-13T09:00')}
                  </div>
                  {/* TYT */}
-                 <div className="bg-white/5 rounded-2xl p-2 md:p-3 px-4 flex items-center justify-between border border-white/10 shadow-sm">
-                   <div className="flex items-center gap-3">
-                     <div className="w-1.5 h-8 bg-gradient-to-b from-emerald-500 to-teal-500 rounded-full"></div>
-                     <span className="text-lg font-black text-white tracking-widest">TYT</span>
+                 <div className="bg-white/5 rounded-xl lg:rounded-2xl p-1.5 sm:p-2 px-3 flex items-center justify-between border border-white/10 shadow-sm">
+                   <div className="flex items-center gap-2.5">
+                     <div className="w-1.5 h-6 lg:h-7 bg-gradient-to-b from-emerald-500 to-teal-500 rounded-full"></div>
+                     <span className="text-sm sm:text-base lg:text-lg font-black text-white tracking-wider">TYT</span>
                    </div>
                    {renderCountdown(settings.examDates?.tyt || '2027-06-19T10:15')}
                  </div>
                  {/* AYT */}
-                 <div className="bg-white/5 rounded-2xl p-2 md:p-3 px-4 flex items-center justify-between border border-white/10 shadow-sm">
-                   <div className="flex items-center gap-3">
-                     <div className="w-1.5 h-8 bg-gradient-to-b from-blue-500 to-cyan-500 rounded-full"></div>
-                     <span className="text-lg font-black text-white tracking-widest">AYT</span>
+                 <div className="bg-white/5 rounded-xl lg:rounded-2xl p-1.5 sm:p-2 px-3 flex items-center justify-between border border-white/10 shadow-sm">
+                   <div className="flex items-center gap-2.5">
+                     <div className="w-1.5 h-6 lg:h-7 bg-gradient-to-b from-blue-500 to-cyan-500 rounded-full"></div>
+                     <span className="text-sm sm:text-base lg:text-lg font-black text-white tracking-wider">AYT</span>
                    </div>
                    {renderCountdown(settings.examDates?.ayt || '2027-06-20T10:15')}
                  </div>
                  {/* YDT */}
-                 <div className="bg-white/5 rounded-2xl p-2 md:p-3 px-4 flex items-center justify-between border border-white/10 shadow-sm">
-                   <div className="flex items-center gap-3">
-                     <div className="w-1.5 h-8 bg-gradient-to-b from-amber-500 to-orange-500 rounded-full"></div>
-                     <span className="text-lg font-black text-white tracking-widest">YDT</span>
+                 <div className="bg-white/5 rounded-xl lg:rounded-2xl p-1.5 sm:p-2 px-3 flex items-center justify-between border border-white/10 shadow-sm">
+                   <div className="flex items-center gap-2.5">
+                     <div className="w-1.5 h-6 lg:h-7 bg-gradient-to-b from-amber-500 to-orange-500 rounded-full"></div>
+                     <span className="text-sm sm:text-base lg:text-lg font-black text-white tracking-wider">YDT</span>
                    </div>
                    {renderCountdown(settings.examDates?.ydt || '2027-06-20T15:45')}
                  </div>
+               </div>
+            </div>
           </div>
-        </div>
-        </div>
           
         </div>
-        
-
-
-      {/* CEVBOT Asistan Popup */}
-
-
       </div>
+
 
                   <div className={`absolute bottom-40 left-8 z-40 flex items-end gap-4 transition-all duration-700 transform ${robotState.visible ? 'translate-y-0 opacity-100' : 'translate-y-32 opacity-0 pointer-events-none'}`}>
         <div className="w-32 h-32 relative group shrink-0">
