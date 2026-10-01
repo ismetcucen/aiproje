@@ -172,22 +172,30 @@ export default function DigitalBoardViewer() {
   }
 
   
+  // Get active background image (Default to uploaded school campus photo)
+  const validBackgrounds = (settings?.backgroundImages || [])
+    .filter(url => typeof url === 'string' && url.trim().length > 0 && !url.includes('photo-1541339907198'))
+
+  const customSingleBg = (settings?.backgroundImageUrl && !settings.backgroundImageUrl.includes('photo-1541339907198'))
+    ? settings.backgroundImageUrl.trim()
+    : null
+
+  const activeBg = validBackgrounds.length > 0
+    ? validBackgrounds[currentSlideIndex % validBackgrounds.length]
+    : (customSingleBg || '/ohep-campus.jpg')
+
   return (
     <div 
       className="fixed inset-0 w-full overflow-hidden text-white font-sans selection:bg-none flex flex-col"
       style={{
-        backgroundImage: `url('${
-          settings.backgroundImages?.length > 0 
-            ? (settings.backgroundImages[currentSlideIndex] || settings.backgroundImageUrl)
-            : (settings.backgroundImageUrl || "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=3540&auto=format&fit=crop")
-        }')`,
+        backgroundImage: `url('${activeBg}')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         transition: 'background-image 1.5s ease-in-out'
       }}
     >
       {/* Overlay for readability */}
-      <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm z-0"></div>
+      <div className="absolute inset-0 bg-slate-900/55 backdrop-blur-[2px] z-0"></div>
 
       
       {/* BAŞARI DUVARI OVERLAY */}
