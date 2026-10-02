@@ -51,6 +51,39 @@ export default function DigitalBoardViewer() {
     return () => document.removeEventListener('fullscreenchange', handleFs)
   }, [isKioskLocked])
 
+  // Screen Wake Lock: Ekranın kapanmasını / uyku moduna geçmesini tarayıcı seviyesinde engelle
+  useEffect(() => {
+    let wakeLock = null
+    const requestWakeLock = async () => {
+      try {
+        if ('wakeLock' in navigator) {
+          wakeLock = await navigator.wakeLock.request('screen')
+        }
+      } catch (err) {
+        // İzin yoksa veya pil kritikse yut
+      }
+    }
+
+    requestWakeLock()
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        requestWakeLock()
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    document.addEventListener('fullscreenchange', requestWakeLock)
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      document.removeEventListener('fullscreenchange', requestWakeLock)
+      if (wakeLock !== null) {
+        wakeLock.release().catch(() => {})
+      }
+    }
+  }, [])
+
   const toggleFullscreen = () => {
     if (isKioskLocked) {
       setShowPinModal(true)
