@@ -16,6 +16,8 @@ import LiveChatInbox from '../../components/teacher/LiveChatInbox'
 import Stats from '../../components/admin/Stats'
 import ClassManager from '../../components/admin/ClassManager'
 import CurriculumEditor from '../../components/admin/CurriculumEditor'
+import CurriculumAssigner from '../../components/teacher/CurriculumAssigner'
+import SubmissionsList from '../../components/teacher/SubmissionsList'
 import ClassSettings from '../../components/teacher/ClassSettings'
 import ClassDojoBoard from '../../components/teacher/ClassDojoBoard'
 import LiveClassControl from '../../components/teacher/LiveClassControl'
@@ -26,6 +28,7 @@ import AILogs from '../../components/admin/AILogs'
 import FocusTracker from '../../components/student/FocusTracker'
 import RandomStudentWheel from '../../components/teacher/RandomStudentWheel'
 import CountdownTimer from '../../components/teacher/CountdownTimer'
+import BlocklyEditor from '../../components/robotics/BlocklyEditor'
 
 const MENU = [
   { id: 'calendar',   label: 'Ajanda', icon: '📅' },
@@ -42,15 +45,17 @@ const MENU = [
   { id: 'stats',      label: 'İstatistikler', icon: '📊' },
   { id: 'users',      label: 'Kullanıcılar',  icon: '👥' },
   { id: 'ailab', label: 'Lise AI Lab', icon: '🧠' },
-  { id: 'qna', label: 'Mesajlar', icon: '💬' },
-  { id: 'curriculum', label: 'Müfredat',      icon: '📚' },
-  { id: 'games', label: 'Oyunlar', icon: '🎮' },
+  { id: 'curriculum', label: 'Müfredat İçeriği', icon: '📚' },
+  { id: 'assign_curriculum', label: 'Görev Ata', icon: '🚀' },
+  { id: 'submissions', label: 'Üretimler', icon: '📝' },
+  { id: 'games', label: 'Kodlama Alıştırmaları', icon: '🎮' },
   { id: 'robotic',    label: 'Robotik Projeler', icon: '🦾' },
   { id: 'classes',    label: 'Sınıflar',      icon: '🏫' },
   { id: 'dojo',       label: 'Sınıf Yıldızları', icon: '🌟' },
   { id: 'tubitak',    label: 'Tübitak & Teknofest', icon: '🏆' },
   { id: 'showcase', label: 'Vitrin', icon: '🏆' },
   { id: 'attendance', label: 'Yoklama',      icon: '✅' },
+  { id: 'robotics', label: 'ESP32 Robotik', icon: '🤖' },
 ]
 
 export default function AdminPanel() {
@@ -133,6 +138,8 @@ export default function AdminPanel() {
           {active === 'stats'      && <Stats />}
           {active === 'classes'    && <ClassManager schoolCode={profile?.schoolCode} />}
           {active === 'curriculum' && <CurriculumEditor />}
+          {active === 'assign_curriculum' && <CurriculumAssigner />}
+          {active === 'submissions' && <SubmissionsList />}
           {active === 'users'      && <UserManager />}
           {active === 'robotic'    && <RoboticProjects />}
           {active === 'tubitak'    && <TubitakProjects />}
@@ -153,6 +160,7 @@ export default function AdminPanel() {
           {active === 'dojo'       && <ClassDojoBoard />}
           {active === 'wheel'       && <RandomStudentWheel />}
           {active === 'timer'       && <CountdownTimer />}
+          {active === 'robotics'    && <BlocklyEditor />}
         </div>
       </main>
     </div>

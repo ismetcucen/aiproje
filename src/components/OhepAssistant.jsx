@@ -18,8 +18,19 @@ export default function OhepAssistant() {
   const [message, setMessage] = useState('');
   const [isAnimating, setIsAnimating] = useState(false);
 
+  // Initial Position: Center of the screen
+  const getInitialPos = () => {
+    if (typeof window !== 'undefined') {
+      return {
+        left: (window.innerWidth / 2) - 32,
+        bottom: (window.innerHeight / 2) - 32
+      };
+    }
+    return { left: 24, bottom: 24 };
+  };
+
   // Dragging State
-  const [pos, setPos] = useState({ left: 24, bottom: 24 });
+  const [pos, setPos] = useState(getInitialPos);
   const [isDragging, setIsDragging] = useState(false);
   const dragStart = useRef({ x: 0, y: 0, left: 0, bottom: 0, moved: false });
 
@@ -123,23 +134,51 @@ export default function OhepAssistant() {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       const ctx = new AudioContext();
       if (ctx.state === 'suspended') ctx.resume();
-      const osc = ctx.createOscillator();
-      const gainNode = ctx.createGain();
-      osc.type = urgent ? 'square' : 'sine';
-      osc.frequency.setValueAtTime(urgent ? 880 : 523.25, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(urgent ? 440 : 880, ctx.currentTime + 0.2);
-      gainNode.gain.setValueAtTime(0.1, ctx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
-      osc.connect(gainNode);
-      gainNode.connect(ctx.destination);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.3);
+      
+      const playPowerChord = (freq, timeOffset, duration) => {
+        const osc1 = ctx.createOscillator();
+        const osc2 = ctx.createOscillator();
+        const gainNode = ctx.createGain();
+        
+        // Sawtooth and square for a distorted/rock tone
+        osc1.type = 'sawtooth';
+        osc2.type = 'square';
+        
+        // Root and Perfect Fifth (Power chord)
+        osc1.frequency.setValueAtTime(freq, ctx.currentTime + timeOffset);
+        osc2.frequency.setValueAtTime(freq * 1.5, ctx.currentTime + timeOffset);
+        
+        gainNode.gain.setValueAtTime(0.12, ctx.currentTime + timeOffset);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + timeOffset + duration);
+        
+        osc1.connect(gainNode);
+        osc2.connect(gainNode);
+        gainNode.connect(ctx.destination);
+        
+        osc1.start(ctx.currentTime + timeOffset);
+        osc2.start(ctx.currentTime + timeOffset);
+        osc1.stop(ctx.currentTime + timeOffset + duration);
+        osc2.stop(ctx.currentTime + timeOffset + duration);
+      };
+
+      if (urgent) {
+        // Fast heavy chugs for urgent
+        playPowerChord(82.41, 0, 0.15);   // E2
+        playPowerChord(82.41, 0.2, 0.15); // E2
+        playPowerChord(82.41, 0.4, 0.15); // E2
+        playPowerChord(110.00, 0.6, 0.4); // A2
+      } else {
+        // Classic rock riff intro (e.g. A2 - A2 - D3)
+        playPowerChord(110.00, 0, 0.15);     // A2
+        playPowerChord(110.00, 0.2, 0.15);   // A2
+        playPowerChord(146.83, 0.4, 0.4);    // D3
+      }
     } catch(e) {}
 
     setTimeout(() => {
       setMessage('');
       setIsAnimating(false);
-    }, 8000);
+    }, 3000);
   };
 
   if (!isVisible) return null;
@@ -149,27 +188,28 @@ export default function OhepAssistant() {
       className={`fixed z-[100] flex items-end gap-3 pointer-events-none transition-none`}
       style={{ left: `${pos.left}px`, bottom: `${pos.bottom}px` }}
     >
-      {/* Speech Bubble */}
-      {message && (
-        <div className="bg-white/95 backdrop-blur-md text-slate-800 p-4 rounded-2xl rounded-bl-none shadow-2xl border border-indigo-100 max-w-xs animate-[bounce_0.3s_ease-out] pointer-events-auto relative">
-          <p className="text-sm font-semibold leading-relaxed">{message}</p>
-          <div className="absolute -bottom-2 left-0 w-4 h-4 bg-white/95 border-b border-l border-indigo-100 transform rotate-45"></div>
-        </div>
-      )}
-      
       {/* CEVBOT Mascot Avatar */}
       <div 
-        className={`w-16 h-16 rounded-full overflow-hidden flex items-center justify-center shadow-[0_10px_25px_rgba(79,70,229,0.4)] border-[3px] border-white flex-shrink-0 bg-indigo-50 pointer-events-auto transition-transform duration-300 select-none ${isDragging ? 'cursor-grabbing scale-110' : 'cursor-grab'} ${isAnimating && !isDragging ? 'animate-spin-happy scale-110' : ''} ${!isDragging && !isAnimating ? 'animate-float hover:scale-105' : ''}`}
+        className={`w-16 h-16 rounded-full overflow-hidden flex items-center justify-center shadow-[0_10px_25px_rgba(79,70,229,0.4)] border-[3px] border-white flex-shrink-0 bg-indigo-50 pointer-events-auto transition-transform duration-300 select-none ${isDragging ? 'cursor-grabbing scale-110' : 'cursor-grab'} ${isAnimating && !isDragging ? 'animate-cevbot-talk' : ''} ${!isDragging && !isAnimating ? 'animate-float hover:scale-105' : ''}`}
         onMouseDown={onMouseDown}
         onTouchStart={onMouseDown}
         onClick={handleAvatarClick}
       >
         <img 
-          src="/cevbot.jpg" 
+          src="/cevbot.png" 
           alt="CEVBOT" 
-          className="w-full h-full object-cover pointer-events-none" 
+          className="w-full h-full object-cover pointer-events-none"
+          draggable="false"
         />
       </div>
+
+      {/* Speech Bubble */}
+      {message && (
+        <div className="bg-white/95 backdrop-blur-md text-slate-800 p-4 rounded-2xl rounded-br-none shadow-2xl border border-indigo-100 max-w-xs animate-[bounce_0.3s_ease-out] pointer-events-auto relative">
+          <p className="text-sm font-semibold leading-relaxed">{message}</p>
+          <div className="absolute -bottom-2 right-0 w-4 h-4 bg-white/95 border-b border-r border-indigo-100 transform rotate-45"></div>
+        </div>
+      )} 
     </div>
   );
 }

@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { CURRICULUM, GRADES } from '../../data/curriculum'
 import { db } from '../../firebase/config'
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
+import { getCurriculumEdits } from '../../firebase/schema'
 
 export default function CurriculumEditor() {
   const [selectedGrade, setSelectedGrade] = useState('3')
@@ -10,6 +11,10 @@ export default function CurriculumEditor() {
   const [saving,        setSaving]        = useState(false)
   const [success,       setSuccess]       = useState('')
   const [localEdits,    setLocalEdits]    = useState({})
+
+  useEffect(() => {
+    getCurriculumEdits().then(edits => setLocalEdits(edits)).catch(console.error)
+  }, [])
 
   function openEdit(week) {
     const grade = selectedGrade

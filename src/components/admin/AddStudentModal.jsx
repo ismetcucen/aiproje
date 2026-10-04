@@ -23,6 +23,12 @@ export const VISUAL_PASSWORDS = [
   { id: 'sunflower', icon: '🌻', label: 'Çiçek' },
 ]
 
+export const SIMPLE_PASSWORDS = [
+  'kaplan', 'kartal', 'yildiz', 'simsek', 'volkan', 'ruzgar', 'destan', 'harika', 
+  'kahraman', 'dostluk', 'basari', 'mucize', 'sampiyon', 'gezegen', 
+  'galaksi', 'kaptan', 'leopar', 'atmaca', 'sirius', 'saturn', 'jupiter'
+];
+
 
 function normalizeStr(str) {
   if (!str) return '';
@@ -44,12 +50,11 @@ function getSecondaryAuth() {
 }
 
 export default function AddStudentModal({ classInfo, schoolCode, onClose, onSuccess }) {
-  const [mode, setMode] = useState('visual') // 'visual' or 'email'
+  const [mode, setMode] = useState('auto') // 'auto' or 'email'
 
   const [form, setForm] = useState({
     fullName:    '',
-    
-    visualId:    'fox', // default
+    visualId:    'fox', // default but won't be used for auto
     email:       '',
     password:    '',
     gradeNumber: classInfo?.grade || '',
@@ -72,10 +77,13 @@ export default function AddStudentModal({ classInfo, schoolCode, onClose, onSucc
     let targetEmail = ''
     let targetPassword = ''
     
-    if (mode === 'visual') {
+    if (mode === 'auto') {
       if (!form.gradeNumber) return setError('Sınıf seviyesi gerekli.')
-      targetEmail = `${normalizeStr(form.fullName).replace(/[^a-z0-9]/g, '')}_${form.visualId}@aistudio.com`
-      targetPassword = `${form.visualId}_123456`
+      const slug = normalizeStr(form.fullName).replace(/[^a-z0-9]/g, '');
+      const randomWord = SIMPLE_PASSWORDS[Math.floor(Math.random() * SIMPLE_PASSWORDS.length)];
+      const randomNum = Math.floor(10 + Math.random() * 90);
+      targetEmail = `${slug}${randomNum}@aistudio.com`
+      targetPassword = randomWord
     } else {
       if (!form.email.trim()) return setError('Email gerekli.')
       if (!form.password || form.password.length < 6) return setError('Şifre en az 6 karakter olmalı.')
@@ -114,7 +122,8 @@ export default function AddStudentModal({ classInfo, schoolCode, onClose, onSucc
           classLevel:  classLevelFromGrade(form.gradeNumber),
           gradeNumber: Number(form.gradeNumber),
           schoolCode,
-          visualId:    mode === 'visual' ? form.visualId : null,
+          visualId:    null,
+          simplePass:  mode === 'auto' ? targetPassword : null,
           files:       [],
           createdAt:   serverTimestamp(),
           isActive:    true,
@@ -152,13 +161,13 @@ export default function AddStudentModal({ classInfo, schoolCode, onClose, onSucc
 
         {/* Tab Seçimi */}
         <div className="flex bg-white shadow-sm p-1.5 rounded-2xl mb-6 relative z-10">
-          <button type="button" onClick={() => setMode('visual')}
-            className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all ${mode === 'visual' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}>
-            🦄 Görsel Şifre
+          <button type="button" onClick={() => setMode('auto')}
+            className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all ${mode === 'auto' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}>
+            ✨ Otomatik Şifre (Kolay)
           </button>
           <button type="button" onClick={() => setMode('email')}
             className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all ${mode === 'email' ? 'bg-slate-50 text-white shadow-sm border border-slate-200' : 'text-slate-500 hover:text-slate-800'}`}>
-            📧 E-posta
+            📧 E-posta (Manuel)
           </button>
         </div>
 
@@ -175,7 +184,7 @@ export default function AddStudentModal({ classInfo, schoolCode, onClose, onSucc
             <label className="block text-slate-700 text-xs font-bold uppercase tracking-wider mb-2">Ad Soyad</label>
             <input value={form.fullName} onChange={e => setForm(p => ({...p, fullName: e.target.value}))}
               placeholder="Ali Yılmaz" required
-              className="w-full bg-white shadow-sm border border-slate-200 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all" />
+              className="w-full bg-white shadow-sm border border-slate-200 text-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all" />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -184,25 +193,18 @@ export default function AddStudentModal({ classInfo, schoolCode, onClose, onSucc
               <input type="number" min={1} max={12} value={form.gradeNumber}
                 onChange={e => setForm(p => ({...p, gradeNumber: e.target.value}))}
                 placeholder="7"
-                className="w-full bg-white shadow-sm border border-slate-200 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 transition-all" />
+                className="w-full bg-white shadow-sm border border-slate-200 text-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 transition-all" />
             </div>
           </div>
 
-          {mode === 'visual' ? (
+          {mode === 'auto' ? (
             <>
-              
-              <div>
-                <label className="block text-slate-700 text-xs font-bold uppercase tracking-wider mb-3">Gizli Görsel Ataması</label>
-                <div className="grid grid-cols-5 gap-2 max-h-48 overflow-y-auto custom-scrollbar p-1">
-                  {VISUAL_PASSWORDS.map(vp => (
-                    <button type="button" key={vp.id} onClick={() => setForm(p => ({...p, visualId: vp.id}))} title={vp.label}
-                      className={`text-3xl p-2 rounded-xl transition-all border-2 ${
-                        form.visualId === vp.id ? 'bg-indigo-500/20 border-indigo-500 scale-110 shadow-lg' : 'bg-white shadow-sm border-transparent hover:border-slate-200 opacity-60 hover:opacity-100'
-                      }`}>
-                      {vp.icon}
-                    </button>
-                  ))}
-                </div>
+              <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-4 text-center mt-4">
+                <span className="text-2xl mb-2 block">✨</span>
+                <h4 className="text-indigo-800 font-bold text-sm mb-1">Kolay Giriş Sistemi</h4>
+                <p className="text-indigo-600/80 text-xs leading-relaxed">
+                  Öğrenci için otomatik olarak "isim+sayı" şeklinde bir kullanıcı adı ve akılda kalıcı tek kelimelik (örn: kaplan, yildiz) bir şifre oluşturulacaktır. Şifrelerde özel karakter bulunmaz.
+                </p>
               </div>
             </>
           ) : (
@@ -211,13 +213,13 @@ export default function AddStudentModal({ classInfo, schoolCode, onClose, onSucc
                 <label className="block text-slate-700 text-xs font-bold uppercase tracking-wider mb-2">Email</label>
                 <input type="email" value={form.email} onChange={e => setForm(p => ({...p, email: e.target.value}))}
                   placeholder="ali@okul.edu.tr" required={mode==='email'}
-                  className="w-full bg-white shadow-sm border border-slate-200 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 transition-all" />
+                  className="w-full bg-white shadow-sm border border-slate-200 text-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 transition-all" />
               </div>
               <div>
                 <label className="block text-slate-700 text-xs font-bold uppercase tracking-wider mb-2">Şifre</label>
                 <input type="password" value={form.password} onChange={e => setForm(p => ({...p, password: e.target.value}))}
                   placeholder="En az 6 karakter" required={mode==='email'}
-                  className="w-full bg-white shadow-sm border border-slate-200 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 transition-all" />
+                  className="w-full bg-white shadow-sm border border-slate-200 text-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 transition-all" />
               </div>
             </>
           )}

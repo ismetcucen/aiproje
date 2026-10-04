@@ -5,6 +5,7 @@ import StudentStatusWidget from '../../components/student/StudentStatusWidget'
 import DojoNotificationListener from '../../components/student/DojoNotificationListener'
 import AvatarCreatorModal from '../../components/student/AvatarCreatorModal'
 import NotificationBell from '../../components/NotificationBell'
+import ChangePasswordModal from '../../components/student/ChangePasswordModal'
 import { logAttendance } from '../../firebase/schema'
 import AssignmentList from '../../components/student/AssignmentList'
 import Studio from '../../components/student/Studio'
@@ -22,6 +23,7 @@ import LiveMarquee from '../../components/LiveMarquee'
 import HighSchoolAILab from '../../components/student/HighSchoolAILab'
 import InstagramWidget from '../../components/InstagramWidget'
 import { getSchoolSettings } from '../../firebase/schema'
+import BlocklyEditor from '../../components/robotics/BlocklyEditor'
 
 const MENU = [
   { id: 'portfolio', label: 'Benim Portfolyom', icon: '🏆' },
@@ -31,8 +33,7 @@ const MENU = [
   { id: 'portfolio',   label: 'Portfolyo', icon: '🗂️' },
   { id: 'leaderboard', label: 'Sıralama', icon: '🏆' },
   { id: 'showcase', label: 'Vitrin', icon: '🌟' },
-
-  
+  { id: 'robotics', label: 'ESP32 Robotik', icon: '🤖' },
 ]
 
 export default function StudentPanel() {
@@ -41,6 +42,7 @@ export default function StudentPanel() {
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [showAvatarModal, setShowAvatarModal] = useState(false)
+  const [showPasswordModal, setShowPasswordModal] = useState(false)
   const [showRules, setShowRules] = useState(!localStorage.getItem('aiLabRulesAccepted_v3'))
 
   useEffect(() => {
@@ -94,9 +96,8 @@ export default function StudentPanel() {
         <nav className="flex-1 p-4 space-y-1.5 overflow-y-auto custom-scrollbar">
           {[
             ...MENU, 
-            ...(settings.messagingEnabled ? [{ id: 'chat', label: 'Mesajlar', icon: '💬' }] : []),
             ...(settings.codingModuleEnabled ? [
-              { id: "games", label: "Oyunlar", icon: "🎮" }, 
+              { id: "games", label: "Kodlama Alıştırmaları", icon: "🎮" }, 
               { id: "tools", label: "Araçlar", icon: "🛠️" },
               ...(profile?.gradeNumber >= 9 ? [{ id: "ailab", label: "Lise Yapay Zeka", icon: "🧠" }] : []),
               ...(settings.aiAssistantEnabled ? [{ id: 'ai', label: 'OHEP AI', icon: '🤖' }] : [])
@@ -148,6 +149,12 @@ export default function StudentPanel() {
             </div>
             </div>
           </div>
+          <button onClick={() => setShowPasswordModal(true)}
+            title={!sidebarOpen ? "Şifremi Değiştir" : ""}
+            className={`w-full flex items-center mb-1 ${sidebarOpen ? "justify-start px-3" : "justify-center px-0"} px-3 py-2.5 rounded-xl text-slate-600 hover:text-indigo-700 hover:bg-white text-sm font-medium transition-all group border border-transparent`}>
+            <span className="text-lg flex-shrink-0 group-hover:scale-110 transition-transform">🔑</span>
+            {sidebarOpen && <span className="ml-3">Şifremi Değiştir</span>}
+          </button>
           <button onClick={logout}
             title={!sidebarOpen ? "Çıkış Yap" : ""}
             className={`w-full flex items-center ${sidebarOpen ? "justify-start px-3" : "justify-center px-0"} px-3 py-2.5 rounded-xl text-red-500 hover:text-red-700 hover:bg-red-50 text-sm font-medium transition-all group border border-transparent hover:border-red-200`}>
@@ -165,7 +172,7 @@ export default function StudentPanel() {
           <div className="flex items-center gap-4">
             <div>
               <h1 className="text-slate-800 font-bold text-lg leading-tight">
-                {[...MENU, { id: 'games', label: 'Oyunlar' }, { id: 'tools', label: 'Araçlar' }, { id: 'ailab', label: 'Lise Yapay Zeka' }, { id: 'ai', label: 'OHEP AI' }].find(m => m.id === active)?.label}
+                {[...MENU, { id: 'games', label: 'Kodlama Alıştırmaları' }, { id: 'tools', label: 'Araçlar' }, { id: 'ailab', label: 'Lise Yapay Zeka' }, { id: 'ai', label: 'OHEP AI' }].find(m => m.id === active)?.label}
               </h1>
               <p className="text-slate-400 text-xs font-medium">Çalışma Alanı</p>
             </div>
@@ -194,10 +201,9 @@ export default function StudentPanel() {
           {active === 'showcase'    && <ShowcaseGallery />}
           {active === 'ai'          && <AiAssistant />}
           {active === 'ailab'       && <HighSchoolAILab />}
-          {active === 'chat'        && <StudentLiveChat />}
+          {active === 'robotics'    && <BlocklyEditor />}
         </div>
       </main>
-      {settings.messagingEnabled && <StudentLiveChat />}
       {showRules && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
           <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200">
@@ -240,6 +246,10 @@ export default function StudentPanel() {
             </div>
           </div>
         </div>
+      )}
+      
+      {showPasswordModal && (
+        <ChangePasswordModal onClose={() => setShowPasswordModal(false)} />
       )}
     </div>
     </>

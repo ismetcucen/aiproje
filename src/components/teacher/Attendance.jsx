@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import { getClassesBySchool, getStudentsBySchool } from '../../firebase/schema'
+import { doc, updateDoc, arrayUnion } from 'firebase/firestore'
+import { db } from '../../firebase/config'
 import * as XLSX from 'xlsx'
 
 export default function Attendance() {
@@ -10,7 +12,7 @@ export default function Attendance() {
   const [selectedClass, setSelectedClass] = useState('')
   const [loading, setLoading] = useState(true)
   
-  // Week selection
+  // Day selection
   const [selectedDate, setSelectedDate] = useState(new Date())
 
   useEffect(() => {
@@ -34,41 +36,47 @@ export default function Attendance() {
     }
   }
 
-  function getStartOfWeek(date) {
-    const d = new Date(date)
-    d.setHours(0, 0, 0, 0)
-    const day = d.getDay()
-    const diff = d.getDate() - day + (day === 0 ? -6 : 1) // adjust when day is sunday
-    return new Date(d.setDate(diff))
-  }
-
-  const startOfWeek = getStartOfWeek(selectedDate)
-  const endOfWeek = new Date(startOfWeek)
-  endOfWeek.setDate(startOfWeek.getDate() + 6)
-  endOfWeek.setHours(23, 59, 59, 999)
-
   const classObj = classes.find(c => c.id === selectedClass)
   const classStudents = students.filter(s => 
     String(s.gradeNumber) === String(classObj?.grade)
   )
 
-  function didAttendThisWeek(student) {
+  const dateStr = selectedDate.toISOString().split('T')[0] // YYYY-MM-DD format for comparison
+
+  function didAttendThisDay(student) {
     if (!student.loginDates || !Array.isArray(student.loginDates)) return false
-    return student.loginDates.some(dateStr => {
-      const d = new Date(dateStr)
-      return d >= startOfWeek && d <= endOfWeek
-    })
+    return student.loginDates.some(d => d.startsWith(dateStr))
   }
 
-  function handlePrevWeek() {
+  async function toggleAttendance(student) {
+    const attended = didAttendThisDay(student)
+    const studentRef = doc(db, 'users', student.id)
+    
+    try {
+      if (attended) {
+        // Remove any login string that starts with dateStr
+        const newDates = (student.loginDates || []).filter(d => !d.startsWith(dateStr))
+        await updateDoc(studentRef, { loginDates: newDates })
+        setStudents(prev => prev.map(s => s.id === student.id ? {...s, loginDates: newDates} : s))
+      } else {
+        // Add dateStr
+        await updateDoc(studentRef, { loginDates: arrayUnion(dateStr) })
+        setStudents(prev => prev.map(s => s.id === student.id ? {...s, loginDates: [...(s.loginDates||[]), dateStr]} : s))
+      }
+    } catch(e) {
+      console.error("Yoklama güncellenirken hata oluştu:", e)
+    }
+  }
+
+  function handlePrevDay() {
     const d = new Date(selectedDate)
-    d.setDate(d.getDate() - 7)
+    d.setDate(d.getDate() - 1)
     setSelectedDate(d)
   }
 
-  function handleNextWeek() {
+  function handleNextDay() {
     const d = new Date(selectedDate)
-    d.setDate(d.getDate() + 7)
+    d.setDate(d.getDate() + 1)
     setSelectedDate(d)
   }
 
@@ -77,14 +85,14 @@ export default function Attendance() {
     const data = classStudents.map(s => ({
       'Öğrenci Adı': s.fullName,
       'Sınıf': `${s.gradeNumber}/${s.section}`,
-      'Hafta': `${startOfWeek.toLocaleDateString('tr-TR')} - ${endOfWeek.toLocaleDateString('tr-TR')}`,
-      'Durum': didAttendThisWeek(s) ? 'Geldi' : 'Gelmedi'
+      'Tarih': selectedDate.toLocaleDateString('tr-TR'),
+      'Durum': didAttendThisDay(s) ? 'Geldi' : 'Gelmedi'
     }))
 
     const ws = XLSX.utils.json_to_sheet(data)
     const wb = XLSX.utils.book_new()
     XLSX.utils.book_append_sheet(wb, ws, 'Yoklama')
-    XLSX.writeFile(wb, `Yoklama_${classObj.grade}_${classObj.section}_${startOfWeek.toLocaleDateString('tr-TR')}.xlsx`)
+    XLSX.writeFile(wb, `Yoklama_${classObj.grade}_${classObj.section}_${dateStr}.xlsx`)
   }
 
   if (loading) return <div className="text-center py-20 text-slate-500">Yükleniyor...</div>
@@ -93,8 +101,8 @@ export default function Attendance() {
     <div className="max-w-4xl">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-slate-800 text-xl font-semibold">Yoklama Takibi</h2>
-          <p className="text-slate-500 text-sm mt-0.5">Sisteme giriş yapan öğrencilerin otomatik yoklaması.</p>
+          <h2 className="text-slate-800 text-xl font-semibold">Manuel Yoklama Takibi</h2>
+          <p className="text-slate-500 text-sm mt-0.5">Öğrencilerin yoklamasını gün gün seçerek manuel olarak alabilirsiniz.</p>
         </div>
         <button onClick={exportToExcel} className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
           Excel İndir
@@ -103,24 +111,27 @@ export default function Attendance() {
 
       <div className="bg-white shadow-sm border border-slate-200 rounded-xl p-5 mb-6 flex flex-wrap gap-4 items-center justify-between">
         <div>
-          <label className="block text-slate-500 text-xs mb-1">Sınıf Seçin</label>
+          <label className="block text-slate-500 text-xs mb-1 font-bold">Sınıf Seçin</label>
           <select value={selectedClass} onChange={e => setSelectedClass(e.target.value)}
-            className="bg-slate-50 border border-slate-200 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500">
+            className="bg-slate-50 border border-slate-200 text-slate-800 font-medium rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 min-w-[200px]">
             {classes.map(c => (
               <option key={c.id} value={c.id}>{c.name}</option>
             ))}
           </select>
         </div>
 
-        <div className="flex items-center gap-4 bg-slate-50 p-2 rounded-lg border border-slate-200">
-          <button onClick={handlePrevWeek} className="text-slate-500 hover:text-white px-2">◀</button>
-          <div className="text-center min-w-[150px]">
-            <p className="text-slate-700 text-sm font-medium">
-              {startOfWeek.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })} - {endOfWeek.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}
-            </p>
-            <p className="text-slate-500 text-xs">Pzt - Paz</p>
+        <div>
+          <label className="block text-slate-500 text-xs mb-1 font-bold">Tarih</label>
+          <div className="flex items-center gap-4 bg-slate-50 p-1.5 rounded-lg border border-slate-200">
+            <button onClick={handlePrevDay} className="text-slate-500 hover:text-indigo-600 hover:bg-white rounded px-2 py-1 transition-colors">◀</button>
+            <div className="text-center min-w-[120px]">
+              <p className="text-slate-700 text-sm font-bold">
+                {selectedDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}
+              </p>
+              <p className="text-slate-500 text-xs">{selectedDate.toLocaleDateString('tr-TR', { weekday: 'long' })}</p>
+            </div>
+            <button onClick={handleNextDay} className="text-slate-500 hover:text-indigo-600 hover:bg-white rounded px-2 py-1 transition-colors">▶</button>
           </div>
-          <button onClick={handleNextWeek} className="text-slate-500 hover:text-white px-2">▶</button>
         </div>
       </div>
 
@@ -128,48 +139,38 @@ export default function Attendance() {
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-slate-50/50 border-b border-slate-200">
-              <th className="p-4 text-slate-500 text-sm font-medium">Öğrenci Adı</th>
-              <th className="p-4 text-slate-500 text-sm font-medium">Durum</th>
-              <th className="p-4 text-slate-500 text-sm font-medium text-right">Detay (Giriş Tarihleri)</th>
+              <th className="p-4 text-slate-500 text-sm font-bold">Öğrenci Adı</th>
+              <th className="p-4 text-slate-500 text-sm font-bold text-center">Durum (Tıklayarak Değiştir)</th>
             </tr>
           </thead>
           <tbody>
             {classStudents.length === 0 ? (
-              <tr><td colSpan="3" className="p-8 text-center text-slate-500">Bu sınıfta öğrenci bulunmuyor.</td></tr>
+              <tr><td colSpan="2" className="p-8 text-center text-slate-500">Bu sınıfta öğrenci bulunmuyor.</td></tr>
             ) : (
               classStudents.map(student => {
-                const attended = didAttendThisWeek(student)
+                const attended = didAttendThisDay(student)
                 return (
-                  <tr key={student.id} className="border-b border-slate-200/50 hover:bg-slate-50/20 transition-colors">
-                    <td className="p-4 text-white text-sm">
+                  <tr key={student.id} className="border-b border-slate-200/50 hover:bg-slate-50/50 transition-colors">
+                    <td className="p-4 text-slate-800 font-medium text-sm">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-700 font-bold text-xs">
-                          {student.fullName.charAt(0)}
+                        <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-700 font-bold text-xs">
+                          {student.fullName.charAt(0).toUpperCase()}
                         </div>
                         {student.fullName}
                       </div>
                     </td>
-                    <td className="p-4">
-                      {attended ? (
-                        <span className="inline-flex items-center gap-1.5 bg-green-900/30 text-green-400 border border-green-800/50 px-2.5 py-1 rounded-full text-xs font-semibold">
-                          <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span> Geldi
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1.5 bg-red-900/30 text-red-400 border border-red-800/50 px-2.5 py-1 rounded-full text-xs font-semibold">
-                          <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span> Gelmedi
-                        </span>
-                      )}
-                    </td>
-                    <td className="p-4 text-right">
-                      {attended ? (
-                        <span className="text-slate-500 text-xs">
-                          {student.loginDates.filter(d => {
-                            const date = new Date(d); return date >= startOfWeek && date <= endOfWeek;
-                          }).join(', ')}
-                        </span>
-                      ) : (
-                        <span className="text-slate-600 text-xs">-</span>
-                      )}
+                    <td className="p-4 text-center">
+                      <button 
+                        onClick={() => toggleAttendance(student)}
+                        className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-sm ${
+                          attended 
+                            ? 'bg-green-100 text-green-700 hover:bg-green-200 border border-green-200' 
+                            : 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-100'
+                        }`}
+                      >
+                        <span className={`w-2 h-2 rounded-full ${attended ? 'bg-green-500' : 'bg-red-500'}`}></span>
+                        {attended ? '✅ Geldi' : '❌ Gelmedi'}
+                      </button>
                     </td>
                   </tr>
                 )

@@ -26,7 +26,9 @@ export async function getUserProfile(uid) {
 }
 
 export async function getStudentsBySchool(schoolCode) {
-  const q = query(collection(db, 'users'), where('role', '==', ROLES.STUDENT), where('schoolCode', '==', schoolCode), )
+  const constraints = [where('role', '==', ROLES.STUDENT)]
+  if (schoolCode) constraints.push(where('schoolCode', '==', schoolCode))
+  const q = query(collection(db, 'users'), ...constraints)
   const snap = await getDocs(q)
   return snap.docs.map(d => ({ id: d.id, ...d.data() }))
 }
@@ -80,26 +82,34 @@ export async function createSubmission({ userId, assignmentId, content, contentT
   return ref.id
 }
 
-export async function updateSubmission(submissionId, { content, aiUsed, aiNotes }) {
-  await updateDoc(doc(db, 'submissions', submissionId), { content, aiUsed: aiUsed || false, aiNotes: aiNotes || null, updatedAt: serverTimestamp() })
+export async function updateSubmission(submissionId, { content, aiUsed, aiNotes, files }) {
+  await updateDoc(doc(db, 'submissions', submissionId), { 
+    content, 
+    aiUsed: aiUsed || false, 
+    aiNotes: aiNotes || null, 
+    files: files || [],
+    updatedAt: serverTimestamp() 
+  })
 }
 
 export async function getSubmissionsByStudent(userId) {
-  const q = query(collection(db, 'submissions'), where('userId', '==', userId), orderBy('createdAt', 'desc'))
+  const q = query(collection(db, 'submissions'), where('userId', '==', userId))
   const snap = await getDocs(q)
-  return snap.docs.map(d => ({ id: d.id, ...d.data() }))
+  return snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0))
 }
 
 export async function getSubmissionsByAssignment(assignmentId) {
-  const q = query(collection(db, 'submissions'), where('assignmentId', '==', assignmentId), orderBy('createdAt', 'desc'))
+  const q = query(collection(db, 'submissions'), where('assignmentId', '==', assignmentId))
   const snap = await getDocs(q)
-  return snap.docs.map(d => ({ id: d.id, ...d.data() }))
+  return snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0))
 }
 
 export async function getSubmissionsBySchool(schoolCode) {
-  const q = query(collection(db, 'submissions'), where('schoolCode', '==', schoolCode), orderBy('createdAt', 'desc'))
+  const constraints = []
+  if (schoolCode) constraints.push(where('schoolCode', '==', schoolCode))
+  const q = query(collection(db, 'submissions'), ...constraints)
   const snap = await getDocs(q)
-  return snap.docs.map(d => ({ id: d.id, ...d.data() }))
+  return snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0))
 }
 
 export async function upsertFeedback({ submissionId, teacherId, comment, score, isShowcase }) {
@@ -318,9 +328,21 @@ export async function getPublicPortfolio(userId) {
   // if (!userData.publicPortfolio) return null; // Make everything public for now
 
   const submissions = await getSubmissionsByStudent(userId);
+  
+  // Fetch assignment details for each submission so parents can see the task title
+  const populatedSubmissions = await Promise.all(submissions.map(async (sub) => {
+    let assignment = null;
+    if (sub.assignmentId) {
+      const aDoc = await getDoc(doc(db, 'assignments', sub.assignmentId));
+      if (aDoc.exists()) assignment = aDoc.data();
+    }
+    return { ...sub, assignment };
+  }));
+  
+  // Velilerin, henüz notlanmamış olsa bile öğrencilerin görevlerini ve cevaplarını görebilmesi için filtreyi kaldırdık.
   return {
     student: { fullName: userData.fullName, gradeNumber: userData.gradeNumber, badges: userData.badges || [] },
-    submissions: submissions.filter(s => s.score !== null) // only graded
+    submissions: populatedSubmissions 
   };
 }
 
@@ -805,4 +827,35 @@ export const logAIPrompt = async (schoolCode, userProfile, promptText, modelResp
   } catch (err) {
     console.error("AI log kaydedilemedi:", err)
   }
+}
+
+export async function getCurriculumEdits() {
+  const q = query(collection(db, 'curriculum_edits'))
+  const snap = await getDocs(q)
+  const edits = {}
+  snap.docs.forEach(d => {
+    const data = d.data()
+    // Group by grade and week
+    const key = `${data.grade}_${data.week}`
+    // If there are multiple edits for the same week, we should take the latest. 
+    // Assuming the query doesn't sort, we can sort in JS or use the last one.
+    // To be safe, we'll compare editedAt if they exist.
+    if (!edits[key] || (data.editedAt && edits[key].editedAt && data.editedAt.toMillis() > edits[key].editedAt.toMillis())) {
+      edits[key] = data
+    }
+  })
+  return edits
+}
+
+export async function getAssignmentsBySchool(schoolCode) {
+  const constraints = []
+  if (schoolCode) constraints.push(where('schoolCode', '==', schoolCode))
+  const q = query(collection(db, 'assignments'), ...constraints)
+  const snap = await getDocs(q)
+  return snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0))
+}
+
+export async function getAllClassStudents() {
+  const snap = await getDocs(collection(db, 'class_students'));
+  return snap.docs.map(d => d.data());
 }

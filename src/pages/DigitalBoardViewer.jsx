@@ -400,7 +400,7 @@ export default function DigitalBoardViewer() {
         <div className="w-32 h-32 relative group shrink-0">
            <div className="absolute inset-0 bg-indigo-500 rounded-full blur-xl opacity-50 animate-pulse"></div>
            <div className="relative w-full h-full bg-indigo-50 border-4 border-indigo-400 rounded-full overflow-hidden shadow-[0_0_30px_rgba(99,102,241,0.6)] flex items-center justify-center">
-             <img src="/cevbot.jpg" alt="CEVBOT" className="w-full h-full object-cover" />
+             <img src="/cevbot.png" alt="CEVBOT" className="w-full h-full object-cover" />
            </div>
            <div className="absolute -bottom-2 bg-indigo-600 text-white text-xs font-black px-4 py-1 rounded-full left-1/2 transform -translate-x-1/2 whitespace-nowrap shadow-lg">CEVBOT</div>
         </div>

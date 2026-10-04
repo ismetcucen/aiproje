@@ -93,13 +93,29 @@ export default function ParentPortfolio({ studentId }) {
                   <h3 className="font-bold text-slate-800 text-lg">{item.assignment?.title || 'Görev'}</h3>
                   <p className="text-slate-500 text-sm">{item.createdAt?.toDate?.()?.toLocaleDateString('tr-TR') || ''}</p>
                 </div>
-                {item.score !== null && (
+                {item.score !== null && item.score !== undefined ? (
                   <div className="bg-green-50 text-green-700 px-3 py-1 rounded-xl font-bold border border-green-200">
                     {item.score} Puan
                   </div>
+                ) : (
+                  <div className="bg-slate-100 text-slate-500 px-3 py-1 rounded-xl font-semibold border border-slate-200 text-sm">
+                    Bekliyor
+                  </div>
                 )}
               </div>
-              <p className="text-slate-700 whitespace-pre-wrap">{item.content}</p>
+              
+              <div className="bg-slate-50 border border-slate-100 p-4 rounded-xl mb-4">
+                <p className="text-slate-600 text-xs font-bold uppercase tracking-wider mb-2">Öğrencinin Cevabı</p>
+                <p className="text-slate-800 whitespace-pre-wrap">
+                  {typeof item.content === 'string' && item.content.trim() !== ''
+                    ? item.content.split(/(\s+)/).map((word, index) => 
+                        word.match(/^https?:\/\/[^\s]+$/) 
+                          ? <a key={index} href={word} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline break-all">{word}</a>
+                          : word
+                      ) 
+                    : (item.content || <span className="text-slate-400 italic">Sadece dosya yüklendi veya boş.</span>)}
+                </p>
+              </div>
 
               {item.files && item.files.length > 0 && (
                 <div className="mt-4 flex flex-wrap gap-2">

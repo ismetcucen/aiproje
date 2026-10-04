@@ -232,7 +232,7 @@ export default function FocusTracker() {
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center shadow-lg border-2 border-indigo-300 flex-shrink-0 bg-white">
             <img 
-              src="/cevbot.jpg" 
+              src="/cevbot.png" 
               alt="CEVBOT" 
               className={`w-full h-full object-cover transition-all duration-300 ${currentEmotion === 'happy' ? 'animate-spin-happy' : 'animate-float'}`} 
             />

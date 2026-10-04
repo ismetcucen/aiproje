@@ -188,7 +188,7 @@ export default function CodingGames() {
             onClick={() => setActiveGame(null)}
             className="bg-red-50 hover:bg-red-100 text-red-600 px-6 py-2 rounded-xl font-bold transition-colors"
           >
-            Oyunlara Dön
+            Alıştırmalara Dön
           </button>
           </div>
         </div>

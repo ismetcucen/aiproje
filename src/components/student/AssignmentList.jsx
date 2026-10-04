@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../hooks/useAuth'
-import { getAssignmentsForStudent, getSubmissionsByStudent } from '../../firebase/schema'
+import { getAssignmentsForStudent, getSubmissionsByStudent, getCurriculumEdits } from '../../firebase/schema'
 import { CURRICULUM } from '../../data/curriculum'
 
 const CONTENT_TYPE_LABELS = {
@@ -11,6 +11,7 @@ export default function AssignmentList({ onStart }) {
   const { user, profile } = useAuth()
   const [assignments, setAssignments] = useState([])
   const [submissions, setSubmissions] = useState([])
+  const [edits,       setEdits]       = useState({})
   const [loading,     setLoading]     = useState(true)
   const [error,       setError]       = useState('')
 
@@ -19,12 +20,14 @@ export default function AssignmentList({ onStart }) {
   async function loadData() {
     setLoading(true)
     try {
-      const [asgns, subs] = await Promise.all([
+      const [asgns, subs, editsData] = await Promise.all([
         getAssignmentsForStudent({ classLevel: profile.classLevel, schoolCode: profile.schoolCode, gradeNumber: profile.gradeNumber }),
         getSubmissionsByStudent(user.uid),
+        getCurriculumEdits()
       ])
       setAssignments(asgns)
       setSubmissions(subs)
+      setEdits(editsData || {})
     } catch (err) {
       console.error(err)
       setError('Gorevler yuklenemedi.')
@@ -49,7 +52,12 @@ export default function AssignmentList({ onStart }) {
 
   // profile.gradeNumber might be "3", "4" etc.
   const gradeStr = profile?.gradeNumber ? String(profile.gradeNumber) : "3"
-  const curriculum = CURRICULUM[gradeStr] || []
+  const rawCurriculum = CURRICULUM[gradeStr] || []
+  
+  const curriculum = rawCurriculum.map(w => {
+    const edit = edits[`${gradeStr}_${w.week}`]
+    return edit ? { ...w, ...edit, title: edit.title || w.title } : w
+  })
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -60,9 +68,8 @@ export default function AssignmentList({ onStart }) {
 
       <div className="space-y-4">
         {curriculum.map(week => {
-          // Find if there is an assignment for this week
-          // It could match by week number or title
-          const assignment = assignments.find(a => a.week === week.week || a.title === week.title)
+          // Strict matching by week number to prevent one assignment from appearing in multiple weeks
+          const assignment = assignments.find(a => Number(a.week) === Number(week.week))
           
           const isAssigned = !!assignment
           const status = assignment ? getStatus(assignment.id) : null
@@ -87,8 +94,8 @@ export default function AssignmentList({ onStart }) {
                         {week.week}
                       </div>
                       <div>
-                        <h3 className="text-slate-900 text-xl font-bold">{week.title}</h3>
-                        <p className="text-slate-500 text-sm font-medium">{week.dateRange}</p>
+                        <h3 className="text-slate-900 text-xl font-bold">{week.title || assignment.title}</h3>
+                        {week.dateRange && <p className="text-slate-500 text-sm font-medium">{week.dateRange}</p>}
                       </div>
                       
                       {status === 'graded' && sub?.score !== null && (
@@ -100,11 +107,11 @@ export default function AssignmentList({ onStart }) {
                       )}
                     </div>
                     
-                    <p className="text-slate-700 text-base mb-4 leading-relaxed">{week.description}</p>
+                    <p className="text-slate-700 text-base mb-4 leading-relaxed">{week.description || assignment.description}</p>
                     
                     <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 mb-4">
                       <p className="text-slate-800 font-medium text-sm mb-1">🎯 Bu Haftanın Aktivitesi:</p>
-                      <p className="text-slate-600 text-sm">{week.activity}</p>
+                      <p className="text-slate-600 text-sm">{week.activity || assignment.activity}</p>
                     </div>
 
                     <div className="flex items-center gap-2 flex-wrap">
@@ -126,7 +133,12 @@ export default function AssignmentList({ onStart }) {
                   </div>
                   
                   <div className="w-full md:w-auto flex-shrink-0">
-                    <button onClick={() => onStart(assignment)}
+                    <button onClick={() => onStart({
+                        ...assignment,
+                        title: week.title || assignment.title,
+                        description: week.description || assignment.description,
+                        activity: week.activity || assignment.activity
+                      })}
                       className={`w-full md:w-auto px-8 py-4 rounded-xl text-lg font-bold transition-all shadow-sm ${
                         status === 'pending'
                           ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-blue-500/25'
@@ -149,7 +161,7 @@ export default function AssignmentList({ onStart }) {
               <div className="flex-1">
                 <div className="flex items-center gap-2">
                   <h3 className="text-slate-700 font-semibold">{week.title}</h3>
-                  <span className="text-slate-500 text-xs font-medium">({week.dateRange})</span>
+                  {week.dateRange && <span className="text-slate-500 text-xs font-medium">({week.dateRange})</span>}
                 </div>
                 <p className="text-slate-500 text-sm line-clamp-1">{week.description}</p>
               </div>

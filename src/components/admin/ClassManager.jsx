@@ -272,6 +272,17 @@ export default function ClassManager({ schoolCode }) {
                           </div>
                         </div>
                         <div className="flex items-center gap-3">
+                          <button
+                            onClick={() => {
+                              const link = `${window.location.origin}/portfolio/${s.id}`;
+                              navigator.clipboard.writeText(link);
+                              alert('Veli linki kopyalandı!\n' + link);
+                            }}
+                            className="bg-indigo-50 hover:bg-indigo-100 text-indigo-600 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors border border-indigo-200"
+                            title="Veli Portfolyo Linkini Kopyala"
+                          >
+                            🔗 Veli Linki
+                          </button>
                           <div className="flex items-center gap-2 bg-green-500/10 px-3 py-1.5 rounded-full border border-green-500/20">
                             <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
                             <span className="text-green-400 text-xs font-bold uppercase tracking-wider">Aktif</span>

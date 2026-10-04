@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import * as XLSX from 'xlsx'
-import { getSubmissionsBySchool, getAssignmentsByTeacher, getStudentsBySchool, upsertFeedback, createNotification } from '../../firebase/schema'
+import { getSubmissionsBySchool, getAssignmentsByTeacher, getAssignmentsBySchool, getStudentsBySchool, getClassesBySchool, upsertFeedback, createNotification, getAllClassStudents } from '../../firebase/schema'
 
 const CONTENT_TYPE_LABELS = {
   text: 'Metin', code: 'Kod', project: 'Proje', presentation: 'Sunum',
@@ -12,9 +12,13 @@ export default function SubmissionsList() {
   const [submissions, setSubmissions] = useState([])
   const [assignments, setAssignments] = useState({})
   const [students,    setStudents]    = useState({})
+  const [classesList, setClassesList] = useState([])
+  const [studentClassMap, setStudentClassMap] = useState({})
   const [loading,     setLoading]     = useState(true)
   const [selected,    setSelected]    = useState(null)
   const [filterAssignment, setFilterAssignment] = useState('all')
+  const [filterClass,      setFilterClass]      = useState('all')
+  const [filterStudent,    setFilterStudent]    = useState('all')
   const [score,   setScore]   = useState('')
   const [comment, setComment] = useState('')
   const [isShowcase, setIsShowcase] = useState(false)
@@ -26,7 +30,7 @@ export default function SubmissionsList() {
   
   function exportToExcel() {
     const dataToExport = filtered.map(s => {
-      const student = students[s.studentId] || {}
+      const student = students[s.studentId] || students[s.userId] || {}
       const assignment = assignments[s.assignmentId] || {}
       return {
         'Öğrenci Adı': student.fullName || 'Bilinmiyor',
@@ -49,10 +53,12 @@ export default function SubmissionsList() {
   async function loadData() {
     setLoading(true)
     try {
-      const [subs, asgns, studs] = await Promise.all([
+      const [subs, asgns, studs, cls, csMap] = await Promise.all([
         getSubmissionsBySchool(profile.schoolCode),
-        getAssignmentsByTeacher(user.uid),
+        profile.role === 'admin' ? getAssignmentsBySchool(profile.schoolCode) : getAssignmentsByTeacher(user.uid),
         getStudentsBySchool(profile.schoolCode),
+        getClassesBySchool(profile.schoolCode),
+        getAllClassStudents()
       ])
       setSubmissions(subs)
       const amap = {}
@@ -61,6 +67,15 @@ export default function SubmissionsList() {
       const smap = {}
       studs.forEach(s => { smap[s.id] = s })
       setStudents(smap)
+      setClassesList(cls || [])
+
+      const csMapping = {}
+      csMap.forEach(m => {
+        csMapping[m.userId] = m.classId
+      })
+      setStudentClassMap(csMapping)
+      
+      console.log("Admin Submissions Loaded:", subs.length, "Assignments:", asgns.length, "Students:", studs.length)
     } catch (err) {
       console.error(err)
     } finally {
@@ -93,9 +108,13 @@ export default function SubmissionsList() {
   }
 
   const assignmentList = Object.values(assignments)
-  const filtered = submissions.filter(s =>
-    filterAssignment === 'all' || s.assignmentId === filterAssignment
-  )
+  const filtered = submissions.filter(s => {
+    const studentClassId = studentClassMap[s.userId] || studentClassMap[s.studentId]
+    const matchAssignment = filterAssignment === 'all' || s.assignmentId === filterAssignment
+    const matchStudent = filterStudent === 'all' || s.userId === filterStudent || s.studentId === filterStudent
+    const matchClass = filterClass === 'all' || studentClassId === filterClass
+    return matchAssignment && matchStudent && matchClass
+  })
 
   if (loading) return <div className="text-center py-20 text-slate-500">Yukleniyor...</div>
 
@@ -107,26 +126,57 @@ export default function SubmissionsList() {
           <p className="text-slate-500 text-sm mt-0.5">{filtered.length} teslim</p>
         </div>
         <div className="flex items-center gap-4">
-          <button onClick={exportToExcel} className="flex items-center gap-2 bg-emerald-600/20 hover:bg-emerald-600/40 text-emerald-400 border border-emerald-600/30 px-4 py-2 rounded-xl text-sm font-bold transition-all shadow-lg shadow-emerald-900/20">
+          <button onClick={exportToExcel} className="px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-sm font-bold transition-all border border-emerald-200 flex items-center gap-2">
             <span>📊</span> Excel İndir
           </button>
-          <button onClick={loadData} className="px-4 py-2 bg-slate-50 hover:bg-slate-700 text-slate-700 rounded-xl text-sm font-bold transition-all border border-slate-200">
+          <button onClick={loadData} className="px-4 py-2 bg-slate-50 hover:bg-slate-700 text-slate-700 hover:text-white rounded-xl text-sm font-bold transition-all border border-slate-200">
             Yenile
           </button>
         </div>
       </div>
 
-      <div className="flex gap-2 mb-8 flex-wrap">
-        <button onClick={() => setFilterAssignment('all')}
-          className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all ${
-            filterAssignment === 'all' ? 'bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-600/20 border' : 'bg-slate-50 text-slate-500 border border-slate-200 hover:border-slate-500 hover:text-slate-800'
-          }`}>Tümü</button>
-        {assignmentList.map(a => (
-          <button key={a.id} onClick={() => setFilterAssignment(a.id)}
-            className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all ${
-              filterAssignment === a.id ? 'bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-600/20 border' : 'bg-slate-50 text-slate-500 border border-slate-200 hover:border-slate-500 hover:text-slate-800'
-            }`}>{a.title}</button>
-        ))}
+      <div className="mb-6 space-y-4">
+        {/* Sınıf Filtresi */}
+        <div className="flex gap-2 flex-wrap items-center bg-slate-50 p-2 rounded-2xl border border-slate-200">
+          <span className="text-slate-500 font-medium text-sm px-3">Sınıf:</span>
+          <select value={filterClass} onChange={e => { setFilterClass(e.target.value); setFilterStudent('all'); }}
+            className="flex-1 max-w-xs px-4 py-2 rounded-xl border border-slate-200 text-slate-700 font-medium text-sm bg-white outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all cursor-pointer">
+            <option value="all">Tüm Sınıflar</option>
+            {classesList.map(c => (
+              <option key={c.id} value={c.id}>{c.name}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Ogrenci Filtresi */}
+        <div className="flex gap-2 flex-wrap items-center bg-slate-50 p-2 rounded-2xl border border-slate-200">
+          <span className="text-slate-500 font-medium text-sm px-3">Öğrenci:</span>
+          <select value={filterStudent} onChange={e => setFilterStudent(e.target.value)}
+            className="flex-1 max-w-xs px-4 py-2 rounded-xl border border-slate-200 text-slate-700 font-medium text-sm bg-white outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all cursor-pointer">
+            <option value="all">Tüm Öğrenciler</option>
+            {Object.values(students)
+              .filter(st => filterClass === 'all' || studentClassMap[st.id] === filterClass)
+              .sort((a,b) => (a.fullName||'').localeCompare(b.fullName||''))
+              .map(st => (
+                <option key={st.id} value={st.id}>{st.fullName || st.email || 'Bilinmeyen Öğrenci'}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Gorev Filtresi */}
+        <div className="flex gap-2 flex-wrap items-center bg-slate-50 p-2 rounded-2xl border border-slate-200">
+          <span className="text-slate-500 font-medium text-sm px-3">Görevler:</span>
+          <button onClick={() => setFilterAssignment('all')}
+            className={`px-4 py-1.5 rounded-xl text-sm font-bold transition-all ${
+              filterAssignment === 'all' ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-slate-500 border border-slate-200 hover:border-slate-400'
+            }`}>Tüm Görevler</button>
+          {assignmentList.map(a => (
+            <button key={a.id} onClick={() => setFilterAssignment(a.id)}
+              className={`px-4 py-1.5 rounded-xl text-sm font-bold transition-all ${
+                filterAssignment === a.id ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-slate-500 border border-slate-200 hover:border-slate-400'
+              }`}>{a.title}</button>
+          ))}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -194,10 +244,21 @@ export default function SubmissionsList() {
                     {students[selected.userId]?.fullName?.charAt(0)?.toUpperCase() || '?'}
                   </span>
                 </div>
-                <div>
+                <div className="flex-1">
                   <p className="text-slate-700 text-xl font-bold">{students[selected.userId]?.fullName || 'Bilinmeyen Öğrenci'}</p>
                   <p className="text-slate-500 text-sm font-medium">{assignments[selected.assignmentId]?.title || ''}</p>
                 </div>
+                <button
+                  onClick={() => {
+                    const link = `${window.location.origin}/portfolio/${selected.userId}`;
+                    navigator.clipboard.writeText(link);
+                    alert('Veli linki kopyalandı!\n' + link);
+                  }}
+                  className="bg-indigo-50 hover:bg-indigo-100 text-indigo-600 px-4 py-2 rounded-xl text-sm font-bold transition-colors border border-indigo-200 flex items-center gap-2"
+                  title="Veli Portfolyo Linkini Kopyala"
+                >
+                  🔗 Veli Linki
+                </button>
               </div>
               <div className="flex gap-2 mb-6 relative z-10">
                 <span className="text-xs font-bold uppercase tracking-wider bg-slate-50 text-slate-700 px-3 py-1.5 rounded-lg">
@@ -210,7 +271,15 @@ export default function SubmissionsList() {
                 )}
               </div>
               <div className="bg-white border border-slate-200/50 rounded-2xl p-6 max-h-64 overflow-y-auto custom-scrollbar relative z-10 mb-8">
-                <p className="text-slate-800 text-base whitespace-pre-wrap leading-relaxed">{selected.content}</p>
+                <p className="text-slate-800 text-base whitespace-pre-wrap leading-relaxed">
+                  {typeof selected.content === 'string' && selected.content.trim() !== ''
+                    ? selected.content.split(/(\s+)/).map((word, index) => 
+                        word.match(/^https?:\/\/[^\s]+$/) 
+                          ? <a key={index} href={word} target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline break-all">{word}</a>
+                          : word
+                      ) 
+                    : (selected.content || <span className="text-slate-400 italic">Öğrenci yazılı bir cevap girmemiş.</span>)}
+                </p>
                 {selected.files && selected.files.length > 0 && (
                   <div className="mt-4 pt-4 border-t border-slate-200 flex flex-wrap gap-2">
                     {selected.files.map((f, i) => (
@@ -230,13 +299,13 @@ export default function SubmissionsList() {
                   <label className="block text-slate-500 text-xs font-bold uppercase tracking-wider mb-2">Puan (0-100)</label>
                   <input type="number" min={0} max={100} value={score} onChange={e => setScore(e.target.value)}
                     placeholder="100"
-                    className="w-full bg-white shadow-sm border border-slate-200 text-white font-bold text-lg rounded-xl px-4 py-3 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-center" />
+                    className="w-full bg-white shadow-sm border border-slate-200 text-slate-800 font-bold text-lg rounded-xl px-4 py-3 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-center" />
                 </div>
                 <div className="md:col-span-3">
                   <label className="block text-slate-500 text-xs font-bold uppercase tracking-wider mb-2">Öğretmen Yorumu</label>
                   <textarea value={comment} onChange={e => setComment(e.target.value)}
                     placeholder="Harika bir tasarım olmuş, tebrikler!" rows={3}
-                    className="w-full bg-white shadow-sm border border-slate-200 text-white rounded-xl px-4 py-3 text-sm placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 resize-none custom-scrollbar transition-all" />
+                    className="w-full bg-white shadow-sm border border-slate-200 text-slate-800 rounded-xl px-4 py-3 text-sm placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 resize-none custom-scrollbar transition-all" />
                 </div>
               </div>
 

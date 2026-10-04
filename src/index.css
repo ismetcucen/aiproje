@@ -22,6 +22,18 @@ body {
   animation: spin-happy 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+@keyframes cevbot-talk {
+  0%, 100% { transform: translate(0, 0) scale(1.1) rotate(0deg); }
+  15% { transform: translate(-3px, 3px) scale(1.1) rotate(-6deg); }
+  30% { transform: translate(3px, -3px) scale(1.1) rotate(6deg); }
+  45% { transform: translate(-3px, -3px) scale(1.1) rotate(-6deg); }
+  60% { transform: translate(3px, 3px) scale(1.1) rotate(6deg); }
+  75% { transform: translate(-2px, 2px) scale(1.1) rotate(-3deg); }
+}
+.animate-cevbot-talk {
+  animation: cevbot-talk 0.25s infinite ease-in-out;
+}
+
 @keyframes scroll-vertical {
   0% { transform: translateY(0); }
   100% { transform: translateY(-50%); }
@@ -31,4 +43,18 @@ body {
 }
 .hover\:pause:hover {
   animation-play-state: paused;
+}
+
+/* Force dark text and white background on text input fields globally to prevent invisible text issues */
+input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]), 
+textarea, 
+select, 
+[contenteditable="true"] {
+  color: #000000 !important;
+  background-color: #ffffff !important;
+}
+
+/* Specific fix for placeholders to ensure they are visible but distinct */
+input::placeholder, textarea::placeholder {
+  color: #64748b !important;
 }

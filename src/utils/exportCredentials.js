@@ -33,7 +33,18 @@ export function exportStudentCredentials(students, className = 'Sınıf') {
       <div class="grid">
         ${students.map(s => {
           const v = s.visualId ? VISUAL_PASSWORDS.find(x => x.id === s.visualId) : null;
-          const pass = v ? (s.email.startsWith('std_') ? `vp_${s.visualId}_2026!` : `${s.visualId}_123456`) : '(Gizli Şifre)';
+          
+          let displayUser = s.email.split('@')[0];
+          let displayPass = '(Gizli Şifre)';
+          
+          if (s.simplePass) {
+             displayPass = s.simplePass;
+          } else if (v) {
+             // For visual password students, thanks to the new auto-resolver,
+             // they can just type their full name and the visual label.
+             displayUser = s.fullName;
+             displayPass = v.label;
+          }
           
           return `
           <div class="card">
@@ -48,22 +59,17 @@ export function exportStudentCredentials(students, className = 'Sınıf') {
             ` : ''}
 
             <div class="info-row">
-              <span class="label">İsim:</span>
-              <span class="value">${s.fullName}</span>
-            </div>
-            
-            <div class="info-row">
               <span class="label">Kullanıcı:</span>
-              <span class="value" style="font-size:12px;">${s.email.split('@')[0]}</span>
+              <span class="value" style="font-size:12px;">${displayUser}</span>
             </div>
             
             <div class="info-row">
               <span class="label">Şifre:</span>
-              <span class="value" style="letter-spacing: 1px;">${pass}</span>
+              <span class="value" style="letter-spacing: 1px;">${displayPass}</span>
             </div>
             
             <div class="warning">
-              ${!v ? '* Bu öğrenci standart şifreyle kayıt olmuştur, şifresi sistemde gizlidir.' : '* Panele giriş yaparken "Görsel Şifre" sekmesinden isminizi ve resminizi seçin.'}
+              ${v || s.simplePass ? '* Sisteme giriş yaparken doğrudan yukarıdaki kullanıcı adı ve şifreyi yazmanız yeterlidir. (Büyük/küçük harf veya boşluk hataları otomatik düzeltilir.)' : '* Bu öğrenci manuel olarak kendi şifresiyle kayıt olmuştur.'}
             </div>
           </div>
           `;
