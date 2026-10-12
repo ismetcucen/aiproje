@@ -13,6 +13,11 @@ export default function LiveClassControl() {
   const [students, setStudents] = useState([])
   const [studentStatuses, setStudentStatuses] = useState({})
   
+  // Şube Seçimi & Filtresi
+  const [availableSections, setAvailableSections] = useState(['A', 'B'])
+  const [selectedSections, setSelectedSections] = useState(['ALL'])
+  const [sectionFilter, setSectionFilter] = useState('ALL')
+
   const [questionText, setQuestionText] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [requireAnswer, setRequireAnswer] = useState(true)
@@ -21,6 +26,11 @@ export default function LiveClassControl() {
   const [pollOptions, setPollOptions] = useState(['', '', '', ''])
 
   const fileInputRef = useRef(null)
+
+  useEffect(() => {
+    setSelectedSections(['ALL'])
+    setSectionFilter('ALL')
+  }, [selectedGrade])
 
   useEffect(() => {
     if (!profile?.schoolCode) return
@@ -45,13 +55,42 @@ export default function LiveClassControl() {
     if (!profile?.schoolCode) return
     async function loadStudents() {
       try {
-        const q = query(
-          collection(db, 'users'),
-          where('role', '==', 'student'),
-          where('schoolCode', '==', profile.schoolCode)
-        )
-        const snap = await getDocs(q)
-        const allStudents = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+        const [usersSnap, classesSnap, csSnap] = await Promise.all([
+          getDocs(query(
+            collection(db, 'users'),
+            where('role', '==', 'student'),
+            where('schoolCode', '==', profile.schoolCode)
+          )),
+          getDocs(query(
+            collection(db, 'classes'),
+            where('schoolCode', '==', profile.schoolCode),
+            where('grade', '==', String(selectedGrade))
+          )),
+          getDocs(collection(db, 'class_students'))
+        ])
+
+        // Mevcut şubeleri belirle
+        const classDocs = classesSnap.docs.map(d => ({ id: d.id, ...d.data() }))
+        const secs = [...new Set(classDocs.map(c => c.section).filter(Boolean))].sort()
+        setAvailableSections(secs.length > 0 ? secs : ['A', 'B'])
+
+        // Öğrenci - Sınıf eşleme haritası
+        const classMap = {}
+        classDocs.forEach(c => { classMap[c.id] = c })
+        const userClassMap = {}
+        csSnap.docs.forEach(d => {
+          const dData = d.data()
+          userClassMap[dData.userId] = dData.classId
+        })
+
+        const allStudents = usersSnap.docs.map(d => {
+          const data = d.data()
+          const cId = userClassMap[d.id]
+          const assignedClass = cId ? classMap[cId] : null
+          const section = data.section || assignedClass?.section || ''
+          return { id: d.id, ...data, section }
+        })
+
         const gradeStudents = allStudents.filter(s => String(s.gradeNumber) === String(selectedGrade))
         setStudents(gradeStudents)
       } catch (err) {
@@ -81,6 +120,21 @@ export default function LiveClassControl() {
     }
   }, [session?.isActive, session?.questionId, session?.id])
 
+  function toggleSection(sec) {
+    if (sec === 'ALL') {
+      setSelectedSections(['ALL'])
+      return
+    }
+    let current = selectedSections.filter(s => s !== 'ALL')
+    if (current.includes(sec)) {
+      current = current.filter(s => s !== sec)
+      if (current.length === 0) current = ['ALL']
+    } else {
+      current.push(sec)
+    }
+    setSelectedSections(current)
+  }
+
   async function toggleSession() {
     if (!profile?.schoolCode) return
     setLoading(true)
@@ -90,7 +144,8 @@ export default function LiveClassControl() {
       currentSlide: '',
       currentQuestion: '',
       questionId: '',
-      requireAnswer: false
+      requireAnswer: false,
+      targetSections: []
     })
     setQuestionText('')
     setImageUrl('')
@@ -101,15 +156,28 @@ export default function LiveClassControl() {
     if (!questionText && !imageUrl) return alert('Lütfen bir soru yazın veya görsel ekleyin.')
     setLoading(true)
     const qId = Date.now().toString()
-    await setLiveSession(profile.schoolCode, selectedGrade, {
+    const targetSections = selectedSections.includes('ALL') ? [] : selectedSections
+    const payload = {
       currentQuestion: questionText,
       currentSlide: imageUrl,
       questionId: qId,
-      requireAnswer: requireAnswer
-    })
+      requireAnswer: requireAnswer,
+      type: questionType,
+      targetSections: targetSections
+    }
+    if (questionType === 'poll') {
+      const validOptions = pollOptions.filter(o => o.trim() !== '')
+      if (validOptions.length < 2) {
+        setLoading(false)
+        return alert('Lütfen en az 2 anket seçeneği girin.')
+      }
+      payload.options = validOptions
+    }
+    await setLiveSession(profile.schoolCode, selectedGrade, payload)
     setQuestionText('')
     setLoading(false)
-    alert('Soru sınıfa başarıyla gönderildi! Öğrenci ekranları kilitlendi.')
+    const targetMsg = targetSections.length > 0 ? `Seçilen şubelere (${targetSections.join(', ')})` : 'Tüm şubelere'
+    alert(`Soru ${targetMsg} başarıyla gönderildi! Öğrenci ekranları kilitlendi.`)
   }
   
   async function handleClearScreen() {
@@ -118,7 +186,8 @@ export default function LiveClassControl() {
       currentQuestion: '',
       currentSlide: '',
       questionId: '',
-      requireAnswer: false
+      requireAnswer: false,
+      targetSections: []
     })
     setImageUrl('')
     setLoading(false)
@@ -226,7 +295,13 @@ export default function LiveClassControl() {
               
               return (
                 <div key={stu.id} className={`px-2.5 py-1 rounded-md border text-xs font-medium text-slate-300 flex items-center gap-1.5 transition-colors ${border}`}>
-                  <span className="text-[10px]">{dot}</span> {stu.fullName}
+                  <span className="text-[10px]">{dot}</span> 
+                  {stu.fullName}
+                  {stu.section && (
+                    <span className="bg-white/10 text-[10px] px-1.5 py-0.5 rounded text-slate-300 font-bold ml-1">
+                      {selectedGrade}/{stu.section}
+                    </span>
+                  )}
                 </div>
               )
             })}
@@ -254,11 +329,65 @@ export default function LiveClassControl() {
             {session?.isActive ? (
               <div className="space-y-5 animate-fade-in">
                 
-                
+                {/* ŞUBE SEÇİMİ (KİMLERE GÖNDERİLSİN?) */}
+                <div className="bg-indigo-50/70 border border-indigo-100 rounded-2xl p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-indigo-900 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
+                      <span>🎯</span> Hedef Şubeler
+                    </label>
+                    <span className="text-[11px] font-medium text-indigo-600">
+                      {selectedSections.includes('ALL') 
+                        ? 'Tüm Şubeler Seçili' 
+                        : `${selectedSections.length} Şube Seçili`}
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => toggleSection('ALL')}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                        selectedSections.includes('ALL')
+                          ? 'bg-indigo-600 text-white shadow-sm'
+                          : 'bg-white border border-indigo-200 text-indigo-700 hover:bg-indigo-100/50'
+                      }`}
+                    >
+                      🌟 Tüm Şubeler
+                    </button>
+                    {availableSections.map(sec => {
+                      const isSelected = !selectedSections.includes('ALL') && selectedSections.includes(sec);
+                      return (
+                        <button
+                          key={sec}
+                          type="button"
+                          onClick={() => toggleSection(sec)}
+                          className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                            isSelected
+                              ? 'bg-indigo-600 text-white shadow-sm'
+                              : 'bg-white border border-slate-200 text-slate-700 hover:border-indigo-300'
+                          }`}
+                        >
+                          {selectedGrade}/{sec}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
                 {/* AKTIF SORU GÖSTERIMI */}
                 {session.questionId && (
                   <div className="bg-indigo-50 border border-indigo-200 rounded-2xl p-4 mb-4">
-                    <h4 className="text-indigo-800 text-xs font-bold uppercase tracking-wider mb-2">Şu An Öğrencilerin Ekranındaki Soru:</h4>
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-indigo-800 text-xs font-bold uppercase tracking-wider">Şu An Ekrandaki Soru:</h4>
+                      {session.targetSections && session.targetSections.length > 0 ? (
+                        <span className="bg-indigo-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                          Hedef: {session.targetSections.map(s => `${selectedGrade}/${s}`).join(', ')}
+                        </span>
+                      ) : (
+                        <span className="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                          Tüm Şubeler
+                        </span>
+                      )}
+                    </div>
                     {session.currentSlide && <img src={session.currentSlide} className="max-h-24 rounded-lg mb-2 border border-indigo-200" />}
                     <p className="text-indigo-900 font-medium">{session.currentQuestion || '(Sadece Görsel)'}</p>
                   </div>
@@ -363,8 +492,10 @@ export default function LiveClassControl() {
                   {students.map(stu => {
                     const hasAnswered = answers.some(a => a.studentId === stu.id);
                     return (
-                      <div key={stu.id} title={hasAnswered ? 'Cevap Verdi' : 'Bekleniyor'} className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors ${hasAnswered ? 'bg-emerald-100 text-emerald-700 border-emerald-200' : 'bg-red-50 text-red-500 border-red-200 animate-pulse'}`}>
-                        {hasAnswered ? '✓' : '⏳'} {stu.fullName}
+                      <div key={stu.id} title={hasAnswered ? 'Cevap Verdi' : 'Bekleniyor'} className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors flex items-center gap-1 ${hasAnswered ? 'bg-emerald-100 text-emerald-700 border-emerald-200' : 'bg-red-50 text-red-500 border-red-200 animate-pulse'}`}>
+                        <span>{hasAnswered ? '✓' : '⏳'}</span>
+                        <span>{stu.fullName}</span>
+                        {stu.section && <span className="opacity-75 text-[10px]">({selectedGrade}/{stu.section})</span>}
                       </div>
                     )
                   })}
@@ -411,7 +542,14 @@ export default function LiveClassControl() {
                     <div className="space-y-2">
                       {answers.map(ans => (
                         <div key={ans.id} className="flex justify-between items-center bg-white px-3 py-2 rounded-lg border border-slate-100">
-                          <span className="text-sm font-medium text-slate-600">{ans.studentName}</span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-medium text-slate-600">{ans.studentName}</span>
+                            {ans.studentSection && (
+                              <span className="bg-slate-100 text-slate-600 text-[10px] font-bold px-1.5 py-0.5 rounded">
+                                {selectedGrade}/{ans.studentSection}
+                              </span>
+                            )}
+                          </div>
                           <span className="text-xs font-bold bg-indigo-50 text-indigo-700 px-2 py-1 rounded">{ans.answer}</span>
                         </div>
                       ))}
@@ -421,7 +559,14 @@ export default function LiveClassControl() {
               ) : (
                 answers.map(ans => (
                   <div key={ans.id} className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 animate-fade-in-up">
-                    <p className="text-xs font-bold text-indigo-600 mb-1">{ans.studentName}</p>
+                    <div className="flex items-center gap-2 mb-1">
+                      <p className="text-xs font-bold text-indigo-600">{ans.studentName}</p>
+                      {ans.studentSection && (
+                        <span className="bg-indigo-50 text-indigo-600 text-[10px] font-bold px-1.5 py-0.5 rounded">
+                          {selectedGrade}/{ans.studentSection}
+                        </span>
+                      )}
+                    </div>
                     <p className="text-slate-700 font-medium">{ans.answer}</p>
                   </div>
                 ))

@@ -22,7 +22,25 @@ export async function createUserProfile(uid, { fullName, email, role, classLevel
 
 export async function getUserProfile(uid) {
   const snap = await getDoc(doc(db, 'users', uid))
-  return snap.exists() ? { id: snap.id, ...snap.data() } : null
+  if (!snap.exists()) return null;
+  const data = { id: snap.id, ...snap.data() };
+  if (!data.section && data.role === ROLES.STUDENT) {
+    try {
+      const csSnap = await getDocs(query(collection(db, 'class_students'), where('userId', '==', uid)));
+      if (!csSnap.empty) {
+        const classId = csSnap.docs[0].data().classId;
+        const cSnap = await getDoc(doc(db, 'classes', classId));
+        if (cSnap.exists()) {
+          data.section = cSnap.data().section;
+          data.className = cSnap.data().name;
+          data.classId = classId;
+        }
+      }
+    } catch (e) {
+      // ignore
+    }
+  }
+  return data;
 }
 
 export async function getStudentsBySchool(schoolCode) {
@@ -709,12 +727,13 @@ export async function setLiveSession(schoolCode, gradeNumber, data) {
   }, { merge: true });
 }
 
-export async function submitLiveAnswer(sessionId, questionId, studentId, studentName, answer) {
+export async function submitLiveAnswer(sessionId, questionId, studentId, studentName, answer, studentSection = '') {
   await addDoc(collection(db, 'live_answers'), {
     sessionId,
     questionId,
     studentId,
     studentName,
+    studentSection,
     answer,
     createdAt: serverTimestamp()
   });
