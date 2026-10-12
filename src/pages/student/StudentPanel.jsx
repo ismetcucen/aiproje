@@ -24,16 +24,17 @@ import HighSchoolAILab from '../../components/student/HighSchoolAILab'
 import InstagramWidget from '../../components/InstagramWidget'
 import { getSchoolSettings } from '../../firebase/schema'
 import BlocklyEditor from '../../components/robotics/BlocklyEditor'
+import TeknofestAssistant from '../../components/projectAssistant/TeknofestAssistant'
 
 const MENU = [
-  { id: 'portfolio', label: 'Benim Portfolyom', icon: '🏆' },
   { id: 'home',        label: 'Ana Sayfa', icon: '🏠' },
+  { id: 'teknofest',   label: 'TEKNOFEST Asistanı', icon: '🚀' },
   { id: 'assignments', label: 'Görevler',  icon: '📋' },
   { id: 'studio',      label: 'Üret',      icon: '✏️' },
   { id: 'portfolio',   label: 'Portfolyo', icon: '🗂️' },
   { id: 'leaderboard', label: 'Sıralama', icon: '🏆' },
-  { id: 'showcase', label: 'Vitrin', icon: '🌟' },
-  { id: 'robotics', label: 'ESP32 Robotik', icon: '🤖' },
+  { id: 'showcase',    label: 'Vitrin', icon: '🌟' },
+  { id: 'robotics',    label: 'ESP32 Robotik', icon: '🤖' },
 ]
 
 export default function StudentPanel() {
@@ -191,6 +192,7 @@ export default function StudentPanel() {
 
         <div className="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar">
           {active === 'home'        && <StudentHome onNavigate={setActive} />}
+          {active === 'teknofest'   && <TeknofestAssistant />}
           {active === 'assignments' && <AssignmentList onStart={goToStudio} />}
           {active === 'studio'      && <Studio assignment={selectedAssignment} onBack={() => setActive('assignments')} />}
           {active === 'portfolio'   && <Portfolio />}

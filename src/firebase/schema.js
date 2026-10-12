@@ -859,3 +859,61 @@ export async function getAllClassStudents() {
   const snap = await getDocs(collection(db, 'class_students'));
   return snap.docs.map(d => d.data());
 }
+
+// ─── TEKNOFEST & TÜBİTAK PROJE ASİSTANI TASLAKLARI ───────────────────────────
+
+export async function saveProjectAssistantDraft(draftData) {
+  const { id, ...rest } = draftData;
+  if (id) {
+    const docRef = doc(db, 'project_drafts', id);
+    await updateDoc(docRef, {
+      ...rest,
+      updatedAt: serverTimestamp()
+    });
+    return id;
+  } else {
+    const docRef = await addDoc(collection(db, 'project_drafts'), {
+      ...rest,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    });
+    return docRef.id;
+  }
+}
+
+export async function getProjectDraftsByStudent(studentId) {
+  if (!studentId) return [];
+  const q = query(
+    collection(db, 'project_drafts'),
+    where('userId', '==', studentId)
+  );
+  const snap = await getDocs(q);
+  const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  return items.sort((a, b) => {
+    const tA = a.updatedAt?.toMillis ? a.updatedAt.toMillis() : (a.createdAt?.toMillis ? a.createdAt.toMillis() : 0);
+    const tB = b.updatedAt?.toMillis ? b.updatedAt.toMillis() : (b.createdAt?.toMillis ? b.createdAt.toMillis() : 0);
+    return tB - tA;
+  });
+}
+
+export async function getAllProjectDraftsForSchool(schoolCode) {
+  let q;
+  if (schoolCode) {
+    q = query(collection(db, 'project_drafts'), where('schoolCode', '==', schoolCode));
+  } else {
+    q = query(collection(db, 'project_drafts'));
+  }
+  const snap = await getDocs(q);
+  const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  return items.sort((a, b) => {
+    const tA = a.updatedAt?.toMillis ? a.updatedAt.toMillis() : 0;
+    const tB = b.updatedAt?.toMillis ? b.updatedAt.toMillis() : 0;
+    return tB - tA;
+  });
+}
+
+export async function deleteProjectAssistantDraft(draftId) {
+  if (!draftId) return;
+  await deleteDoc(doc(db, 'project_drafts', draftId));
+}
+

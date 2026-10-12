@@ -29,8 +29,10 @@ import FocusTracker from '../../components/student/FocusTracker'
 import RandomStudentWheel from '../../components/teacher/RandomStudentWheel'
 import CountdownTimer from '../../components/teacher/CountdownTimer'
 import BlocklyEditor from '../../components/robotics/BlocklyEditor'
+import TeknofestAssistant from '../../components/projectAssistant/TeknofestAssistant'
 
 const MENU = [
+  { id: 'teknofest',  label: 'TEKNOFEST Asistanı', icon: '🚀' },
   { id: 'calendar',   label: 'Ajanda', icon: '📅' },
   { id: 'tools', label: 'Araçlar', icon: '🛠️' },
   { id: 'wheel', label: 'Seçici Çark', icon: '🎡' },
@@ -135,6 +137,7 @@ export default function AdminPanel() {
           </div>
         </header>
         <div className="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar">
+          {active === 'teknofest'  && <TeknofestAssistant isTeacher={true} />}
           {active === 'stats'      && <Stats />}
           {active === 'classes'    && <ClassManager schoolCode={profile?.schoolCode} />}
           {active === 'curriculum' && <CurriculumEditor />}

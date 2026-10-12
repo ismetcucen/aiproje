@@ -131,6 +131,58 @@ export default function ClassSettings() {
         </div>
       </div>
 
+      {/* GEMINI API ANAHTARI VE TEST ALANI */}
+      <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm mt-6">
+        <div className="flex gap-6 items-start">
+          <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-rose-600 rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-amber-500/20 flex-shrink-0 text-white">
+            🔑
+          </div>
+          <div className="flex-1">
+            <h3 className="text-xl font-bold text-slate-800 mb-2">Google Gemini API Anahtarı Yönetimi</h3>
+            <p className="text-slate-500 text-sm leading-relaxed max-w-xl mb-4">
+              TEKNOFEST Asistanı ve OHEP AI'ın kesintisiz çalışması için Google AI Studio anahtarınızı buradan güncelleyebilir ve canlı olarak test edebilirsiniz.
+            </p>
+
+            <div className="max-w-xl space-y-3">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1">
+                  Aktif Gemini API Anahtarı
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="password"
+                    placeholder="AIzaSy... (Boş bırakılırsa .env anahtarı kullanılır)"
+                    defaultValue={settings.geminiApiKey || ''}
+                    id="geminiKeyInput"
+                    className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  />
+                  <button
+                    onClick={async () => {
+                      const input = document.getElementById('geminiKeyInput');
+                      const val = input ? input.value.trim() : '';
+                      setSaving(true);
+                      try {
+                        await updateSchoolSettings('global_school', { geminiApiKey: val });
+                        setSettings(prev => ({ ...prev, geminiApiKey: val }));
+                        alert('API anahtarı başarıyla kaydedildi!');
+                      } catch (e) {
+                        alert('Hata: ' + e.message);
+                      } finally {
+                        setSaving(false);
+                      }
+                    }}
+                    disabled={saving}
+                    className="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-colors"
+                  >
+                    Kaydet
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   )
 
