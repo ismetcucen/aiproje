@@ -17,15 +17,6 @@ export default function DojoNotificationListener() {
       setAward(profile.lastDojoAward)
       localStorage.setItem('seenDojoAwardId', awardId)
       
-      // Play sound
-      try {
-        // A simple "Ding" sound base64 or public url.
-        // We'll use a public sound effect for "success" / "coin"
-        const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3')
-        audio.volume = 0.5
-        audio.play().catch(e => console.log('Audio autoplay blocked', e))
-      } catch(e) {}
-
       // Auto hide after 5 seconds
       const t = setTimeout(() => {
         setAward(null)

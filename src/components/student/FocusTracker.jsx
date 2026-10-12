@@ -195,23 +195,6 @@ export default function FocusTracker() {
     trackingData.current.lastAlertTime = Date.now()
     setF1Message(msg)
     
-    try {
-      const AudioContext = window.AudioContext || window.webkitAudioContext
-      const ctx = new AudioContext()
-      if (ctx.state === 'suspended') ctx.resume()
-      const osc = ctx.createOscillator()
-      const gainNode = ctx.createGain()
-      osc.type = 'sine'
-      osc.frequency.setValueAtTime(523.25, ctx.currentTime) // C5
-      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.2)
-      gainNode.gain.setValueAtTime(0.2, ctx.currentTime)
-      gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3)
-      osc.connect(gainNode)
-      gainNode.connect(ctx.destination)
-      osc.start()
-      osc.stop(ctx.currentTime + 0.3)
-    } catch(e) {}
-
     setTimeout(() => {
       setF1Message(null)
     }, 8000)

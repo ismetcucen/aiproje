@@ -32,15 +32,7 @@ export default function DigitalBoardViewer() {
              if (data.liveEvent.type === 'confetti') {
                confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 }, zIndex: 999999 });
              } else if (data.liveEvent.type === 'announcement') {
-               try {
-                 const u = new SpeechSynthesisUtterance(data.liveEvent.payload);
-                 u.lang = 'tr-TR';
-                 u.pitch = 1.2;
-                 u.rate = 0.9;
-                 window.speechSynthesis.speak(u);
-               } catch(err) {
-                 console.error("Speech error", err)
-               }
+               // audio disabled
              } else if (data.liveEvent.type === 'reload') {
                window.location.reload();
              }

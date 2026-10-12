@@ -125,48 +125,10 @@ export default function OhepAssistant() {
     speak(FUNNY_PHRASES[Math.floor(Math.random() * FUNNY_PHRASES.length)]);
   };
 
-  const speak = (msg, urgent = false) => {
+  const speak = (msg) => {
     setIsVisible(true);
     setMessage(msg);
     setIsAnimating(true);
-    
-    if (urgent) {
-      try {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        const ctx = new AudioContext();
-        if (ctx.state === 'suspended') ctx.resume();
-        
-        const playPowerChord = (freq, timeOffset, duration) => {
-          const osc1 = ctx.createOscillator();
-          const osc2 = ctx.createOscillator();
-          const gainNode = ctx.createGain();
-          
-          osc1.type = 'sawtooth';
-          osc2.type = 'square';
-          
-          osc1.frequency.setValueAtTime(freq, ctx.currentTime + timeOffset);
-          osc2.frequency.setValueAtTime(freq * 1.5, ctx.currentTime + timeOffset);
-          
-          gainNode.gain.setValueAtTime(0.12, ctx.currentTime + timeOffset);
-          gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + timeOffset + duration);
-          
-          osc1.connect(gainNode);
-          osc2.connect(gainNode);
-          gainNode.connect(ctx.destination);
-          
-          osc1.start(ctx.currentTime + timeOffset);
-          osc2.start(ctx.currentTime + timeOffset);
-          osc1.stop(ctx.currentTime + timeOffset + duration);
-          osc2.stop(ctx.currentTime + timeOffset + duration);
-        };
-
-        // Fast heavy chugs for urgent
-        playPowerChord(82.41, 0, 0.15);   // E2
-        playPowerChord(82.41, 0.2, 0.15); // E2
-        playPowerChord(82.41, 0.4, 0.15); // E2
-        playPowerChord(110.00, 0.6, 0.4); // A2
-      } catch(e) {}
-    }
 
     setTimeout(() => {
       setMessage('');

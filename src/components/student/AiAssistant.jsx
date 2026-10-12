@@ -17,79 +17,6 @@ export default function AiAssistant() {
   const [error, setError] = useState('');
   const chatRef = useRef(null);
 
-  // Robot Send Sound (Web Audio API)
-  const playSendSound = () => {
-    if (isMuted) return;
-    try {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      const ctx = new AudioContext();
-      if (ctx.state === 'suspended') ctx.resume();
-      const osc = ctx.createOscillator();
-      const gainNode = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(880, ctx.currentTime); // A5
-      osc.frequency.exponentialRampToValueAtTime(1760, ctx.currentTime + 0.1); // A6
-      gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
-      osc.connect(gainNode);
-      gainNode.connect(ctx.destination);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.1);
-    } catch(e) { console.log("Audio not supported"); }
-  };
-
-  // Robot Receive Sound
-  const playReceiveSound = () => {
-    if (isMuted) return;
-    try {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      const ctx = new AudioContext();
-      if (ctx.state === 'suspended') ctx.resume();
-      const osc = ctx.createOscillator();
-      const gainNode = ctx.createGain();
-      osc.type = 'square';
-      osc.frequency.setValueAtTime(440, ctx.currentTime); 
-      osc.frequency.setValueAtTime(660, ctx.currentTime + 0.1);
-      gainNode.gain.setValueAtTime(0.1, ctx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
-      osc.connect(gainNode);
-      gainNode.connect(ctx.destination);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.2);
-    } catch(e) { 
-      console.log("AudioContext blocked, using fallback");
-    }
-  };
-
-  // Text to Speech
-  const [isMuted, setIsMuted] = useState(false);
-  const speakText = (text) => {
-    if (isMuted) return;
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      // Remove basic markdown
-      let cleanText = text.replace(/[*#_`]/g, '');
-      const utterance = new SpeechSynthesisUtterance(cleanText);
-      utterance.lang = 'tr-TR';
-      utterance.rate = 1.05;
-      utterance.pitch = 1.3;
-      
-      const voices = window.speechSynthesis.getVoices();
-      const trVoice = voices.find(v => v.lang.includes('tr') || v.lang.includes('TR'));
-      if (trVoice) utterance.voice = trVoice;
-      
-      window.speechSynthesis.speak(utterance);
-    }
-  };
-
-  useEffect(() => {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.getVoices();
-    }
-  }, []);
-
-
-  
   // VITE_GEMINI_API_KEY ortam değişkeninden anahtarı alıyoruz
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
@@ -117,13 +44,6 @@ export default function AiAssistant() {
       return;
     }
     
-    // Unlock Speech Synthesis immediately on click
-    if ('speechSynthesis' in window) {
-       const unlock = new SpeechSynthesisUtterance('');
-       unlock.volume = 0;
-       window.speechSynthesis.speak(unlock);
-    }
-    
     const userMsg = input.trim();
     setInput('');
     const userParts = [{ text: userMsg || 'Bu görsele bak.' }];
@@ -132,7 +52,6 @@ export default function AiAssistant() {
     }
     setMessages(prev => [...prev, { role: 'user', parts: userParts }]);
     setLoading(true);
-    playSendSound();
     setError('');
 
     try {
@@ -200,8 +119,6 @@ export default function AiAssistant() {
 
       if (responseText) {
          setMessages(prev => [...prev, { role: 'model', parts: [{ text: responseText }] }]);
-         playReceiveSound();
-         speakText(responseText);
          
          if (profile?.uid) {
            await logAIPrompt(profile.schoolCode, profile, userMsg, responseText);
