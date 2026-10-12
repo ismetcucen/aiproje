@@ -25,10 +25,12 @@ import InstagramWidget from '../../components/InstagramWidget'
 import { getSchoolSettings } from '../../firebase/schema'
 import BlocklyEditor from '../../components/robotics/BlocklyEditor'
 import TeknofestAssistant from '../../components/projectAssistant/TeknofestAssistant'
+import MyProjects from '../../components/student/MyProjects'
 
 const MENU = [
   { id: 'home',        label: 'Ana Sayfa', icon: '🏠' },
   { id: 'teknofest',   label: 'TEKNOFEST Asistanı', icon: '🚀' },
+  { id: 'my_projects', label: 'Projelerim', icon: '📁' },
   { id: 'assignments', label: 'Görevler',  icon: '📋' },
   { id: 'studio',      label: 'Üret',      icon: '✏️' },
   { id: 'portfolio',   label: 'Portfolyo', icon: '🗂️' },
@@ -40,6 +42,7 @@ const MENU = [
 export default function StudentPanel() {
   const { user, profile, logout } = useAuth()
   const [active, setActive]                     = useState('home')
+  const [selectedDraftForEdit, setSelectedDraftForEdit] = useState(null)
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [showAvatarModal, setShowAvatarModal] = useState(false)
@@ -192,7 +195,19 @@ export default function StudentPanel() {
 
         <div className="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar">
           {active === 'home'        && <StudentHome onNavigate={setActive} />}
-          {active === 'teknofest'   && <TeknofestAssistant />}
+          {active === 'teknofest'   && <TeknofestAssistant initialDraft={selectedDraftForEdit} />}
+          {active === 'my_projects' && (
+            <MyProjects 
+              onOpenProject={(proj) => {
+                setSelectedDraftForEdit(proj);
+                setActive('teknofest');
+              }}
+              onNewProject={() => {
+                setSelectedDraftForEdit(null);
+                setActive('teknofest');
+              }}
+            />
+          )}
           {active === 'assignments' && <AssignmentList onStart={goToStudio} />}
           {active === 'studio'      && <Studio assignment={selectedAssignment} onBack={() => setActive('assignments')} />}
           {active === 'portfolio'   && <Portfolio />}

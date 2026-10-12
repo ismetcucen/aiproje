@@ -44,7 +44,7 @@ const STEPS = [
   { num: 6, title: 'Sanal Jüri', icon: '⚖️', desc: 'Zorlu sorular ve puanlama simülasyonu' },
 ];
 
-export default function TeknofestAssistant({ isTeacher = false }) {
+export default function TeknofestAssistant({ isTeacher = false, initialDraft = null }) {
   const { user, profile } = useAuth();
   
   // Proje Form Verisi
@@ -86,6 +86,12 @@ export default function TeknofestAssistant({ isTeacher = false }) {
       loadDrafts();
     }
   }, [user]);
+
+  useEffect(() => {
+    if (initialDraft) {
+      handleSelectDraft(initialDraft);
+    }
+  }, [initialDraft]);
 
   async function loadDrafts() {
     try {
