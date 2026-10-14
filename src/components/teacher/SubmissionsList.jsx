@@ -248,17 +248,28 @@ export default function SubmissionsList() {
                   <p className="text-slate-700 text-xl font-bold">{students[selected.userId]?.fullName || 'Bilinmeyen Öğrenci'}</p>
                   <p className="text-slate-500 text-sm font-medium">{assignments[selected.assignmentId]?.title || ''}</p>
                 </div>
-                <button
-                  onClick={() => {
-                    const link = `${window.location.origin}/portfolio/${selected.userId}`;
-                    navigator.clipboard.writeText(link);
-                    alert('Veli linki kopyalandı!\n' + link);
-                  }}
-                  className="bg-indigo-50 hover:bg-indigo-100 text-indigo-600 px-4 py-2 rounded-xl text-sm font-bold transition-colors border border-indigo-200 flex items-center gap-2"
-                  title="Veli Portfolyo Linkini Kopyala"
-                >
-                  🔗 Veli Linki
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => {
+                      const link = `${window.location.origin}/portfolio/${selected.userId}`;
+                      navigator.clipboard.writeText(link);
+                      alert('Veli linki kopyalandı!\n' + link);
+                    }}
+                    className="bg-indigo-50 hover:bg-indigo-100 text-indigo-600 px-3 py-2 rounded-xl text-sm font-bold transition-colors border border-indigo-200 flex items-center gap-1.5"
+                    title="Veli Portfolyo Linkini Kopyala"
+                  >
+                    🔗 Kopyala
+                  </button>
+                  <a
+                    href={`/portfolio/${selected.userId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 px-3 py-2 rounded-xl text-sm font-bold transition-colors border border-emerald-200 flex items-center gap-1"
+                    title="Veli / Gelişim Portfolyosunu Görüntüle"
+                  >
+                    👁️ Aç
+                  </a>
+                </div>
               </div>
               <div className="flex gap-2 mb-6 relative z-10">
                 <span className="text-xs font-bold uppercase tracking-wider bg-slate-50 text-slate-700 px-3 py-1.5 rounded-lg">

@@ -47,7 +47,22 @@ export default function LiveSessionLocker() {
     if (!answer.trim()) return
     setSubmitting(true)
     try {
-      await submitLiveAnswer(session.id, session.questionId, user.uid, profile.fullName, answer, mySection || '')
+      await submitLiveAnswer(
+        session.id, 
+        session.questionId, 
+        user.uid, 
+        profile.fullName, 
+        answer, 
+        mySection || '',
+        {
+          questionText: session.currentQuestion || '',
+          questionSlide: session.currentSlide || '',
+          questionType: session.type || 'text',
+          pollOptions: session.options || [],
+          schoolCode: profile.schoolCode || '',
+          gradeNumber: String(profile.gradeNumber || '')
+        }
+      )
       const updated = { ...answeredQuestions, [session.questionId]: true }
       setAnsweredQuestions(updated)
       localStorage.setItem('answeredLiveQuestions', JSON.stringify(updated))
@@ -99,7 +114,22 @@ export default function LiveSessionLocker() {
                     onClick={async () => {
                       setSubmitting(true)
                       try {
-                        await submitLiveAnswer(session.id, session.questionId, user.uid, profile.fullName, opt, mySection || '')
+                        await submitLiveAnswer(
+                          session.id, 
+                          session.questionId, 
+                          user.uid, 
+                          profile.fullName, 
+                          opt, 
+                          mySection || '',
+                          {
+                            questionText: session.currentQuestion || '',
+                            questionSlide: session.currentSlide || '',
+                            questionType: session.type || 'poll',
+                            pollOptions: session.options || [],
+                            schoolCode: profile.schoolCode || '',
+                            gradeNumber: String(profile.gradeNumber || '')
+                          }
+                        )
                         const updated = { ...answeredQuestions, [session.questionId]: true }
                         setAnsweredQuestions(updated)
                         localStorage.setItem('answeredLiveQuestions', JSON.stringify(updated))

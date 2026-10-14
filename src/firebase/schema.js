@@ -345,7 +345,10 @@ export async function getPublicPortfolio(userId) {
   const userData = userDoc.data();
   // if (!userData.publicPortfolio) return null; // Make everything public for now
 
-  const submissions = await getSubmissionsByStudent(userId);
+  const [submissions, liveAnswers] = await Promise.all([
+    getSubmissionsByStudent(userId),
+    getStudentLiveAnswers(userId)
+  ]);
   
   // Fetch assignment details for each submission so parents can see the task title
   const populatedSubmissions = await Promise.all(submissions.map(async (sub) => {
@@ -359,8 +362,14 @@ export async function getPublicPortfolio(userId) {
   
   // Velilerin, henüz notlanmamış olsa bile öğrencilerin görevlerini ve cevaplarını görebilmesi için filtreyi kaldırdık.
   return {
-    student: { fullName: userData.fullName, gradeNumber: userData.gradeNumber, badges: userData.badges || [] },
-    submissions: populatedSubmissions 
+    student: { 
+      fullName: userData.fullName, 
+      gradeNumber: userData.gradeNumber, 
+      section: userData.section || '',
+      badges: userData.badges || [] 
+    },
+    submissions: populatedSubmissions,
+    liveAnswers: liveAnswers || []
   };
 }
 
@@ -727,16 +736,101 @@ export async function setLiveSession(schoolCode, gradeNumber, data) {
   }, { merge: true });
 }
 
-export async function submitLiveAnswer(sessionId, questionId, studentId, studentName, answer, studentSection = '') {
-  await addDoc(collection(db, 'live_answers'), {
-    sessionId,
-    questionId,
-    studentId,
-    studentName,
-    studentSection,
-    answer,
+export async function saveLiveQuestion(schoolCode, gradeNumber, questionData) {
+  if (!schoolCode || !gradeNumber || !questionData?.questionId) return;
+  const qId = String(questionData.questionId);
+  await setDoc(doc(db, 'live_questions', qId), {
+    ...questionData,
+    schoolCode,
+    gradeNumber: String(gradeNumber),
     createdAt: serverTimestamp()
-  });
+  }, { merge: true });
+}
+
+export async function submitLiveAnswer(arg1, questionId, studentId, studentName, answer, studentSection = '', extraDetails = {}) {
+  let payload = {};
+  if (typeof arg1 === 'object' && arg1 !== null) {
+    payload = {
+      ...arg1,
+      createdAt: serverTimestamp()
+    };
+  } else {
+    payload = {
+      sessionId: arg1,
+      questionId,
+      studentId,
+      studentName,
+      studentSection,
+      answer,
+      ...extraDetails,
+      createdAt: serverTimestamp()
+    };
+  }
+  await addDoc(collection(db, 'live_answers'), payload);
+}
+
+export async function getStudentLiveAnswers(studentId) {
+  if (!studentId) return [];
+  try {
+    const q = query(
+      collection(db, 'live_answers'),
+      where('studentId', '==', studentId)
+    );
+    const snap = await getDocs(q);
+    const answers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+    // Eksik soru başlığı veya slaytı varsa live_questions koleksiyonundan tamamla
+    const populated = await Promise.all(answers.map(async (ans) => {
+      if ((!ans.questionText || !ans.questionSlide) && ans.questionId) {
+        try {
+          const qDoc = await getDoc(doc(db, 'live_questions', String(ans.questionId)));
+          if (qDoc.exists()) {
+            const qData = qDoc.data();
+            return {
+              ...ans,
+              questionText: ans.questionText || qData.questionText || qData.currentQuestion || '',
+              questionSlide: ans.questionSlide || qData.imageUrl || qData.currentSlide || '',
+              questionType: ans.questionType || qData.type || 'text',
+              pollOptions: ans.pollOptions || qData.options || []
+            };
+          }
+        } catch (e) {
+          // ignore error
+        }
+      }
+      return ans;
+    }));
+
+    return populated.sort((a, b) => {
+      const timeA = a.createdAt?.toMillis?.() || (a.createdAt?.seconds ? a.createdAt.seconds * 1000 : 0);
+      const timeB = b.createdAt?.toMillis?.() || (b.createdAt?.seconds ? b.createdAt.seconds * 1000 : 0);
+      return timeB - timeA;
+    });
+  } catch (err) {
+    console.error('Error fetching live answers for student:', err);
+    return [];
+  }
+}
+
+export async function getLiveQuestionsHistory(schoolCode, gradeNumber) {
+  if (!schoolCode || !gradeNumber) return [];
+  try {
+    const q = query(
+      collection(db, 'live_questions'),
+      where('schoolCode', '==', schoolCode),
+      where('gradeNumber', '==', String(gradeNumber))
+    );
+    const snap = await getDocs(q);
+    const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    return list.sort((a, b) => {
+      const timeA = a.createdAt?.toMillis?.() || (a.createdAt?.seconds ? a.createdAt.seconds * 1000 : 0);
+      const timeB = b.createdAt?.toMillis?.() || (b.createdAt?.seconds ? b.createdAt.seconds * 1000 : 0);
+      return timeB - timeA;
+    });
+  } catch (err) {
+    console.error('Error fetching live questions history:', err);
+    return [];
+  }
 }
 
 export function listenToLiveAnswers(sessionId, questionId, callback) {

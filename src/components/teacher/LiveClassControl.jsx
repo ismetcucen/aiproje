@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../../hooks/useAuth'
-import { setLiveSession, listenToLiveSession, listenToLiveAnswers } from '../../firebase/schema'
+import { setLiveSession, listenToLiveSession, listenToLiveAnswers, saveLiveQuestion, getLiveQuestionsHistory } from '../../firebase/schema'
 import { collection, query, where, getDocs, onSnapshot } from 'firebase/firestore'
 import { db } from '../../firebase/config'
 const GRADES = ['3', '4', '5', '6', '7', '9', '10'] // using GRADES from schema or just array
@@ -24,6 +24,10 @@ export default function LiveClassControl() {
   const [loading, setLoading] = useState(false)
   const [questionType, setQuestionType] = useState('text')
   const [pollOptions, setPollOptions] = useState(['', '', '', ''])
+
+  const [showHistoryModal, setShowHistoryModal] = useState(false)
+  const [historyQuestions, setHistoryQuestions] = useState([])
+  const [historyLoading, setHistoryLoading] = useState(false)
 
   const fileInputRef = useRef(null)
 
@@ -174,6 +178,15 @@ export default function LiveClassControl() {
       payload.options = validOptions
     }
     await setLiveSession(profile.schoolCode, selectedGrade, payload)
+    await saveLiveQuestion(profile.schoolCode, selectedGrade, {
+      questionId: qId,
+      questionText,
+      imageUrl,
+      type: questionType,
+      options: payload.options || [],
+      targetSections,
+      requireAnswer
+    })
     setQuestionText('')
     setLoading(false)
     const targetMsg = targetSections.length > 0 ? `Seçilen şubelere (${targetSections.join(', ')})` : 'Tüm şubelere'
@@ -227,7 +240,19 @@ export default function LiveClassControl() {
           </h2>
           <p className="text-slate-500 text-sm">Öğrencilerin ekranlarına anlık soru ve görsel gönderin, cevapları toplayın.</p>
         </div>
-        <div className="mt-4 md:mt-0 flex gap-2">
+        <div className="mt-4 md:mt-0 flex flex-wrap items-center gap-2">
+          <button 
+            onClick={async () => {
+              setShowHistoryModal(true);
+              setHistoryLoading(true);
+              const hist = await getLiveQuestionsHistory(profile.schoolCode, selectedGrade);
+              setHistoryQuestions(hist);
+              setHistoryLoading(false);
+            }}
+            className="px-3.5 py-2 rounded-xl text-sm font-bold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all flex items-center gap-1.5 shadow-sm"
+          >
+            <span>📜</span> Soru Geçmişi
+          </button>
           {GRADES.map(g => (
             <button key={g} onClick={() => setSelectedGrade(g)}
               className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${selectedGrade === g ? 'bg-indigo-600 text-white shadow-md' : 'bg-white border border-slate-200 text-slate-600'}`}>
@@ -576,6 +601,80 @@ export default function LiveClassControl() {
         </div>
 
       </div>
+
+      {/* SORU GEÇMİŞİ MODALI */}
+      {showHistoryModal && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-3xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-slate-100 overflow-hidden animate-fade-in">
+            <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+              <div>
+                <h3 className="font-black text-slate-800 text-xl flex items-center gap-2">
+                  <span>📜</span> {selectedGrade}. Sınıf Canlı Soru Geçmişi
+                </h3>
+                <p className="text-slate-500 text-xs mt-0.5">Daha önce sınıfa gönderilen sorular ve şube hedefleri</p>
+              </div>
+              <button 
+                onClick={() => setShowHistoryModal(false)}
+                className="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center font-bold text-lg hover:bg-slate-100 transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+            
+            <div className="p-6 overflow-y-auto space-y-4 flex-1 custom-scrollbar">
+              {historyLoading ? (
+                <div className="py-12 text-center text-slate-400 font-medium">Yükleniyor...</div>
+              ) : historyQuestions.length === 0 ? (
+                <div className="py-12 text-center text-slate-400">
+                  <span className="text-4xl block mb-2">📁</span>
+                  <p className="font-bold">Henüz kaydedilmiş soru bulunmuyor.</p>
+                </div>
+              ) : (
+                historyQuestions.map((q, idx) => (
+                  <div key={q.id || idx} className="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                    <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="bg-indigo-100 text-indigo-700 text-xs font-bold px-2.5 py-0.5 rounded-lg">
+                          {q.type === 'poll' ? '🔘 Anket' : '✍️ Açık Uçlu'}
+                        </span>
+                        {q.targetSections && q.targetSections.length > 0 ? (
+                          <span className="bg-purple-100 text-purple-700 text-xs font-bold px-2.5 py-0.5 rounded-lg">
+                            Hedef: {q.targetSections.map(s => `${selectedGrade}/${s}`).join(', ')}
+                          </span>
+                        ) : (
+                          <span className="bg-emerald-100 text-emerald-700 text-xs font-bold px-2.5 py-0.5 rounded-lg">
+                            Tüm Şubeler
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-xs text-slate-400 font-medium">
+                        {q.createdAt?.toDate ? q.createdAt.toDate().toLocaleString('tr-TR') : ''}
+                      </span>
+                    </div>
+
+                    {q.imageUrl && (
+                      <img src={q.imageUrl} alt="Slayt" className="max-h-36 rounded-xl object-contain mb-2 border border-slate-200 bg-white" />
+                    )}
+
+                    <p className="text-slate-800 font-bold text-sm">{q.questionText || '(Görsel soru)'}</p>
+
+                    {q.type === 'poll' && q.options && q.options.length > 0 && (
+                      <div className="mt-2 grid grid-cols-2 gap-1.5">
+                        {q.options.map((opt, oIdx) => (
+                          <div key={oIdx} className="bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-xs text-slate-600 flex items-center gap-1.5">
+                            <span className="font-bold text-indigo-600">{String.fromCharCode(65 + oIdx)}:</span>
+                            <span>{opt}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

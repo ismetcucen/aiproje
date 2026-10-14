@@ -170,17 +170,27 @@ export default function StudentList() {
                 </div>
                 
                 {/* Veli Linki */}
-                <div className="col-span-2 flex justify-end">
+                <div className="col-span-2 flex justify-end gap-1.5">
                   <button
                     onClick={() => {
                       const link = window.location.origin + '/p/' + student.id;
                       navigator.clipboard.writeText(link);
                       alert('Veli linki kopyalandı!\n' + link);
                     }}
-                    className="bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600 hover:text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-colors"
+                    title="Veli linkini kopyala"
+                    className="bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600 hover:text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition-colors"
                   >
                     🔗 Kopyala
                   </button>
+                  <a
+                    href={'/p/' + student.id}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Veli / Gelişim Portfolyosunu Görüntüle"
+                    className="bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600 hover:text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition-colors flex items-center gap-1"
+                  >
+                    👁️ Aç
+                  </a>
                 </div>
               </div>
             )
