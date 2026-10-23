@@ -441,13 +441,9 @@ export default function DigitalBoardViewer() {
   const validBackgrounds = (settings?.backgroundImages || [])
     .filter(url => typeof url === 'string' && url.trim().length > 0 && !url.includes('photo-1541339907198') && !url.includes('unsplash'))
 
-  const customSingleBg = (settings?.backgroundImageUrl && !settings.backgroundImageUrl.includes('photo-1541339907198') && !settings.backgroundImageUrl.includes('unsplash'))
-    ? settings.backgroundImageUrl.trim()
-    : null
-
   const activeBg = validBackgrounds.length > 0
     ? validBackgrounds[currentSlideIndex % validBackgrounds.length]
-    : (customSingleBg || '/ohep-campus.jpg?v=2')
+    : '/ohep-campus.jpg?v=3'
 
   return (
     <div 

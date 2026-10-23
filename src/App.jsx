@@ -12,7 +12,7 @@ function AppContent() {
   const { user, profile } = useAuth()
 
   const path = window.location.pathname;
-  if (path === '/pano') return <DigitalBoardViewer />
+  if (path === '/pano' || window.location.search.includes('pano') || window.location.hash.includes('pano')) return <DigitalBoardViewer />
 
   if (path.startsWith('/p/') || path.startsWith('/portfolio/')) {
     const parts = path.split('/');

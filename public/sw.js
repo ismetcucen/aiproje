@@ -3,9 +3,13 @@ self.addEventListener('install', (e) => {
 });
 
 self.addEventListener('activate', (e) => {
-  console.log('OHEP AI Studio Service Worker Aktif!');
+  e.waitUntil(
+    caches.keys().then((keys) => {
+      return Promise.all(keys.map((k) => caches.delete(k)));
+    }).then(() => self.clients.claim())
+  );
 });
 
 self.addEventListener('fetch', (e) => {
-  // Basit pass-through, PWA kurulum gereksinimini karsilamak icin yeterli.
+  // Always fetch fresh network requests
 });
