@@ -14,8 +14,9 @@ function AppContent() {
   const path = window.location.pathname;
   if (path === '/pano') return <DigitalBoardViewer />
 
-  if (path.startsWith('/p/')) {
-    const studentId = path.split('/')[2];
+  if (path.startsWith('/p/') || path.startsWith('/portfolio/')) {
+    const parts = path.split('/');
+    const studentId = parts[parts.length - 1]; // Takes the last part, robust for both
     return <ParentPortfolio studentId={studentId} />
   }
 

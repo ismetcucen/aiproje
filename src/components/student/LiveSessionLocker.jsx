@@ -28,19 +28,41 @@ export default function LiveSessionLocker() {
   // Soru yoksa kilitlenme
   if (!session.questionId && !session.currentSlide) return null
 
+  // Şube kontrolü: Eğer öğretmen belirli şubeleri seçtiyse ve öğrenci bu şubede değilse kilitlenme
+  const mySection = profile?.section;
+  const targetSections = session.targetSections;
+  if (targetSections && Array.isArray(targetSections) && targetSections.length > 0 && !targetSections.includes('ALL')) {
+    if (mySection && !targetSections.includes(mySection)) {
+      return null;
+    }
+  }
+
   // Soru varsa, kilitli mi?
   const isAnswered = answeredQuestions[session.questionId]
   const isLocked = session.requireAnswer && session.questionId && !isAnswered
 
-  // Eger kilitli degilse ama hala aktif slayt varsa, kucuk bir yuzen widget veya baska bir sekme gosterilebilir.
-  // Mimaride zorunlu dediginiz icin, kilitli oldugu senaryoyu render ediyoruz.
   if (!isLocked) return null
 
   async function handleSubmit() {
     if (!answer.trim()) return
     setSubmitting(true)
     try {
-      await submitLiveAnswer(session.id, session.questionId, user.uid, profile.fullName, answer)
+      await submitLiveAnswer(
+        session.id, 
+        session.questionId, 
+        user.uid, 
+        profile.fullName, 
+        answer, 
+        mySection || '',
+        {
+          questionText: session.currentQuestion || '',
+          questionSlide: session.currentSlide || '',
+          questionType: session.type || 'text',
+          pollOptions: session.options || [],
+          schoolCode: profile.schoolCode || '',
+          gradeNumber: String(profile.gradeNumber || '')
+        }
+      )
       const updated = { ...answeredQuestions, [session.questionId]: true }
       setAnsweredQuestions(updated)
       localStorage.setItem('answeredLiveQuestions', JSON.stringify(updated))
@@ -92,7 +114,22 @@ export default function LiveSessionLocker() {
                     onClick={async () => {
                       setSubmitting(true)
                       try {
-                        await submitLiveAnswer(session.id, session.questionId, user.uid, profile.fullName, opt)
+                        await submitLiveAnswer(
+                          session.id, 
+                          session.questionId, 
+                          user.uid, 
+                          profile.fullName, 
+                          opt, 
+                          mySection || '',
+                          {
+                            questionText: session.currentQuestion || '',
+                            questionSlide: session.currentSlide || '',
+                            questionType: session.type || 'poll',
+                            pollOptions: session.options || [],
+                            schoolCode: profile.schoolCode || '',
+                            gradeNumber: String(profile.gradeNumber || '')
+                          }
+                        )
                         const updated = { ...answeredQuestions, [session.questionId]: true }
                         setAnsweredQuestions(updated)
                         localStorage.setItem('answeredLiveQuestions', JSON.stringify(updated))

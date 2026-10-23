@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../hooks/useAuth'
-import { createSubmission, getSubmissionsByStudent, uploadFile } from '../../firebase/schema'
+import { createSubmission, updateSubmission, getSubmissionsByStudent, uploadFile } from '../../firebase/schema'
 import { CURRICULUM } from '../../data/curriculum'
 import { getToolUrl } from '../../data/aiToolUrls'
 
@@ -15,6 +15,30 @@ export default function Studio({ assignment, onBack }) {
   
   const [uploading, setUploading] = useState(false)
   const [progress, setProgress] = useState(0)
+  
+  const [existingSubmission, setExistingSubmission] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (!user || !assignment) return;
+    async function loadSub() {
+      try {
+        const subs = await getSubmissionsByStudent(user.uid)
+        const sub = subs.find(s => s.assignmentId === assignment.id)
+        if (sub) {
+          setExistingSubmission(sub)
+          setContent(sub.content || '')
+          setFiles(sub.files || [])
+          setAiUsed(sub.aiUsed || false)
+        }
+      } catch (err) {
+        console.error(err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadSub()
+  }, [user, assignment])
 
   if (!assignment) {
     return (
@@ -53,18 +77,31 @@ export default function Studio({ assignment, onBack }) {
     if (!content.trim() && files.length === 0) return setError('Lütfen bir içerik yaz veya dosya yükle.')
     setError(''); setSaving(true)
     try {
-      await createSubmission({
-        userId:       user.uid,
-        assignmentId: assignment.id,
-        content:      content.trim(),
-        contentType:  assignment.contentTypes?.[0] || 'text',
-        aiUsed,
-        aiNotes:      aiUsed ? 'Onerilen arac kullanildi' : null,
-        schoolCode:   profile.schoolCode,
-        files:        files,
-      })
+      if (existingSubmission) {
+        if (existingSubmission.score !== null && existingSubmission.score !== undefined) {
+          return setError('Bu ödev notlandırıldığı için tekrar gönderilemez.')
+        }
+        await updateSubmission(existingSubmission.id, {
+          content: content.trim(),
+          aiUsed,
+          aiNotes: aiUsed ? 'Onerilen arac kullanildi' : null,
+          files: files,
+        })
+      } else {
+        const newSubId = await createSubmission({
+          userId:       user.uid,
+          assignmentId: assignment.id,
+          content:      content.trim(),
+          contentType:  assignment.contentTypes?.[0] || 'text',
+          aiUsed,
+          aiNotes:      aiUsed ? 'Onerilen arac kullanildi' : null,
+          schoolCode:   profile.schoolCode,
+          files:        files,
+        })
+        setExistingSubmission({ id: newSubId, score: null })
+      }
       setSaved(true)
-      setTimeout(() => setSaved(false), 3000)
+      setTimeout(() => setSaved(false), 8000)
     } catch (err) {
       console.error(err)
       setError('Kaydetme başarısız. Tekrar deneyin.')
@@ -87,6 +124,30 @@ export default function Studio({ assignment, onBack }) {
           </span>
         )}
       </div>
+
+      {existingSubmission && !saved && (
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6 shadow-sm flex items-center gap-4 animate-in fade-in slide-in-from-top-2">
+          <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-xl flex-shrink-0 font-bold">
+            ℹ️
+          </div>
+          <div>
+            <h3 className="text-blue-800 font-bold text-lg">Bu görevi daha önce gönderdiniz.</h3>
+            <p className="text-blue-600 text-sm">Aşağıdaki alanları düzenleyip "Gönderimi Güncelle" butonuna basarak ödevinizi güncelleyebilirsiniz.</p>
+          </div>
+        </div>
+      )}
+
+      {saved && (
+        <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-6 shadow-sm flex items-center gap-4 animate-in fade-in slide-in-from-top-2">
+          <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 text-xl flex-shrink-0 font-bold">
+            ✓
+          </div>
+          <div>
+            <h3 className="text-emerald-800 font-bold text-lg">Ödeviniz Öğretmene Gönderildi!</h3>
+            <p className="text-emerald-600 text-sm">Göreviniz başarıyla kaydedildi ve öğretmeninize iletildi. Değerlendirme sonucunu bu ekrandan takip edebilirsiniz.</p>
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
         <div className="lg:col-span-2 bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
@@ -184,10 +245,10 @@ export default function Studio({ assignment, onBack }) {
           </div>
           <div className="flex items-center gap-3">
             {error  && <span className="text-red-500 text-xs">{error}</span>}
-            {saved  && <span className="text-green-600 text-xs font-medium">✓ Kaydedildi!</span>}
+            {saved  && <span className="text-green-600 text-xs font-medium">✓ Başarıyla Gönderildi!</span>}
             <button onClick={handleSave} disabled={saving || uploading}
               className="bg-blue-600 hover:bg-blue-500 disabled:bg-blue-300 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
-              {saving ? 'Kaydediliyor...' : 'Gönder & Kaydet'}
+              {saving ? 'Kaydediliyor...' : existingSubmission ? 'Gönderimi Güncelle' : 'Gönder & Kaydet'}
             </button>
           </div>
         </div>

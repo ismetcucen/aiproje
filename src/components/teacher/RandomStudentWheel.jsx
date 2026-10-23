@@ -130,49 +130,8 @@ export default function RandomStudentWheel() {
     drawWheel()
   }, [students])
 
-  const playTickSound = () => {
-    try {
-      const AudioContext = window.AudioContext || window.webkitAudioContext
-      const ctx = new AudioContext()
-      if (ctx.state === 'suspended') ctx.resume()
-      const osc = ctx.createOscillator()
-      const gainNode = ctx.createGain()
-      osc.type = 'triangle'
-      osc.frequency.setValueAtTime(800, ctx.currentTime)
-      gainNode.gain.setValueAtTime(0.1, ctx.currentTime)
-      gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.05)
-      osc.connect(gainNode)
-      gainNode.connect(ctx.destination)
-      osc.start()
-      osc.stop(ctx.currentTime + 0.05)
-    } catch(err) { console.error(err) }
-  }
-
-  const playWinnerSound = () => {
-    try {
-      const AudioContext = window.AudioContext || window.webkitAudioContext
-      const ctx = new AudioContext()
-      if (ctx.state === 'suspended') ctx.resume()
-      
-      const playNote = (freq, startTime, duration) => {
-        const osc = ctx.createOscillator()
-        const gainNode = ctx.createGain()
-        osc.type = 'square'
-        osc.frequency.value = freq
-        gainNode.gain.setValueAtTime(0.2, startTime)
-        gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + duration)
-        osc.connect(gainNode)
-        gainNode.connect(ctx.destination)
-        osc.start(startTime)
-        osc.stop(startTime + duration)
-      }
-      
-      const now = ctx.currentTime
-      playNote(523.25, now, 0.2) // C5
-      playNote(659.25, now + 0.2, 0.2) // E5
-      playNote(783.99, now + 0.4, 0.4) // G5
-    } catch(err) { console.error(err) }
-  }
+  const playTickSound = () => {}
+  const playWinnerSound = () => {}
 
   const spin = () => {
     if (isSpinning || students.length === 0) return

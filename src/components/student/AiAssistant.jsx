@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { GoogleGenAI } from '@google/genai';
 import { useAuth } from '../../hooks/useAuth';
 import { checkAndIncrementAILimit, logAIPrompt } from '../../firebase/schema';
+import { resolveGeminiApiKey } from '../../utils/geminiService';
 
 export default function AiAssistant() {
   const { profile } = useAuth();
@@ -16,79 +17,6 @@ export default function AiAssistant() {
   const [error, setError] = useState('');
   const chatRef = useRef(null);
 
-  // Robot Send Sound (Web Audio API)
-  const playSendSound = () => {
-    if (isMuted) return;
-    try {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      const ctx = new AudioContext();
-      if (ctx.state === 'suspended') ctx.resume();
-      const osc = ctx.createOscillator();
-      const gainNode = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(880, ctx.currentTime); // A5
-      osc.frequency.exponentialRampToValueAtTime(1760, ctx.currentTime + 0.1); // A6
-      gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
-      osc.connect(gainNode);
-      gainNode.connect(ctx.destination);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.1);
-    } catch(e) { console.log("Audio not supported"); }
-  };
-
-  // Robot Receive Sound
-  const playReceiveSound = () => {
-    if (isMuted) return;
-    try {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      const ctx = new AudioContext();
-      if (ctx.state === 'suspended') ctx.resume();
-      const osc = ctx.createOscillator();
-      const gainNode = ctx.createGain();
-      osc.type = 'square';
-      osc.frequency.setValueAtTime(440, ctx.currentTime); 
-      osc.frequency.setValueAtTime(660, ctx.currentTime + 0.1);
-      gainNode.gain.setValueAtTime(0.1, ctx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
-      osc.connect(gainNode);
-      gainNode.connect(ctx.destination);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.2);
-    } catch(e) { 
-      console.log("AudioContext blocked, using fallback");
-    }
-  };
-
-  // Text to Speech
-  const [isMuted, setIsMuted] = useState(false);
-  const speakText = (text) => {
-    if (isMuted) return;
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      // Remove basic markdown
-      let cleanText = text.replace(/[*#_`]/g, '');
-      const utterance = new SpeechSynthesisUtterance(cleanText);
-      utterance.lang = 'tr-TR';
-      utterance.rate = 1.05;
-      utterance.pitch = 1.3;
-      
-      const voices = window.speechSynthesis.getVoices();
-      const trVoice = voices.find(v => v.lang.includes('tr') || v.lang.includes('TR'));
-      if (trVoice) utterance.voice = trVoice;
-      
-      window.speechSynthesis.speak(utterance);
-    }
-  };
-
-  useEffect(() => {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.getVoices();
-    }
-  }, []);
-
-
-  
   // VITE_GEMINI_API_KEY ortam değişkeninden anahtarı alıyoruz
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
@@ -110,25 +38,20 @@ export default function AiAssistant() {
 
   async function handleSend(e) {
     e.preventDefault();
-    if ((!input.trim() && !imageFile) || !apiKey) return;
-    
-    // Unlock Speech Synthesis immediately on click
-    if ('speechSynthesis' in window) {
-       const unlock = new SpeechSynthesisUtterance('');
-       unlock.volume = 0;
-       window.speechSynthesis.speak(unlock);
+    const activeKey = await resolveGeminiApiKey();
+    if ((!input.trim() && !imageFile) || !activeKey) {
+      if (!activeKey) setError('Gemini API anahtarı tanımlanmamış. Lütfen öğretmen veya yöneticinizle iletişime geçin.');
+      return;
     }
     
     const userMsg = input.trim();
     setInput('');
     const userParts = [{ text: userMsg || 'Bu görsele bak.' }];
     if (imagePreview) {
-       // Just for local UI history we can store a text indicator or a custom img tag
        userParts.push({ text: '[Görsel eklendi]' });
     }
     setMessages(prev => [...prev, { role: 'user', parts: userParts }]);
     setLoading(true);
-    playSendSound();
     setError('');
 
     try {
@@ -142,7 +65,7 @@ export default function AiAssistant() {
         }
       }
 
-      const ai = new GoogleGenAI({ apiKey, dangerouslyAllowBrowser: true });
+      const ai = new GoogleGenAI({ apiKey: activeKey, dangerouslyAllowBrowser: true });
       
       // Sistem talimatı (Öğretmen modu)
       const systemInstruction = `Sen ÖHEP Bilişim'in lise ve ortaokul bilişim teknolojileri, kodlama ve robotik öğretmenisin.
@@ -153,13 +76,11 @@ export default function AiAssistant() {
 4. Eğitim: Öğrenci senden ödevin veya projenin bitmiş kodunu isterse KODUN TAMAMINI YAZMA. Sadece mantığını anlat ve küçük ipuçları ver.
 5. Anlaşılır, cesaretlendirici ve tamamen Türkçe konuş.`;
 
-      // API'nin beklediği formata mesajları çeviriyoruz
       const history = messages.map(m => ({
         role: m.role,
         parts: m.parts
       }));
 
-      // Kendi mesajını da ekle
       const apiUserParts = [{ text: userMsg || 'Lütfen bu görsele bakarak yardımcı ol.' }];
       if (imageFile) {
         const base64 = imagePreview.split(',')[1];
@@ -175,27 +96,39 @@ export default function AiAssistant() {
       setImagePreview(null);
       if (fileInputRef.current) fileInputRef.current.value = '';
 
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: history,
-        config: {
-          systemInstruction: systemInstruction,
-          temperature: 0.7
+      let responseText = '';
+      const candidateModels = ['gemini-2.5-flash', 'gemini-1.5-flash'];
+      for (const m of candidateModels) {
+        try {
+          const res = await ai.models.generateContent({
+            model: m,
+            contents: history,
+            config: {
+              systemInstruction: systemInstruction,
+              temperature: 0.7
+            }
+          });
+          if (res?.text) {
+            responseText = res.text;
+            break;
+          }
+        } catch (mErr) {
+          console.warn(`Model ${m} başarısız oldu, yedek deneniyor:`, mErr.message);
         }
-      });
+      }
 
-      if (response.text) {
-         setMessages(prev => [...prev, { role: 'model', parts: [{ text: response.text }] }]);
-         playReceiveSound();
-         speakText(response.text);
+      if (responseText) {
+         setMessages(prev => [...prev, { role: 'model', parts: [{ text: responseText }] }]);
          
          if (profile?.uid) {
-           await logAIPrompt(profile.schoolCode, profile, userMsg, response.text);
+           await logAIPrompt(profile.schoolCode, profile, userMsg, responseText);
          }
+      } else {
+        throw new Error('Yapay zeka yanıt üretemedi.');
       }
     } catch (err) {
       console.error(err);
-      setError('Bir hata oluştu. Lütfen tekrar dene.');
+      setError(err?.message?.includes('leaked') ? 'Google API anahtarı geçersiz veya kilitli (Leaked/403).' : 'Bir hata oluştu. Lütfen tekrar dene.');
     } finally {
       setLoading(false);
     }

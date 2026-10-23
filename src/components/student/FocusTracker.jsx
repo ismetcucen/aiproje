@@ -195,23 +195,6 @@ export default function FocusTracker() {
     trackingData.current.lastAlertTime = Date.now()
     setF1Message(msg)
     
-    try {
-      const AudioContext = window.AudioContext || window.webkitAudioContext
-      const ctx = new AudioContext()
-      if (ctx.state === 'suspended') ctx.resume()
-      const osc = ctx.createOscillator()
-      const gainNode = ctx.createGain()
-      osc.type = 'sine'
-      osc.frequency.setValueAtTime(523.25, ctx.currentTime) // C5
-      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.2)
-      gainNode.gain.setValueAtTime(0.2, ctx.currentTime)
-      gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3)
-      osc.connect(gainNode)
-      gainNode.connect(ctx.destination)
-      osc.start()
-      osc.stop(ctx.currentTime + 0.3)
-    } catch(e) {}
-
     setTimeout(() => {
       setF1Message(null)
     }, 8000)
@@ -232,7 +215,7 @@ export default function FocusTracker() {
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center shadow-lg border-2 border-indigo-300 flex-shrink-0 bg-white">
             <img 
-              src="/cevbot.jpg" 
+              src="/cevbot.png" 
               alt="CEVBOT" 
               className={`w-full h-full object-cover transition-all duration-300 ${currentEmotion === 'happy' ? 'animate-spin-happy' : 'animate-float'}`} 
             />

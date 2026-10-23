@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../hooks/useAuth'
-import { getClassesBySchool, assignWeekToClass, getAssignmentsByClass } from '../../firebase/schema'
+import { getClassesBySchool, assignWeekToClass, getAssignmentsByClass, getCurriculumEdits } from '../../firebase/schema'
 import { CURRICULUM } from '../../data/curriculum'
 
 export default function CurriculumAssigner() {
@@ -8,6 +8,7 @@ export default function CurriculumAssigner() {
   const [classes,     setClasses]     = useState([])
   const [selected,    setSelected]    = useState(null)
   const [assignments, setAssignments] = useState([])
+  const [edits,       setEdits]       = useState({})
   const [loading,     setLoading]     = useState(true)
   const [saving,      setSaving]      = useState(false)
   const [success,     setSuccess]     = useState('')
@@ -16,6 +17,7 @@ export default function CurriculumAssigner() {
 
   useEffect(() => {
     loadClasses()
+    getCurriculumEdits().then(setEdits).catch(console.error)
   }, [])
 
   async function loadClasses() {
@@ -33,10 +35,15 @@ export default function CurriculumAssigner() {
     setAssignments(asgns)
   }
 
+  const curriculum = selected ? (CURRICULUM[selected.grade] || []).map(w => {
+    const edit = edits[`${selected.grade}_${w.week}`]
+    return edit ? { ...w, ...edit, title: edit.title || w.title } : w
+  }) : []
+
   async function handleAssign(week) {
     if (!selected) return
     const grade = selected.grade
-    const weekData = CURRICULUM[grade]?.find(w => w.week === week)
+    const weekData = curriculum.find(w => w.week === week)
     if (!weekData) return setError('Bu sinif icin hafta verisi bulunamadi.')
 
     const alreadyAssigned = assignments.find(a => a.week === week && a.classId === selected.id)
@@ -70,7 +77,6 @@ export default function CurriculumAssigner() {
     return assignments.some(a => a.week === week && a.classId === selected?.id)
   }
 
-  const curriculum = selected ? (CURRICULUM[selected.grade] || []) : []
 
   if (loading) return <div className="text-center py-20 text-slate-500">Yukleniyor...</div>
 

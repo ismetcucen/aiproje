@@ -1,0 +1,67 @@
+
+--- 1. Ünite: Teknoloji Ve Tasarım Öğreniyorum ---
+TT.7.1.1. Teknoloji ve tasarım ile ilişkili kavramları sorgulayabilme
+TT.7.1.2. Teknoloji ve tasarım arasındaki ilişkiyi çözümleyebilme
+TT.7.1.3. Teknoloji ve tasarım ürünlerini karşılaştırabilme
+TT.7.1.4. Çevresindeki teknoloji ve tasarım gelişmelerini değerlendirebilme
+TT.7.1.1.
+TT.7.1.2.
+TT.7.1.3.
+TT.7.1.4.
+
+--- 2. Ünite: Temel Tasarım ---
+TT.7.2.1. Bir ürün veya eser üzerinde sanat-tasarım eleman ve ilkelerini algılayabilme
+TT.7.2.2. Çevresindeki bir ürünü veya eseri yeniden yorumlayabilme
+TT.7.2.3. Sanat-tasarım eleman ve ilkelerini kullanarak analoji yapabilme
+TT.7.2.4. Sanat-tasarım eleman ve ilkelerini kullanarak özgün bir tasarım oluşturabilme
+TT.7.2.1.
+TT.7.2.2.
+TT.7.2.3.
+TT.7.2.4.
+
+--- 3. Ünite: Tasarım Odaklı Süreç ---
+TT.7.3.1. Tasarım problemlerini çözümleyebilme ve geliştirebilme kriterlerini sınıflandırabilme
+TT.7.3.1.
+
+--- 4. Ünite: Bilgisayar Destekli Tasarım ---
+TT.7.4.1. Tasarım problemini çözmek için ürün oluşturabilme
+TT.7.4.2. Yapılan tasarımı paylaşmak için çoklu ortam sunusu hazırlayabilme
+TT.7.4.1.
+TT.7.4.2.
+
+--- 5. Ünite: Mimari Tasarım ---
+TT.7.5.2. Işlevsel özelliklerin mimari tasarımda yapısal farklılıklara yol açtığını algılayabilme
+TT.7.5.1.
+TT.7.5.2.
+TT.7.5.3.
+TT.7.5.4.
+
+--- 6. Ünite: Doğadan Tasarıma ---
+TT.7.6.1. Canlılar ve doğal yapıların yapısal, biçimsel ve görsel özelliklerini sanatsal gözlemleyebilme
+TT.7.6.2. Gündelik hayatında var olan bir problemi çözebilmek için doğa ve canlıları tasarımla ilişkilendirebilme
+TT.7.6.3. Gündelik hayatında var olan bir problemin çözümünde biyotaklit yaklaşımını kullanarak ürün oluşturabilme
+TT.7.6.1.
+TT.7.6.2.
+TT.7.6.3.
+
+--- 7. Ünite: Enerjinin Dönüşümü Ve Tasarım ---
+TT.7.7.1. Enerji kavramı, enerji kaynakları, türleri ve dönüşümleri hakkında bilgi toplayabilme
+TT.7.7.2. Enerjinin dönüşümünün ve korunumunun doğa ve insan hayatına etkisi üzerine tümevarımsal akıl yürütebilme
+TT.7.7.3. Yenilenebilir ve yenilenemez enerji kaynaklarını sınıflandırabilme
+TT.7.7.4. Yenilenemez enerji kaynakları kullanımının dünyaya etkisini gözleme dayalı tahmin edebilme
+TT.7.7.5. Yenilenebilir enerji kaynakları kullanılarak enerji elde edilebilen bir ürün taslağı oluşturabilme
+TT.7.7.1.
+TT.7.7.2.
+TT.7.7.3.
+TT.7.7.4.
+TT.7.7.5.
+
+--- 8. Ünite: Bütünleşik Öğrenme: Steam ---
+TT.7.8.1. STEAM’i oluşturan disiplinler ile alt bileşenlerinin ne olduğunu sorgulayabilme
+TT.7.8.2. STEAM disiplinlerinin arasındaki ilişkiyi gözlemleyebilme
+TT.7.8.3. Proje türlerini karşılaştırabilme
+TT.7.8.4. STEAM yaklaşımına göre problem çözebilme
+TT.7.8.3.
+TT.7.8.4.
+
+--- 9. Ünite: Yapay Zekâ Ve Akıllı Ürünler ---

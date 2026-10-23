@@ -48,6 +48,7 @@ export default function BulkStudentUpload({ classInfo, schoolCode, onSuccess }) 
           let email = row['Email'] || row['email'] || row['mail'] || ''
           let password = row['Sifre'] || row['password'] || `Okul${schoolCode}123`
           let visualId = null
+          const useVisualPass = row['Durum'] === 'Görsel' || row['Görsel Şifre'] || row['Gorsel'] || row['Otomatik'] || row['Otomatik Şifre']
 
           const slug = fullName.trim().toLowerCase().replace(/[^a-z0-9]/g, '')
           
@@ -57,11 +58,15 @@ export default function BulkStudentUpload({ classInfo, schoolCode, onSuccess }) 
           }
 
           if (useVisualPass) {
-            const randomVisual = VISUAL_PASSWORDS[Math.floor(Math.random() * VISUAL_PASSWORDS.length)]
-            visualId = randomVisual.id
-            const slug = fullName.trim().toLowerCase().replace(/[^a-z0-9]/g, '')
-            email = `${slug}_${visualId}@aistudio.com`
-            password = `${visualId}_123456`
+            const SIMPLE_PASSWORDS = [
+              'kaplan', 'kartal', 'yildiz', 'simsek', 'volkan', 'ruzgar', 'destan', 'harika', 
+              'kahraman', 'dostluk', 'basari', 'mucize', 'sampiyon', 'gezegen', 
+              'galaksi', 'kaptan', 'leopar', 'atmaca', 'sirius', 'saturn', 'jupiter'
+            ];
+            const randomWord = SIMPLE_PASSWORDS[Math.floor(Math.random() * SIMPLE_PASSWORDS.length)];
+            const randomNum = Math.floor(10 + Math.random() * 90);
+            email = `${slug}${randomNum}@aistudio.com`
+            password = randomWord
           }
 
           return {
@@ -69,7 +74,8 @@ export default function BulkStudentUpload({ classInfo, schoolCode, onSuccess }) 
             email,
             gradeNumber: row['Sinif'] || row['grade'] || classInfo?.grade || '',
             password,
-            visualId
+            visualId: null,
+            simplePass: useVisualPass ? password : null
           }
         }).filter(r => r.fullName && r.email)
 
@@ -108,6 +114,7 @@ export default function BulkStudentUpload({ classInfo, schoolCode, onSuccess }) 
           gradeNumber: classInfo ? classInfo.grade : null,
           schoolCode,
           visualId:    s.visualId || null,
+          simplePass:  s.simplePass || null,
           files:       [],
           createdAt:   serverTimestamp(),
           isActive:    true,

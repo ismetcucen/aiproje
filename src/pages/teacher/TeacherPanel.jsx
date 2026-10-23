@@ -16,14 +16,17 @@ import LiveClassControl from '../../components/teacher/LiveClassControl'
 import RandomStudentWheel from '../../components/teacher/RandomStudentWheel'
 import CountdownTimer from '../../components/teacher/CountdownTimer'
 import FocusTracker from '../../components/student/FocusTracker'
+import BlocklyEditor from '../../components/robotics/BlocklyEditor'
+import TeknofestAssistant from '../../components/projectAssistant/TeknofestAssistant'
 
 const MENU = [
   { id: 'curriculum',  label: 'Müfredat',   icon: '📚' },
+  { id: 'teknofest',   label: 'TEKNOFEST Asistanı', icon: '🚀' },
   { id: 'assignments', label: 'Görevler',   icon: '📋' },
   { id: 'students',    label: 'Öğrenciler', icon: '👥' },
   { id: 'attendance',  label: 'Yoklama',    icon: '✅' },
   { id: 'submissions', label: 'Üretimler',  icon: '📝' },
-  { id: 'games', label: 'Oyunlar', icon: '🎮' },
+  { id: 'games', label: 'Kodlama Alıştırmaları', icon: '🎮' },
   { id: 'tools', label: 'Araçlar', icon: '🛠️' },
   { id: 'wheel', label: 'Seçici Çark', icon: '🎡' },
   { id: 'timer', label: 'Geri Sayım', icon: '⏱️' },
@@ -31,6 +34,7 @@ const MENU = [
   { id: 'live', label: 'Canlı Sınıf', icon: '📡' },
   { id: 'dojo', label: 'Sınıf Yıldızları', icon: '🌟' },
   { id: 'settings', label: 'Ayarlar', icon: '⚙️' },
+  { id: 'robotics', label: 'ESP32 Robotik', icon: '🤖' },
 ]
 
 export default function TeacherPanel() {
@@ -127,6 +131,7 @@ export default function TeacherPanel() {
 
         <div className="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar">
           {active === 'curriculum'  && <CurriculumAssigner />}
+          {active === 'teknofest'   && <TeknofestAssistant isTeacher={true} />}
           {active === 'assignments' && <AssignmentForm />}
           {active === 'students'    && <StudentList />}
           {active === 'attendance'  && <Attendance />}
@@ -139,6 +144,7 @@ export default function TeacherPanel() {
           {active === 'settings' && <ClassSettings />}
           {active === 'live' && <LiveClassControl />}
           {active === 'dojo' && <ClassDojoBoard />}
+          {active === 'robotics' && <BlocklyEditor />}
         </div>
       </main>
     </div>

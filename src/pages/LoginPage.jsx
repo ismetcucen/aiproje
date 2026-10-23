@@ -6,7 +6,7 @@ from '../components/admin/AddStudentModal'
 import InstagramWidget from '../components/InstagramWidget'
 import LiveMarquee from '../components/LiveMarquee'
 
-const TABS = { LOGIN: 'login', VISUAL: 'visual', REGISTER: 'register' }
+const TABS = { LOGIN: 'login', REGISTER: 'register' }
 
 const SLOGANS = [
   "Geleceği Şekillendir",
@@ -26,13 +26,12 @@ function normalizeStr(str) {
 
 export default function LoginPage() {
   const { login, register } = useAuth()
-  const [tab, setTab]         = useState(TABS.VISUAL) // Default to visual for students
+  const [tab, setTab]         = useState(TABS.LOGIN)
   const [loading, setLoading] = useState(false)
   const [error, setError]     = useState('')
   const [sloganIdx, setSloganIdx] = useState(0)
   
   const [loginData, setLoginData] = useState({ email: '', password: '' })
-  const [visualData, setVisualData] = useState({ fullName: '', gradeNumber: '', visualId: '' })
   const [regData, setRegData] = useState({
     fullName: '', email: '', password: '',
     role: ROLES.STUDENT, classLevel: CLASS_LEVELS.ORTAOKUL,
@@ -50,48 +49,76 @@ export default function LoginPage() {
     e.preventDefault()
     if (!loginData.email || !loginData.password) return setError('Kullanıcı adı ve şifre gerekli.')
     setError(''); setLoading(true)
-    try {
-      let loginId = loginData.email.trim();
-      // If it's just a username (no @ symbol), append the default school domain
-      if (!loginId.includes('@')) {
-         // Assume ohep.edu.tr or similar. Since we don't know the exact school code, we can try multiple or just the default.
-         // Most users are created with @ohep.edu.tr if no email was provided.
-         loginId = `${loginId}@ohep.edu.tr`;
-      }
-      await login(loginId, loginData.password)
-    } catch(err) {
-      setError('Giriş başarısız. Lütfen bilgilerinizi kontrol edin.')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  async function handleVisualLogin(e) {
-    e.preventDefault()
-    if (!visualData.fullName || !visualData.gradeNumber || !visualData.visualId) {
-      return setError('Lütfen Adınızı, Sınıfınızı ve Gizli Görselinizi eksiksiz girin.')
-    }
-    setError(''); setLoading(true)
     
-    const legacyEmail = `std_${visualData.gradeNumber}_${normalizeStr(visualData.fullName)}@aistudio.com`
-    const legacyPassword = `vp_${visualData.visualId}_2026!`
-    
-    const newEmail = `${normalizeStr(visualData.fullName).replace(/[^a-z0-9]/g, '')}_${visualData.visualId}@aistudio.com`
-    const newPassword = `${visualData.visualId}_123456`
+    let rawEmail = loginData.email.trim();
+    let pass = loginData.password.trim();
 
-    try {
+    const lowerTurkish = (s) => s.toLowerCase()
+      .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
+      .replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c');
+
+    if (rawEmail.includes('@')) {
       try {
-        await login(newEmail, newPassword)
-      } catch (e1) {
-        // Fallback for students created before this fix
-        await login(legacyEmail, legacyPassword)
+        await login(rawEmail, pass)
+      } catch (err) {
+        try {
+           await login(lowerTurkish(rawEmail), pass);
+        } catch (err2) {
+           setError('Giriş başarısız. Lütfen bilgilerinizi kontrol edin.')
+           setLoading(false)
+        }
       }
-    } catch(err) {
-      setError('Giriş başarısız. İsminizi yanlış yazmış veya yanlış görsel seçmiş olabilirsiniz.')
-    } finally {
+      return;
+    }
+
+    const normEmail = normalizeStr(rawEmail);
+    const normPass = normalizeStr(pass);
+    
+    let visualUserVars = [];
+    if (normEmail) {
+      for (let i = 1; i <= 12; i++) {
+        visualUserVars.push(`std_${i}_${normEmail}`);
+      }
+    }
+    
+    let visualPassVars = [];
+    const matchedVisual = VISUAL_PASSWORDS?.find(v => normalizeStr(v.label) === normPass);
+    if (matchedVisual) {
+      visualPassVars.push(`vp_${matchedVisual.id}_2026!`);
+      visualPassVars.push(`${matchedVisual.id}_123456`); // in case of old format
+    }
+    
+    const userVars = Array.from(new Set([rawEmail.toLowerCase(), normEmail, ...visualUserVars]));
+    const passVars = Array.from(new Set([pass, normPass, ...visualPassVars]));
+    const domains = ['@aistudio.com', '@ohep.edu.tr'];
+    
+    let success = false;
+    
+    for (const u of userVars) {
+      if (!u) continue;
+      for (const d of domains) {
+        for (const p of passVars) {
+          if (!p) continue;
+          try {
+            await login(`${u}${d}`, p);
+            success = true;
+            break;
+          } catch (err) {
+            // ignore and try next
+          }
+        }
+        if (success) break;
+      }
+      if (success) break;
+    }
+
+    if (!success) {
+      setError('Giriş başarısız. Lütfen bilgilerinizi kontrol edin.')
       setLoading(false)
     }
   }
+
+
 
   async function handleRegister(e) {
     e.preventDefault()
@@ -198,10 +225,6 @@ export default function LoginPage() {
                 className={`flex-1 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${tab === TABS.REGISTER ? 'bg-white/20 text-white shadow-sm border border-white/20 backdrop-blur-md' : 'text-white/50 hover:text-white/80'}`}>
                 Kayıt
               </button>
-              <button onClick={() => setTab(TABS.VISUAL)}
-                className={`flex-1 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${tab === TABS.VISUAL ? 'bg-indigo-600 text-white shadow-sm' : 'text-white/50 hover:text-white/80'}`}>
-                🦄 Görsel
-              </button>
             </div>
 
             {error && (
@@ -211,49 +234,6 @@ export default function LoginPage() {
             )}
 
             <div className="relative z-10">
-              {tab === TABS.VISUAL && (
-                <form onSubmit={handleVisualLogin} className="space-y-5">
-                  <div className="text-center mb-6">
-                    <h3 className="text-white text-xl font-bold">Öğrenci Görsel Girişi</h3>
-                    <p className="text-slate-400 text-sm mt-1">Adın, sınıfın ve gizli görselinle giriş yap.</p>
-                  </div>
-                  
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="col-span-2">
-                      <label className="block text-slate-300 text-xs font-bold uppercase tracking-wider mb-2">Ad Soyad</label>
-                      <input type="text" value={visualData.fullName} onChange={e => setVisualData(p => ({...p, fullName: e.target.value}))}
-                        placeholder="Ali Yılmaz" required
-                        className="w-full bg-black/20 border border-white/10 text-white placeholder-white/40 font-bold rounded-xl px-4 py-3.5 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all" />
-                    </div>
-                    <div className="col-span-1">
-                      <label className="block text-slate-300 text-xs font-bold uppercase tracking-wider mb-2">Sınıf</label>
-                      <input type="number" min="1" max="12" value={visualData.gradeNumber} onChange={e => setVisualData(p => ({...p, gradeNumber: e.target.value}))}
-                        placeholder="5" required
-                        className="w-full bg-black/20 border border-white/10 text-white placeholder-white/40 font-bold rounded-xl px-4 py-3.5 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-center" />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-slate-300 text-xs font-bold uppercase tracking-wider mb-3 text-center">Gizli Görselini Seç</label>
-                    <div className="grid grid-cols-5 gap-2 max-h-48 overflow-y-auto custom-scrollbar p-1">
-                      {VISUAL_PASSWORDS.map(vp => (
-                        <button type="button" key={vp.id} onClick={() => setVisualData(p => ({...p, visualId: vp.id}))} title={vp.label}
-                          className={`text-3xl p-3 rounded-2xl transition-all border-2 ${
-                            visualData.visualId === vp.id ? 'bg-indigo-500/20 border-indigo-500 scale-105 shadow-lg shadow-indigo-500/20' : 'bg-black/20 border-white/10 hover:border-white/30 opacity-60 hover:opacity-100'
-                          }`}>
-                          {vp.icon}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <button type="submit" disabled={loading}
-                    className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 disabled:opacity-50 text-white py-4 rounded-2xl text-base font-bold transition-all shadow-lg shadow-indigo-600/30 mt-6">
-                    {loading ? 'Giriş Yapılıyor...' : 'Giriş Yap 🚀'}
-                  </button>
-                </form>
-              )}
-
               {tab === TABS.LOGIN && (
                 <form onSubmit={handleLogin} className="space-y-5">
                   <div>

@@ -22,11 +22,31 @@ export async function createUserProfile(uid, { fullName, email, role, classLevel
 
 export async function getUserProfile(uid) {
   const snap = await getDoc(doc(db, 'users', uid))
-  return snap.exists() ? { id: snap.id, ...snap.data() } : null
+  if (!snap.exists()) return null;
+  const data = { id: snap.id, ...snap.data() };
+  if (!data.section && data.role === ROLES.STUDENT) {
+    try {
+      const csSnap = await getDocs(query(collection(db, 'class_students'), where('userId', '==', uid)));
+      if (!csSnap.empty) {
+        const classId = csSnap.docs[0].data().classId;
+        const cSnap = await getDoc(doc(db, 'classes', classId));
+        if (cSnap.exists()) {
+          data.section = cSnap.data().section;
+          data.className = cSnap.data().name;
+          data.classId = classId;
+        }
+      }
+    } catch (e) {
+      // ignore
+    }
+  }
+  return data;
 }
 
 export async function getStudentsBySchool(schoolCode) {
-  const q = query(collection(db, 'users'), where('role', '==', ROLES.STUDENT), where('schoolCode', '==', schoolCode), )
+  const constraints = [where('role', '==', ROLES.STUDENT)]
+  if (schoolCode) constraints.push(where('schoolCode', '==', schoolCode))
+  const q = query(collection(db, 'users'), ...constraints)
   const snap = await getDocs(q)
   return snap.docs.map(d => ({ id: d.id, ...d.data() }))
 }
@@ -80,26 +100,34 @@ export async function createSubmission({ userId, assignmentId, content, contentT
   return ref.id
 }
 
-export async function updateSubmission(submissionId, { content, aiUsed, aiNotes }) {
-  await updateDoc(doc(db, 'submissions', submissionId), { content, aiUsed: aiUsed || false, aiNotes: aiNotes || null, updatedAt: serverTimestamp() })
+export async function updateSubmission(submissionId, { content, aiUsed, aiNotes, files }) {
+  await updateDoc(doc(db, 'submissions', submissionId), { 
+    content, 
+    aiUsed: aiUsed || false, 
+    aiNotes: aiNotes || null, 
+    files: files || [],
+    updatedAt: serverTimestamp() 
+  })
 }
 
 export async function getSubmissionsByStudent(userId) {
-  const q = query(collection(db, 'submissions'), where('userId', '==', userId), orderBy('createdAt', 'desc'))
+  const q = query(collection(db, 'submissions'), where('userId', '==', userId))
   const snap = await getDocs(q)
-  return snap.docs.map(d => ({ id: d.id, ...d.data() }))
+  return snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0))
 }
 
 export async function getSubmissionsByAssignment(assignmentId) {
-  const q = query(collection(db, 'submissions'), where('assignmentId', '==', assignmentId), orderBy('createdAt', 'desc'))
+  const q = query(collection(db, 'submissions'), where('assignmentId', '==', assignmentId))
   const snap = await getDocs(q)
-  return snap.docs.map(d => ({ id: d.id, ...d.data() }))
+  return snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0))
 }
 
 export async function getSubmissionsBySchool(schoolCode) {
-  const q = query(collection(db, 'submissions'), where('schoolCode', '==', schoolCode), orderBy('createdAt', 'desc'))
+  const constraints = []
+  if (schoolCode) constraints.push(where('schoolCode', '==', schoolCode))
+  const q = query(collection(db, 'submissions'), ...constraints)
   const snap = await getDocs(q)
-  return snap.docs.map(d => ({ id: d.id, ...d.data() }))
+  return snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0))
 }
 
 export async function upsertFeedback({ submissionId, teacherId, comment, score, isShowcase }) {
@@ -317,10 +345,31 @@ export async function getPublicPortfolio(userId) {
   const userData = userDoc.data();
   // if (!userData.publicPortfolio) return null; // Make everything public for now
 
-  const submissions = await getSubmissionsByStudent(userId);
+  const [submissions, liveAnswers] = await Promise.all([
+    getSubmissionsByStudent(userId),
+    getStudentLiveAnswers(userId)
+  ]);
+  
+  // Fetch assignment details for each submission so parents can see the task title
+  const populatedSubmissions = await Promise.all(submissions.map(async (sub) => {
+    let assignment = null;
+    if (sub.assignmentId) {
+      const aDoc = await getDoc(doc(db, 'assignments', sub.assignmentId));
+      if (aDoc.exists()) assignment = aDoc.data();
+    }
+    return { ...sub, assignment };
+  }));
+  
+  // Velilerin, henüz notlanmamış olsa bile öğrencilerin görevlerini ve cevaplarını görebilmesi için filtreyi kaldırdık.
   return {
-    student: { fullName: userData.fullName, gradeNumber: userData.gradeNumber, badges: userData.badges || [] },
-    submissions: submissions.filter(s => s.score !== null) // only graded
+    student: { 
+      fullName: userData.fullName, 
+      gradeNumber: userData.gradeNumber, 
+      section: userData.section || '',
+      badges: userData.badges || [] 
+    },
+    submissions: populatedSubmissions,
+    liveAnswers: liveAnswers || []
   };
 }
 
@@ -687,15 +736,101 @@ export async function setLiveSession(schoolCode, gradeNumber, data) {
   }, { merge: true });
 }
 
-export async function submitLiveAnswer(sessionId, questionId, studentId, studentName, answer) {
-  await addDoc(collection(db, 'live_answers'), {
-    sessionId,
-    questionId,
-    studentId,
-    studentName,
-    answer,
+export async function saveLiveQuestion(schoolCode, gradeNumber, questionData) {
+  if (!schoolCode || !gradeNumber || !questionData?.questionId) return;
+  const qId = String(questionData.questionId);
+  await setDoc(doc(db, 'live_questions', qId), {
+    ...questionData,
+    schoolCode,
+    gradeNumber: String(gradeNumber),
     createdAt: serverTimestamp()
-  });
+  }, { merge: true });
+}
+
+export async function submitLiveAnswer(arg1, questionId, studentId, studentName, answer, studentSection = '', extraDetails = {}) {
+  let payload = {};
+  if (typeof arg1 === 'object' && arg1 !== null) {
+    payload = {
+      ...arg1,
+      createdAt: serverTimestamp()
+    };
+  } else {
+    payload = {
+      sessionId: arg1,
+      questionId,
+      studentId,
+      studentName,
+      studentSection,
+      answer,
+      ...extraDetails,
+      createdAt: serverTimestamp()
+    };
+  }
+  await addDoc(collection(db, 'live_answers'), payload);
+}
+
+export async function getStudentLiveAnswers(studentId) {
+  if (!studentId) return [];
+  try {
+    const q = query(
+      collection(db, 'live_answers'),
+      where('studentId', '==', studentId)
+    );
+    const snap = await getDocs(q);
+    const answers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+    // Eksik soru başlığı veya slaytı varsa live_questions koleksiyonundan tamamla
+    const populated = await Promise.all(answers.map(async (ans) => {
+      if ((!ans.questionText || !ans.questionSlide) && ans.questionId) {
+        try {
+          const qDoc = await getDoc(doc(db, 'live_questions', String(ans.questionId)));
+          if (qDoc.exists()) {
+            const qData = qDoc.data();
+            return {
+              ...ans,
+              questionText: ans.questionText || qData.questionText || qData.currentQuestion || '',
+              questionSlide: ans.questionSlide || qData.imageUrl || qData.currentSlide || '',
+              questionType: ans.questionType || qData.type || 'text',
+              pollOptions: ans.pollOptions || qData.options || []
+            };
+          }
+        } catch (e) {
+          // ignore error
+        }
+      }
+      return ans;
+    }));
+
+    return populated.sort((a, b) => {
+      const timeA = a.createdAt?.toMillis?.() || (a.createdAt?.seconds ? a.createdAt.seconds * 1000 : 0);
+      const timeB = b.createdAt?.toMillis?.() || (b.createdAt?.seconds ? b.createdAt.seconds * 1000 : 0);
+      return timeB - timeA;
+    });
+  } catch (err) {
+    console.error('Error fetching live answers for student:', err);
+    return [];
+  }
+}
+
+export async function getLiveQuestionsHistory(schoolCode, gradeNumber) {
+  if (!schoolCode || !gradeNumber) return [];
+  try {
+    const q = query(
+      collection(db, 'live_questions'),
+      where('schoolCode', '==', schoolCode),
+      where('gradeNumber', '==', String(gradeNumber))
+    );
+    const snap = await getDocs(q);
+    const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    return list.sort((a, b) => {
+      const timeA = a.createdAt?.toMillis?.() || (a.createdAt?.seconds ? a.createdAt.seconds * 1000 : 0);
+      const timeB = b.createdAt?.toMillis?.() || (b.createdAt?.seconds ? b.createdAt.seconds * 1000 : 0);
+      return timeB - timeA;
+    });
+  } catch (err) {
+    console.error('Error fetching live questions history:', err);
+    return [];
+  }
 }
 
 export function listenToLiveAnswers(sessionId, questionId, callback) {
@@ -806,3 +941,92 @@ export const logAIPrompt = async (schoolCode, userProfile, promptText, modelResp
     console.error("AI log kaydedilemedi:", err)
   }
 }
+
+export async function getCurriculumEdits() {
+  const q = query(collection(db, 'curriculum_edits'))
+  const snap = await getDocs(q)
+  const edits = {}
+  snap.docs.forEach(d => {
+    const data = d.data()
+    // Group by grade and week
+    const key = `${data.grade}_${data.week}`
+    // If there are multiple edits for the same week, we should take the latest. 
+    // Assuming the query doesn't sort, we can sort in JS or use the last one.
+    // To be safe, we'll compare editedAt if they exist.
+    if (!edits[key] || (data.editedAt && edits[key].editedAt && data.editedAt.toMillis() > edits[key].editedAt.toMillis())) {
+      edits[key] = data
+    }
+  })
+  return edits
+}
+
+export async function getAssignmentsBySchool(schoolCode) {
+  const constraints = []
+  if (schoolCode) constraints.push(where('schoolCode', '==', schoolCode))
+  const q = query(collection(db, 'assignments'), ...constraints)
+  const snap = await getDocs(q)
+  return snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0))
+}
+
+export async function getAllClassStudents() {
+  const snap = await getDocs(collection(db, 'class_students'));
+  return snap.docs.map(d => d.data());
+}
+
+// ─── TEKNOFEST & TÜBİTAK PROJE ASİSTANI TASLAKLARI ───────────────────────────
+
+export async function saveProjectAssistantDraft(draftData) {
+  const { id, ...rest } = draftData;
+  if (id) {
+    const docRef = doc(db, 'project_drafts', id);
+    await updateDoc(docRef, {
+      ...rest,
+      updatedAt: serverTimestamp()
+    });
+    return id;
+  } else {
+    const docRef = await addDoc(collection(db, 'project_drafts'), {
+      ...rest,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    });
+    return docRef.id;
+  }
+}
+
+export async function getProjectDraftsByStudent(studentId) {
+  if (!studentId) return [];
+  const q = query(
+    collection(db, 'project_drafts'),
+    where('userId', '==', studentId)
+  );
+  const snap = await getDocs(q);
+  const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  return items.sort((a, b) => {
+    const tA = a.updatedAt?.toMillis ? a.updatedAt.toMillis() : (a.createdAt?.toMillis ? a.createdAt.toMillis() : 0);
+    const tB = b.updatedAt?.toMillis ? b.updatedAt.toMillis() : (b.createdAt?.toMillis ? b.createdAt.toMillis() : 0);
+    return tB - tA;
+  });
+}
+
+export async function getAllProjectDraftsForSchool(schoolCode) {
+  let q;
+  if (schoolCode) {
+    q = query(collection(db, 'project_drafts'), where('schoolCode', '==', schoolCode));
+  } else {
+    q = query(collection(db, 'project_drafts'));
+  }
+  const snap = await getDocs(q);
+  const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  return items.sort((a, b) => {
+    const tA = a.updatedAt?.toMillis ? a.updatedAt.toMillis() : 0;
+    const tB = b.updatedAt?.toMillis ? b.updatedAt.toMillis() : 0;
+    return tB - tA;
+  });
+}
+
+export async function deleteProjectAssistantDraft(draftId) {
+  if (!draftId) return;
+  await deleteDoc(doc(db, 'project_drafts', draftId));
+}
+

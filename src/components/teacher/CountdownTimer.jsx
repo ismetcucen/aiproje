@@ -30,109 +30,12 @@ export default function CountdownTimer() {
   const oscRef = useRef(null)
   const lfoRef = useRef(null)
 
-  // Web Audio API for suspense music
-  const initAudio = () => {
-    if (!audioCtxRef.current) {
-      const AudioContext = window.AudioContext || window.webkitAudioContext
-      audioCtxRef.current = new AudioContext()
-    }
-    if (audioCtxRef.current.state === 'suspended') {
-      audioCtxRef.current.resume()
-    }
-  }
-
-  const playSuspenseTick = (timeRemaining, totalTime) => {
-    if (!audioCtxRef.current) return
-    const ctx = audioCtxRef.current
-    
-    // Heartbeat / Tick sound
-    const osc = ctx.createOscillator()
-    const gainNode = ctx.createGain()
-    
-    // As time gets lower, pitch gets slightly higher
-    const urgency = 1 - (timeRemaining / totalTime)
-    osc.type = 'triangle'
-    osc.frequency.setValueAtTime(150 + (urgency * 100), ctx.currentTime)
-    osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.1)
-    
-    gainNode.gain.setValueAtTime(0.5, ctx.currentTime)
-    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1)
-    
-    osc.connect(gainNode)
-    gainNode.connect(ctx.destination)
-    
-    osc.start()
-    osc.stop(ctx.currentTime + 0.1)
-  }
-
-  const startSuspenseDrone = () => {
-    if (!audioCtxRef.current) return
-    const ctx = audioCtxRef.current
-    
-    // Low drone sound
-    const osc = ctx.createOscillator()
-    const gainNode = ctx.createGain()
-    const lfo = ctx.createOscillator()
-    
-    osc.type = 'sawtooth'
-    osc.frequency.value = 55 // Low note
-    
-    lfo.type = 'sine'
-    lfo.frequency.value = 2 // 2Hz pulse
-    const lfoGain = ctx.createGain()
-    lfoGain.gain.value = 0.2
-    
-    lfo.connect(lfoGain)
-    lfoGain.connect(gainNode.gain)
-    
-    gainNode.gain.value = 0.1 // Base volume
-    
-    osc.connect(gainNode)
-    gainNode.connect(ctx.destination)
-    
-    osc.start()
-    lfo.start()
-    
-    oscRef.current = osc
-    lfoRef.current = lfo
-  }
-
-  const stopSuspenseDrone = () => {
-    if (oscRef.current) {
-      oscRef.current.stop()
-      oscRef.current = null
-    }
-    if (lfoRef.current) {
-      lfoRef.current.stop()
-      lfoRef.current = null
-    }
-  }
-
-  const playTimeUpSound = () => {
-    if (!audioCtxRef.current) return
-    const ctx = audioCtxRef.current
-    
-    // Alarm sound
-    const playBeep = (time) => {
-      const osc = ctx.createOscillator()
-      const gainNode = ctx.createGain()
-      osc.type = 'square'
-      osc.frequency.setValueAtTime(880, time)
-      osc.frequency.setValueAtTime(660, time + 0.1)
-      gainNode.gain.setValueAtTime(0.3, time)
-      gainNode.gain.linearRampToValueAtTime(0, time + 0.2)
-      osc.connect(gainNode)
-      gainNode.connect(ctx.destination)
-      osc.start(time)
-      osc.stop(time + 0.2)
-    }
-    
-    const now = ctx.currentTime
-    playBeep(now)
-    playBeep(now + 0.3)
-    playBeep(now + 0.6)
-    playBeep(now + 0.9)
-  }
+  // Audio disabled across application
+  const initAudio = () => {}
+  const playSuspenseTick = () => {}
+  const startSuspenseDrone = () => {}
+  const stopSuspenseDrone = () => {}
+  const playTimeUpSound = () => {}
 
   // Timer Logic
   const startTimer = () => {
