@@ -443,7 +443,7 @@ export default function DigitalBoardViewer() {
 
   const activeBg = validBackgrounds.length > 0
     ? validBackgrounds[currentSlideIndex % validBackgrounds.length]
-    : '/ohep-campus.jpg?v=3'
+    : '/ohep-campus.jpg?v=4'
 
   return (
     <div 
@@ -802,18 +802,18 @@ export default function DigitalBoardViewer() {
           </div>
         </header>
 
-        {/* 3-Column Layout */}
+        {/* 3-Column Layout: 3 (Yemek) - 6 (Dev Saat) - 3 (Sınavlar) */}
         <div className="flex-1 grid grid-cols-12 gap-3 sm:gap-4 lg:gap-6 min-h-0 items-stretch">
           
-          {/* LEFT: Timetable & Menu */}
-          <div className="col-span-12 md:col-span-4 flex flex-col min-h-0">
+          {/* LEFT: Yemek Menüsü (25% Width) */}
+          <div className="col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 flex flex-col min-h-0">
             {/* Günün Menüsü */}
             <div className="bg-slate-900/40 backdrop-blur-md rounded-2xl lg:rounded-3xl p-3 sm:p-4 lg:p-5 border border-white/10 shadow-2xl relative overflow-hidden flex-1 flex flex-col justify-between">
               <div className="absolute -right-8 -bottom-8 text-8xl opacity-10 pointer-events-none">🍲</div>
-              <div>
-                <div className="flex items-center justify-between gap-2 mb-2.5 lg:mb-3 relative z-10">
-                  <h2 className="text-base sm:text-lg lg:text-xl font-bold tracking-wider text-orange-300 flex items-center gap-2">
-                    <span>🍽️</span> GÜNÜN ÖĞLE YEMEĞİ
+              <div className="flex-1 flex flex-col">
+                <div className="flex items-center justify-between gap-2 mb-2.5 lg:mb-4 relative z-10">
+                  <h2 className="text-sm sm:text-base lg:text-lg font-bold tracking-wider text-orange-300 flex items-center gap-1.5">
+                    <span>🍽️</span> GÜNÜN YEMEĞİ
                   </h2>
                   <div className="flex items-center gap-1.5 shrink-0">
                     <span className="text-[10px] lg:text-xs font-bold px-2 py-0.5 rounded-full bg-orange-400/20 text-orange-200 border border-orange-400/30">
@@ -827,9 +827,9 @@ export default function DigitalBoardViewer() {
                   </div>
                 </div>
 
-                <ul className="space-y-1.5 sm:space-y-2 lg:space-y-2.5 relative z-10">
+                <ul className="flex-1 flex flex-col justify-around gap-1.5 sm:gap-2 relative z-10 my-1">
                   {todaysLunch.items.map((item, idx) => (
-                    <li key={idx} className="flex items-center gap-2.5 text-xs sm:text-sm lg:text-base font-medium text-slate-100 bg-white/5 hover:bg-white/10 transition-colors p-2 px-3 rounded-xl border border-white/5">
+                    <li key={idx} className="flex items-center gap-2 text-xs sm:text-sm lg:text-base font-semibold text-slate-100 bg-white/5 hover:bg-white/10 transition-colors p-2 lg:p-2.5 px-3 rounded-xl border border-white/5 shadow-sm">
                       <span className="flex-shrink-0 w-5 h-5 lg:w-6 lg:h-6 rounded-full bg-gradient-to-tr from-orange-400 to-amber-500 flex items-center justify-center text-white text-[10px] lg:text-xs font-bold shadow-md">✓</span>
                       <span className="truncate">{item}</span>
                     </li>
@@ -843,8 +843,8 @@ export default function DigitalBoardViewer() {
             </div>
           </div>
 
-          {/* MIDDLE: Weather & Quote */}
-          <div className="col-span-12 md:col-span-4 flex flex-col gap-2 sm:gap-2.5 lg:gap-3 min-h-0 justify-between">
+          {/* MIDDLE: Weather & Dev Saat (50% Width) */}
+          <div className="col-span-12 md:col-span-6 lg:col-span-6 xl:col-span-6 flex flex-col gap-2 sm:gap-2.5 lg:gap-3 min-h-0 justify-between">
             {/* Hava Durumu (Kompakt) */}
             <div className="bg-slate-900/40 backdrop-blur-md rounded-2xl lg:rounded-3xl p-2 sm:p-2.5 lg:p-3 px-3.5 sm:px-4 border border-white/10 shadow-2xl flex items-center justify-between shrink-0">
               <div>
@@ -866,20 +866,26 @@ export default function DigitalBoardViewer() {
               )}
             </div>
             
-            {/* Saat ve Tarih (Maksimum Büyüklük) */}
-            <div className="bg-slate-900/50 backdrop-blur-xl rounded-2xl lg:rounded-3xl p-3 sm:p-5 lg:p-6 border border-white/15 shadow-[0_15px_35px_rgba(0,0,0,0.5)] flex-1 flex flex-col items-center justify-center relative overflow-hidden group">
+            {/* DEV SAAT VE TARİH (Ekranın Merkez Odak Noktası) */}
+            <div className="bg-slate-900/50 backdrop-blur-xl rounded-2xl lg:rounded-3xl p-3 sm:p-5 lg:p-8 border border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.6)] flex-1 flex flex-col items-center justify-center relative overflow-hidden group">
               {/* Ortam Parlaması */}
-              <div className="absolute w-56 h-56 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none"></div>
+              <div className="absolute w-80 h-80 sm:w-[32rem] sm:h-[32rem] bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
 
-              <div className="relative z-10 flex items-baseline justify-center font-black tabular-nums tracking-tighter leading-none text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.9)] text-6xl sm:text-7xl md:text-8xl lg:text-8xl xl:text-9xl 2xl:text-[9.5rem]">
+              <div 
+                className="relative z-10 flex items-baseline justify-center font-black tabular-nums tracking-tighter leading-none text-white drop-shadow-[0_12px_45px_rgba(0,0,0,0.95)] whitespace-nowrap"
+                style={{ fontSize: 'clamp(5.5rem, 12.5vw, 15.5rem)' }}
+              >
                 <span>{time.getHours().toString().padStart(2, '0')}</span>
-                <span className="text-indigo-400 mx-0.5 sm:mx-1 animate-pulse">:</span>
+                <span className="text-indigo-400 mx-1 sm:mx-2 animate-pulse">:</span>
                 <span>{time.getMinutes().toString().padStart(2, '0')}</span>
-                <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-indigo-300 font-bold ml-1.5 sm:ml-2.5 opacity-80">
+                <span 
+                  className="text-indigo-300 font-bold ml-2 sm:ml-4 opacity-85"
+                  style={{ fontSize: 'clamp(2.2rem, 4.5vw, 5.5rem)' }}
+                >
                   {time.getSeconds().toString().padStart(2, '0')}
                 </span>
               </div>
-              <div className="relative z-10 text-xs sm:text-sm lg:text-base font-bold text-slate-200 tracking-[0.25em] mt-3 sm:mt-4 lg:mt-5 uppercase text-center drop-shadow">
+              <div className="relative z-10 text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-black text-slate-100 tracking-[0.3em] mt-3 sm:mt-5 lg:mt-7 uppercase text-center drop-shadow-md">
                 {time.toLocaleDateString('tr-TR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
               </div>
             </div>
@@ -896,43 +902,43 @@ export default function DigitalBoardViewer() {
             )}
           </div>
 
-          {/* RIGHT: Exams */}
-          <div className="col-span-12 md:col-span-4 flex flex-col min-h-0">
+          {/* RIGHT: Sınavlar (25% Width) */}
+          <div className="col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-3 flex flex-col min-h-0">
             {/* Sınavlara Kalan Zaman */}
             <div className="bg-slate-900/40 backdrop-blur-md rounded-2xl lg:rounded-3xl p-3 sm:p-4 lg:p-5 border border-white/10 shadow-2xl flex-1 flex flex-col justify-between">
-               <h2 className="text-base sm:text-lg lg:text-xl font-bold tracking-wider text-fuchsia-300 mb-2 flex items-center gap-2">
+               <h2 className="text-sm sm:text-base lg:text-lg font-bold tracking-wider text-fuchsia-300 mb-2 flex items-center gap-1.5">
                  <span>🎯</span> Sınavlara Kalan Zaman
                </h2>
-               <div className="flex flex-col gap-1.5 sm:gap-2 flex-1 justify-center">
+               <div className="flex flex-col gap-2 sm:gap-2.5 lg:gap-3 flex-1 justify-around my-1">
                  {/* LGS */}
-                 <div className="bg-white/5 rounded-xl lg:rounded-2xl p-1.5 sm:p-2 px-3 flex items-center justify-between border border-white/10 shadow-sm">
-                   <div className="flex items-center gap-2.5">
+                 <div className="bg-white/5 rounded-xl lg:rounded-2xl p-2 sm:p-2.5 px-3 flex items-center justify-between border border-white/10 shadow-sm">
+                   <div className="flex items-center gap-2">
                      <div className="w-1.5 h-6 lg:h-7 bg-gradient-to-b from-fuchsia-500 to-purple-500 rounded-full"></div>
-                     <span className="text-sm sm:text-base lg:text-lg font-black text-white tracking-wider">LGS</span>
+                     <span className="text-sm sm:text-base font-black text-white tracking-wider">LGS</span>
                    </div>
                    {renderCountdown(settings.examDates?.lgs || '2027-06-13T09:00')}
                  </div>
                  {/* TYT */}
-                 <div className="bg-white/5 rounded-xl lg:rounded-2xl p-1.5 sm:p-2 px-3 flex items-center justify-between border border-white/10 shadow-sm">
-                   <div className="flex items-center gap-2.5">
+                 <div className="bg-white/5 rounded-xl lg:rounded-2xl p-2 sm:p-2.5 px-3 flex items-center justify-between border border-white/10 shadow-sm">
+                   <div className="flex items-center gap-2">
                      <div className="w-1.5 h-6 lg:h-7 bg-gradient-to-b from-emerald-500 to-teal-500 rounded-full"></div>
-                     <span className="text-sm sm:text-base lg:text-lg font-black text-white tracking-wider">TYT</span>
+                     <span className="text-sm sm:text-base font-black text-white tracking-wider">TYT</span>
                    </div>
                    {renderCountdown(settings.examDates?.tyt || '2027-06-19T10:15')}
                  </div>
                  {/* AYT */}
-                 <div className="bg-white/5 rounded-xl lg:rounded-2xl p-1.5 sm:p-2 px-3 flex items-center justify-between border border-white/10 shadow-sm">
-                   <div className="flex items-center gap-2.5">
+                 <div className="bg-white/5 rounded-xl lg:rounded-2xl p-2 sm:p-2.5 px-3 flex items-center justify-between border border-white/10 shadow-sm">
+                   <div className="flex items-center gap-2">
                      <div className="w-1.5 h-6 lg:h-7 bg-gradient-to-b from-blue-500 to-cyan-500 rounded-full"></div>
-                     <span className="text-sm sm:text-base lg:text-lg font-black text-white tracking-wider">AYT</span>
+                     <span className="text-sm sm:text-base font-black text-white tracking-wider">AYT</span>
                    </div>
                    {renderCountdown(settings.examDates?.ayt || '2027-06-20T10:15')}
                  </div>
                  {/* YDT */}
-                 <div className="bg-white/5 rounded-xl lg:rounded-2xl p-1.5 sm:p-2 px-3 flex items-center justify-between border border-white/10 shadow-sm">
-                   <div className="flex items-center gap-2.5">
+                 <div className="bg-white/5 rounded-xl lg:rounded-2xl p-2 sm:p-2.5 px-3 flex items-center justify-between border border-white/10 shadow-sm">
+                   <div className="flex items-center gap-2">
                      <div className="w-1.5 h-6 lg:h-7 bg-gradient-to-b from-amber-500 to-orange-500 rounded-full"></div>
-                     <span className="text-sm sm:text-base lg:text-lg font-black text-white tracking-wider">YDT</span>
+                     <span className="text-sm sm:text-base font-black text-white tracking-wider">YDT</span>
                    </div>
                    {renderCountdown(settings.examDates?.ydt || '2027-06-20T15:45')}
                  </div>
