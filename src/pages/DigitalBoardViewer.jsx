@@ -848,21 +848,21 @@ export default function DigitalBoardViewer() {
           </div>
 
           {/* MIDDLE: Weather & Quote */}
-          <div className="col-span-12 md:col-span-4 flex flex-col gap-2.5 sm:gap-3 lg:gap-4 min-h-0 justify-between">
-            {/* Hava Durumu */}
-            <div className="bg-slate-900/40 backdrop-blur-md rounded-2xl lg:rounded-3xl p-2.5 sm:p-3 lg:p-4 border border-white/10 shadow-2xl flex items-center justify-between shrink-0">
+          <div className="col-span-12 md:col-span-4 flex flex-col gap-2 sm:gap-2.5 lg:gap-3 min-h-0 justify-between">
+            {/* Hava Durumu (Kompakt) */}
+            <div className="bg-slate-900/40 backdrop-blur-md rounded-2xl lg:rounded-3xl p-2 sm:p-2.5 lg:p-3 px-3.5 sm:px-4 border border-white/10 shadow-2xl flex items-center justify-between shrink-0">
               <div>
-                <h2 className="text-sm lg:text-base font-bold tracking-widest text-sky-300 mb-0.5 flex items-center gap-1.5">
+                <h2 className="text-xs sm:text-sm lg:text-base font-bold tracking-widest text-sky-300 flex items-center gap-1.5">
                   <span>📍</span> Alanya
                 </h2>
-                <p className="text-slate-400 text-[11px] lg:text-xs">Anlık Hava Durumu</p>
+                <p className="text-slate-400 text-[10px] sm:text-[11px]">Anlık Hava Durumu</p>
               </div>
               {weather ? (
-                <div className="flex items-center gap-2.5 lg:gap-3">
-                  <span className="text-3xl lg:text-4xl drop-shadow-lg">{getWeatherIcon(weather.weathercode)}</span>
+                <div className="flex items-center gap-2 lg:gap-3">
+                  <span className="text-2xl sm:text-3xl lg:text-4xl drop-shadow-lg">{getWeatherIcon(weather.weathercode)}</span>
                   <div className="flex flex-col">
-                    <span className="text-2xl lg:text-3xl font-black text-white leading-none">{Math.round(weather.temperature)}°</span>
-                    <span className="text-sky-200 text-[10px] font-bold mt-0.5">{weather.windspeed} km/s</span>
+                    <span className="text-xl sm:text-2xl lg:text-3xl font-black text-white leading-none">{Math.round(weather.temperature)}°</span>
+                    <span className="text-sky-200 text-[9px] sm:text-[10px] font-bold mt-0.5">{weather.windspeed} km/s</span>
                   </div>
                 </div>
               ) : (
@@ -870,27 +870,32 @@ export default function DigitalBoardViewer() {
               )}
             </div>
             
-            {/* Saat ve Tarih (Kompakt ve Dengeli) */}
-            <div className="bg-slate-900/40 backdrop-blur-md rounded-2xl lg:rounded-3xl p-3 sm:p-4 lg:p-6 border border-white/10 shadow-2xl flex-1 flex flex-col items-center justify-center transform hover:scale-[1.02] transition-all">
-              <div className="text-5xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-8xl font-black tabular-nums tracking-tighter drop-shadow-2xl flex items-baseline gap-1 lg:gap-2">
-                {time.getHours().toString().padStart(2, '0')}
-                <span className="text-indigo-400 animate-pulse">:</span>
-                {time.getMinutes().toString().padStart(2, '0')}
-                <span className="text-xl sm:text-2xl lg:text-3xl text-slate-400 ml-1.5">{time.getSeconds().toString().padStart(2, '0')}</span>
+            {/* Saat ve Tarih (Maksimum Büyüklük) */}
+            <div className="bg-slate-900/50 backdrop-blur-xl rounded-2xl lg:rounded-3xl p-3 sm:p-5 lg:p-6 border border-white/15 shadow-[0_15px_35px_rgba(0,0,0,0.5)] flex-1 flex flex-col items-center justify-center relative overflow-hidden group">
+              {/* Ortam Parlaması */}
+              <div className="absolute w-56 h-56 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+              <div className="relative z-10 flex items-baseline justify-center font-black tabular-nums tracking-tighter leading-none text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.9)] text-6xl sm:text-7xl md:text-8xl lg:text-8xl xl:text-9xl 2xl:text-[9.5rem]">
+                <span>{time.getHours().toString().padStart(2, '0')}</span>
+                <span className="text-indigo-400 mx-0.5 sm:mx-1 animate-pulse">:</span>
+                <span>{time.getMinutes().toString().padStart(2, '0')}</span>
+                <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-indigo-300 font-bold ml-1.5 sm:ml-2.5 opacity-80">
+                  {time.getSeconds().toString().padStart(2, '0')}
+                </span>
               </div>
-              <div className="text-xs sm:text-sm lg:text-base xl:text-lg font-medium text-slate-300 tracking-widest mt-2 uppercase text-center">
+              <div className="relative z-10 text-xs sm:text-sm lg:text-base font-bold text-slate-200 tracking-[0.25em] mt-3 sm:mt-4 lg:mt-5 uppercase text-center drop-shadow">
                 {time.toLocaleDateString('tr-TR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
               </div>
             </div>
 
-            {/* Günün Sözü */}
+            {/* Günün Sözü (Kompakt) */}
             {settings.quoteOfTheDay && (
-              <div className="bg-gradient-to-br from-indigo-900/80 to-purple-900/80 backdrop-blur-xl rounded-2xl lg:rounded-3xl p-2.5 sm:p-3 lg:p-4 border border-indigo-500/30 shadow-2xl text-center relative overflow-hidden shrink-0">
-                 <div className="text-4xl text-indigo-400/20 absolute -top-2 -left-1 font-serif">"</div>
-                 <p className="text-xs sm:text-sm lg:text-base font-medium text-white italic leading-relaxed relative z-10 px-3">
+              <div className="bg-gradient-to-br from-indigo-900/80 to-purple-900/80 backdrop-blur-xl rounded-2xl lg:rounded-3xl p-2 sm:p-2.5 lg:p-3 border border-indigo-500/30 shadow-2xl text-center relative overflow-hidden shrink-0">
+                 <div className="text-3xl text-indigo-400/20 absolute -top-2 -left-1 font-serif">"</div>
+                 <p className="text-[11px] sm:text-xs lg:text-sm font-medium text-white italic leading-relaxed relative z-10 px-3">
                    "{settings.quoteOfTheDay}"
                  </p>
-                 <div className="text-4xl text-indigo-400/20 absolute -bottom-4 -right-1 font-serif">"</div>
+                 <div className="text-3xl text-indigo-400/20 absolute -bottom-3 -right-1 font-serif">"</div>
               </div>
             )}
           </div>
