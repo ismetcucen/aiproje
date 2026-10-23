@@ -1,88 +1,69 @@
 // ÖZEL HAMDULLAH EMİNPAŞA OKULLARI (ÖHEP)
-// 1. Hafta Beslenme Programı (Öğle Yemeği)
+// 19 - 23 Ekim Öğlen Beslenme Menüsü
 
 export const WEEKLY_MENU = {
   1: {
     dayName: 'Pazartesi',
-    calorie: '~740 kcal',
+    calorie: '~710 kcal',
     items: [
-      'Tavuk Çorbası',
-      'Kuru Fasulye',
+      'Tarhana Çorbası',
+      'Etli Nohut',
       'Pirinç Pilavı',
-      'Akdeniz Salatası',
-      'Mevsim Meyvesi'
+      'Yoğurt',
+      'Çoban Salata'
     ]
   },
   2: {
     dayName: 'Salı',
-    calorie: '~690 kcal',
+    calorie: '~720 kcal',
     items: [
-      'Ezogelin Çorbası',
-      'Tavuk Sote',
-      'Erişte',
-      'Ayran',
-      'Puding'
+      'Domates Çorbası',
+      'Mantı (Yoğurtlu, Soslu)',
+      'Salata (Havuç, Turp)',
+      'Meyve'
     ]
   },
   3: {
     dayName: 'Çarşamba',
-    calorie: '~710 kcal',
+    calorie: '~690 kcal',
     items: [
-      'Yayla Çorbası',
-      'Misket Köfte',
-      'Bulgur Pilavı',
-      'Salata',
-      'Mevsim Meyvesi'
+      'Mercimek Çorbası',
+      'Kıymalı Patates Oturtma',
+      'Kuru Cacık',
+      'Tulumba Tatlısı'
     ]
   },
   4: {
     dayName: 'Perşembe',
-    calorie: '~720 kcal',
+    calorie: '~730 kcal',
     items: [
-      'Mantar Çorbası',
-      'Zeytinyağlı Bezelye',
-      'Pirinç Pilavı',
-      'Karışık Turşu',
-      'Yoğurt'
+      'Arpa Şehriye Çorbası',
+      'Balık / Kök Sebze',
+      'Akdeniz Salatası',
+      'Helva'
     ]
   },
   5: {
     dayName: 'Cuma',
-    calorie: '~620 kcal',
+    calorie: '~660 kcal',
     items: [
-      'Şehriye Çorbası',
-      'Çoban Kavurma',
-      'Domatesli Bulgur Pilavı',
-      'Yeşil Salata',
-      'Cacık'
+      'Mantar Çorbası',
+      'Baget Haşlama',
+      'Pirinç Pilavı',
+      'Mevsim Salatası',
+      'Meyve'
     ]
   }
 }
 
 /**
  * Günün menüsünü getirir.
- * Eğer Firebase'den özel bir menü girilmişse onu,
- * yoksa haftalık resmi beslenme programından o günün menüsünü döner.
+ * Resmi 19-23 Ekim beslenme programından o günün menüsünü döner.
  */
 export function getTodaysLunchMenu(customMenu, customCalorie, targetDate = new Date()) {
-  // Eğer panelden özel ve geçerli menü girilmişse
-  const validCustom = Array.isArray(customMenu) 
-    ? customMenu.map(i => (typeof i === 'string' ? i.trim() : '')).filter(Boolean)
-    : []
-
-  if (validCustom.length > 0) {
-    return {
-      dayName: targetDate.toLocaleDateString('tr-TR', { weekday: 'long' }),
-      calorie: customCalorie || '',
-      items: validCustom,
-      isCustom: true,
-      isWeekend: false
-    }
-  }
-
   const dayOfWeek = targetDate.getDay() // 0: Pazar, 1: Pzt, ..., 5: Cuma, 6: Cmt
 
-  if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+  if (dayOfWeek >= 1 && dayOfWeek <= 5 && WEEKLY_MENU[dayOfWeek]) {
     const scheduled = WEEKLY_MENU[dayOfWeek]
     return {
       dayName: scheduled.dayName,
@@ -95,7 +76,7 @@ export function getTodaysLunchMenu(customMenu, customCalorie, targetDate = new D
 
   // Hafta sonu ise Pazartesi menüsünü önizleme olarak sun
   return {
-    dayName: 'Pazartesi (Gelecek Hafta)',
+    dayName: 'Pazartesi (Önizleme)',
     calorie: WEEKLY_MENU[1].calorie,
     items: WEEKLY_MENU[1].items,
     isCustom: false,
