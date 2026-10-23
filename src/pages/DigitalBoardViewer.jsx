@@ -401,6 +401,27 @@ export default function DigitalBoardViewer() {
   // Check current timetable
   const currentMinutes = time.getHours() * 60 + time.getMinutes()
 
+  // Default timetable if Firestore is empty
+  const defaultTimetable = [
+    { label: '1. Ders', time: '08:30 - 09:10' },
+    { label: 'Teneffüs', time: '09:10 - 09:20' },
+    { label: '2. Ders', time: '09:20 - 10:00' },
+    { label: 'Teneffüs', time: '10:00 - 10:15' },
+    { label: '3. Ders', time: '10:15 - 10:55' },
+    { label: 'Teneffüs', time: '10:55 - 11:05' },
+    { label: '4. Ders', time: '11:05 - 11:45' },
+    { label: 'Öğle Yemeği', time: '11:45 - 12:35' },
+    { label: '5. Ders', time: '12:35 - 13:15' },
+    { label: 'Teneffüs', time: '13:15 - 13:25' },
+    { label: '6. Ders', time: '13:25 - 14:05' },
+    { label: 'Teneffüs', time: '14:05 - 14:15' },
+    { label: '7. Ders', time: '14:15 - 14:55' },
+    { label: '8. Ders', time: '15:05 - 15:45' }
+  ]
+  const activeTimetable = (settings?.timetable && settings.timetable.length > 0)
+    ? settings.timetable
+    : defaultTimetable
+
   // Get active lunch menu (from settings if customized, otherwise official weekly schedule)
   const todaysLunch = getTodaysLunchMenu(settings?.dailyMenu, settings?.dailyMenuCalorie, time)
 
@@ -418,15 +439,15 @@ export default function DigitalBoardViewer() {
   
   // Get active background image (Default to uploaded school campus photo)
   const validBackgrounds = (settings?.backgroundImages || [])
-    .filter(url => typeof url === 'string' && url.trim().length > 0 && !url.includes('photo-1541339907198'))
+    .filter(url => typeof url === 'string' && url.trim().length > 0 && !url.includes('photo-1541339907198') && !url.includes('unsplash'))
 
-  const customSingleBg = (settings?.backgroundImageUrl && !settings.backgroundImageUrl.includes('photo-1541339907198'))
+  const customSingleBg = (settings?.backgroundImageUrl && !settings.backgroundImageUrl.includes('photo-1541339907198') && !settings.backgroundImageUrl.includes('unsplash'))
     ? settings.backgroundImageUrl.trim()
     : null
 
   const activeBg = validBackgrounds.length > 0
     ? validBackgrounds[currentSlideIndex % validBackgrounds.length]
-    : (customSingleBg || '/ohep-campus.jpg')
+    : (customSingleBg || '/ohep-campus.jpg?v=2')
 
   return (
     <div 
@@ -924,66 +945,67 @@ export default function DigitalBoardViewer() {
 
       {/* UNIFIED FOOTER: Timetable + Marquee */}
       <div className="w-full shrink-0 bg-slate-900/95 backdrop-blur-2xl border-t border-white/10 z-50 flex flex-col shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
-        <div className="w-full px-6 py-3 flex items-center gap-6">
-          <h2 className="text-lg font-black tracking-widest text-indigo-300 flex flex-col items-center gap-1 shrink-0 whitespace-nowrap">
-            <span className="text-2xl">⏱️</span>
-            <span className="text-[10px] text-slate-400">ZAMAN ÇİZELGESİ</span>
-          </h2>
+        <div className="w-full px-2 sm:px-4 py-2 sm:py-2.5 flex items-center gap-2 sm:gap-3">
+          <div className="shrink-0 flex items-center gap-1.5 sm:gap-2 pr-2 sm:pr-3 border-r border-white/10">
+            <span className="text-xl sm:text-2xl">⏱️</span>
+            <div className="hidden md:flex flex-col">
+              <span className="text-[11px] font-black tracking-wider text-indigo-300">ZAMAN</span>
+              <span className="text-[8px] font-semibold text-slate-400">ÇİZELGESİ</span>
+            </div>
+          </div>
           
-          <div className="flex w-full overflow-x-auto hide-scrollbar">
-            <div className="flex flex-row gap-2 w-max pr-6 items-center">
-              {(settings.timetable || []).map((t, idx) => {
-                let isCurrent = false;
-                const isLunch = t.label && (t.label.toLowerCase().includes('yemek') || t.label.toLowerCase().includes('öğle'));
-                const isBreak = t.label && (t.label.toLowerCase().includes('teneffüs') || isLunch);
-                
-                if (t.time && t.time.includes('-')) {
-                  const [startStr, endStr] = t.time.split('-').map(s => s.trim())
-                  const [sh, sm] = startStr.split(':').map(Number)
-                  const [eh, em] = endStr.split(':').map(Number)
-                  if (!isNaN(sh) && !isNaN(eh)) {
-                    const startMin = sh * 60 + sm
-                    const endMin = eh * 60 + em
-                    if (currentMinutes >= startMin && currentMinutes <= endMin) {
-                      isCurrent = true;
-                    }
+          <div className="flex-1 min-w-0 flex items-center gap-1 sm:gap-1.5 w-full justify-between">
+            {activeTimetable.map((t, idx) => {
+              let isCurrent = false;
+              const isLunch = t.label && (t.label.toLowerCase().includes('yemek') || t.label.toLowerCase().includes('öğle'));
+              const isBreak = t.label && (t.label.toLowerCase().includes('teneffüs') || isLunch);
+              
+              if (t.time && t.time.includes('-')) {
+                const [startStr, endStr] = t.time.split('-').map(s => s.trim())
+                const [sh, sm] = startStr.split(':').map(Number)
+                const [eh, em] = endStr.split(':').map(Number)
+                if (!isNaN(sh) && !isNaN(eh)) {
+                  const startMin = sh * 60 + sm
+                  const endMin = eh * 60 + em
+                  if (currentMinutes >= startMin && currentMinutes <= endMin) {
+                    isCurrent = true;
                   }
                 }
-                
-                let boxClass = 'bg-indigo-900/30 border border-indigo-500/20';
-                let textClass = 'text-indigo-200';
-                let timeClass = 'text-indigo-300';
-                
-                if (isCurrent && isLunch) {
-                   boxClass = 'bg-orange-500 border-2 border-yellow-300 shadow-[0_0_15px_#fb923c] scale-105 transform z-20 relative animate-pulse';
-                   textClass = 'text-white';
-                   timeClass = 'text-yellow-100';
-                } else if (isCurrent && isBreak) {
-                   boxClass = 'bg-emerald-500 border-2 border-emerald-300 shadow-[0_0_15px_#10b981] scale-105 transform z-20 relative animate-pulse';
-                   textClass = 'text-white';
-                   timeClass = 'text-emerald-100';
-                } else if (isCurrent) {
-                   boxClass = 'bg-indigo-600 border-2 border-fuchsia-400 shadow-[0_0_15px_#e879f9] scale-105 transform z-20 relative animate-pulse';
-                   textClass = 'text-white';
-                   timeClass = 'text-fuchsia-200';
-                } else if (isLunch) {
-                   boxClass = 'bg-orange-900/40 border border-orange-500/30';
-                   textClass = 'text-orange-200';
-                   timeClass = 'text-orange-300';
-                } else if (isBreak) {
-                   boxClass = 'bg-emerald-900/30 border border-emerald-500/30';
-                   textClass = 'text-emerald-200';
-                   timeClass = 'text-emerald-300';
-                }
+              }
+              
+              let boxClass = 'bg-indigo-900/30 border border-indigo-500/20';
+              let textClass = 'text-indigo-200';
+              let timeClass = 'text-indigo-300';
+              
+              if (isCurrent && isLunch) {
+                 boxClass = 'bg-orange-500 border-2 border-yellow-300 shadow-[0_0_15px_#fb923c] scale-105 transform z-20 relative animate-pulse';
+                 textClass = 'text-white';
+                 timeClass = 'text-yellow-100';
+              } else if (isCurrent && isBreak) {
+                 boxClass = 'bg-emerald-500 border-2 border-emerald-300 shadow-[0_0_15px_#10b981] scale-105 transform z-20 relative animate-pulse';
+                 textClass = 'text-white';
+                 timeClass = 'text-emerald-100';
+              } else if (isCurrent) {
+                 boxClass = 'bg-indigo-600 border-2 border-fuchsia-400 shadow-[0_0_15px_#e879f9] scale-105 transform z-20 relative animate-pulse';
+                 textClass = 'text-white';
+                 timeClass = 'text-fuchsia-200';
+              } else if (isLunch) {
+                 boxClass = 'bg-orange-900/40 border border-orange-500/30';
+                 textClass = 'text-orange-200';
+                 timeClass = 'text-orange-300';
+              } else if (isBreak) {
+                 boxClass = 'bg-emerald-900/30 border border-emerald-500/30';
+                 textClass = 'text-emerald-200';
+                 timeClass = 'text-emerald-300';
+              }
 
-                return (
-                  <div key={idx} className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-500 w-[120px] flex-shrink-0 ${boxClass}`}>
-                    <span className={`font-bold text-[11px] whitespace-nowrap ${textClass}`}>{t.label}</span>
-                    <span className={`font-black text-[13px] tracking-tighter whitespace-nowrap ${timeClass}`}>{t.time}</span>
-                  </div>
-                )
-              })}
-            </div>
+              return (
+                <div key={idx} className={`flex-1 min-w-0 flex flex-col items-center justify-center py-1 sm:py-1.5 px-0.5 sm:px-1 rounded-xl transition-all duration-300 text-center ${boxClass}`}>
+                  <span className={`font-bold text-[9px] sm:text-[10px] md:text-[11px] whitespace-nowrap truncate max-w-full ${textClass}`}>{t.label}</span>
+                  <span className={`font-black text-[9px] sm:text-[10px] md:text-xs tracking-tighter whitespace-nowrap ${timeClass}`}>{t.time}</span>
+                </div>
+              )
+            })}
           </div>
         </div>
         {/* Marquee Banner */}
